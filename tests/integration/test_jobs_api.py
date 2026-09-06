@@ -219,6 +219,21 @@ def test_matches_are_private_to_each_user(api, ready_profile, db_session):
     assert len({match.user_id for match in matches}) == 1
 
 
+def test_a_second_user_gets_their_own_matches_for_already_stored_jobs(api, ready_profile):
+    """Jobs are shared, so a search that creates nothing new must still score them."""
+    api.post("/jobs/search", json={})
+    api.post("/auth/logout")
+    second = api.post(
+        "/auth/register", json={"email": "second@example.com", "password": "Str0ngPassword!"}
+    )
+    api.set_csrf(second.json()["csrf_token"])
+
+    result = api.post("/jobs/search", json={}).json()
+    assert result["created"] == 0, "the jobs already exist"
+    assert result["scored"] == 3, "but this user has no matches for them yet"
+    assert all(item["match"] is not None for item in api.get("/jobs").json()["items"])
+
+
 def test_job_endpoints_require_authentication(api):
     assert api.get("/jobs").status_code == 401
     assert api.post("/jobs/search", json={}).status_code == 401

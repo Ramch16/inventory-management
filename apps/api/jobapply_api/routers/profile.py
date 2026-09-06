@@ -7,8 +7,10 @@ is never updated as a side effect of a general profile save.
 from __future__ import annotations
 
 import uuid
+from datetime import UTC, datetime
 
 from fastapi import APIRouter, status
+from jobapply_shared.errors import ValidationError_
 
 from jobapply_api.deps import CurrentUser, ProfileServiceDep, SessionDep
 from jobapply_api.schemas.profile import (
@@ -18,6 +20,8 @@ from jobapply_api.schemas.profile import (
     EducationResponse,
     ExperienceCreate,
     ExperienceResponse,
+    OnboardingComplete,
+    OnboardingStatus,
     ProfileCompleteness,
     ProfileResponse,
     ProfileUpdate,
@@ -26,6 +30,7 @@ from jobapply_api.schemas.profile import (
     WorkAuthorizationResponse,
     WorkAuthorizationUpdate,
 )
+from jobapply_api.services import audit
 
 router = APIRouter(prefix="/profile", tags=["profile"])
 
@@ -81,6 +86,74 @@ def update_work_authorization(
     db.commit()
     db.refresh(profile)
     return _profile_response(profile).work_authorization
+
+
+@router.get("/onboarding", response_model=OnboardingStatus)
+def onboarding_status(
+    user: CurrentUser, service: ProfileServiceDep, db: SessionDep
+) -> OnboardingStatus:
+    return OnboardingStatus(
+        completed_at=user.onboarding_completed_at, **_onboarding_facts(db, user, service)
+    )
+
+
+@router.post("/onboarding/complete", response_model=OnboardingStatus)
+def complete_onboarding(
+    payload: OnboardingComplete,
+    user: CurrentUser,
+    service: ProfileServiceDep,
+    db: SessionDep,
+) -> OnboardingStatus:
+    """Record the user's confirmation that their profile is accurate."""
+    facts = _onboarding_facts(db, user, service)
+    if not facts["ready_for_automation"] or not facts["has_master_resume"]:
+        raise ValidationError_(
+            "Complete your profile and upload a master resume before finishing onboarding.",
+            code="onboarding_incomplete",
+            details={
+                "missing": facts["missing"],
+                "blocks_automation": facts["blocks_automation"],
+                "has_master_resume": facts["has_master_resume"],
+            },
+        )
+
+    _ = payload.confirmed  # validated above; recorded in the audit entry below
+    user.onboarding_completed_at = datetime.now(tz=UTC)
+    audit.record(
+        db,
+        action="profile.onboarding_completed",
+        actor_user_id=user.id,
+        entity_type="user",
+        entity_id=user.id,
+    )
+    db.commit()
+    db.refresh(user)
+    return OnboardingStatus(completed_at=user.onboarding_completed_at, **facts)
+
+
+def _onboarding_facts(db, user, service: ProfileServiceDep) -> dict:
+    from jobapply_db.models import Resume
+    from sqlalchemy import func, select
+
+    completeness = service.completeness(user.id)
+    has_master = (
+        db.execute(
+            select(func.count())
+            .select_from(Resume)
+            .where(
+                Resume.user_id == user.id,
+                Resume.is_master.is_(True),
+                Resume.deleted_at.is_(None),
+            )
+        ).scalar_one()
+        > 0
+    )
+    return {
+        "ready_for_automation": completeness["ready_for_automation"],
+        "missing": completeness["missing"],
+        "blocks_automation": completeness["blocks_automation"],
+        "has_master_resume": has_master,
+    }
 
 
 @router.get("/completeness", response_model=ProfileCompleteness)

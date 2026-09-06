@@ -29,8 +29,8 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/profile", label: "Profile", icon: User },
   { href: "/resume", label: "Resumes", icon: FileText },
   { href: "/jobs", label: "Jobs", icon: Briefcase },
-  { href: "/applications", label: "Applications", icon: Send, upcoming: true },
-  { href: "/interventions", label: "Needs attention", icon: TriangleAlert, upcoming: true },
+  { href: "/applications", label: "Applications", icon: Send },
+  { href: "/interventions", label: "Needs attention", icon: TriangleAlert },
   { href: "/analytics", label: "Analytics", icon: BarChart3, upcoming: true },
   { href: "/settings", label: "Settings", icon: Settings },
 ];

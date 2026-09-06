@@ -133,11 +133,11 @@ class JobService:
             source.last_error = "; ".join(report.errors)[:1000] or None
 
         scored = 0
-        if request.score_after_discovery and created_jobs:
-            profile = self.build_match_profile(user_id)
-            for job in created_jobs:
-                self._score_and_store(user_id, job, profile)
-                scored += 1
+        if request.score_after_discovery:
+            # Jobs are stored once and shared between users, so a run that creates
+            # nothing new can still be the first time *this* user has seen them.
+            # Score everything they have no match for, not just the new rows.
+            scored = self.score_unmatched(user_id)
 
         audit.record(
             self.db,
@@ -372,6 +372,24 @@ class JobService:
         job = self.get_job(job_id)
         match, _ = self._score_and_store(user_id, job, self.build_match_profile(user_id))
         return match
+
+    def score_unmatched(self, user_id: uuid.UUID) -> int:
+        """Score every stored job this user has no match row for."""
+        jobs = (
+            self.db.execute(
+                select(Job)
+                .outerjoin(JobMatch, (JobMatch.job_id == Job.id) & (JobMatch.user_id == user_id))
+                .where(Job.deleted_at.is_(None), JobMatch.id.is_(None))
+            )
+            .scalars()
+            .all()
+        )
+        if not jobs:
+            return 0
+        profile = self.build_match_profile(user_id)
+        for job in jobs:
+            self._score_and_store(user_id, job, profile)
+        return len(jobs)
 
     def rescore_all(self, user_id: uuid.UUID) -> int:
         profile = self.build_match_profile(user_id)

@@ -2,6 +2,9 @@
 
 import { api } from "@/lib/api/client";
 import type {
+  ApplicationDetail,
+  ApplicationSummary,
+  AutomationSettings,
   Certification,
   DiscoveryResult,
   JobCard,
@@ -10,6 +13,8 @@ import type {
   JobSource,
   MatchSummary,
   Page,
+  Intervention,
+  OnboardingStatus,
   ResumeTemplate,
   ResumeVersion,
   DashboardResponse,
@@ -42,6 +47,12 @@ export const queryKeys = {
   job: (id: string) => ["jobs", "detail", id] as const,
   preferences: ["preferences"] as const,
   resumeVersions: (jobId: string) => ["resume-versions", jobId] as const,
+  applications: (filters: Record<string, unknown> = {}) => ["applications", filters] as const,
+  application: (id: string) => ["applications", "detail", id] as const,
+  interventions: (status: string) => ["interventions", status] as const,
+  intervention: (id: string) => ["interventions", "detail", id] as const,
+  automationSettings: ["automation-settings"] as const,
+  onboarding: ["onboarding"] as const,
   jobSources: ["job-sources"] as const,
   notifications: ["notifications"] as const,
   unreadCount: ["notifications", "unread-count"] as const,
@@ -166,6 +177,43 @@ export const endpoints = {
   resumeVersionsForJob: (jobId: string) =>
     api.get<ResumeVersion[]>(`/resume-versions/for-job/${jobId}`),
   resumeVersion: (id: string) => api.get<ResumeVersion>(`/resume-versions/${id}`),
+
+  // applications
+  createApplication: (payload: { job_id: string; auto_submit?: boolean; generate_resume?: boolean }) =>
+    api.post<ApplicationSummary>("/applications", payload),
+  applications: (params: { page?: number; page_size?: number; status?: string }) => {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") query.set(key, String(value));
+    });
+    const suffix = query.toString();
+    return api.get<Page<ApplicationSummary>>(`/applications${suffix ? `?${suffix}` : ""}`);
+  },
+  application: (id: string) => api.get<ApplicationDetail>(`/applications/${id}`),
+  startApplication: (id: string) =>
+    api.post<{ task_id: string; status: string }>(`/applications/${id}/start`),
+  cancelApplication: (id: string) => api.post<void>(`/applications/${id}/cancel`),
+  updateApplicationStatus: (id: string, status: string, note?: string) =>
+    api.put<ApplicationSummary>(`/applications/${id}/status`, { status, note }),
+
+  // interventions
+  interventions: (status = "open") =>
+    api.get<Page<Intervention>>(`/interventions?status=${status}`),
+  intervention: (id: string) => api.get<Intervention>(`/interventions/${id}`),
+  continueIntervention: (id: string, payload: { answers?: Record<string, string>; otp_code?: string }) =>
+    api.post<{ task_id: string; status: string }>(`/interventions/${id}/continue`, payload),
+  cancelIntervention: (id: string) => api.post<void>(`/interventions/${id}/cancel`),
+
+  // onboarding
+  onboarding: () => api.get<OnboardingStatus>("/profile/onboarding"),
+  completeOnboarding: () =>
+    api.post<OnboardingStatus>("/profile/onboarding/complete", { confirmed: true }),
+
+  // automation settings
+  automationSettings: () => api.get<AutomationSettings>("/automation-settings"),
+  updateAutomationSettings: (payload: Partial<AutomationSettings>) =>
+    api.put<AutomationSettings>("/automation-settings", payload),
+  setPause: (paused: boolean) => api.post<AutomationSettings>("/automation/pause", { paused }),
 
   // dashboard
   dashboard: () => api.get<DashboardResponse>("/dashboard"),

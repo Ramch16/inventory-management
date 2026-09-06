@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import { MatchScore } from "@/components/jobs/match-score";
 import { TailoredResumePanel } from "@/components/resume/tailored-resume-panel";
@@ -21,6 +21,7 @@ import { formatDate, titleCase } from "@/lib/utils";
 export default function JobDetailPage() {
   const params = useParams<{ id: string }>();
   const jobId = params.id;
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -35,6 +36,26 @@ export default function JobDetailPage() {
       queryClient.invalidateQueries({ queryKey: queryKeys.job(jobId) });
       toast({ title: "Match recalculated", variant: "success" });
     },
+  });
+
+  const apply = useMutation({
+    mutationFn: () => endpoints.createApplication({ job_id: jobId }),
+    onSuccess: (application) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.job(jobId) });
+      queryClient.invalidateQueries({ queryKey: ["applications"] });
+      toast({
+        title: "Application created",
+        description: "Review it, then start the automation when you are ready.",
+        variant: "success",
+      });
+      router.push(`/applications/${application.id}`);
+    },
+    onError: (error) =>
+      toast({
+        title: "Cannot apply to this job",
+        description: error instanceof ApiError ? error.message : "Something went wrong.",
+        variant: "error",
+      }),
   });
 
   const decide = useMutation({
@@ -107,6 +128,20 @@ export default function JobDetailPage() {
             <Button size="sm" variant="ghost" onClick={() => rescore.mutate()}>
               Rescore
             </Button>
+            {detail.application_status ? (
+              <Button asChild size="sm" variant="secondary">
+                <Link href="/applications">View application</Link>
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                variant="secondary"
+                disabled={apply.isPending || match?.hard_requirement_failed}
+                onClick={() => apply.mutate()}
+              >
+                {apply.isPending ? "Preparing…" : "Apply"}
+              </Button>
+            )}
           </div>
         </div>
       </div>

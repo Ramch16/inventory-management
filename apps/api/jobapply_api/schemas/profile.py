@@ -236,3 +236,29 @@ class ProfileCompleteness(BaseModel):
     missing: list[str]
     blocks_automation: list[str]
     ready_for_automation: bool
+
+
+class OnboardingComplete(BaseModel):
+    """Explicit confirmation that the profile is accurate.
+
+    Automated submission stays blocked until this is given: the platform will not send
+    a user's details to an employer on the strength of a half-filled form.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    confirmed: bool
+
+    @model_validator(mode="after")
+    def require_confirmation(self) -> OnboardingComplete:
+        if not self.confirmed:
+            raise ValueError("Confirm that your profile information is accurate")
+        return self
+
+
+class OnboardingStatus(BaseModel):
+    completed_at: datetime | None = None
+    ready_for_automation: bool = False
+    missing: list[str] = Field(default_factory=list)
+    blocks_automation: list[str] = Field(default_factory=list)
+    has_master_resume: bool = False

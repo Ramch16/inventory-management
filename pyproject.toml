@@ -59,7 +59,9 @@ where = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-q --strict-markers"
+# Browser tests are opt-in: they need Chromium and the local mock ATS server.
+
+addopts = "-q --strict-markers -m 'not browser'"
 markers = [
     "integration: requires postgres/redis",
     "browser: requires playwright and the local mock ATS sites",

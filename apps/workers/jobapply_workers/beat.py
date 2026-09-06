@@ -21,6 +21,10 @@ celery_app.conf.beat_schedule = {
         "task": "jobs.expire_stale",
         "schedule": crontab(minute="15"),
     },
+    "reap-browser-sessions": {
+        "task": "apply.cleanup_sessions",
+        "schedule": crontab(minute="*/5"),
+    },
     "purge-deleted-accounts": {
         "task": "account.purge_deleted",
         "schedule": crontab(hour="3", minute="30"),

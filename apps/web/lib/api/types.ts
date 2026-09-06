@@ -441,3 +441,150 @@ export interface ResumeVersion {
   pdf_storage_key: string | null;
   created_at: string;
 }
+
+// ---------------------------------------------------------------- applications
+export type ApplicationStatus =
+  | "DISCOVERED" | "MATCHED" | "APPROVED" | "RESUME_GENERATING" | "RESUME_READY"
+  | "APPLICATION_STARTING" | "FORM_ANALYZING" | "FORM_FILLING"
+  | "WAITING_FOR_VERIFICATION" | "READY_TO_SUBMIT" | "SUBMITTING" | "SUBMITTED"
+  | "SUBMISSION_UNCONFIRMED" | "CONFIRMATION_CAPTURED" | "FAILED" | "CANCELLED"
+  | "INTERVIEW" | "ASSESSMENT" | "REJECTED" | "OFFER" | "WITHDRAWN";
+
+export interface ApplicationSummary {
+  id: string;
+  job_id: string;
+  status: ApplicationStatus;
+  run_state: string | null;
+  auto_submit: boolean;
+  requires_review: boolean;
+  detected_ats: string | null;
+  match_score: number | null;
+  attempts: number;
+  failure_reason: string | null;
+  submitted_at: string | null;
+  created_at: string;
+  company_name: string | null;
+  title: string | null;
+  open_interventions: number;
+}
+
+export interface ApplicationStep {
+  id: string;
+  name: string;
+  status: string;
+  message: string | null;
+  duration_ms: number | null;
+  data: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export interface ApplicationQuestion {
+  id: string;
+  field_id: string;
+  label: string | null;
+  question: string | null;
+  field_type: string;
+  category: string;
+  required: boolean;
+  is_sensitive: boolean;
+  options: Array<{ label: string; value: string }>;
+  answer: string | null;
+  confidence: number;
+  source: string | null;
+  requires_review: boolean;
+  approved_by_user_at: string | null;
+  reason: string | null;
+}
+
+export interface AutomationLogEntry {
+  id: string;
+  event: string;
+  level: string;
+  status: string | null;
+  ats: string | null;
+  duration_ms: number | null;
+  message: string | null;
+  data: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export interface ApplicationDetail extends ApplicationSummary {
+  apply_url: string | null;
+  confirmation_id: string | null;
+  confirmation_url: string | null;
+  confirmation_text: string | null;
+  failure_detail: string | null;
+  notes: string | null;
+  completed_at: string | null;
+  resume_version_id: string | null;
+  resume_template: ResumeTemplate | null;
+  resume_quality: ResumeScore | null;
+  cover_letter_text: string | null;
+  steps: ApplicationStep[];
+  questions: ApplicationQuestion[];
+  logs: AutomationLogEntry[];
+  can_retry: boolean;
+}
+
+export interface Intervention {
+  id: string;
+  application_id: string;
+  type: string;
+  status: string;
+  current_step: string | null;
+  reason: string;
+  page_url: string | null;
+  page_title: string | null;
+  payload: {
+    evidence?: string[];
+    questions?: Array<{
+      field_id: string;
+      question: string | null;
+      draft?: string | null;
+      confidence?: number;
+      category?: string;
+      is_sensitive?: boolean;
+      reason?: string | null;
+      options?: Array<{ label: string; value: string }>;
+    }>;
+    missing_required?: string[];
+    unresolved?: string[];
+    mismatches?: string[];
+  } | null;
+  created_at: string;
+  resolved_at: string | null;
+  company_name: string | null;
+  title: string | null;
+  screenshot_url: string | null;
+  requires_browser: boolean;
+}
+
+export interface AutomationSettings {
+  id: string;
+  enabled: boolean;
+  auto_submit_enabled: boolean;
+  require_review_before_submit: boolean;
+  allow_browser_verification: boolean;
+  generate_cover_letters: boolean;
+  daily_application_limit: number;
+  hourly_application_limit: number;
+  min_delay_seconds: number;
+  max_delay_seconds: number;
+  min_match_score: number;
+  default_resume_template: ResumeTemplate;
+  resume_max_pages: number;
+  confidence_auto_threshold: number;
+  confidence_review_threshold: number;
+  notification_preferences: Record<string, unknown> | null;
+  paused_at: string | null;
+  enabled_at: string | null;
+  automation_paused: boolean;
+}
+
+export interface OnboardingStatus {
+  completed_at: string | null;
+  ready_for_automation: boolean;
+  missing: string[];
+  blocks_automation: string[];
+  has_master_resume: boolean;
+}

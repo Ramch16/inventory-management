@@ -58,8 +58,14 @@ TEST_POSTGRES_URL=postgresql+psycopg://... pytest tests/integration/test_migrati
 cd apps/web && npm run typecheck && npm run lint
 ```
 
-Browser tests run against the local mock ATS sites in `tests/mock_ats/` only. Submitting
-test applications to real employers is prohibited.
+Browser tests are opt-in (`-m browser`) and run a real Chromium against the local mock
+ATS sites in `tests/mock_ats/` only:
+
+```bash
+pytest tests/browser -m browser          # needs Chromium; set BROWSER_EXECUTABLE_PATH to pin one
+```
+
+Submitting test applications to real employers is prohibited.
 
 ## Repository layout
 
@@ -85,8 +91,9 @@ tests           unit / integration / browser + fixtures and mock ATS sites
 | 1 | Auth, profile, resume upload + parsing, database, dashboard | **Implemented and tested** |
 | 2 | Job ingestion, normalization, dedupe, matching, preferences | **Implemented and tested** |
 | 3 | Resume tailoring, cover letters, question engine, field mapping | **Implemented and tested** |
-| 4–6 | Playwright engine, ATS adapters, queue, interventions | Interfaces and data model landed |
-| 7–8 | Notifications, analytics, billing, production hardening | Notifications and analytics partial |
+| 4–6 | Playwright engine, seven ATS adapters, queue, interventions | **Implemented and tested** |
+| 7 | Notifications, analytics, billing | Notifications and dashboard analytics implemented; billing is a `BillingService` seam only |
+| 8 | Production deployment, monitoring, security hardening | Docker and health checks implemented; Terraform is a skeleton |
 
 See [`docs/11-roadmap.md`](docs/11-roadmap.md) for the full plan and
 [`docs/01-architecture.md`](docs/01-architecture.md) for the architecture.

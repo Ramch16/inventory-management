@@ -221,3 +221,68 @@ def test_users_cannot_reach_another_users_records(api, registered):
 
     assert api.delete(f"/profile/experience/{other}").status_code == 404
     assert api.get("/profile/experience").json() == []
+
+
+def test_onboarding_cannot_be_completed_with_a_thin_profile(api, registered):
+    status = api.get("/profile/onboarding").json()
+    assert status["completed_at"] is None
+    assert status["ready_for_automation"] is False
+
+    response = api.post("/profile/onboarding/complete", json={"confirmed": True})
+    assert response.status_code == 422
+    assert response.json()["error"]["code"] == "onboarding_incomplete"
+
+
+def test_onboarding_requires_explicit_confirmation(api, registered):
+    response = api.post("/profile/onboarding/complete", json={"confirmed": False})
+    assert response.status_code == 422
+
+
+def test_onboarding_completes_once_everything_is_in_place(api, registered):
+    import io
+    from pathlib import Path
+
+    fixture = Path(__file__).parent.parent / "fixtures" / "resumes" / "sample_resume.txt"
+    api.post(
+        "/resumes/upload",
+        files={"file": ("resume.txt", io.BytesIO(fixture.read_bytes()), "text/plain")},
+    )
+    api.put(
+        "/profile",
+        json={
+            "first_name": "Jordan",
+            "last_name": "Rivera",
+            "email": "jordan@example.com",
+            "phone": "+1 415 555 0142",
+            "city": "San Francisco",
+            "country": "United States",
+            "current_title": "Senior Data Engineer",
+            "years_experience": 6,
+        },
+    )
+    api.post(
+        "/profile/experience",
+        json={
+            "company": "Northwind Analytics",
+            "title": "Senior Data Engineer",
+            "is_current": True,
+        },
+    )
+    api.post("/profile/skills", json={"name": "Python"})
+    api.put(
+        "/profile/work-authorization",
+        json={
+            "authorization_country": "United States",
+            "authorization_type": "citizen",
+            "requires_sponsorship_now": False,
+            "requires_sponsorship_future": False,
+            "confirmed": True,
+        },
+    )
+
+    response = api.post("/profile/onboarding/complete", json={"confirmed": True})
+    assert response.status_code == 200
+    assert response.json()["completed_at"] is not None
+
+    # Only now may automation be switched on.
+    assert api.put("/automation-settings", json={"enabled": True}).status_code == 200

@@ -99,6 +99,9 @@ class Settings(BaseSettings):
     confidence_auto_threshold: float = 0.95
     confidence_review_threshold: float = 0.80
     browser_headless: bool = True
+    #: Pin a specific Chromium build. Useful in images where Playwright's expected
+    #: revision differs from the one installed.
+    browser_executable_path: str | None = None
     browser_session_ttl_seconds: int = 60 * 30
 
     # -- billing ------------------------------------------------------------

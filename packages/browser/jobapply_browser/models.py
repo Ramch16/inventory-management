@@ -96,10 +96,16 @@ class ResolvedAnswer(BaseModel):
     category: QuestionCategory = QuestionCategory.OTHER
     is_sensitive: bool = False
     reason: str | None = None
+    #: Set once a person has looked at a reviewed answer and accepted it.
+    approved_by_user: bool = False
 
     @property
     def can_autofill(self) -> bool:
-        return self.answer is not None and not self.requires_review
+        return self.answer is not None and (not self.requires_review or self.approved_by_user)
+
+    @property
+    def needs_person(self) -> bool:
+        return self.requires_review and not self.approved_by_user
 
 
 class DetectionResult(BaseModel):

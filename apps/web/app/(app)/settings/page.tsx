@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { AutomationSettingsPanel } from "@/components/settings/automation-settings";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -100,6 +101,8 @@ export default function SettingsPage() {
           </div>
         </CardContent>
       </Card>
+
+      <AutomationSettingsPanel />
 
       <Card>
         <CardHeader>
