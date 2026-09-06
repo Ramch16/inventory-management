@@ -76,6 +76,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(auth.router, prefix=prefix)
     app.include_router(profile.router, prefix=prefix)
     app.include_router(resumes.router, prefix=prefix)
+    app.include_router(resumes.versions_router, prefix=prefix)
     app.include_router(jobs.router, prefix=prefix)
     app.include_router(dashboard.router, prefix=prefix)
     return app

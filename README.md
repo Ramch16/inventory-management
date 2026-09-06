@@ -84,7 +84,7 @@ tests           unit / integration / browser + fixtures and mock ATS sites
 | --- | --- | --- |
 | 1 | Auth, profile, resume upload + parsing, database, dashboard | **Implemented and tested** |
 | 2 | Job ingestion, normalization, dedupe, matching, preferences | **Implemented and tested** |
-| 3 | Resume tailoring, cover letters, question engine | Truth layer, prompts and guardrails landed |
+| 3 | Resume tailoring, cover letters, question engine, field mapping | **Implemented and tested** |
 | 4–6 | Playwright engine, ATS adapters, queue, interventions | Interfaces and data model landed |
 | 7–8 | Notifications, analytics, billing, production hardening | Notifications and analytics partial |
 

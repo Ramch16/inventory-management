@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import { MatchScore } from "@/components/jobs/match-score";
+import { TailoredResumePanel } from "@/components/resume/tailored-resume-panel";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -154,6 +155,8 @@ export default function JobDetailPage() {
           </CardContent>
         </Card>
       ) : null}
+
+      <TailoredResumePanel jobId={jobId} />
 
       <Card>
         <CardHeader>

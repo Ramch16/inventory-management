@@ -389,3 +389,55 @@ export interface JobSource {
   last_run_at: string | null;
   last_error: string | null;
 }
+
+// ---------------------------------------------------------------- tailored resumes
+export type ResumeTemplate =
+  | "ats_classic"
+  | "modern_professional"
+  | "technical"
+  | "minimal";
+
+export interface ResumeScore {
+  ats_readability: number;
+  keyword_coverage: number;
+  skill_coverage: number;
+  experience_relevance: number;
+  formatting_quality: number;
+  factual_consistency: number;
+  overall: number;
+  notes: string[];
+}
+
+export interface ProvenanceRecord {
+  generated_text: string;
+  source_ids: string[];
+  confidence: number;
+  section: string | null;
+}
+
+export interface TruthReport {
+  allowed: boolean;
+  reasons: string[];
+  rejected_statements: string[];
+  rejected_by_generator: Array<{ section?: string; text?: string; reasons?: string[] }>;
+  used_ai: boolean;
+}
+
+export interface ResumeVersion {
+  id: string;
+  resume_id: string;
+  job_id: string | null;
+  version: number;
+  label: string | null;
+  template: ResumeTemplate;
+  quality: ResumeScore | null;
+  truth_report: TruthReport | null;
+  provenance: ProvenanceRecord[];
+  content: Record<string, unknown> | null;
+  cover_letter_text: string | null;
+  ai_provider: string | null;
+  ai_model: string | null;
+  docx_storage_key: string | null;
+  pdf_storage_key: string | null;
+  created_at: string;
+}

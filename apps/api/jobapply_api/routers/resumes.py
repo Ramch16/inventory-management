@@ -6,6 +6,7 @@ import uuid
 
 from fastapi import APIRouter, File, UploadFile, status
 from fastapi.responses import RedirectResponse, Response
+from jobapply_ai.factory import get_ai_provider
 from jobapply_shared.errors import ValidationError_
 
 from jobapply_api.deps import CurrentUser, ResumeServiceDep, SessionDep, StorageDep
@@ -18,11 +19,30 @@ from jobapply_api.schemas.resume import (
     ResumeTextCreate,
     ResumeUpdate,
     ResumeVersionResponse,
+    TailorRequest,
 )
+from jobapply_api.services.tailoring_service import TailoringService
 
 router = APIRouter(prefix="/resumes", tags=["resumes"])
 
+#: Tailored versions live under their own prefix so a path like
+#: ``/resumes/versions/{id}`` can never be matched as ``/resumes/{resume_id}``.
+versions_router = APIRouter(prefix="/resume-versions", tags=["resumes"])
+
 ALLOWED_EXTENSIONS = {".pdf", ".docx", ".txt", ".md"}
+
+
+def content_disposition(filename: str) -> str:
+    """Build a Content-Disposition header that survives non-ASCII filenames.
+
+    HTTP headers are latin-1, and a generated label routinely contains an em dash, so
+    an ASCII fallback is sent alongside the RFC 5987 encoded form.
+    """
+    from urllib.parse import quote
+
+    cleaned = filename.replace("/", "-").replace("\\", "-").replace('"', "").strip()
+    ascii_name = cleaned.encode("ascii", "replace").decode("ascii").replace("?", "_")
+    return f"attachment; filename=\"{ascii_name}\"; filename*=UTF-8''{quote(cleaned)}"
 
 
 @router.post("/upload", response_model=ResumeResponse, status_code=status.HTTP_201_CREATED)
@@ -143,12 +163,11 @@ def download_file(
     if url.startswith("http"):
         return RedirectResponse(url=url, status_code=status.HTTP_302_FOUND)
     data = storage.get(resume.original_storage_key)
-    safe_name = (resume.original_filename or "resume").replace('"', "").replace("\n", "")
     return Response(
         content=data,
         media_type=resume.original_content_type or "application/octet-stream",
         headers={
-            "Content-Disposition": f'attachment; filename="{safe_name}"',
+            "Content-Disposition": content_disposition(resume.original_filename or "resume"),
             "X-Content-Type-Options": "nosniff",
         },
     )
@@ -160,3 +179,79 @@ def delete_resume(
 ) -> None:
     service.delete(user.id, resume_id)
     db.commit()
+
+
+# --------------------------------------------------------------------- tailoring
+@router.post("/tailor", response_model=ResumeVersionResponse, status_code=status.HTTP_201_CREATED)
+def tailor_for_job(
+    payload: TailorRequest,
+    user: CurrentUser,
+    db: SessionDep,
+    storage: StorageDep,
+) -> ResumeVersionResponse:
+    """Generate a job-specific resume from the master resume and approved records.
+
+    The master resume is never modified: this writes a new version and new stored
+    documents, with provenance, a truth report and a quality score attached.
+    """
+    service = TailoringService(db, storage, get_ai_provider())
+    version = service.generate(
+        user.id,
+        payload.job_id,
+        template=str(payload.template) if payload.template else None,
+        max_pages=payload.max_pages,
+        include_cover_letter=payload.include_cover_letter,
+    )
+    db.commit()
+    db.refresh(version)
+    return ResumeVersionResponse.model_validate(version)
+
+
+@versions_router.get("/{version_id}", response_model=ResumeVersionResponse)
+def get_version(
+    version_id: uuid.UUID, user: CurrentUser, db: SessionDep, storage: StorageDep
+) -> ResumeVersionResponse:
+    version = TailoringService(db, storage).get_version(user.id, version_id)
+    return ResumeVersionResponse.model_validate(version)
+
+
+@versions_router.get("/{version_id}/file")
+def download_version(
+    version_id: uuid.UUID,
+    user: CurrentUser,
+    db: SessionDep,
+    storage: StorageDep,
+    fmt: str = "pdf",
+):
+    """Stream a generated document. Only the two formats we render are served."""
+    if fmt not in {"pdf", "docx"}:
+        raise ValidationError_("Choose either pdf or docx.", code="unsupported_format")
+    version = TailoringService(db, storage).get_version(user.id, version_id)
+    key = version.pdf_storage_key if fmt == "pdf" else version.docx_storage_key
+    if not key:
+        raise ValidationError_("That format was not generated.", code="format_not_generated")
+
+    url = storage.presign(key)
+    if url.startswith("http"):
+        return RedirectResponse(url=url, status_code=status.HTTP_302_FOUND)
+    media_type = (
+        "application/pdf"
+        if fmt == "pdf"
+        else "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+    return Response(
+        content=storage.get(key),
+        media_type=media_type,
+        headers={
+            "Content-Disposition": content_disposition(f"{version.label or 'resume'}.{fmt}"),
+            "X-Content-Type-Options": "nosniff",
+        },
+    )
+
+
+@versions_router.get("/for-job/{job_id}", response_model=list[ResumeVersionResponse])
+def versions_for_job(
+    job_id: uuid.UUID, user: CurrentUser, db: SessionDep, storage: StorageDep
+) -> list[ResumeVersionResponse]:
+    versions = TailoringService(db, storage).list_versions_for_job(user.id, job_id)
+    return [ResumeVersionResponse.model_validate(version) for version in versions]

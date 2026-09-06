@@ -10,6 +10,8 @@ import type {
   JobSource,
   MatchSummary,
   Page,
+  ResumeTemplate,
+  ResumeVersion,
   DashboardResponse,
   Education,
   Experience,
@@ -39,6 +41,7 @@ export const queryKeys = {
   jobs: (filters: Record<string, unknown> = {}) => ["jobs", filters] as const,
   job: (id: string) => ["jobs", "detail", id] as const,
   preferences: ["preferences"] as const,
+  resumeVersions: (jobId: string) => ["resume-versions", jobId] as const,
   jobSources: ["job-sources"] as const,
   notifications: ["notifications"] as const,
   unreadCount: ["notifications", "unread-count"] as const,
@@ -152,6 +155,17 @@ export const endpoints = {
   updatePreferences: (payload: Partial<JobPreference>) =>
     api.put<JobPreference>("/preferences", payload),
   jobSources: () => api.get<JobSource[]>("/job-sources"),
+
+  // tailored resumes
+  tailorResume: (payload: {
+    job_id: string;
+    template?: ResumeTemplate;
+    max_pages?: number;
+    include_cover_letter?: boolean;
+  }) => api.post<ResumeVersion>("/resumes/tailor", payload),
+  resumeVersionsForJob: (jobId: string) =>
+    api.get<ResumeVersion[]>(`/resume-versions/for-job/${jobId}`),
+  resumeVersion: (id: string) => api.get<ResumeVersion>(`/resume-versions/${id}`),
 
   // dashboard
   dashboard: () => api.get<DashboardResponse>("/dashboard"),

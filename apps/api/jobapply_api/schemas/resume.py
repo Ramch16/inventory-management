@@ -115,6 +115,41 @@ class ResumeImportResult(BaseModel):
     notes: list[str] = Field(default_factory=list)
 
 
+class TailorRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    job_id: uuid.UUID
+    template: ResumeTemplate | None = None
+    max_pages: int | None = Field(default=None, ge=1, le=3)
+    include_cover_letter: bool | None = None
+
+
+class ResumeScoreOut(BaseModel):
+    ats_readability: int = 0
+    keyword_coverage: int = 0
+    skill_coverage: int = 0
+    experience_relevance: int = 0
+    formatting_quality: int = 0
+    factual_consistency: int = 0
+    overall: int = 0
+    notes: list[str] = Field(default_factory=list)
+
+
+class ProvenanceOut(BaseModel):
+    generated_text: str
+    source_ids: list[str] = Field(default_factory=list)
+    confidence: float = 0.0
+    section: str | None = None
+
+
+class TruthReportOut(BaseModel):
+    allowed: bool = True
+    reasons: list[str] = Field(default_factory=list)
+    rejected_statements: list[str] = Field(default_factory=list)
+    rejected_by_generator: list[dict] = Field(default_factory=list)
+    used_ai: bool = False
+
+
 class ResumeVersionResponse(ORMModel):
     id: uuid.UUID
     resume_id: uuid.UUID
@@ -122,7 +157,13 @@ class ResumeVersionResponse(ORMModel):
     version: int
     label: str | None = None
     template: ResumeTemplate
-    quality: dict | None = None
+    quality: ResumeScoreOut | None = None
+    truth_report: TruthReportOut | None = None
+    provenance: list[ProvenanceOut] = Field(default_factory=list)
+    content: dict | None = None
+    cover_letter_text: str | None = None
+    ai_provider: str | None = None
+    ai_model: str | None = None
     docx_storage_key: str | None = None
     pdf_storage_key: str | None = None
     created_at: datetime
