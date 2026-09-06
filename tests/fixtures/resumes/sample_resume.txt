@@ -1,0 +1,38 @@
+Jordan Rivera
+San Francisco, CA
+jordan.rivera@example.com | (415) 555-0142
+linkedin.com/in/jordanrivera | github.com/jrivera | jordanrivera.dev
+
+PROFESSIONAL SUMMARY
+Data engineer with six years building batch and streaming pipelines for analytics teams. Focused on reliability, cost control and making data usable by non-engineers.
+
+EXPERIENCE
+
+Northwind Analytics | Senior Data Engineer | San Francisco, CA
+Mar 2021 - Present
+- Built automated data pipelines using Python and SQL that cut nightly batch time from 6h to 90m.
+- Migrated 40 legacy ETL jobs to Airflow, reducing on-call pages by 60%.
+- Partnered with analysts to define a dbt semantic layer used by 12 dashboards.
+
+Cobalt Software | Data Engineer | Austin, TX
+Jun 2018 - Feb 2021
+- Designed a Kafka ingestion service handling 2M events per day.
+- Introduced dbt testing that caught 30+ data defects before release.
+
+EDUCATION
+University of Texas at Austin
+B.S. in Computer Science, 2018
+GPA: 3.7
+
+SKILLS
+Languages: Python, SQL, Go
+Frameworks: Airflow, dbt, Spark
+Cloud: AWS, Snowflake, Terraform
+
+CERTIFICATIONS
+AWS Certified Solutions Architect – Associate (2022)
+dbt Analytics Engineering Certification (2023)
+
+PROJECTS
+Pipeline Radar – open-source freshness monitor for Airflow DAGs
+- Used by 300+ GitHub stargazers

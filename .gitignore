@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Environment and local state
+.env
+.env.local
+.env.*.local
+.storage/
+pgdata/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+
+# Automation artefacts
+screenshots/
+traces/
+playwright-report/
+test-results/
