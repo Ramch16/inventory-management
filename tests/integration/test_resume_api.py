@@ -106,6 +106,15 @@ def test_import_copies_records_into_the_profile(api, registered, resume_bytes, d
     assert profile["linkedin_url"] == "https://linkedin.com/in/jordanrivera"
 
 
+def test_import_splits_an_unambiguous_city_and_state(api, registered, resume_bytes):
+    resume_id = upload(api, resume_bytes).json()["id"]
+    api.post(f"/resumes/{resume_id}/import", json={})
+    profile = api.get("/profile").json()
+    assert profile["city"] == "San Francisco"
+    assert profile["state"] == "CA"
+    assert profile["country"] is None, "the country is never guessed from a state code"
+
+
 def test_imported_skills_are_marked_unverified(api, registered, resume_bytes, db_session):
     resume_id = upload(api, resume_bytes).json()["id"]
     api.post(f"/resumes/{resume_id}/import", json={})

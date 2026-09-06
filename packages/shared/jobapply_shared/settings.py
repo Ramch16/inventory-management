@@ -8,10 +8,10 @@ that would be unsafe in production: the app refuses to boot with a development
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import Field, field_validator, model_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 #: Refused at startup when ENVIRONMENT=production (see _production_guards).
 DEV_SECRET = "dev-only-secret-change-me"  # noqa: S105
@@ -56,7 +56,11 @@ class Settings(BaseSettings):
 
     # -- frontend -----------------------------------------------------------
     frontend_base_url: str = "http://localhost:3000"
-    cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
+    # NoDecode keeps pydantic-settings from JSON-parsing the raw value, so the
+    # comma-separated form used in .env reaches the validator below intact.
+    cors_origins: Annotated[list[str], NoDecode] = Field(
+        default_factory=lambda: ["http://localhost:3000"]
+    )
 
     # -- storage ------------------------------------------------------------
     storage_backend: Literal["local", "s3"] = "local"
@@ -111,9 +115,18 @@ class Settings(BaseSettings):
     @field_validator("cors_origins", mode="before")
     @classmethod
     def _split_origins(cls, value: object) -> object:
-        if isinstance(value, str):
-            return [item.strip() for item in value.split(",") if item.strip()]
-        return value
+        """Accept both the comma-separated form used in .env files and a JSON array."""
+        if not isinstance(value, str):
+            return value
+        text = value.strip()
+        if text.startswith("["):
+            import json
+
+            try:
+                return json.loads(text)
+            except json.JSONDecodeError as exc:
+                raise ValueError("CORS_ORIGINS looked like JSON but could not be parsed") from exc
+        return [item.strip() for item in text.split(",") if item.strip()]
 
     @model_validator(mode="after")
     def _production_guards(self) -> Settings:

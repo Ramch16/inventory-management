@@ -276,6 +276,15 @@ class ResumeService:
                 ):
                     if value and not getattr(profile, field):
                         setattr(profile, field, value)
+
+                # A resume location is usually "City, ST". Only the unambiguous
+                # two-part form is split; anything else is left for the user, and
+                # the country is never guessed from a state abbreviation.
+                city, state = _split_location(contact.get("location"))
+                if city and not profile.city:
+                    profile.city = city
+                if state and not profile.state:
+                    profile.state = state
                 result["profile_updated"] = True
             if options.import_summary and structured.get("summary") and not profile.summary:
                 profile.summary = structured["summary"][:4000]
@@ -388,6 +397,23 @@ class ResumeService:
             data={key: value for key, value in result.items() if key != "notes"},
         )
         return result
+
+
+def _split_location(value: Any) -> tuple[str | None, str | None]:
+    """Split ``"San Francisco, CA"`` into city and state.
+
+    Returns ``(None, None)`` for anything that is not exactly two comma-separated
+    parts, so an unusual format is left to the user rather than guessed at.
+    """
+    if not value or not isinstance(value, str):
+        return None, None
+    parts = [part.strip() for part in value.split(",") if part.strip()]
+    if len(parts) != 2:
+        return None, None
+    city, state = parts
+    if len(city) > 120 or len(state) > 120:
+        return None, None
+    return city, state
 
 
 def _as_date(value: Any):

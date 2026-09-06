@@ -107,3 +107,31 @@ def test_redaction_strips_sensitive_keys_and_bearer_tokens():
     assert cleaned["nested"]["authorization"] == "[redacted]"
     assert "abc.def.ghi" not in cleaned["note"]
     assert cleaned["email"] == "a@example.com"
+
+
+def test_cors_origins_accepts_both_env_formats(monkeypatch):
+    """A comma-separated CORS_ORIGINS in a .env file must not crash startup."""
+    from jobapply_shared.settings import Settings
+
+    monkeypatch.setenv("CORS_ORIGINS", "http://127.0.0.1:3000, http://localhost:3000")
+    assert Settings().cors_origins == ["http://127.0.0.1:3000", "http://localhost:3000"]
+
+    monkeypatch.setenv("CORS_ORIGINS", '["http://a.test", "http://b.test"]')
+    assert Settings().cors_origins == ["http://a.test", "http://b.test"]
+
+
+def test_production_refuses_a_development_secret(monkeypatch):
+    import pytest as _pytest
+
+    from jobapply_shared.settings import DEV_SECRET, Settings
+
+    monkeypatch.setenv("ENVIRONMENT", "production")
+    monkeypatch.setenv("SECRET_KEY", DEV_SECRET)
+    monkeypatch.setenv("COOKIE_SECURE", "true")
+    with _pytest.raises(ValueError, match="SECRET_KEY"):
+        Settings()
+
+    monkeypatch.setenv("SECRET_KEY", "a" * 40)
+    monkeypatch.setenv("COOKIE_SECURE", "false")
+    with _pytest.raises(ValueError, match="COOKIE_SECURE"):
+        Settings()
