@@ -588,3 +588,88 @@ export interface OnboardingStatus {
   blocks_automation: string[];
   has_master_resume: boolean;
 }
+
+export interface AnalyticsReport {
+  range_days: number;
+  applications_per_day: Array<{ date: string; created: number; submitted: number }>;
+  by_company: Array<{ label: string; count: number }>;
+  by_role: Array<{ label: string; count: number }>;
+  by_location: Array<{ label: string; count: number }>;
+  match_score_distribution: Array<{ label: string; count: number }>;
+  funnel: Array<{ stage: string; label: string; count: number }>;
+  outcomes: {
+    submitted: number;
+    responses: number;
+    interviews: number;
+    offers: number;
+    rejections: number;
+    response_rate: number;
+    interview_rate: number;
+  };
+  automation: {
+    succeeded: number;
+    failed: number;
+    awaiting_user: number;
+    unconfirmed: number;
+    success_rate: number;
+    failure_rate: number;
+    intervention_rate: number;
+  };
+}
+
+export interface BillingPlan {
+  plan: string;
+  applications_per_day: number;
+  applications_per_month: number;
+  ai_tailoring: boolean;
+  cover_letters: boolean;
+  current: boolean;
+}
+
+export interface BillingState {
+  plan: string;
+  status: string;
+  provider: string;
+  cancel_at_period_end: boolean;
+  current_period_end: string | null;
+  usage: {
+    period: string;
+    applications_submitted: number;
+    applications_limit: number;
+    remaining: number;
+  };
+  plans: BillingPlan[];
+  checkout_available: boolean;
+}
+
+export interface AdminOverview {
+  users: number;
+  active_users: number;
+  jobs: number;
+  applications: number;
+  submitted: number;
+  failed: number;
+  open_interventions: number;
+  adapters: Array<{
+    ats: string;
+    runs: number;
+    succeeded: number;
+    failed: number;
+    interventions: number;
+    success_rate: number;
+    enabled: boolean;
+  }>;
+}
+
+export interface AdminUser {
+  id: string;
+  email: string;
+  role: string;
+  is_active: boolean;
+  email_verified: boolean;
+  automation_enabled: boolean;
+  automation_paused: boolean;
+  plan: string | null;
+  applications: number;
+  created_at: string;
+}

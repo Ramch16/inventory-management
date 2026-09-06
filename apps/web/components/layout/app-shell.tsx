@@ -33,7 +33,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <span className="font-semibold tracking-tight">JobApply</span>
         </div>
         <div className="flex-1 overflow-y-auto p-3">
-          <Nav />
+          <Nav isAdmin={user?.role === "admin"} />
         </div>
         <div className="border-t p-3">
           {user ? (
@@ -83,7 +83,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         {mobileOpen ? (
           <div className="border-b bg-card p-3 lg:hidden">
-            <Nav onNavigate={() => setMobileOpen(false)} />
+            <Nav onNavigate={() => setMobileOpen(false)} isAdmin={user?.role === "admin"} />
           </div>
         ) : null}
 

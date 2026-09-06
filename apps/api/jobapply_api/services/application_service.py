@@ -38,6 +38,7 @@ from jobapply_shared.enums import (
 )
 from jobapply_shared.errors import ConflictError, NotFoundError, ValidationError_
 from jobapply_shared.logging import get_logger
+from jobapply_shared.metrics import record_application_run, record_intervention
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -267,7 +268,14 @@ class ApplicationService:
             )
         )
 
+        record_application_run(
+            str(report.detection.ats) if report.detection else "unknown",
+            str(report.status),
+            sum(step.duration_ms or 0 for step in report.steps),
+        )
+
         if report.intervention is not None:
+            record_intervention(str(report.intervention.type))
             self.open_intervention(application, report)
         elif report.failure_reason is not None:
             self._notify(

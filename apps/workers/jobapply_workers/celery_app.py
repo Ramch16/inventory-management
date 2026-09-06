@@ -48,3 +48,29 @@ celery_app.conf.update(
 )
 
 celery_app.autodiscover_tasks(["jobapply_workers.tasks"], force=True)
+
+
+@celery_app.on_after_configure.connect
+def _register_heartbeat(sender, **_kwargs) -> None:
+    """Publish a heartbeat so ``/health/ready`` can tell whether workers are alive.
+
+    A deployment with no running worker looks healthy from the API alone while
+    applications quietly queue up; this makes that visible.
+    """
+    sender.add_periodic_task(30.0, worker_heartbeat.s(), name="worker heartbeat")
+
+
+@celery_app.task(name="worker.heartbeat")
+def worker_heartbeat() -> dict:
+    import socket
+    import time
+
+    try:
+        import redis
+
+        client = redis.Redis.from_url(settings.redis_url, socket_connect_timeout=2)
+        client.hset("jobapply:worker:heartbeats", socket.gethostname(), time.time())
+        client.expire("jobapply:worker:heartbeats", 600)
+    except Exception:  # noqa: BLE001 - a missing heartbeat must not kill the worker
+        return {"published": False}
+    return {"published": True}

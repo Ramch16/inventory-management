@@ -92,8 +92,8 @@ tests           unit / integration / browser + fixtures and mock ATS sites
 | 2 | Job ingestion, normalization, dedupe, matching, preferences | **Implemented and tested** |
 | 3 | Resume tailoring, cover letters, question engine, field mapping | **Implemented and tested** |
 | 4–6 | Playwright engine, seven ATS adapters, queue, interventions | **Implemented and tested** |
-| 7 | Notifications, analytics, billing | Notifications and dashboard analytics implemented; billing is a `BillingService` seam only |
-| 8 | Production deployment, monitoring, security hardening | Docker and health checks implemented; Terraform is a skeleton |
+| 7 | Notifications, analytics, billing | **Implemented and tested** — in-app + e-mail notifications, `/analytics` API and charts, plan limits with a Stripe adapter |
+| 8 | Production deployment, monitoring, security hardening | **Implemented and tested** — Prometheus `/metrics`, worker heartbeats in readiness, Sentry/tracing hooks, admin console, Docker images; Terraform remains a skeleton |
 
 See [`docs/11-roadmap.md`](docs/11-roadmap.md) for the full plan and
 [`docs/01-architecture.md`](docs/01-architecture.md) for the architecture.

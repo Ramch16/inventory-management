@@ -3,10 +3,12 @@
 import {
   BarChart3,
   Briefcase,
+  CreditCard,
   FileText,
   LayoutDashboard,
   Send,
   Settings,
+  ShieldCheck,
   TriangleAlert,
   User,
 } from "lucide-react";
@@ -31,16 +33,29 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/jobs", label: "Jobs", icon: Briefcase },
   { href: "/applications", label: "Applications", icon: Send },
   { href: "/interventions", label: "Needs attention", icon: TriangleAlert },
-  { href: "/analytics", label: "Analytics", icon: BarChart3, upcoming: true },
+  { href: "/analytics", label: "Analytics", icon: BarChart3 },
+  { href: "/billing", label: "Billing", icon: CreditCard },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
-export function Nav({ onNavigate }: { onNavigate?: () => void }) {
+/** Only rendered for administrators. */
+export const ADMIN_ITEMS: NavItem[] = [
+  { href: "/admin", label: "Admin", icon: ShieldCheck },
+];
+
+export function Nav({
+  onNavigate,
+  isAdmin = false,
+}: {
+  onNavigate?: () => void;
+  isAdmin?: boolean;
+}) {
   const pathname = usePathname();
+  const items = isAdmin ? [...NAV_ITEMS, ...ADMIN_ITEMS] : NAV_ITEMS;
 
   return (
     <nav className="flex flex-col gap-0.5" aria-label="Main">
-      {NAV_ITEMS.map((item) => {
+      {items.map((item) => {
         const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
         const Icon = item.icon;
         return (

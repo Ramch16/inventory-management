@@ -70,3 +70,18 @@ def test_health_endpoints(api):
     body = ready.json()
     assert body["checks"]["database"]["ok"] is True
     assert body["checks"]["storage"]["ok"] is True
+
+
+def test_metrics_are_exposed_in_prometheus_format(api):
+    response = api.raw.get("/api/v1/metrics")
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/plain")
+    assert "# TYPE" in response.text
+
+
+def test_readiness_reports_worker_health(api):
+    checks = api.raw.get("/health/ready").json()["checks"]
+    assert "workers" in checks
+    # No worker is running in the test process, so this must say so rather than
+    # quietly reporting a healthy deployment.
+    assert checks["workers"]["ok"] is False

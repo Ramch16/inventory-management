@@ -176,10 +176,11 @@ def question_report() -> RunReport:
 def _apply(db_session, application_id: str, report: RunReport):
     from jobapply_api.services.application_service import ApplicationService
     from jobapply_api.services.notification_service import NotificationService
-    from jobapply_shared.email import ConsoleEmailSender
 
     application = db_session.get(Application, uuid.UUID(application_id))
-    service = ApplicationService(db_session, NotificationService(db_session, ConsoleEmailSender()))
+    from jobapply_api.deps import _email_sender
+
+    service = ApplicationService(db_session, NotificationService(db_session, _email_sender()))
     service.apply_run_report(application, report)
     db_session.commit()
     return application
@@ -335,3 +336,25 @@ def test_a_confirmed_submission_records_its_evidence(api, application_row, db_se
     assert detail["status"] == "CONFIRMATION_CAPTURED"
     assert detail["confirmation_id"] == "NW-48213-A"
     assert detail["submitted_at"] is not None
+
+
+def test_an_intervention_also_sends_an_email(api, application_row, db_session, outbox):
+    _apply(db_session, application_row["id"], captcha_report())
+    subjects = [message.subject for message in outbox]
+    assert "Action required" in subjects
+
+
+def test_email_copies_can_be_switched_off(api, application_row, db_session, outbox):
+    api.put(
+        "/automation-settings",
+        json={"notification_preferences": {"email": {"captcha_required": False}}},
+    )
+    outbox.clear()
+    _apply(db_session, application_row["id"], captcha_report())
+    assert [message.subject for message in outbox] == []
+
+
+def test_a_routine_status_change_does_not_email(api, application_row, db_session, outbox):
+    outbox.clear()
+    api.put(f"/applications/{application_row['id']}/status", json={"status": "WITHDRAWN"})
+    assert [message.subject for message in outbox] == []

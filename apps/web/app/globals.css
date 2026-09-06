@@ -28,6 +28,15 @@
     --input: 214 32% 91%;
     --ring: 221 83% 53%;
     --radius: 0.65rem;
+
+    /* Chart palette. Validated for colourblind separation and contrast against
+       the chart surface in both modes; the dark values are their own steps, not
+       an automatic flip. Slots are assigned in fixed order and never cycled. */
+    --chart-1: #2a78d6;
+    --chart-2: #eb6834;
+    --chart-3: #1baf7a;
+    --chart-grid: 214 32% 91%;
+    --chart-axis: 215 16% 47%;
   }
 
   .dark {
@@ -54,6 +63,12 @@
     --border: 217 33% 20%;
     --input: 217 33% 20%;
     --ring: 217 91% 60%;
+
+    --chart-1: #3987e5;
+    --chart-2: #d95926;
+    --chart-3: #199e70;
+    --chart-grid: 217 33% 20%;
+    --chart-axis: 215 20% 65%;
   }
 
   * {

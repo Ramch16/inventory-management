@@ -1,0 +1,9 @@
+# Copy to staging.tfvars and fill in. Never commit real values.
+environment              = "staging"
+region                   = "us-east-1"
+database_instance_class  = "db.t4g.small"
+redis_node_type          = "cache.t4g.micro"
+api_desired_count        = 1
+worker_desired_count     = 1
+automation_desired_count = 1
+domain_name              = null

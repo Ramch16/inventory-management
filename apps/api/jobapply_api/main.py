@@ -11,7 +11,17 @@ from jobapply_shared.settings import Settings, get_settings
 
 from jobapply_api.errors import register_error_handlers
 from jobapply_api.middleware import RequestContextMiddleware, SecurityHeadersMiddleware
-from jobapply_api.routers import applications, auth, dashboard, health, jobs, profile, resumes
+from jobapply_api.routers import (
+    admin,
+    applications,
+    auth,
+    billing,
+    dashboard,
+    health,
+    jobs,
+    profile,
+    resumes,
+)
 
 DESCRIPTION = """
 Job application automation with a human in the loop.
@@ -79,6 +89,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(resumes.versions_router, prefix=prefix)
     app.include_router(jobs.router, prefix=prefix)
     app.include_router(applications.router, prefix=prefix)
+    app.include_router(billing.router, prefix=prefix)
+    app.include_router(admin.router, prefix=prefix)
     app.include_router(dashboard.router, prefix=prefix)
     return app
 

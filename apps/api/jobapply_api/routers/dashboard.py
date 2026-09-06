@@ -13,11 +13,13 @@ from jobapply_api.deps import (
     SessionDep,
 )
 from jobapply_api.schemas.dashboard import (
+    AnalyticsReport,
     DashboardCounters,
     DashboardResponse,
     NotificationResponse,
     ProfileReadiness,
 )
+from jobapply_api.services.analytics_service import AnalyticsService
 
 router = APIRouter(tags=["dashboard"])
 
@@ -35,6 +37,15 @@ def dashboard(user: CurrentUser, service: DashboardServiceDep) -> DashboardRespo
 @router.get("/analytics/summary", response_model=DashboardCounters)
 def analytics_summary(user: CurrentUser, service: DashboardServiceDep) -> DashboardCounters:
     return DashboardCounters(**service.counters(user.id))
+
+
+@router.get("/analytics", response_model=AnalyticsReport)
+def analytics(
+    user: CurrentUser,
+    db: SessionDep,
+    range_days: int = Query(default=30, ge=7, le=365, alias="range"),
+) -> AnalyticsReport:
+    return AnalyticsReport(**AnalyticsService(db).report(user.id, range_days))
 
 
 @router.get("/notifications", response_model=list[NotificationResponse])

@@ -2,9 +2,13 @@
 
 import { api } from "@/lib/api/client";
 import type {
+  AdminOverview,
+  AdminUser,
+  AnalyticsReport,
   ApplicationDetail,
   ApplicationSummary,
   AutomationSettings,
+  BillingState,
   Certification,
   DiscoveryResult,
   JobCard,
@@ -53,6 +57,10 @@ export const queryKeys = {
   intervention: (id: string) => ["interventions", "detail", id] as const,
   automationSettings: ["automation-settings"] as const,
   onboarding: ["onboarding"] as const,
+  analytics: (days: number) => ["analytics", days] as const,
+  billing: ["billing"] as const,
+  adminOverview: ["admin", "overview"] as const,
+  adminUsers: ["admin", "users"] as const,
   jobSources: ["job-sources"] as const,
   notifications: ["notifications"] as const,
   unreadCount: ["notifications", "unread-count"] as const,
@@ -214,6 +222,18 @@ export const endpoints = {
   updateAutomationSettings: (payload: Partial<AutomationSettings>) =>
     api.put<AutomationSettings>("/automation-settings", payload),
   setPause: (paused: boolean) => api.post<AutomationSettings>("/automation/pause", { paused }),
+
+  // analytics
+  analytics: (days = 30) => api.get<AnalyticsReport>(`/analytics?range=${days}`),
+
+  // billing
+  billing: () => api.get<BillingState>("/billing"),
+  changePlan: (plan: string) => api.post<BillingState>("/billing/plan", { plan }),
+
+  // admin
+  adminOverview: () => api.get<AdminOverview>("/admin/overview"),
+  adminUsers: () => api.get<AdminUser[]>("/admin/users"),
+  adminDisableUser: (id: string) => api.post<AdminUser>(`/admin/users/${id}/disable`),
 
   // dashboard
   dashboard: () => api.get<DashboardResponse>("/dashboard"),
