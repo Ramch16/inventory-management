@@ -43,15 +43,25 @@ required on all unsafe methods. Bearer tokens are accepted for programmatic clie
 | GET | `/notifications` · POST `/notifications/{id}/read` | |
 | GET | `/health` · `/health/ready` | liveness / dependency readiness |
 
-## Phase 2+ (contract fixed now, implemented per roadmap)
+## Phase 2 (implemented)
 
 ```
-POST /jobs/search                 { query, location, remote, sources[] } -> { queued_task_id }
-GET  /jobs                        ?status&min_score&company&page -> Page<JobCard>
-GET  /jobs/{id}                   -> JobDetail (with match if scored)
-POST /jobs/{id}/match             -> MatchResult
-POST /jobs/{id}/skip              -> 204
+POST /jobs/search                 { keywords, titles, locations, remote_only, sources[] }
+                                  -> { fetched, created, duplicates, scored, errors[] }
+GET  /jobs                        ?page&page_size&min_score&recommendation&company
+                                  -> Page<JobCard>   (ordered by match score)
+GET  /jobs/{id}                   -> JobDetail (posting + match analysis)
+POST /jobs/{id}/match             -> MatchSummary   (rescore this job)
+POST /jobs/rescore                -> { rescored }   (after a profile change)
+POST /jobs/{id}/decision          { decision: approve|skip } -> MatchSummary
+                                  # approve is refused when a hard requirement fails
 GET  /preferences  PUT /preferences
+GET  /job-sources                 -> configured sources and their enabled state
+```
+
+## Phase 3+ (contract fixed now, implemented per roadmap)
+
+```
 GET  /automation-settings  PUT /automation-settings
 POST /automation/pause  POST /automation/resume        # global PAUSE ALL
 POST /applications                { job_id, auto_submit } -> Application

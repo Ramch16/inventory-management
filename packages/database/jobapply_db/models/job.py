@@ -69,6 +69,7 @@ class Job(Base, UUIDPrimaryKeyMixin, TimestampMixin, SoftDeleteMixin):
         UniqueConstraint("source_id", "source_job_id", name="uq_jobs_source_job"),
         UniqueConstraint("dedupe_key", name="uq_jobs_dedupe_key"),
         Index("ix_jobs_company_title", "company_id", "normalized_title"),
+        Index("ix_jobs_normalized_company_title", "normalized_company", "normalized_title"),
         Index("ix_jobs_status_discovered", "status", "discovered_at"),
     )
 
@@ -81,6 +82,8 @@ class Job(Base, UUIDPrimaryKeyMixin, TimestampMixin, SoftDeleteMixin):
     )
 
     company_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    #: Denormalized so duplicate detection can compare without joining companies.
+    normalized_company: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     title: Mapped[str] = mapped_column(String(300), nullable=False)
     normalized_title: Mapped[str] = mapped_column(String(300), nullable=False, index=True)
     location: Mapped[str | None] = mapped_column(String(255))

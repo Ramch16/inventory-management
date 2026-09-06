@@ -71,7 +71,7 @@ packages/shared settings, logging, security, storage, e-mail, text, rate limits
 packages/database SQLAlchemy models + Alembic migrations
 packages/ai     AIProvider abstraction, prompt registry, guardrails
 packages/resume parsing, ResumeTruthLayer, tailoring contracts
-packages/jobs   job sources, normalization, matching
+packages/jobs   job sources, normalization, dedupe, matching
 packages/browser Playwright engine and ATS adapters
 infrastructure  Dockerfiles and Terraform skeleton
 docs            architecture, ERD, interfaces, API contracts, security model
@@ -83,7 +83,7 @@ tests           unit / integration / browser + fixtures and mock ATS sites
 | Phase | Scope | State |
 | --- | --- | --- |
 | 1 | Auth, profile, resume upload + parsing, database, dashboard | **Implemented and tested** |
-| 2 | Job ingestion, normalization, dedupe, matching | Models, contracts and normalization primitives landed |
+| 2 | Job ingestion, normalization, dedupe, matching, preferences | **Implemented and tested** |
 | 3 | Resume tailoring, cover letters, question engine | Truth layer, prompts and guardrails landed |
 | 4–6 | Playwright engine, ATS adapters, queue, interventions | Interfaces and data model landed |
 | 7–8 | Notifications, analytics, billing, production hardening | Notifications and analytics partial |

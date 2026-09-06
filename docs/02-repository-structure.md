@@ -56,6 +56,9 @@
 
 * `packages/*` never import from `apps/*`.
 * `apps/api` and `apps/workers` may import any `packages/*`.
+* `apps/api/jobapply_api/services` is the shared service layer, not an HTTP detail:
+  `apps/workers` imports it so a scheduled run and a user-initiated one take exactly
+  the same code path. Workers never import `apps/api/jobapply_api/routers`.
 * `packages/browser` may import `packages/shared` only — it receives resolved answers
   and file paths, never a database session.
 * `packages/ai` never performs I/O other than the provider HTTP call.

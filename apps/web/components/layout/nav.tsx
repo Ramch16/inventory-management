@@ -28,7 +28,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/profile", label: "Profile", icon: User },
   { href: "/resume", label: "Resumes", icon: FileText },
-  { href: "/jobs", label: "Jobs", icon: Briefcase, upcoming: true },
+  { href: "/jobs", label: "Jobs", icon: Briefcase },
   { href: "/applications", label: "Applications", icon: Send, upcoming: true },
   { href: "/interventions", label: "Needs attention", icon: TriangleAlert, upcoming: true },
   { href: "/analytics", label: "Analytics", icon: BarChart3, upcoming: true },

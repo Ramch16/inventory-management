@@ -3,6 +3,13 @@
 import { api } from "@/lib/api/client";
 import type {
   Certification,
+  DiscoveryResult,
+  JobCard,
+  JobDetail,
+  JobPreference,
+  JobSource,
+  MatchSummary,
+  Page,
   DashboardResponse,
   Education,
   Experience,
@@ -29,6 +36,10 @@ export const queryKeys = {
   resumes: ["resumes"] as const,
   resume: (id: string) => ["resumes", id] as const,
   dashboard: ["dashboard"] as const,
+  jobs: (filters: Record<string, unknown> = {}) => ["jobs", filters] as const,
+  job: (id: string) => ["jobs", "detail", id] as const,
+  preferences: ["preferences"] as const,
+  jobSources: ["job-sources"] as const,
   notifications: ["notifications"] as const,
   unreadCount: ["notifications", "unread-count"] as const,
 };
@@ -107,6 +118,40 @@ export const endpoints = {
   setMasterResume: (id: string) => api.post<Resume>(`/resumes/${id}/master`),
   importResume: (id: string) => api.post<ResumeImportResult>(`/resumes/${id}/import`, {}),
   deleteResume: (id: string) => api.delete<void>(`/resumes/${id}`),
+
+  // jobs
+  searchJobs: (payload: {
+    keywords?: string[];
+    titles?: string[];
+    locations?: string[];
+    remote_only?: boolean;
+    sources?: string[];
+  }) => api.post<DiscoveryResult>("/jobs/search", payload),
+  jobs: (params: {
+    page?: number;
+    page_size?: number;
+    min_score?: number;
+    recommendation?: string;
+    company?: string;
+  }) => {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        query.set(key, String(value));
+      }
+    });
+    const suffix = query.toString();
+    return api.get<Page<JobCard>>(`/jobs${suffix ? `?${suffix}` : ""}`);
+  },
+  job: (id: string) => api.get<JobDetail>(`/jobs/${id}`),
+  matchJob: (id: string) => api.post<MatchSummary>(`/jobs/${id}/match`),
+  rescoreJobs: () => api.post<{ rescored: number }>("/jobs/rescore"),
+  decideJob: (id: string, decision: "approve" | "skip") =>
+    api.post<MatchSummary>(`/jobs/${id}/decision`, { decision }),
+  preferences: () => api.get<JobPreference>("/preferences"),
+  updatePreferences: (payload: Partial<JobPreference>) =>
+    api.put<JobPreference>("/preferences", payload),
+  jobSources: () => api.get<JobSource[]>("/job-sources"),
 
   // dashboard
   dashboard: () => api.get<DashboardResponse>("/dashboard"),

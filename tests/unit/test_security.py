@@ -122,7 +122,6 @@ def test_cors_origins_accepts_both_env_formats(monkeypatch):
 
 def test_production_refuses_a_development_secret(monkeypatch):
     import pytest as _pytest
-
     from jobapply_shared.settings import DEV_SECRET, Settings
 
     monkeypatch.setenv("ENVIRONMENT", "production")

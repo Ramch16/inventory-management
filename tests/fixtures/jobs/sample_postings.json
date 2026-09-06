@@ -1,0 +1,36 @@
+[
+  {
+    "id": "sample-1001",
+    "company": "Northwind Analytics",
+    "title": "Senior Data Engineer",
+    "location": "San Francisco, CA",
+    "remote": "Hybrid",
+    "employment_type": "Full-time",
+    "salary": "$160,000 - $200,000 per year",
+    "apply_url": "https://boards.greenhouse.io/northwindsample/jobs/1001",
+    "posting_url": "https://boards.greenhouse.io/northwindsample/jobs/1001",
+    "description": "<p>Sample posting used for local development. We are hiring a Senior Data Engineer to build batch and streaming pipelines.</p><h3>Requirements</h3><ul><li>5+ years of experience building data pipelines</li><li>Strong Python and SQL</li><li>Experience with Airflow and dbt</li><li>Bachelor's degree in a technical field</li></ul><h3>Preferred qualifications</h3><ul><li>Snowflake or BigQuery</li><li>Terraform</li></ul><p>We are unable to sponsor work visas for this role.</p>"
+  },
+  {
+    "id": "sample-1002",
+    "company": "Cobalt Software, Inc.",
+    "title": "Analytics Engineer (Remote)",
+    "location": "Remote - United States",
+    "remote": "Remote",
+    "employment_type": "Full-time",
+    "salary": "$140,000 - $175,000",
+    "apply_url": "https://jobs.lever.co/cobaltsample/1002/apply",
+    "posting_url": "https://jobs.lever.co/cobaltsample/1002",
+    "description": "<p>Sample posting used for local development.</p><h3>Qualifications</h3><ul><li>3+ years of experience in analytics engineering</li><li>dbt and SQL expertise</li><li>Python for tooling</li></ul><h3>Nice to have</h3><ul><li>Looker or Tableau</li></ul><p>We will sponsor eligible candidates.</p>"
+  },
+  {
+    "id": "sample-1003",
+    "company": "Helios Robotics",
+    "title": "Senior Director of Engineering",
+    "location": "Austin, TX",
+    "remote": "On-site",
+    "employment_type": "Full-time",
+    "apply_url": "https://helios.example.com/careers/1003",
+    "description": "<p>Sample posting used for local development.</p><h3>Requirements</h3><ul><li>12+ years of experience leading engineering organisations</li><li>Master's degree preferred</li></ul>"
+  }
+]

@@ -6,7 +6,7 @@ user verification → submit**, with one ATS adapter at a time rather than all a
 | Phase | Scope | State |
 | --- | --- | --- |
 | 1 | Auth, profile, resume upload + parsing, database + migrations, dashboard | **Implemented** |
-| 2 | Job ingestion, normalization, dedupe, matching engine, preferences | Contracts + models landed |
+| 2 | Job ingestion, normalization, dedupe, matching engine, preferences | **Implemented** |
 | 3 | AI resume tailoring, cover letters, application question engine | Interfaces + prompts landed |
 | 4 | Playwright engine, ATS detection, Greenhouse / Lever / Ashby adapters | Interfaces landed |
 | 5 | Workday, iCIMS, SmartRecruiters, generic fallback adapter | Planned |

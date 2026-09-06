@@ -279,3 +279,113 @@ export interface Notification {
   read_at: string | null;
   created_at: string;
 }
+
+// --------------------------------------------------------------------------- jobs
+export type MatchRecommendation = "APPLY" | "REVIEW" | "SKIP";
+
+export interface MatchSummary {
+  overall_score: number;
+  skills_score: number;
+  experience_score: number;
+  education_score: number;
+  location_score: number;
+  authorization_score: number;
+  title_score: number;
+  seniority_score: number;
+  recommendation: MatchRecommendation;
+  matched_skills: string[];
+  missing_skills: string[];
+  risks: string[];
+  hard_requirement_failed: boolean;
+  explanation: string | null;
+  user_decision: string | null;
+}
+
+export interface JobCard {
+  id: string;
+  company_name: string;
+  title: string;
+  location: string | null;
+  remote_type: RemoteType;
+  employment_type: EmploymentType;
+  salary_min: number | null;
+  salary_max: number | null;
+  salary_currency: string | null;
+  detected_ats: string | null;
+  apply_url: string | null;
+  status: string;
+  discovered_at: string;
+  expiration_date: string | null;
+  sponsorship_offered: boolean | null;
+  match: MatchSummary | null;
+  application_status: string | null;
+}
+
+export interface JobDetail extends JobCard {
+  description: string | null;
+  requirements: string[];
+  preferred_qualifications: string[];
+  skills: string[];
+  education: string | null;
+  experience_required_years: number | null;
+  seniority: string | null;
+  sponsorship_information: string | null;
+  posting_url: string | null;
+  source_slug: string | null;
+}
+
+export interface Page<T> {
+  items: T[];
+  page: number;
+  page_size: number;
+  total: number;
+}
+
+export interface DiscoveryResult {
+  fetched: number;
+  created: number;
+  duplicates: number;
+  scored: number;
+  errors: string[];
+}
+
+export interface MatchWeights {
+  skills: number;
+  experience: number;
+  title: number;
+  education: number;
+  location: number;
+  authorization: number;
+}
+
+export interface JobPreference {
+  id: string;
+  name: string;
+  is_active: boolean;
+  target_titles: string[] | null;
+  excluded_titles: string[] | null;
+  target_companies: string[] | null;
+  excluded_companies: string[] | null;
+  locations: string[] | null;
+  remote_preference: RemoteType | null;
+  salary_min: number | null;
+  experience_min_years: number | null;
+  experience_max_years: number | null;
+  employment_types: string[] | null;
+  industries: string[] | null;
+  keywords: string[] | null;
+  excluded_keywords: string[] | null;
+  requires_sponsorship: boolean | null;
+  match_weights: MatchWeights | null;
+  updated_at: string;
+}
+
+export interface JobSource {
+  id: string;
+  slug: string;
+  name: string;
+  kind: string;
+  enabled: boolean;
+  last_run_at: string | null;
+  last_error: string | null;
+}
