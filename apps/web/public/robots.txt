@@ -1,0 +1,4 @@
+# The product is an authenticated application; there is nothing here worth
+# indexing, and the routes below only ever render someone's own data.
+User-agent: *
+Disallow: /
