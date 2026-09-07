@@ -233,6 +233,9 @@ class CertificationResponse(ORMModel, CertificationBase):
 # ------------------------------------------------------------------------ completeness
 class ProfileCompleteness(BaseModel):
     score: int
+    #: Per-section state, so a wizard can show which step is outstanding rather than
+    #: making the user read a list of missing field names.
+    sections: dict[str, bool] = Field(default_factory=dict)
     missing: list[str]
     blocks_automation: list[str]
     ready_for_automation: bool
@@ -259,6 +262,7 @@ class OnboardingComplete(BaseModel):
 class OnboardingStatus(BaseModel):
     completed_at: datetime | None = None
     ready_for_automation: bool = False
+    sections: dict[str, bool] = Field(default_factory=dict)
     missing: list[str] = Field(default_factory=list)
     blocks_automation: list[str] = Field(default_factory=list)
     has_master_resume: bool = False

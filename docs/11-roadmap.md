@@ -29,6 +29,8 @@ from scratch on an empty database.
 | Worker liveness | `worker.heartbeat` periodic task, surfaced by `GET /health/ready` |
 | Admin console | `apps/api/.../routers/admin.py`, `apps/web/app/(app)/admin` (role-gated) |
 | Deployment skeleton | `infrastructure/docker/*`, `infrastructure/terraform/` |
+| Credential vault | `apps/api/.../services/credential_service.py`, `/credentials`, the vault panel in Settings, and the worker's one-shot sign-in step |
+| Guided onboarding | `apps/web/app/(app)/onboarding`, driven by the per-section state `GET /profile/onboarding` now returns |
 
 ## Not built yet
 
@@ -37,6 +39,4 @@ in the codebase pretends otherwise.
 
 | Item | Status |
 | --- | --- |
-| Credential vault API and UI | Encrypted model and envelope encryption exist; no endpoints or screens, so no credential can be stored through the product yet |
-| Multi-step onboarding wizard route | The onboarding confirmation step exists in Settings; the guided `/onboarding` route is not built |
-| Inbox parsing of employer e-mail | Optional in the specification; not started |
+| Inbox parsing of employer e-mail | Optional in the specification; not started. Application outcomes are recorded from the run itself and from manual status updates instead |

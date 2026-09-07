@@ -293,6 +293,21 @@ class SubscriptionStatus(StrEnum):
     TRIALING = "trialing"
 
 
+class CredentialKind(StrEnum):
+    """What a vault entry holds.
+
+    ``SSO`` stores no secret at all: the user completes the sign-in themselves during
+    an intervention, which is the only way an identity-provider flow can be handled
+    without circumventing the employer's authentication.
+    """
+
+    # These are the names of credential kinds, not credentials.
+    PASSWORD = "password"  # noqa: S105
+    API_TOKEN = "api_token"  # noqa: S105
+    OAUTH = "oauth"
+    SSO = "sso"
+
+
 class EmailCategory(StrEnum):
     APPLICATION_CONFIRMATION = "APPLICATION_CONFIRMATION"
     INTERVIEW = "INTERVIEW"

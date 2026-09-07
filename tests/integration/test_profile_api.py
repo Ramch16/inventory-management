@@ -233,6 +233,25 @@ def test_onboarding_cannot_be_completed_with_a_thin_profile(api, registered):
     assert response.json()["error"]["code"] == "onboarding_incomplete"
 
 
+def test_onboarding_reports_each_step_so_the_wizard_can_show_progress(api, registered):
+    """The wizard shows which step is outstanding, not a list of field names."""
+    status = api.get("/profile/onboarding").json()
+
+    assert status["sections"] == {
+        "identity": False,
+        "professional": False,
+        "authorization": False,
+        "experience": False,
+        "education": False,
+        "skills": False,
+    }
+    assert status["has_master_resume"] is False
+
+    api.post("/profile/skills", json={"name": "Python"})
+    assert api.get("/profile/onboarding").json()["sections"]["skills"] is True
+    assert api.get("/profile/completeness").json()["sections"]["skills"] is True
+
+
 def test_onboarding_requires_explicit_confirmation(api, registered):
     response = api.post("/profile/onboarding/complete", json={"confirmed": False})
     assert response.status_code == 422

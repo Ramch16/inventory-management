@@ -122,6 +122,9 @@ class ApiClient:
     def put(self, path: str, **kwargs):
         return self._client.put(self._url(path), **kwargs)
 
+    def patch(self, path: str, **kwargs):
+        return self._client.patch(self._url(path), **kwargs)
+
     def delete(self, path: str, **kwargs):
         return self._client.request("DELETE", self._url(path), **kwargs)
 

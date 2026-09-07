@@ -10,6 +10,8 @@ import type {
   AutomationSettings,
   BillingState,
   Certification,
+  Credential,
+  CredentialInput,
   DiscoveryResult,
   JobCard,
   JobDetail,
@@ -59,6 +61,7 @@ export const queryKeys = {
   onboarding: ["onboarding"] as const,
   analytics: (days: number) => ["analytics", days] as const,
   billing: ["billing"] as const,
+  credentials: ["credentials"] as const,
   adminOverview: ["admin", "overview"] as const,
   adminUsers: ["admin", "users"] as const,
   jobSources: ["job-sources"] as const,
@@ -229,6 +232,13 @@ export const endpoints = {
   // billing
   billing: () => api.get<BillingState>("/billing"),
   changePlan: (plan: string) => api.post<BillingState>("/billing/plan", { plan }),
+
+  // credential vault - a secret is written here and never read back
+  credentials: () => api.get<Credential[]>("/credentials"),
+  createCredential: (payload: CredentialInput) => api.post<Credential>("/credentials", payload),
+  updateCredential: (id: string, payload: Partial<CredentialInput>) =>
+    api.patch<Credential>(`/credentials/${id}`, payload),
+  deleteCredential: (id: string) => api.delete<void>(`/credentials/${id}`),
 
   // admin
   adminOverview: () => api.get<AdminOverview>("/admin/overview"),

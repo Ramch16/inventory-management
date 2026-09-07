@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pytest
 from jobapply_browser.engine import ApplicationRunner
-from jobapply_browser.models import RunContext
+from jobapply_browser.models import RunContext, SignInCredential
 from jobapply_browser.questions import AnswerContext, ApplicationQuestionService
 from jobapply_shared.enums import (
     ApplicationStatus,
@@ -50,7 +50,14 @@ def answer_context() -> AnswerContext:
     )
 
 
-def context_for(url: str, *, ats: AtsKind, auto_submit: bool = True, **metadata) -> RunContext:
+def context_for(
+    url: str,
+    *,
+    ats: AtsKind,
+    auto_submit: bool = True,
+    credential: SignInCredential | None = None,
+    **metadata,
+) -> RunContext:
     return RunContext(
         application_id="app-1",
         user_id="user-1",
@@ -59,16 +66,17 @@ def context_for(url: str, *, ats: AtsKind, auto_submit: bool = True, **metadata)
         ats=ats,
         auto_submit=auto_submit,
         resume_path=str(RESUME),
+        credential=credential,
         metadata={"company": "Northwind Analytics", "title": "Senior Data Engineer", **metadata},
     )
 
 
-async def _run(manager, url, ats, *, auto_submit=True, **metadata):
+async def _run(manager, url, ats, *, auto_submit=True, credential=None, **metadata):
     runner = ApplicationRunner(question_service=ApplicationQuestionService())
     async with manager.session() as page:
         return await runner.run(
             page,
-            context_for(url, ats=ats, auto_submit=auto_submit, **metadata),
+            context_for(url, ats=ats, auto_submit=auto_submit, credential=credential, **metadata),
             answer_context(),
         )
     # the context is always closed by the session manager
@@ -224,3 +232,69 @@ def test_every_run_records_a_step_timeline(browser_manager, mock_ats, run_async)
     names = [step.name for step in report.steps]
     assert names[:4] == ["navigate", "detect", "inspect_form", "map_fields"]
     assert "submit" in names
+
+
+CREDENTIAL = SignInCredential(
+    credential_id="cred-1", username="candidate@example.com", secret="mock-password"
+)
+
+
+def test_a_stored_credential_signs_in_and_the_run_continues(browser_manager, mock_ats, run_async):
+    """Signing in to the user's own account is not a bypass — it is the user acting."""
+    report = run_async(
+        _run(
+            browser_manager,
+            mock_ats.url("/login"),
+            AtsKind.GENERIC,
+            credential=CREDENTIAL,
+            company="Helios",
+            title="Apply",
+        )
+    )
+
+    assert mock_ats.sign_in_attempts == ["candidate@example.com"]
+    steps = {step.name: step.status for step in report.steps}
+    assert steps.get("sign_in") == "ok"
+    assert report.intervention is None
+    assert report.form is not None and report.form.fields, "the form behind the wall was reached"
+
+
+def test_a_wrong_credential_pauses_instead_of_trying_again(browser_manager, mock_ats, run_async):
+    """One attempt only: repeated guesses would lock the user out of their own account."""
+    wrong = SignInCredential(
+        credential_id="cred-1", username="candidate@example.com", secret="not-the-password"
+    )
+    report = run_async(
+        _run(browser_manager, mock_ats.url("/login"), AtsKind.GENERIC, credential=wrong)
+    )
+
+    assert mock_ats.sign_in_attempts == ["candidate@example.com"], "exactly one attempt"
+    assert report.intervention is not None
+    assert report.intervention.type == InterventionType.AUTHENTICATION_REQUIRED
+    assert report.status == ApplicationStatus.WAITING_FOR_VERIFICATION
+
+
+def test_a_captcha_after_sign_in_still_stops_the_run(browser_manager, mock_ats, run_async):
+    """A correct password never becomes a way past a challenge."""
+    report = run_async(
+        _run(
+            browser_manager,
+            mock_ats.url("/login-captcha"),
+            AtsKind.GENERIC,
+            credential=CREDENTIAL,
+        )
+    )
+
+    assert report.intervention is not None
+    assert report.intervention.type == InterventionType.CAPTCHA
+    assert report.status == ApplicationStatus.WAITING_FOR_VERIFICATION
+
+
+def test_a_sign_in_wall_without_a_stored_credential_still_pauses(
+    browser_manager, mock_ats, run_async
+):
+    report = run_async(_run(browser_manager, mock_ats.url("/login"), AtsKind.GENERIC))
+
+    assert mock_ats.sign_in_attempts == [], "nothing was typed into the sign-in form"
+    assert report.intervention is not None
+    assert report.intervention.type == InterventionType.AUTHENTICATION_REQUIRED

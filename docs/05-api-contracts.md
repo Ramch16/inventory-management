@@ -77,6 +77,10 @@ GET  /interventions/{id}          -> Intervention + screenshot URL
 POST /interventions/{id}/continue { otp_code?, answers? } -> 202
 POST /interventions/{id}/cancel   -> 204
 GET  /analytics                   ?range -> series + breakdowns
+GET  /credentials                 -> [Credential]            # never includes a secret
+POST /credentials                 { label, kind, host?, username?, secret? } -> Credential
+PATCH /credentials/{id}           { label?, host?, username?, secret? } -> Credential
+DELETE /credentials/{id}          -> 204
 GET  /admin/{users,jobs,applications,automation,errors,usage}    # role=admin
 ```
 
@@ -89,3 +93,6 @@ GET  /admin/{users,jobs,applications,automation,errors,usage}    # role=admin
   router.
 * Long operations return `202 Accepted` with `{task_id}`; progress is read from the
   resource itself.
+* A stored credential secret is write-only over HTTP. No route reads one back, and
+  `POST`/`PATCH` echo the credential without it; the only reader is the automation
+  worker.

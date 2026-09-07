@@ -141,6 +141,7 @@ export interface Certification {
 
 export interface ProfileCompleteness {
   score: number;
+  sections: Record<string, boolean>;
   missing: string[];
   blocks_automation: string[];
   ready_for_automation: boolean;
@@ -584,6 +585,8 @@ export interface AutomationSettings {
 export interface OnboardingStatus {
   completed_at: string | null;
   ready_for_automation: boolean;
+  /** Per-section state, keyed by the section names the wizard steps through. */
+  sections: Record<string, boolean>;
   missing: string[];
   blocks_automation: string[];
   has_master_resume: boolean;
@@ -672,4 +675,31 @@ export interface AdminUser {
   plan: string | null;
   applications: number;
   created_at: string;
+}
+
+/**
+ * A vault entry as the browser is allowed to see it.
+ *
+ * There is no `secret` field and there is no endpoint that would populate one:
+ * secrets are written and then only ever decrypted inside an automation worker.
+ */
+export interface Credential {
+  id: string;
+  label: string;
+  kind: CredentialKind;
+  host: string | null;
+  username: string | null;
+  has_secret: boolean;
+  last_used_at: string | null;
+  created_at: string;
+}
+
+export type CredentialKind = "password" | "api_token" | "oauth" | "sso";
+
+export interface CredentialInput {
+  label: string;
+  kind: CredentialKind;
+  host?: string | null;
+  username?: string | null;
+  secret?: string | null;
 }

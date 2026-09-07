@@ -43,9 +43,16 @@ def chromium_path() -> str:
 
 
 @pytest.fixture(scope="session")
-def mock_ats() -> Iterator[MockAtsServer]:
+def _mock_ats_server() -> Iterator[MockAtsServer]:
     with MockAtsServer() as server:
         yield server
+
+
+@pytest.fixture
+def mock_ats(_mock_ats_server: MockAtsServer) -> MockAtsServer:
+    """One server for the session, but each test starts from a clean record of it."""
+    _mock_ats_server.reset()
+    return _mock_ats_server
 
 
 @pytest.fixture

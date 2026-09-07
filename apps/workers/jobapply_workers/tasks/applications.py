@@ -22,7 +22,7 @@ from jobapply_api.services.policy import ApplicationPolicy, next_delay_seconds
 from jobapply_api.services.profile_service import ProfileService
 from jobapply_browser.engine import ApplicationRunner
 from jobapply_browser.manager import BrowserManager, BrowserSettings
-from jobapply_browser.models import RunContext
+from jobapply_browser.models import RunContext, SignInCredential
 from jobapply_browser.questions import AnswerContext, ApplicationQuestionService
 from jobapply_browser.verification import redact_html
 from jobapply_db.models import (
@@ -45,6 +45,41 @@ from jobapply_shared.storage import build_storage
 from sqlalchemy import select
 
 logger = get_logger(__name__)
+
+
+def _credential_for(db, user: User, apply_url: str, settings) -> SignInCredential | None:
+    """The user's stored sign-in details for this site, if they have any.
+
+    Decryption happens here, in the worker, and the plaintext lives only inside the
+    ``SignInCredential`` that is handed to the run. It is never written to the task
+    payload, the run report, the audit entry or a log line. Without a match the run
+    simply pauses at a sign-in wall, which is the default.
+    """
+    from urllib.parse import urlparse
+
+    from jobapply_api.services.credential_service import CredentialVault
+
+    host = (urlparse(apply_url).hostname or "").lower().removeprefix("www.")
+    if not host:
+        return None
+
+    vault = CredentialVault(db, secret_key=settings.secret_key)
+    for credential in vault.list_for(user.id):
+        if not credential.host or not credential.secret_encrypted or not credential.username:
+            continue
+        # A credential for "acme.com" also covers "careers.acme.com".
+        if host != credential.host and not host.endswith(f".{credential.host}"):
+            continue
+        secret = vault.reveal(user.id, credential.id)
+        if secret is None:
+            continue
+        return SignInCredential(
+            credential_id=str(credential.id),
+            username=credential.username,
+            secret=secret,
+            host=credential.host,
+        )
+    return None
 
 
 def _answer_context(db, user: User, job: Job) -> AnswerContext:
@@ -218,6 +253,9 @@ def run_application(self, task_id: str, otp_code: str | None = None) -> dict:
                 auto_submit=application.auto_submit and not application.requires_review,
                 resume_path=_materialise_resume(storage, version, directory),
                 cover_letter_path=_materialise_cover_letter(storage, version, directory),
+                credential=_credential_for(
+                    db, user, application.apply_url or job.apply_url or "", settings
+                ),
                 metadata={
                     "company": job.company_name,
                     "title": job.title,

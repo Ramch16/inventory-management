@@ -103,6 +103,46 @@ class ApplicationRunner:
         self.question_service = question_service
         self.enabled_adapters = enabled_adapters
 
+    async def _try_sign_in(
+        self,
+        page: Any,
+        context: RunContext,
+        report: RunReport,
+        blocking: VerificationSignal,
+        adapter: BaseAdapter,
+    ) -> VerificationSignal | None:
+        """Sign in, but only for a plain sign-in wall and only with a stored credential.
+
+        Every other blocking signal — a CAPTCHA, a one-time code, a multi-factor
+        prompt — is returned untouched so the run pauses. Signing in here is the user
+        acting through the platform on their own account; it is never a way past a
+        control the employer put in front of that account.
+        """
+        if blocking.type is not InterventionType.AUTHENTICATION_REQUIRED:
+            return blocking
+        if context.credential is None:
+            return blocking
+
+        result = await adapter.sign_in(page, context.credential)
+        report.step(
+            "sign_in",
+            "ok" if result.signed_in else "paused",
+            message=result.error,
+            data={"credential_id": context.credential.credential_id},
+        )
+        if result.signed_in:
+            report.page_url = page.url
+            # The page changed; whatever is in front of us now decides the run.
+            return scan_page(await page.content(), url=page.url).blocking
+        return result.blocked_by or VerificationSignal(
+            type=InterventionType.AUTHENTICATION_REQUIRED,
+            reason=(
+                "Signing in with your stored credential did not work: "
+                f"{result.error or 'the site did not accept it'}. Sign in yourself, or "
+                "update the credential in Settings."
+            ),
+        )
+
     async def run(
         self,
         page: Any,
@@ -124,6 +164,8 @@ class ApplicationRunner:
 
             # A challenge on arrival stops everything before a single keystroke.
             blocking = scan_page(await page.content(), url=page.url).blocking
+            if blocking is not None:
+                blocking = await self._try_sign_in(page, context, report, blocking, chosen)
             if blocking is not None:
                 return self._pause(report, blocking, "navigate")
 

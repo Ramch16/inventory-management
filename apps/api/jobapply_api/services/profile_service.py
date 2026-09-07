@@ -299,6 +299,7 @@ class ProfileService:
 
         return {
             "score": score,
+            "sections": sections,
             "missing": missing,
             "blocks_automation": blockers,
             "ready_for_automation": not blockers,

@@ -20,6 +20,11 @@ export function ReadinessCard({ readiness }: ReadinessCardProps) {
     { label: "Automation enabled", done: readiness.automation_enabled },
   ];
 
+  const setupFinished =
+    readiness.profile_score === 100 &&
+    readiness.has_master_resume &&
+    readiness.work_authorization_declared;
+
   return (
     <Card>
       <CardHeader>
@@ -74,9 +79,17 @@ export function ReadinessCard({ readiness }: ReadinessCardProps) {
         ) : null}
 
         <div className="flex flex-wrap gap-2">
-          <Button asChild size="sm">
-            <Link href="/profile">Complete profile</Link>
-          </Button>
+          {setupFinished ? (
+            <Button asChild size="sm">
+              <Link href="/profile">Edit profile</Link>
+            </Button>
+          ) : (
+            // While anything is outstanding the guided route is the useful one: it
+            // shows every step at once instead of one page at a time.
+            <Button asChild size="sm">
+              <Link href="/onboarding">Continue setup</Link>
+            </Button>
+          )}
           {!readiness.has_master_resume ? (
             <Button asChild size="sm" variant="outline">
               <Link href="/resume">Upload resume</Link>

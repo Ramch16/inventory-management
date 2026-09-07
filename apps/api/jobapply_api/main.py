@@ -16,6 +16,7 @@ from jobapply_api.routers import (
     applications,
     auth,
     billing,
+    credentials,
     dashboard,
     health,
     jobs,
@@ -90,6 +91,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(jobs.router, prefix=prefix)
     app.include_router(applications.router, prefix=prefix)
     app.include_router(billing.router, prefix=prefix)
+    app.include_router(credentials.router, prefix=prefix)
     app.include_router(admin.router, prefix=prefix)
     app.include_router(dashboard.router, prefix=prefix)
     return app

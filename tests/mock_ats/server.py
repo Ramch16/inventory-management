@@ -25,6 +25,8 @@ ROUTES: dict[str, str] = {
     "/generic": "generic.html",
     "/generic-ambiguous": "generic_ambiguous.html",
     "/captcha": "captcha.html",
+    "/login": "login.html",
+    "/login-captcha": "login_then_captcha.html",
     "/otp": "otp.html",
     "/confirmation": "confirmation.html",
 }
@@ -44,6 +46,9 @@ class MockAtsServer:
         #: When set, a submission returns a page with no confirmation text, so the
         #: runner has to report SUBMISSION_UNCONFIRMED.
         self.suppress_confirmation = False
+        #: Sign-in details the mock site accepts, and what it was sent.
+        self.valid_credentials = ("candidate@example.com", "mock-password")
+        self.sign_in_attempts: list[str] = []
         self._server: ThreadingHTTPServer | None = None
         self._thread: threading.Thread | None = None
 
@@ -56,12 +61,33 @@ class MockAtsServer:
     def url(self, path: str) -> str:
         return f"{self.base_url}{path}"
 
+    def reset(self) -> None:
+        """Forget what previous tests did, so one server can be shared by all of them."""
+        self.submissions.clear()
+        self.sign_in_attempts.clear()
+        self.suppress_confirmation = False
+
     def start(self) -> MockAtsServer:
         outer = self
 
         class Handler(BaseHTTPRequestHandler):
             def log_message(self, *args):  # noqa: A003 - silence the default stderr log
                 return
+
+            def _sign_in(self, path: str, fields: dict[str, list[str]]) -> None:
+                """Imitate a sign-in wall: right details reveal the form, wrong ones do not."""
+                email = (fields.get("email") or [""])[0]
+                password = (fields.get("password") or [""])[0]
+                outer.sign_in_attempts.append(email)
+
+                if (email, password) != outer.valid_credentials:
+                    self._send((SITES / "login.html").read_bytes(), 401)
+                    return
+                if path == "/login-captcha":
+                    # A correct password is not the end of it on this site.
+                    self._send((SITES / "captcha_after_login.html").read_bytes())
+                    return
+                self._send((SITES / "generic.html").read_bytes())
 
             def _send(self, body: bytes, status: int = 200) -> None:
                 self.send_response(status)
@@ -82,6 +108,11 @@ class MockAtsServer:
                 length = int(self.headers.get("Content-Length") or 0)
                 raw = self.rfile.read(length).decode("utf-8", errors="replace")
                 content_type = self.headers.get("Content-Type", "")
+                path = urlparse(self.path).path.rstrip("/") or "/"
+
+                if path in {"/login", "/login-captcha"}:
+                    self._sign_in(path, parse_qs(raw))
+                    return
                 fields: dict[str, list[str]] = {}
                 if content_type.startswith("application/x-www-form-urlencoded"):
                     fields = parse_qs(raw)

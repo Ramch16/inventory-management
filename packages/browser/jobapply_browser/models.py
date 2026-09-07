@@ -16,7 +16,7 @@ from jobapply_shared.enums import (
     InterventionType,
     QuestionCategory,
 )
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, SecretStr
 
 
 class FieldOption(BaseModel):
@@ -157,6 +157,35 @@ class SubmissionResult(BaseModel):
     error: str | None = None
 
 
+class SignInCredential(BaseModel):
+    """One set of sign-in details, for the user's own account on a job board.
+
+    ``SecretStr`` means the value cannot leak through a repr, a log line, a traceback
+    or a serialised run report — it has to be asked for explicitly, which happens in
+    exactly one place.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    credential_id: str
+    username: str
+    secret: SecretStr
+    host: str | None = None
+
+
+class SignInResult(BaseModel):
+    """The outcome of one sign-in attempt. Never retried: a second failure risks
+    locking the user out of their own account."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    signed_in: bool
+    #: Set when a challenge appeared during sign-in. The run stops here; nothing in
+    #: this codebase attempts to satisfy one.
+    blocked_by: VerificationSignal | None = None
+    error: str | None = None
+
+
 class ConfirmationResult(BaseModel):
     """Absent hard evidence, a submission is reported as unconfirmed, never as applied."""
 
@@ -184,4 +213,7 @@ class RunContext(BaseModel):
     resume_path: str | None = None
     cover_letter_path: str | None = None
     auto_submit: bool = False
+    #: Present only when the user stored a credential for this site. Absent means a
+    #: sign-in wall pauses the run, which is the default.
+    credential: SignInCredential | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { AutomationSettingsPanel } from "@/components/settings/automation-settings";
+import { CredentialVaultPanel } from "@/components/settings/credential-vault";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -103,6 +104,8 @@ export default function SettingsPage() {
       </Card>
 
       <AutomationSettingsPanel />
+
+      <CredentialVaultPanel />
 
       <Card>
         <CardHeader>

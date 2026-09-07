@@ -21,6 +21,12 @@
 * Envelope encryption (AES-256-GCM with a KMS/`SECRET_KEY`-derived data key) for
   credential vault entries and browser session blobs. Ciphertext columns are
   `deferred` in the ORM.
+* The credential vault (`services/credential_service.py`) binds the owning user into
+  the AEAD's associated data, so ciphertext moved into another user's row will not
+  decrypt. `POST`, `PATCH` and `DELETE` exist; there is deliberately **no** endpoint
+  that returns a secret. `CredentialVault.reveal()` is called from exactly one place —
+  the automation worker, at the moment it signs in — and every call is audited with
+  the credential's kind and host but never its value or its username.
 * PostgreSQL at-rest encryption (RDS) and S3 SSE for objects; resume objects are
   private with short-lived presigned URLs.
 * OTP codes are never persisted; they live in the worker's memory for the duration of

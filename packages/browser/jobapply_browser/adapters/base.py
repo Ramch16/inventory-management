@@ -24,6 +24,8 @@ from jobapply_browser.models import (
     FormSpec,
     NormalizedField,
     RunContext,
+    SignInCredential,
+    SignInResult,
     SubmissionResult,
     ValidationReport,
     VerificationSignal,
@@ -61,6 +63,25 @@ async def wait_for_first(
     return None
 
 
+#: Ordinary sign-in controls. Nothing here targets a challenge widget.
+PASSWORD_SELECTORS = ("input[type='password']",)
+
+USERNAME_SELECTORS = (
+    "input[type='email']",
+    "input[name='email']",
+    "input[name='username']",
+    "input[id='email']",
+    "input[id='username']",
+    "input[autocomplete='username']",
+)
+
+SIGN_IN_SUBMIT_SELECTORS = (
+    "button[type='submit']",
+    "input[type='submit']",
+    "button:has-text('Sign in')",
+    "button:has-text('Log in')",
+)
+
 CONFIRMATION_PATTERNS = (
     r"(?i)thank you for (?:your )?appl",
     r"(?i)application (?:has been )?(?:received|submitted|complete)",
@@ -86,6 +107,7 @@ class ApplicationAdapter(Protocol):
     async def fill_field(self, page: Any, field: NormalizedField, value: str) -> FillOutcome: ...
     async def upload_resume(self, page: Any, form: FormSpec, path: str) -> FillOutcome: ...
     async def upload_cover_letter(self, page: Any, form: FormSpec, path: str) -> FillOutcome: ...
+    async def sign_in(self, page: Any, credential: SignInCredential) -> SignInResult: ...
     async def validate(
         self, page: Any, context: RunContext, form: FormSpec
     ) -> ValidationReport: ...
@@ -200,6 +222,57 @@ class BaseAdapter:
                     return FillOutcome(field_id=field.field_id, filled=False, error=str(exc)[:300])
                 return FillOutcome(field_id=field.field_id, filled=True, observed_value=path)
         return FillOutcome(field_id=f"<{label}>", filled=False, error=f"no {label} upload field")
+
+    # ----------------------------------------------------------------- sign in
+    async def sign_in(self, page: Any, credential: SignInCredential) -> SignInResult:
+        """Sign in to the user's own account with the credential they stored.
+
+        This is the ordinary sign-in form and nothing else. It is attempted once, and
+        it stops at the first sign of a challenge: a CAPTCHA, a one-time code or a
+        multi-factor prompt ends the attempt and hands the run back to the user. No
+        challenge is answered, worked around, or retried here.
+        """
+        password_selector = await self._first_present(page, PASSWORD_SELECTORS)
+        if password_selector is None:
+            return SignInResult(signed_in=False, error="no sign-in form was found on this page")
+
+        username_selector = await self._first_present(page, USERNAME_SELECTORS)
+        if username_selector is None:
+            return SignInResult(
+                signed_in=False, error="the sign-in form has no field for a username"
+            )
+
+        try:
+            await page.fill(username_selector, credential.username)
+            await page.fill(password_selector, credential.secret.get_secret_value())
+        except Exception as exc:  # noqa: BLE001 - reported, never swallowed
+            return SignInResult(signed_in=False, error=str(exc)[:300])
+
+        submit_selector = await self._first_present(page, SIGN_IN_SUBMIT_SELECTORS)
+        if submit_selector is None:
+            return SignInResult(
+                signed_in=False, error="the sign-in form has no button we can identify"
+            )
+
+        try:
+            await page.click(submit_selector)
+            await page.wait_for_load_state("networkidle")
+        except Exception as exc:  # noqa: BLE001
+            return SignInResult(signed_in=False, error=str(exc)[:300])
+
+        scan = scan_page(await page.content(), url=page.url)
+        blocking = scan.blocking
+        if blocking is not None:
+            # Includes the case where the same sign-in form came back: wrong details
+            # are the user's to correct, and a second attempt risks a lockout.
+            return SignInResult(signed_in=False, blocked_by=blocking)
+        return SignInResult(signed_in=True)
+
+    async def _first_present(self, page: Any, selectors: tuple[str, ...]) -> str | None:
+        for selector in selectors:
+            if await _query(page, selector) is not None:
+                return selector
+        return None
 
     # ---------------------------------------------------------------- validate
     async def validate(self, page: Any, context: RunContext, form: FormSpec) -> ValidationReport:

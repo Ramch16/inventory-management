@@ -150,6 +150,7 @@ def _onboarding_facts(db, user, service: ProfileServiceDep) -> dict:
     )
     return {
         "ready_for_automation": completeness["ready_for_automation"],
+        "sections": completeness["sections"],
         "missing": completeness["missing"],
         "blocks_automation": completeness["blocks_automation"],
         "has_master_resume": has_master,

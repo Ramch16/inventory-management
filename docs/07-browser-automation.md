@@ -44,6 +44,13 @@ the generic adapter, which is deliberately conservative.
 
 * No CAPTCHA solving, no MFA bypass, no anti-bot evasion, no fingerprint spoofing,
   no credential stuffing. Detecting a challenge always means *stop and ask the user*.
+* A plain sign-in wall is the one exception, and only when the user has stored a
+  credential for that site: the run signs in to the user's own account, once, with
+  the details the user supplied. It is attempted a single time — a second guess risks
+  locking the user out — and the page is rescanned immediately afterwards, so a
+  CAPTCHA, a one-time code or a multi-factor prompt appearing after a correct
+  password still stops the run. Without a stored credential a sign-in wall pauses as
+  before; no account is ever created.
 * Requests obey the site's rate expectations; delays are for politeness and account
   safety, not for evading limits.
 * Only elements the adapter can name are clicked. The generic adapter clicks exactly
