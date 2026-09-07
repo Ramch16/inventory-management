@@ -138,6 +138,10 @@ class Settings(BaseSettings):
                 raise ValueError("SECRET_KEY must be a strong, non-default value in production")
             if not self.cookie_secure:
                 raise ValueError("COOKIE_SECURE must be true in production")
+            if self.email_backend == "console":
+                # The console backend delivers nothing. In production that means
+                # every verification and reset e-mail is silently lost.
+                raise ValueError("EMAIL_BACKEND must not be 'console' in production")
         return self
 
     @property

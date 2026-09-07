@@ -1,8 +1,12 @@
 """E-mail delivery abstraction.
 
-The console backend is the development default: messages are logged (with the body
-redacted of tokens) and handed to the caller so tests can assert on them. No e-mail is
-ever sent automatically to a third party without explicit user configuration.
+The console backend is a development sink: it stands in for an inbox, so it prints
+the whole message — verification link included — to stdout, and keeps an in-process
+outbox for tests. The structured log line stays free of the body, because that is
+what ships to a log aggregator. ``_production_guards`` refuses this backend outside
+development, so a real deployment cannot silently drop its mail.
+
+No e-mail is ever sent to a third party without explicit user configuration.
 """
 
 from __future__ import annotations
@@ -31,13 +35,28 @@ class EmailSender(Protocol):
 
 
 class ConsoleEmailSender:
-    """Development sink. Keeps an in-process outbox for tests."""
+    """Development sink. Prints the message and keeps an in-process outbox for tests.
+
+    Printing the body is the entire point: without it there is no way to reach the
+    verification or password-reset link when running locally, and the account cannot
+    be verified at all. It goes to stdout rather than through ``logger`` so a token
+    never reaches structured logs.
+    """
 
     def __init__(self) -> None:
         self.outbox: list[EmailMessage] = []
 
     def send(self, message: EmailMessage) -> None:
         self.outbox.append(message)
+        print(  # noqa: T201 - this backend exists to be read by a person
+            "\n"
+            "─── e-mail (console backend; not delivered anywhere) ───\n"
+            f"To:      {message.to}\n"
+            f"Subject: {message.subject}\n\n"
+            f"{message.text_body}\n"
+            "───────────────────────────────────────────────────────",
+            flush=True,
+        )
         logger.info(
             "email.sent",
             extra={

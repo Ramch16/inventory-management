@@ -18,6 +18,11 @@ COPY apps/workers ./apps/workers
 
 RUN pip install --upgrade pip && pip install -e .
 
+# The storage volume is mounted here. The directory has to exist in the image and be
+# owned by the runtime user: Docker creates a missing mountpoint as root, and the
+# unprivileged process below then cannot write an uploaded resume into it.
+RUN mkdir -p /app/.storage
+
 RUN useradd --create-home --uid 10001 appuser && chown -R appuser /app
 USER appuser
 
