@@ -613,6 +613,21 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 .sheet.receipt .tot td{border-top:1px dashed #111}
 .sheet.receipt .foot{flex-direction:column;align-items:center;border-top:1px dashed #111}
 .rpgrid>*{min-width:0}
+.vnd{display:grid;grid-template-columns:360px 1fr;gap:16px;align-items:start}
+.vnd>*{min-width:0}
+.vrow{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.vrow:hover{border-color:var(--muted)}
+.vrow.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.vav{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font:800 italic 15px var(--display);color:#fff}
+.vrow small{display:block;color:var(--muted);font-size:11.5px}
+.vcols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.vprod{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:3px 10px 3px 4px;font-size:12px;font-weight:600;background:var(--surface)}
+.vprod svg{height:22px;width:auto}
+.pick{display:flex;flex-wrap:wrap;gap:6px;max-height:180px;overflow:auto;padding:2px}
+.pick button{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:3px 10px 3px 4px;font-size:12px;font-weight:600;background:var(--surface)}
+.pick button svg{height:22px;width:auto}
+.pick button.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+@media (max-width:1180px){.vnd{grid-template-columns:1fr}}
 @media (max-width:1180px){.rpgrid{grid-template-columns:1fr 1fr}.rpgrid .wide{grid-column:1/-1}}
 @media (max-width:820px){.rpgrid{grid-template-columns:1fr}.rpgrid .wide{grid-column:auto}}
 #print{display:none}
@@ -823,6 +838,7 @@ const NOTES = {
   command:{deck:'Deck p.11 · AI Owner Command Center', purpose:'One morning view for the owner: today\'s numbers plus the five things that need attention, each linking to the screen that fixes it.', data:['Sales, margin, inventory value (POS + inventory service)','Priority feed ranked by $ impact and urgency','Hourly sales with an AI projection for the rest of the day'], build:['GET /dashboard/today','GET /ai/priorities?limit=5','Push refresh every 5 min; owner and manager roles only']},
   register:{deck:'Deck p.2–5 · Checkout, ID scan, payments, offline', purpose:'Fast lane checkout. Any 21+ item locks tender until an ID scan passes, and the sale keeps working when the internet drops.', data:['Catalog with category, size, ABV, CRV deposit, age flag','Cart, tax 8.75%, CRV, loyalty member','ID result: DOB, age, expiry, authenticity checks'], build:['Barcode scanner as keyboard wedge + camera fallback','ID SDK (Scandit / IDScan.net) on-device, store result not image','Terminal SDK (PAX, Verifone, Stripe) · offline store-and-forward queue in IndexedDB']},
   pricing:{deck:'New · cost changes → retail prices', purpose:'When a vendor PO, price sheet or invoice changes a cost, suggest the new shelf price from the category’s target margin, apply rounding and limits, let the owner approve, then update the register and queue shelf tags.', data:['Case cost old → new and cost per unit (case ÷ pack)','Margin rules: this product → brand/group → category default','Target margin per category, rounding rule, 10% change limit','Current and new margin and markup per product'], build:['Suggested price = unit cost ÷ (1 − target margin), rounded up to the price ending','Checks: never below cost, state minimum-price rules, multi-pack consistency','Approved prices go live now or at opening; tags go to the label printer; price history kept']},
+  vendors:{deck:'New · vendor management', purpose:'Keep every distributor in one place: contact, licence, terms, delivery days, what they supply, what you owe, open orders and deals. Add a new vendor and assign the brands they carry.', data:['Vendor: licence, rep, phone, email, terms, delivery days, minimum order, how POs are sent','Products each vendor supplies (one distributor per brand)','On-time rate from past POs, balance owed, open POs, active deals'], build:['Licence check against the state ABC licence lookup before the first order','Moving a brand to a new vendor takes effect on the next PO; history stays with the old vendor','Vendor record feeds Purchasing, Pricing, Vendor deals and Inventory']},
   purchasing:{deck:'New · vendor deals + purchase orders', purpose:'Each brand comes from one distributor in the store’s area. For each product, compare that vendor’s own options (buy just what you need, or take one of its deals) as the real cost per case, then group products into one PO per vendor. Deals arrive by deal sheet, forwarded rep email, vendor portal or state price posting.', data:['Product → its one vendor: case cost, lead time, on-time rate, terms, minimum','Every active deal from that vendor: free cases, discounted extra case, % or $ volume tiers','Forecast need for the next 30 days and daily sales in cases'], build:['Deals don’t stack: each is evaluated on its own against buying at list','Plan search: every quantity from need to need + 15, rejecting plans with more than 30 days of extra stock','State rules flag deal types a distributor may not offer']},
   inventory:{deck:'Deck p.9–10 · Inventory Heat Map + AI Insight', purpose:'Colour shows the state of every SKU; the AI panel turns it into a ranked to-do list.', data:['Per product: stock left, days left, reorder point, vendor, last order date and quantity, open order','Days of cover = on hand ÷ forecast daily demand','Reorder point, expiry date, last-sale date, margin','Capital tied up = on hand × cost for overstock'], build:['Nightly + on-sale recalculation of state','Tile size = inventory value (treemap)','Actions create POs, markdowns or transfers']},
   assortment:{deck:'New · dead stock + best sellers (extends deck p.9–10)', purpose:'Find products that no longer sell, clear them, and replace them with products that sell in similar stores. Rank best sellers and warn before they run out.', data:['Days since last sale, units on hand, cash tied up, shelf location','Replacement: same shelf and price band, sales in similar stores, margin, vendor','Best sellers by units, revenue or profit for 7 / 30 / 90 days, trend, days of cover'], build:['Dead stock rule: no sale in 60+ days (owner can change it)','Replacement engine: category + price band + local market sales + this store’s basket data','One tap creates a clearance offer and a trial-case draft PO']},
@@ -1001,6 +1017,23 @@ const POLICY = {
 const TODAY = new Date(2026,8,25);
 function ageFrom(dob){ if (!dob) return null; const d=new Date(dob+'T00:00'); if (isNaN(d)) return null; let a=TODAY.getFullYear()-d.getFullYear(); if (TODAY.getMonth()<d.getMonth() || (TODAY.getMonth()===d.getMonth() && TODAY.getDate()<d.getDate())) a--; return a; }
 const nowLabel = () => 'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+/* ---- vendors (fictional demo distributors; 555 phone numbers and .example emails) ---- */
+const VENDORS = [
+  {n:'Summit Wine & Spirits', kind:'Spirits & wine distributor', lic:'Type 17 · 17-551203', rep:'Dana Ortiz', ph:'(916) 555-0142', em:'orders@summit.example', terms:'Net 15', days:['Tue','Fri'], min:'$500', via:'Email', ontime:95, owed:12450, due:'Fri, Sep 27', color:'#B8520A', since:'2019', extra:[]},
+  {n:'Valley Beer Distributing', kind:'Beer & seltzer distributor', lic:'Type 17 · 17-448910', rep:'Luis Romero', ph:'(916) 555-0177', em:'luis@valleybeer.example', terms:'Net 7', days:['Mon','Wed','Fri'], min:'10 cases', via:'Vendor portal', ontime:96, owed:3180, due:'Mon, Sep 30', color:'#1F4EA3', since:'2019', extra:['Hard seltzer 24pk mix','Craft IPA 4pk','Pumpkin ale','Imported lager','Cider 6pk']},
+  {n:'Golden State Beverage', kind:'Wine distributor', lic:'Type 17 · 17-602377', rep:'Karen Liu', ph:'(916) 555-0119', em:'karen@goldenstate.example', terms:'Net 30', days:['Thu'], min:'$300', via:'Email', ontime:90, owed:0, due:'', color:'#7A1F33', since:'2021', extra:['Kendall-Jackson Chardonnay','Pinot Grigio','Boxed wine 3 L']},
+  {n:'Pacific Crest Imports', kind:'Import specialist', lic:'Type 17 · 17-715540', rep:'Sam Patel', ph:'(415) 555-0163', em:'sam@pacificcrest.example', terms:'Cash on delivery', days:['Wed'], min:'5 cases', via:'Email', ontime:82, owed:0, due:'', color:'#2E6F77', since:'2022', extra:['Aperol 750','Sake 720 ml','Mezcal 750','Magnum Champagne']},
+  {n:'Metro Cash & Carry', kind:'Cash & carry (you pick up)', lic:'Wholesale club · no alcohol', rep:'—', ph:'(916) 555-0100', em:'—', terms:'Card at pickup', days:['Any day'], min:'none', via:'You pick up', ontime:100, owed:0, due:'', color:'#5A6B76', since:'2019', extra:[]},
+  {n:'Coastal Cigar Co.', kind:'Tobacco wholesaler', lic:'Tobacco distributor · TD-30881', rep:'Mia Grant', ph:'(707) 555-0188', em:'mia@coastalcigar.example', terms:'Net 30', days:['Every other Tue'], min:'$250', via:'Email', ontime:88, owed:640, due:'Sat, Oct 5', color:'#6A3B18', since:'2023', extra:['Cigars humidor']},
+];
+const VENDOR_OF = {tito175:'Summit Wine & Spirits', casa750:'Summit Wine & Spirits', hen750:'Summit Wine & Spirits', jame750:'Summit Wine & Spirits', crown750:'Summit Wine & Spirits', bac1l:'Summit Wine & Spirits', lamarca:'Summit Wine & Spirits', meiomi:'Summit Wine & Spirits', tonic4:'Summit Wine & Spirits',
+  josh750:'Golden State Beverage', kim750:'Golden State Beverage', oyster:'Golden State Beverage',
+  bud12:'Valley Beer Distributing', modelo12:'Valley Beer Distributing', claw12:'Valley Beer Distributing', noon8:'Valley Beer Distributing',
+  redbull4:'Metro Cash & Carry', limes:'Metro Cash & Carry', ice10:'Metro Cash & Carry'};
+const WEEKDAYS = ['Mon','Tue','Wed','Thu','Fri','Sat'];
+const blankVendor = () => ({n:'', kind:'Spirits & wine distributor', lic:'', licOk:false, rep:'', ph:'', em:'', terms:'Net 15', days:['Tue'], min:'', via:'Email', pids:[]});
+const initials = n => n.split(/\s+/).filter(w=>/^[A-Za-z]/.test(w)).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+
 const S = {
   route:'command', online:true, notes:false,
   cart:[], cat:'All', q:'', id:null, member:null, saleNo:1048,
@@ -1014,6 +1047,7 @@ const S = {
   tour:null,
   margins:{sp:28, wi:35, be:22, mx:40}, itemMargin:{}, groups:[{n:'Premium spirits', pids:['casa750','hen750'], m:30}], rounding:'99', priceEdit:{}, priceSel:null, priceDone:{}, tagsQ:[], priceWhen:'now',
   dealSheet:null, dealRows:SHEET.rows.map(()=>'review'), dealsAdded:[],
+  vSel:'Summit Wine & Spirits', vQ:'', nv:null,
   rp:{tab:'eod', day:'2026-09-24', from:'2026-09-01', to:'2026-09-24', year:2026, fmt:'page', email:true},
   invView:'tiles',
   shelfTab:'dead', swapDone:[], bestBy:'profit', bestPer:'30',
@@ -1032,6 +1066,7 @@ const ROUTES = [
   ['register','Register','register','Store'],
   ['inventory','Inventory','inventory','Store'],
   ['purchasing','Purchasing','truck','Store'],
+  ['vendors','Vendors','store','Store'],
   ['pricing','Pricing','tag','Store'],
   ['damage','Damaged Goods','broken','Store'],
   ['compliance','Compliance','shield','Store'],
@@ -1048,6 +1083,7 @@ const TITLES = {
   command:['Good morning','Friday, September 25 · Oak Street Liquor #014'],
   register:['Register · Lane 1','Cashier: Maria G. · Shift opened 8:00 AM'],
   pricing:['Pricing','New vendor costs → shelf prices at your target margin'],
+  vendors:['Vendors','Distributors you buy from · add a new vendor'],
   purchasing:['Purchasing','Check each vendor’s deals, then build one PO per vendor'],
   inventory:['Inventory Heat Map','1,284 SKUs · $184K on hand'],
   assortment:['Shelf Optimizer','Replace dead stock with what sells, and protect your best sellers'],
@@ -1743,6 +1779,81 @@ function printModal(){
     <footer><button class="btn" data-close>Cancel</button><button class="btn primary" data-act="rpprint">${ic('printer')}Print</button></footer></div></div>`;
 }
 
+function vendorProducts(n){ return Object.entries(VENDOR_OF).filter(([k,v])=>v===n).map(([k])=>byId(k)).filter(Boolean); }
+VIEWS.vendors = () => {
+  const q = S.vQ.toLowerCase(), list = VENDORS.filter(v=>!q || v.n.toLowerCase().includes(q) || v.rep.toLowerCase().includes(q));
+  const V = VENDORS.find(v=>v.n===S.vSel) || VENDORS[0], prods = vendorProducts(V.n);
+  const pos = POS_DATA.filter(o=>o.v===V.n), deals = BUY.filter(b=>b.vendor.v===V.n).flatMap(b=>b.deals.map(d=>({prod:b.n, d, buy:b.id})));
+  const owed = VENDORS.reduce((a,v)=>a+v.owed,0);
+  return `
+  <section class="stats">
+    <div><b class="num">${VENDORS.length}</b><small>active vendors</small></div>
+    <div><b class="num" style="color:var(--warn)">${money(owed,0)}</b><small>owed to vendors · next due Fri</small></div>
+    <div><b class="num">${POS_DATA.filter(o=>o.st!=='Received').length}</b><small>open purchase orders</small></div>
+    <div><b class="num">${Math.round(VENDORS.reduce((a,v)=>a+v.ontime,0)/VENDORS.length)}%</b><small>average on-time delivery</small></div>
+  </section>
+  <div class="vnd">
+    <aside style="display:flex;flex-direction:column;gap:10px" data-note="Vendor list · search">
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><label class="scanbar" style="flex:1;min-width:180px;padding:4px 8px 4px 12px">${ic('search')}<input id="v-q" placeholder="Search vendors or reps" value="${esc(S.vQ)}" autocomplete="off"></label><button class="btn primary" data-act="vnew">+ Add vendor</button></div>
+      ${list.map(v=>`<button class="vrow ${v.n===V.n?'on':''}" data-vsel="${esc(v.n)}"><span class="vav" style="background:${v.color}">${initials(v.n)}</span><span><b>${esc(v.n)}</b><small>${esc(v.kind)} · ${vendorProducts(v.n).length + v.extra.length} products</small></span><span style="text-align:right">${v.owed?`<b class="num">${money(v.owed,0)}</b><small>due ${v.due.split(',')[0]}</small>`:`<small>${v.ontime}% on time</small>`}</span></button>`).join('') || '<div class="empty">No vendor matches.</div>'}
+    </aside>
+    <section style="display:flex;flex-direction:column;gap:16px" data-note="Vendor detail">
+      <section class="card" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+        <span class="vav" style="background:${V.color};width:52px;height:52px;font-size:19px">${initials(V.n)}</span>
+        <div style="flex:1;min-width:200px"><h2 style="font-size:20px">${esc(V.n)}</h2><div class="muted" style="font-size:13px">${esc(V.kind)} · customer since ${V.since}</div>
+          <div class="meta3" style="margin-top:6px"><span class="chip ok">${ic('shield','style="width:12px;height:12px"')} Licence verified · ${esc(V.lic)}</span><span class="chip plain">${esc(V.terms)}</span><span class="chip plain">POs by ${esc(V.via.toLowerCase())}</span></div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary sm" data-go="purchasing" data-potab-go="orders">New PO</button><button class="btn sm" data-go="purchasing" data-potab-go="deals">Add deal sheet</button><button class="btn sm" data-toast="Editing vendor details">Edit</button></div>
+      </section>
+      <div class="vcols">
+        <section class="card" data-note="Contact"><div class="cardhead"><h2>Contact</h2></div><dl class="kv" style="grid-template-columns:auto 1fr">
+          <dt>Sales rep</dt><dd>${esc(V.rep)}</dd><dt>Phone</dt><dd style="user-select:all">${esc(V.ph)}</dd><dt>Email</dt><dd style="user-select:all;overflow-wrap:anywhere">${esc(V.em)}</dd></dl>
+          ${V.em!=='—'?`<button class="btn sm" style="margin-top:10px" data-copy="${esc(V.em)}">Copy email</button>`:''}</section>
+        <section class="card" data-note="Ordering terms"><div class="cardhead"><h2>Ordering</h2></div><dl class="kv">
+          <dt>Delivery days</dt><dd>${V.days.join(', ')}</dd><dt>Minimum order</dt><dd>${esc(V.min)}</dd><dt>Payment terms</dt><dd>${esc(V.terms)}</dd><dt>On time</dt><dd style="color:${V.ontime<90?'var(--warn)':'var(--ok)'}">${V.ontime}%</dd></dl>
+          <div class="meter" style="margin-top:10px"><i style="width:${V.ontime}%"></i></div></section>
+        <section class="card" data-note="Money owed"><div class="cardhead"><h2>Balance</h2></div>
+          <div style="font:800 26px/1 var(--display);color:${V.owed?'var(--warn)':'var(--ok)'}">${V.owed?money(V.owed,0):'Paid up'}</div>
+          <div class="muted" style="font-size:12.5px;margin-top:6px">${V.owed?`Due ${V.due} · ${esc(V.terms)}`:'Nothing owed right now'}</div>
+          ${V.owed?`<button class="btn sm" style="margin-top:10px" data-toast="Payment of ${money(V.owed,0)} scheduled for ${V.due}">Schedule payment</button>`:''}</section>
+      </div>
+      <section class="card" data-note="Products this vendor supplies"><div class="cardhead"><h2>Products they supply</h2><span class="chip plain">${prods.length + V.extra.length}</span><span class="spacer"></span><span class="muted" style="font-size:12px">Each brand comes from one distributor in your area</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">${prods.map(p=>`<span class="vprod">${bottleSVG(p)}${esc(p.n)}</span>`).join('')}${V.extra.map(x=>`<span class="vprod" style="padding-left:10px">${esc(x)}</span>`).join('')}${!prods.length&&!V.extra.length?'<span class="muted">No products assigned yet.</span>':''}</div></section>
+      <div class="vcols">
+        <section class="card" data-note="Open and recent POs"><div class="cardhead"><h2>Purchase orders</h2></div>
+          ${pos.length?pos.map(o=>`<div class="rule">${ic('truck')}<div><b>${o.no}</b><small>${esc(o.lines)}</small></div><div style="text-align:right"><span class="chip ${o.st==='Received'?'ok':o.st==='Sent'?'over':'warn'}">${o.st}</span><div class="num" style="font-size:12px;margin-top:3px">${money(o.total)}</div></div></div>`).join(''):'<div class="muted" style="font-size:13px">No purchase orders yet.</div>'}</section>
+        <section class="card" data-note="Active deals from this vendor"><div class="cardhead"><h2>Active deals</h2></div>
+          ${deals.length?deals.map(x=>`<div class="rule">${ic('gift','style="color:var(--violet)"')}<div><b>${esc(x.prod)}</b><small>${dealText(x.d)} · ends ${x.d.ends}</small></div><button class="btn sm" data-buygo="${x.buy}">Check</button></div>`).join(''):'<div class="muted" style="font-size:13px">No active deals. Forward their deal sheets to add them.</div>'}</section>
+      </div>
+    </section>
+  </div>`;
+};
+function vendorModal(){
+  const N=S.nv, moving = N.pids.filter(k=>VENDOR_OF[k]);
+  const canSave = N.n.trim() && N.licOk;
+  const inp = (id,label,val,ph,extra='') => `<label class="field">${label}<input id="${id}" value="${esc(val)}" placeholder="${ph}" ${extra}></label>`;
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Add vendor" style="width:min(720px,100%)">
+    <header>${ic('store')}<h2>Add a vendor</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="gap:14px">
+      <div class="frow">${inp('nv-n','Company name *',N.n,'e.g. Bay Area Craft Distributors')}
+        <label class="field">Type<select id="nv-kind">${['Spirits & wine distributor','Beer & seltzer distributor','Wine distributor','Import specialist','Cash & carry (you pick up)','Tobacco wholesaler','Other supplier'].map(k=>`<option ${N.kind===k?'selected':''}>${k}</option>`).join('')}</select></label></div>
+      <div class="field">Distributor licence number *
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input id="nv-lic" value="${esc(N.lic)}" placeholder="e.g. 17-123456" style="flex:1;min-width:160px">
+          ${N.licOk?`<span class="chip ok">${ic('shield','style="width:12px;height:12px"')} Active wholesale licence</span>`:`<button class="btn sm" data-act="nvlic">Check licence</button>`}</div>
+        <span style="font-weight:500;color:var(--muted);font-size:11.5px">Stores may only buy alcohol from licensed wholesalers. The number is checked against the state licence lookup.</span></div>
+      <div class="frow">${inp('nv-rep','Sales rep',N.rep,'Name')}${inp('nv-ph','Phone',N.ph,'(916) 555-0000','inputmode="tel"')}</div>
+      ${inp('nv-em','Email for POs',N.em,'orders@vendor.com','inputmode="email"')}
+      <div class="frow">
+        <label class="field">Payment terms<select id="nv-terms">${['Net 7','Net 15','Net 30','Cash on delivery','Card at pickup'].map(t=>`<option ${N.terms===t?'selected':''}>${t}</option>`).join('')}</select></label>
+        ${inp('nv-min','Minimum order',N.min,'e.g. $500 or 10 cases')}</div>
+      <div class="field">Delivery days<div class="quick">${WEEKDAYS.map(d=>`<button class="${N.days.includes(d)?'on':''}" data-nvday="${d}">${d}</button>`).join('')}</div></div>
+      <div class="field">Send purchase orders by<div class="quick">${['Email','Vendor portal','EDI connection'].map(v=>`<button class="${N.via===v?'on':''}" data-nvvia="${v}">${v}</button>`).join('')}</div></div>
+      <div class="field">Products they will supply <span style="font-weight:500;color:var(--muted)">(${N.pids.length} selected)</span>
+        <div class="pick">${PRODUCTS.map(p=>`<button class="${N.pids.includes(p.id)?'on':''}" data-nvp="${p.id}">${bottleSVG(p)}${esc(p.n)}${VENDOR_OF[p.id]&&!N.pids.includes(p.id)?` <span class="muted" style="font-weight:500">· ${esc(shortV(VENDOR_OF[p.id]))}</span>`:''}</button>`).join('')}</div></div>
+      ${moving.length?`<div class="clockban soon">${ic('swap')} ${moving.length} product${moving.length>1?'s':''} will move from ${[...new Set(moving.map(k=>shortV(VENDOR_OF[k])))].join(' and ')}: ${moving.map(k=>byId(k).n).join(', ')}. The change starts with your next order.</div>`:''}
+    </div>
+    <footer><span class="muted" style="font-size:12px;margin-right:auto">${canSave?'Ready to save':'Name and a verified licence are required'}</span><button class="btn" data-close>Cancel</button><button class="btn primary" data-act="nvsave" ${canSave?'':'disabled'}>Save vendor</button></footer></div></div>`;
+}
+
 VIEWS.reports = () => {
   const R=S.rp, tabs=[['eod','End of day'],['range','Date range'],['month','Monthly'],['year','Yearly']];
   const head = `<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -1958,7 +2069,7 @@ VIEWS.purchasing = () => {
     <span style="height:110px;display:flex;justify-content:center">${bottleSVG(prod)}</span>
     <div><h2 style="font-size:19px">${item.n}</h2><div class="muted" style="font-size:13px;margin-top:4px">Sold by the ${item.pack} · on hand ${item.onHand}</div>
       <div class="meta3" style="margin-top:8px"><span class="chip ai">${ic('spark')} You need ${item.need} cases for the next 30 days</span><span class="chip plain">Sells about ${item.daily<1?`1 case every ${Math.round(1/item.daily)} days`:`${item.daily} cases a day`}</span></div>
-      <div class="rule" style="padding:8px 0 0;border:0">${ic('truck','style="color:var(--muted)"')}<div><b>${V.v}</b><small>The only supplier of this brand in your area · ${money(V.cost)} a case · delivers in ${V.lead} days · ${V.ontime}% on time · ${V.terms}${V.min>1?` · minimum ${V.min} cases`:''}</small></div></div></div>
+      <div class="rule" style="padding:8px 0 0;border:0">${ic('truck','style="color:var(--muted)"')}<div><b><button class="btn ghost" style="padding:0;border:0;font-weight:800;text-decoration:underline" data-vsel="${esc(V.v)}" data-vgo="1">${V.v}</button></b><small>The only supplier of this brand in your area · ${money(V.cost)} a case · delivers in ${V.lead} days · ${V.ontime}% on time · ${V.terms}${V.min>1?` · minimum ${V.min} cases`:''}</small></div></div></div>
     <div class="field">Cases to buy
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="seg"><button class="${S.buyQ==null?'on':''}" data-act="buyai">AI picks</button><button class="${S.buyQ!=null?'on':''}" data-act="buyman">I choose</button></div>
       ${S.buyQ!=null?`<div class="stepper"><button data-bq="-1" aria-label="Fewer">−</button><span>${S.buyQ}</span><button data-bq="1" aria-label="More">+</button></div>`:''}</div></div>
@@ -2306,7 +2417,7 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-vsel],[data-nvday],[data-nvvia],[data-nvp]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -2324,6 +2435,10 @@ document.addEventListener('click', e => {
   if (d.resolve){ S.done.add(+d.resolve); toast(d.msg+' · marked resolved'); render(); return; }
   if (d.undo){ S.done.delete(+d.undo); render(); return; }
   if (d.seg){ S.custSeg=+d.seg; render(); return; }
+  if (d.vsel){ S.vSel=d.vsel; if (d.vgo) go('vendors'); else render(); return; }
+  if (d.nvday){ const a=S.nv.days; S.nv.days = a.includes(d.nvday) ? a.filter(x=>x!==d.nvday) : [...a, d.nvday].sort((x,y)=>WEEKDAYS.indexOf(x)-WEEKDAYS.indexOf(y)); vendorModal(); return; }
+  if (d.nvvia){ S.nv.via=d.nvvia; vendorModal(); return; }
+  if (d.nvp){ const a=S.nv.pids; S.nv.pids = a.includes(d.nvp) ? a.filter(x=>x!==d.nvp) : [...a, d.nvp]; vendorModal(); return; }
   if (d.rptab){ S.rp.tab=d.rptab; render(); return; }
   if (d.rpyear){ S.rp.year=+d.rpyear; render(); return; }
   if (d.rpfmt){ S.rp.fmt=d.rpfmt; printModal(); return; }
@@ -2390,6 +2505,12 @@ document.addEventListener('click', e => {
     case 'refuseok': S.refusals.unshift({t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), why:S.refuse.why, by:'Maria G.', val:Math.round(totals().total*100)/100}); S.cart=[]; S.id=null; S.tdisc=null; closeModal(); render(); toast('Sale refused · saved to compliance log','ban'); break;
     case 'swapok': { const id=el.dataset.v, l=S.cart.find(x=>x.id===id); l?l.qty++:S.cart.push({id,qty:1}); closeModal(); render(); toast('Swapped in '+byId(id).n); break; }
     case 'report': reportModal(); break;
+    case 'vnew': S.nv=blankVendor(); vendorModal(); break;
+    case 'nvlic': if (!/\d{2}-?\d{5,6}/.test(S.nv.lic)){ toast('Enter a licence number like 17-123456','alert'); break; } S.nv.licOk=true; vendorModal(); toast('Licence found: active wholesale licence'); break;
+    case 'nvsave': { const N=S.nv; if (!N.n.trim()||!N.licOk) break; const moved=N.pids.filter(k=>VENDOR_OF[k]).length;
+      VENDORS.push({n:N.n.trim(), kind:N.kind, lic:N.lic, rep:N.rep||'—', ph:N.ph||'—', em:N.em||'—', terms:N.terms, days:N.days.length?N.days:['By appointment'], min:N.min||'none', via:N.via, ontime:100, owed:0, due:'', color:'#8A3FE0', since:'2026', extra:[]});
+      N.pids.forEach(k=>{ VENDOR_OF[k]=N.n.trim(); const it=BUY.find(b=>b.pid===k); if (it){ it.vendor={...it.vendor, v:N.n.trim(), terms:N.terms, ontime:100, lead:2}; it.deals=[]; } }); S.vSel=N.n.trim(); S.nv=null; closeModal(); render();
+      toast(`${N.n.trim()} added${N.pids.length?` · ${N.pids.length} products assigned${moved?`, ${moved} moved`:''}`:''}`); break; }
     case 'rpopen': printModal(); break;
     case 'rpemail': S.rp.email=!S.rp.email; render(); toast(S.rp.email?'The end of day report will be emailed at close':'Email at close turned off'); break;
     case 'rpprint': { const rc=S.rp.fmt==='receipt'; $('#print').innerHTML = `<div class="sheet ${rc?'receipt':''}">${currentSheet(rc)}</div>`; closeModal(); render();
@@ -2434,6 +2555,9 @@ document.addEventListener('click', e => {
   }
 });
 document.addEventListener('input', e => {
+  if (e.target.id==='v-q'){ S.vQ=e.target.value; render(); refocus('v-q'); return; }
+  if (e.target.id && e.target.id.startsWith('nv-') && S.nv){ const k=e.target.id.slice(3); S.nv[k]=e.target.value; if (k==='lic') S.nv.licOk=false;
+    if (k==='n' || k==='lic'){ const pos=e.target.selectionStart; vendorModal(); const el=document.getElementById(e.target.id); el.focus(); try{el.setSelectionRange(pos,pos);}catch(x){} } return; }
   if (e.target.id==='man-dob'){ S.man.dob=e.target.value; manUpdate(); return; }
   if (e.target.id==='man-pin'){ S.man.pin=e.target.value.replace(/\D/g,''); e.target.value=S.man.pin; manUpdate(); return; }
   if (e.target.id==='dm-v'){ S.dm.v=+e.target.value||0; S.pinOk=false; discModal(); refocus('dm-v'); return; }
@@ -2449,6 +2573,7 @@ document.addEventListener('keydown', e => {
   if (e.key==='Enter' && e.target.id==='q'){ const m = PRODUCTS.find(p=>p.n.toLowerCase().includes(S.q.toLowerCase()) && (S.cat==='All'||p.cat===S.cat)); if (m){ S.q=''; const l=S.cart.find(x=>x.id===m.id); l?l.qty++:S.cart.push({id:m.id,qty:1}); render(); $('#q').focus(); } }
 });
 document.addEventListener('change', e => {
+  if (e.target.id && e.target.id.startsWith('nv-') && S.nv){ S.nv[e.target.id.slice(3)]=e.target.value; return; }
   if (e.target.id==='rp-day' && e.target.value){ S.rp.day=e.target.value; render(); return; }
   if (e.target.id==='rp-from' && e.target.value){ S.rp.from=e.target.value; render(); return; }
   if (e.target.id==='rp-to' && e.target.value){ S.rp.to=e.target.value; render(); return; }
