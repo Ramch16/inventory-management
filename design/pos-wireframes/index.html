@@ -595,6 +595,11 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 .chartsvg{width:100%;height:auto;display:block}
 .chartsvg text{fill:var(--muted);font:500 10.5px var(--mono)}
 .rptable td,.rptable th{font-size:12.5px}
+.permtable td:first-child{white-space:normal;min-width:220px}
+.permtable th small{display:block;font-weight:600;text-transform:none;letter-spacing:0;color:var(--muted);font-size:10.5px}
+.permtable .me{background:var(--accent-soft)}
+.permtable tr.grp td{font:800 11px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:14px}
+.permtable td:not(:first-child),.permtable th:not(:first-child){text-align:center}
 .rptable td{font-family:var(--mono);white-space:nowrap}
 .rptable td:first-child{font-family:var(--body)}
 .rptable tfoot td{font-weight:800;border-top:2px solid var(--ink)}
@@ -1217,7 +1222,33 @@ const USERS = [
   {n:'Sam R.', role:'cashier', pin:'5555', color:'#6A3B18'},
 ];
 const CASHIER_ROUTES = ['register','display','returns','shifts','damage','receiving'];
-function allowed(r){ const u=USERS.find(x=>x.n===S.user); if (!u) return false; if (u.role==='owner') return true; if (u.role==='manager') return r!=='settings' && r!=='stores'; return CASHIER_ROUTES.includes(r); }
+const OWNER_ROUTES = ['settings','stores'];
+function roleAllows(role, r){ return role==='owner' || (role==='manager' && !OWNER_ROUTES.includes(r)) || (role==='cashier' && CASHIER_ROUTES.includes(r)); }
+function allowed(r){ const u=USERS.find(x=>x.n===S.user); return !!u && roleAllows(u.role, r); }
+// what each role can do inside the screens (1 = yes, 0 = no, text = yes with a condition)
+const ROLE_ACTIONS = [
+  ['Selling', [
+    ['Sell, scan IDs, refuse a sale', 1,1,1],
+    ['Approve a customer by eye when clearly over the store’s age (logged)', 1,1,1],
+    ['Discounts up to 15%', 1,1,1],
+    ['Discounts 15–30% (over 30% is blocked for everyone)', 'Manager PIN',1,1],
+    ['Accept a typed date of birth when an ID won’t scan', 'Manager PIN',1,1],
+    ['Returns and exchanges up to $50', 1,1,1],
+    ['Refunds over $50', 'Manager PIN',1,1],
+    ['Choose or resend a digital receipt', 1,1,1]]],
+  ['Cash and staff', [
+    ['Open and close the till (blind count), clock in and out', 1,1,1],
+    ['See expected cash, over/short history and staff hours', 0,1,1]]],
+  ['Stock', [
+    ['Receive deliveries, report damage', 1,1,1],
+    ['Count shelves', 1,1,1],
+    ['Approve count adjustments (shrink)', 0,1,1],
+    ['Add a new product', 'Sends to a manager',1,1],
+    ['Change prices, build POs, add vendors, approve invoices', 0,1,1]]],
+  ['Owner only', [
+    ['Switch stores, move stock between stores, add a store', 0,0,1],
+    ['Tax rate, CRV, sale hours, receipt text, users and roles', 0,0,1]]],
+];
 const SHIFTS = [
   {d:'Thu Sep 24', lane:'Lane 1', who:'Maria G.', open:'8:00 AM', close:'4:02 PM', sales:9120, exp:1712.40, cnt:1712.40},
   {d:'Thu Sep 24', lane:'Lane 1', who:'Dev P.', open:'4:00 PM', close:'2:04 AM', sales:11890, exp:2297.80, cnt:2294.05},
@@ -2291,21 +2322,28 @@ VIEWS.shifts = () => {
     </section>
     <section class="card" data-note="Time clock">
       <div class="cardhead"><h2>Time clock</h2><span class="spacer"></span><span class="muted" style="font-size:12px">Hours this week</span></div>
-      ${USERS.map(u=>`<div class="rule"><span class="vav" style="background:${u.color};width:30px;height:30px;font-size:11px;border-radius:8px">${initials(u.n)}</span><div><b>${u.n}</b><small>${u.role[0].toUpperCase()+u.role.slice(1)} · ${S.clocked[u.n]?`clocked in at ${S.clocked[u.n]}`:'not clocked in'}</small></div><span class="num" style="font-size:12px">${hours[u.n]} h</span>
+      ${USERS.filter(u=>me.role!=='cashier'||u.n===S.user).map(u=>`<div class="rule"><span class="vav" style="background:${u.color};width:30px;height:30px;font-size:11px;border-radius:8px">${initials(u.n)}</span><div><b>${u.n}</b><small>${u.role[0].toUpperCase()+u.role.slice(1)} · ${S.clocked[u.n]?`clocked in at ${S.clocked[u.n]}`:'not clocked in'}</small></div><span class="num" style="font-size:12px">${hours[u.n]} h</span>
         ${(me.role!=='cashier'||u.n===S.user)?`<button class="btn sm ${S.clocked[u.n]?'':'primary'}" data-clockuser="${u.n}">${S.clocked[u.n]?'Clock out':'Clock in'}</button>`:''}</div>`).join('')}
     </section>
   </div>
-  <section class="card" data-note="Shift history · feeds end of day">
+  ${me.role==='cashier'?`<section class="card"><div class="muted" style="font-size:13px">${ic('lock','style="width:14px;height:14px;vertical-align:-2px"')} Past shifts, cash over/short and staff hours are for managers and owners.</div></section>`:`<section class="card" data-note="Shift history · feeds end of day">
     <div class="cardhead"><h2>Recent shifts</h2></div>
     <div class="tablewrap"><table class="rptable" style="min-width:680px"><thead><tr><th>Date</th><th>Lane</th><th>Cashier</th><th>Open – close</th><th class="r">Sales</th><th class="r">Cash expected</th><th class="r">Counted</th><th class="r">Over / short</th></tr></thead><tbody>
       ${SHIFTS.map(x=>{ const os=x.cnt-x.exp; return `<tr><td>${x.d}</td><td>${x.lane}</td><td>${x.who}</td><td>${x.open} – ${x.close}</td><td class="r">${money(x.sales,0)}</td><td class="r">${money(x.exp)}</td><td class="r">${money(x.cnt)}</td><td class="r" style="color:${os<0?'var(--crit)':os>0?'var(--warn)':'var(--ok)'}">${Math.abs(os)<0.005?'balanced':money(os)}</td></tr>`; }).join('')}
     </tbody></table></div>
-  </section>
+  </section>`}
   <section class="card" data-note="Roles and permissions">
-    <div class="cardhead"><h2>Who can do what</h2></div>
-    <div class="tablewrap"><table class="rptable" style="min-width:560px"><thead><tr><th>Task</th><th>Cashier</th><th>Manager</th><th>Owner</th></tr></thead><tbody>
-      ${[['Sell, scan IDs, returns under $50',1,1,1],['Discounts over 15%, refunds over $50, typed birthdates',0,1,1],['Receive deliveries, count stock',1,1,1],['Pricing, purchasing, vendors, reports',0,1,1],['Store settings, users, tax rates',0,0,1]].map(r=>`<tr><td>${r[0]}</td>${[1,2,3].map(k=>`<td>${r[k]?ic('check','style="color:var(--ok)"'):'<span class="muted">—</span>'}</td>`).join('')}</tr>`).join('')}
-    </tbody></table></div>
+    <div class="cardhead"><h2>Who can do what</h2><span class="spacer"></span><span class="muted" style="font-size:12px">Same rules the app enforces · you are ${esc(S.user)} (${USERS.find(u=>u.n===S.user)?.role||''})</span></div>
+    ${(()=>{ const me=USERS.find(u=>u.n===S.user)?.role, roles=['cashier','manager','owner'];
+      const head = `<tr><th></th>${roles.map(r=>`<th class="${r===me?'me':''}" style="text-transform:capitalize">${r}<small>${USERS.filter(u=>u.role===r).map(u=>u.n).join(', ')}</small></th>`).join('')}</tr>`;
+      const cell = (v,r) => `<td class="${r===me?'me':''}">${v===1?ic('check','style="color:var(--ok)"'):v===0?'<span class="muted">—</span>':`<span class="chip warn">${v}</span>`}</td>`;
+      const grp = t => `<tr class="grp"><td colspan="4">${t}</td></tr>`;
+      const row = ([l,...v]) => `<tr><td>${esc(l)}</td>${v.map((x,k)=>cell(x,roles[k])).join('')}</tr>`;
+      return `<div class="tablewrap"><table class="rptable permtable" style="min-width:560px"><thead>${head}</thead><tbody>
+        ${grp('Screens they can open')}${ROUTES.map(([id,label])=>row([label, ...roles.map(r=>roleAllows(r,id)?1:0)])).join('')}
+        ${ROLE_ACTIONS.map(([t,rows])=>grp(t)+rows.map(row).join('')).join('')}
+      </tbody></table></div>`; })()}
+    <div class="muted" style="font-size:12px;margin-top:8px">“Manager PIN” means a cashier can start it and a manager types their PIN to approve. Managers and cashiers work at their own store; owners see every store.</div>
   </section>`;
 };
 function receiptSheet(sale){
