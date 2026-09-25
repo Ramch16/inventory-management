@@ -1,0 +1,1027 @@
+<title>Bevnetic POS Prototype</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,500;0,600;0,700;1,700;1,800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --rail:#13202A; --rail-2:#1B2B36; --rail-ink:#C9D6DD; --rail-muted:#7F95A1;
+  --bg:#F2F5F6; --surface:#FFFFFF; --surface-2:#F7F9FA; --ink:#14212A; --muted:#5A6B76; --line:#DCE3E7;
+  --accent:#F07A1C; --accent-ink:#B8520A; --accent-soft:#FFF1E4; --violet:#8A3FE0; --violet-soft:#F3EAFE;
+  --grad:linear-gradient(100deg,#FF9A2E 0%,#EC5A6E 55%,#8A3FE0 100%);
+  --crit:#D63F2F; --crit-soft:#FDECEA; --warn:#D98E0B; --warn-soft:#FDF4E1; --ok:#1E9360; --ok-soft:#E6F6EE; --over:#2C74D6; --over-soft:#E7F0FC;
+  --shadow:0 1px 2px rgba(20,33,42,.06),0 6px 20px rgba(20,33,42,.06);
+  --display:"Saira","Arial Narrow",system-ui,sans-serif; --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --bg:#0D161C; --surface:#152129; --surface-2:#1A2831; --ink:#E6EDF0; --muted:#8FA2AD; --line:#26363F;
+  --accent:#FF8E3A; --accent-ink:#FFB27A; --accent-soft:#3A2414; --violet:#B07BFF; --violet-soft:#2A1C40;
+  --crit:#FF6A57; --crit-soft:#3A1A17; --warn:#F2B13C; --warn-soft:#382A10; --ok:#3CC487; --ok-soft:#13301F; --over:#5C9BFF; --over-soft:#15253D;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#0D161C; --surface:#152129; --surface-2:#1A2831; --ink:#E6EDF0; --muted:#8FA2AD; --line:#26363F;
+  --accent:#FF8E3A; --accent-ink:#FFB27A; --accent-soft:#3A2414; --violet:#B07BFF; --violet-soft:#2A1C40;
+  --crit:#FF6A57; --crit-soft:#3A1A17; --warn:#F2B13C; --warn-soft:#382A10; --ok:#3CC487; --ok-soft:#13301F; --over:#5C9BFF; --over-soft:#15253D;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 14px/1.5 var(--body);-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ---------- shell ---------- */
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100%}
+.rail{background:var(--rail);color:var(--rail-ink);display:flex;flex-direction:column;gap:6px;padding:14px 12px;position:sticky;top:0;height:100vh;overflow:auto;
+  background-image:radial-gradient(circle at 20% 0%,rgba(255,154,46,.10),transparent 45%),linear-gradient(transparent 0 0);}
+.brand{display:flex;align-items:center;gap:8px;padding:2px 4px 12px}
+.brand img{width:62px;height:auto;-webkit-mask-image:radial-gradient(ellipse 62% 58% at 55% 50%,#000 60%,transparent 100%);mask-image:radial-gradient(ellipse 62% 58% at 55% 50%,#000 60%,transparent 100%)}
+.brand b{font:italic 800 21px/1 var(--display);letter-spacing:.02em;color:#fff}
+.brand small{display:block;font:600 9px/1.3 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--rail-muted);margin-top:4px}
+.navlabel{font:700 10px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--rail-muted);padding:14px 10px 6px}
+.nav{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--rail-ink);text-decoration:none;font-weight:600;position:relative}
+.nav:hover{background:var(--rail-2)}
+.nav.on{background:linear-gradient(90deg,rgba(255,154,46,.20),rgba(138,63,224,.12));color:#fff}
+.nav.on svg{color:#FFA350}
+.nav .cnt{margin-left:auto;font:600 11px/1 var(--mono);background:#E8503A;color:#fff;border-radius:10px;padding:3px 6px}
+.railfoot{margin-top:auto;border-top:1px solid #243642;padding:12px 6px 4px;font-size:12px;color:var(--rail-muted)}
+.railfoot strong{color:#fff;display:block;font-size:13px}
+
+.main{min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 24px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top h1{font:700 22px/1.1 var(--display);margin:0;letter-spacing:.01em;text-wrap:balance}
+.top .sub{color:var(--muted);font-size:12px}
+.top .spacer{flex:1}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 11px;font-size:12px;font-weight:700;white-space:nowrap}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
+.pill.off .dot{background:var(--crit);box-shadow:0 0 0 3px var(--crit-soft)}
+.pill.off{border-color:var(--crit);color:var(--crit)}
+.iconbtn{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--surface);position:relative}
+.iconbtn .badge{position:absolute;top:-5px;right:-5px;background:#E8503A;color:#fff;font:600 10px/1 var(--mono);padding:3px 5px;border-radius:9px}
+.iconbtn[aria-pressed="true"]{background:var(--violet-soft);border-color:var(--violet);color:var(--violet)}
+.content{padding:22px 24px 40px;display:flex;flex-direction:column;gap:18px;max-width:1440px;width:100%}
+
+/* ---------- primitives ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card h2,.h2{font:700 16px/1.2 var(--display);margin:0;letter-spacing:.01em}
+.cardhead{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.cardhead .spacer{flex:1}
+.muted{color:var(--muted)}
+.eyebrow{font:700 10.5px/1 var(--body);letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.grid{display:grid;gap:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 13px;font-weight:700;font-size:13px;white-space:nowrap}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn.grad{background:var(--grad);border:0;color:#fff}
+.btn.ghost{background:transparent}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn.danger{color:var(--crit);border-color:color-mix(in srgb,var(--crit) 40%,var(--line))}
+.btn.sm{padding:5px 9px;font-size:12px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 9px;font-size:11.5px;font-weight:700;border:1px solid transparent;white-space:nowrap}
+.chip.crit{background:var(--crit-soft);color:var(--crit)} .chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.ok{background:var(--ok-soft);color:var(--ok)} .chip.over{background:var(--over-soft);color:var(--over)}
+.chip.ai{background:var(--violet-soft);color:var(--violet)} .chip.plain{border-color:var(--line);color:var(--muted)}
+.chip.age{background:var(--ink);color:var(--surface);font-family:var(--mono);font-size:10.5px;padding:2px 6px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;padding:3px;background:var(--surface);gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;border-radius:6px;padding:5px 10px;font-weight:700;font-size:12.5px;color:var(--muted)}
+.seg button.on{background:var(--ink);color:var(--surface)}
+table{width:100%;border-collapse:collapse}
+th{font:700 10.5px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+.tablewrap{overflow-x:auto}
+.r{text-align:right}
+
+/* ---------- wireframe notes mode ---------- */
+.spec{display:none}
+body.notes .spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;border:1.5px dashed var(--violet);background:var(--violet-soft);border-radius:12px;padding:14px 16px}
+.spec h3{grid-column:1/-1;margin:0;font:700 13px/1 var(--display);color:var(--violet);letter-spacing:.06em;text-transform:uppercase;display:flex;gap:8px;align-items:center}
+.spec div{font-size:12.5px}
+.spec b{display:block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--violet);margin-bottom:3px}
+.spec ul{margin:0;padding-left:16px}
+body.notes [data-note]{outline:1.5px dashed var(--violet);outline-offset:3px;position:relative}
+body.notes [data-note]::after{content:attr(data-note);position:absolute;top:-10px;right:8px;background:var(--violet);color:#fff;font:700 10px/1 var(--mono);padding:4px 6px;border-radius:4px;z-index:5;pointer-events:none;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ---------- command center ---------- */
+.hello{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.kpi{background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.kpi .v{font:700 23px/1.15 var(--display);white-space:nowrap;letter-spacing:.01em}
+.kpi .d{font-size:12px;font-weight:700}
+.kpi .d.up{color:var(--ok)} .kpi .d.dn{color:var(--crit)}
+.kpi.wide{grid-column:span 2}
+.spark{width:100%;height:34px;display:block}
+.assistant{background:var(--rail);color:#E7EEF2;border-radius:14px;padding:18px;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:12px}
+.assistant::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 100% 0%,rgba(236,90,110,.28),transparent 45%),radial-gradient(circle at 0% 100%,rgba(138,63,224,.22),transparent 50%);pointer-events:none}
+.assistant>*{position:relative}
+.assistant .quote{font:600 italic 17px/1.35 var(--display);color:#fff;text-wrap:balance}
+.prio{display:flex;flex-direction:column;gap:6px}
+.prio button{display:flex;gap:10px;align-items:center;text-align:left;width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:9px;padding:9px 11px;color:#E7EEF2}
+.prio button:hover{background:rgba(255,255,255,.10)}
+.prio .sev{width:8px;height:28px;border-radius:4px;flex:none}
+.prio .go{margin-left:auto;color:#FFA350;font-size:12px;font-weight:700;white-space:nowrap}
+.hourly{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.bars{display:flex;align-items:flex-end;gap:4px;height:140px;padding-top:8px}
+.bars div{flex:1;border-radius:4px 4px 0 0;background:color-mix(in srgb,var(--accent) 35%,var(--surface-2));position:relative}
+.bars div.now{background:var(--accent)}
+.bars div.fc{background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--violet) 30%,transparent) 0 4px,transparent 4px 8px);border:1px dashed var(--violet);border-bottom:0}
+.barlbl{display:flex;gap:4px;font:500 10px/1 var(--mono);color:var(--muted);margin-top:6px}
+.barlbl span{flex:1;text-align:center}
+.mix li{display:grid;grid-template-columns:90px 1fr 60px;gap:8px;align-items:center;padding:5px 0}
+.mix ul{list-style:none;margin:0;padding:0}
+.meter{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--grad)}
+
+/* ---------- register ---------- */
+.reg{display:grid;grid-template-columns:1fr 380px;gap:16px;align-items:start}
+.scanbar{display:flex;gap:8px;align-items:center;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:6px 6px 6px 12px}
+.scanbar input{flex:1;border:0;outline:0;background:transparent;padding:6px 0;min-width:0}
+.cats{display:flex;gap:6px;flex-wrap:wrap}
+.cats button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-weight:700;font-size:12.5px}
+.cats button.on{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.plu{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.prod{display:flex;flex-direction:column;gap:6px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px;min-height:118px;position:relative;transition:transform .12s,border-color .12s}
+.prod:hover{border-color:var(--accent);transform:translateY(-1px)}
+.prod:active{transform:scale(.98)}
+.bottle{height:34px;display:flex;align-items:flex-end;gap:3px}
+.bottle i{display:block;border-radius:3px 3px 2px 2px}
+.prod .nm{font-weight:700;font-size:13px;line-height:1.25}
+.prod .meta{font:500 11px/1.2 var(--mono);color:var(--muted)}
+.prod .pr{margin-top:auto;display:flex;justify-content:space-between;align-items:center}
+.prod .pr b{font:700 15px/1 var(--mono)}
+.prod .low{font-size:10.5px;font-weight:700;color:var(--warn)}
+.ticket{position:sticky;top:76px;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);max-height:calc(100vh - 96px)}
+.ticket header{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.ticket header .spacer{flex:1}
+.lines{overflow:auto;flex:1;min-height:120px}
+.line{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 16px;border-bottom:1px dashed var(--line)}
+.line .q{display:flex;align-items:center;gap:6px;font:600 12px/1 var(--mono);color:var(--muted)}
+.line .q button{width:22px;height:22px;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);line-height:1;padding:0}
+.empty{padding:34px 20px;text-align:center;color:var(--muted)}
+.idgate{margin:10px 16px 0;border-radius:10px;padding:10px 12px;display:flex;gap:10px;align-items:center;font-size:12.5px;font-weight:600}
+.idgate.need{background:var(--warn-soft);color:var(--warn)}
+.idgate.ok{background:var(--ok-soft);color:var(--ok)}
+.totals{padding:12px 16px;display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:13px}
+.totals .grand{font:700 26px/1.1 var(--display);padding-top:6px;border-top:1px solid var(--line);margin-top:4px}
+.paybar{padding:0 16px 16px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.paybar .btn{padding:12px}
+.paybar .big{grid-column:1/-1;font-size:16px;padding:15px}
+.offbanner{display:flex;gap:10px;align-items:center;background:var(--crit-soft);color:var(--crit);border:1px solid color-mix(in srgb,var(--crit) 35%,transparent);border-radius:10px;padding:10px 14px;font-weight:600;font-size:13px}
+
+/* ---------- modal ---------- */
+.scrim{position:fixed;inset:0;background:rgba(8,14,18,.58);backdrop-filter:blur(3px);display:grid;place-items:center;padding:16px;z-index:50}
+.modal{background:var(--surface);border-radius:16px;width:min(860px,100%);max-height:calc(100% - 20px);overflow:auto;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.modal header{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.modal header h2{font:700 19px/1 var(--display);margin:0}
+.modal header .spacer{flex:1}
+.modal .body{padding:20px;display:grid;gap:20px}
+.modal footer{display:flex;gap:8px;justify-content:flex-end;padding:14px 20px;border-top:1px solid var(--line);flex-wrap:wrap}
+.idwrap{grid-template-columns:1fr 1fr}
+.idcard{aspect-ratio:1.586;max-width:100%;border-radius:12px;padding:14px;background:linear-gradient(135deg,#E9EEF4,#CFD9E3);color:#1C2A36;position:relative;overflow:hidden;display:grid;grid-template-columns:80px 1fr;gap:10px;align-content:start;font-size:11px}
+.idcard .ph{width:80px;height:96px;border-radius:6px;background:linear-gradient(#AAB8C4,#8C9DAC)}
+.idcard .st{grid-column:1/-1;font:800 italic 13px/1 var(--display);letter-spacing:.1em;color:#2C4A67}
+.idcard dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:2px 8px}
+.idcard dt{color:#5A6B7A;font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+.idcard dd{margin:0;font-family:var(--mono);font-weight:600}
+.laser{position:absolute;left:0;right:0;height:2px;background:#FF3B3B;box-shadow:0 0 12px 2px #FF3B3B;top:10%;animation:scan 1.3s ease-in-out infinite alternate}
+@keyframes scan{to{top:88%}}
+.pdf417{height:54px;border-radius:6px;background:#fff;padding:6px;display:flex;gap:1px;overflow:hidden;margin-top:10px}
+.pdf417 i{flex:1;background:#111}
+.checks{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.checks li{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:8px;background:var(--surface-2);font-size:13px}
+.checks li .st{margin-left:auto;font:600 11px/1 var(--mono)}
+.tick{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--line);color:#fff}
+.tick.ok{background:var(--ok)} .tick.bad{background:var(--crit)} .tick.run{background:transparent;border:2px solid var(--accent);border-top-color:transparent;animation:spin .7s linear infinite}
+.tick svg{width:12px;height:12px;stroke-width:3}
+@keyframes spin{to{transform:rotate(360deg)}}
+.agebig{font:800 italic 44px/1 var(--display)}
+.verdict{border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center}
+.verdict.ok{background:var(--ok-soft);color:var(--ok)} .verdict.bad{background:var(--crit-soft);color:var(--crit)}
+.term{border-radius:18px;background:#1A1F24;color:#fff;padding:18px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;max-width:260px;margin-inline:auto;width:100%}
+.term .scr{background:#0E1418;border-radius:10px;width:100%;padding:18px 12px;display:flex;flex-direction:column;gap:6px;align-items:center}
+.term .amt{font:700 30px/1 var(--mono)}
+.nfc{width:64px;height:64px;border-radius:50%;border:2px solid #FFA350;display:grid;place-items:center;animation:pulse 1.4s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,163,80,.5)}100%{box-shadow:0 0 0 18px rgba(255,163,80,0)}}
+.methods{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.methods button{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:700;font-size:12px}
+.methods button.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+.cashgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+
+/* ---------- inventory heat map ---------- */
+.legend{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.lg{border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 14px;text-align:left;display:flex;flex-direction:column;gap:4px}
+.lg .n{font:700 28px/1 var(--display)}
+.lg small{color:var(--muted);font-size:11.5px}
+.lg.on{border-color:currentColor}
+.lg.crit{color:var(--crit)} .lg.warn{color:var(--warn)} .lg.ok{color:var(--ok)} .lg.over{color:var(--over)}
+.lg .t{color:var(--ink);font-weight:700;display:flex;align-items:center;gap:6px}
+.lg .t i{width:10px;height:10px;border-radius:3px;background:currentColor}
+.heat{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));grid-auto-rows:76px;grid-auto-flow:dense;gap:6px}
+.tile{border:0;border-radius:8px;padding:8px 9px;text-align:left;display:flex;flex-direction:column;justify-content:space-between;color:var(--ink);transition:opacity .2s,transform .12s;overflow:hidden}
+.tile:hover{transform:scale(1.02)}
+.tile.big{grid-column:span 2;grid-row:span 2}
+.tile.wide{grid-column:span 2}
+.tile .tn{font-weight:700;font-size:12px;line-height:1.2}
+.tile .tv{font:600 11px/1 var(--mono);opacity:.85}
+.tile.big .tn{font-size:15px}
+.tile.crit{background:color-mix(in srgb,var(--crit) 26%,var(--surface))} .tile.warn{background:color-mix(in srgb,var(--warn) 26%,var(--surface))}
+.tile.ok{background:color-mix(in srgb,var(--ok) 18%,var(--surface))} .tile.over{background:color-mix(in srgb,var(--over) 22%,var(--surface))}
+.tile.dim{opacity:.18}
+.tile.sel{box-shadow:inset 0 0 0 2px var(--ink)}
+.insight{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.insight div{background:var(--surface);padding:14px 16px}
+.insight b{display:block;font:700 30px/1 var(--display);background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.invgrid{display:grid;grid-template-columns:1fr 360px;gap:16px;align-items:start}
+.actions{display:flex;flex-direction:column}
+.act{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.act:last-child{border-bottom:0}
+.act .ic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center}
+.act .ic.crit{background:var(--crit-soft);color:var(--crit)} .act .ic.warn{background:var(--warn-soft);color:var(--warn)} .act .ic.over{background:var(--over-soft);color:var(--over)}
+.act p{margin:0;font-size:13px;font-weight:600}
+.act small{color:var(--muted);font-size:11.5px}
+.detail dl{display:grid;grid-template-columns:1fr auto;gap:6px 10px;margin:10px 0 0;font-size:13px}
+.detail dd{margin:0;font-family:var(--mono);text-align:right}
+.detail dt{color:var(--muted)}
+
+/* ---------- forecast ---------- */
+.fcgrid{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start}
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--muted);font:500 10.5px var(--mono)}
+.drivers{display:flex;flex-direction:column;gap:8px}
+.drv{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;font-size:13px}
+.drv .ic{width:28px;height:28px;border-radius:7px;background:var(--surface-2);display:grid;place-items:center;color:var(--muted)}
+.drv b{font:600 12px/1 var(--mono)}
+.drv b.up{color:var(--ok)} .drv b.dn{color:var(--crit)}
+.reco{border-radius:14px;padding:16px;background:var(--rail);color:#E7EEF2;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+.reco::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 100% 0%,rgba(255,154,46,.25),transparent 55%);pointer-events:none}
+.reco>*{position:relative}
+.reco .big{font:800 italic 32px/1 var(--display);color:#fff}
+.reco ul{margin:0;padding-left:18px;font-size:12.5px;color:#B9C8D0}
+.skus{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- invoices ---------- */
+.steps{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;counter-reset:s}
+.step{display:flex;flex-direction:column;gap:6px;font-size:11.5px;font-weight:600;color:var(--muted)}
+.step i{height:5px;border-radius:3px;background:var(--line)}
+.step.done i{background:var(--ok)} .step.cur i{background:var(--grad)} .step.cur{color:var(--ink)}
+.step span{font:600 10px/1 var(--mono)}
+.invwrap{display:grid;grid-template-columns:320px 1fr;gap:16px;align-items:start}
+.paper{background:#FBFAF6;color:#2B2B2B;border-radius:6px;padding:16px;font:500 10px/1.5 var(--mono);box-shadow:var(--shadow);transform:rotate(-1.2deg);position:relative;border:1px solid #E6E1D3}
+.paper h4{margin:0 0 4px;font:700 13px/1 var(--body);letter-spacing:.03em}
+.paper .row{display:grid;grid-template-columns:1fr 26px 46px;gap:4px;border-bottom:1px dotted #CFC8B6;padding:2px 0}
+.paper .hl{position:absolute;border:2px solid var(--violet);border-radius:4px;background:rgba(138,63,224,.08)}
+.drop{border:1.5px dashed var(--line);border-radius:10px;padding:14px;display:flex;gap:10px;align-items:center;color:var(--muted);font-size:12.5px;background:var(--surface)}
+.conf{display:inline-flex;align-items:center;gap:6px;font:600 11px/1 var(--mono)}
+.conf i{width:34px;height:5px;border-radius:3px;background:var(--line);position:relative;overflow:hidden}
+.conf i b{position:absolute;inset:0 auto 0 0;background:var(--ok)}
+.var-up{color:var(--crit);font-weight:700} .var-dn{color:var(--ok);font-weight:700}
+.rowact{display:flex;gap:4px}
+.rowact button{width:28px;height:28px;border-radius:7px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;padding:0}
+.rowact button.on-ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.rowact button.on-bad{background:var(--crit);border-color:var(--crit);color:#fff}
+tr.rej td{opacity:.45;text-decoration:line-through}
+tr.rej td:last-child{opacity:1;text-decoration:none}
+
+/* ---------- alerts ---------- */
+.alerts{display:flex;flex-direction:column;gap:10px}
+.alert{display:grid;grid-template-columns:40px 1fr auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+.alert .ic{width:40px;height:40px;border-radius:10px;display:grid;place-items:center}
+.alert h3{margin:0;font:700 14px/1.2 var(--body)}
+.alert p{margin:3px 0 0;color:var(--muted);font-size:13px}
+.alert .when{font:500 11px/1 var(--mono);color:var(--muted)}
+.alert.done{opacity:.5}
+.alert .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+
+/* ---------- customers ---------- */
+.cust{display:grid;grid-template-columns:340px 1fr;gap:16px;align-items:start}
+.member{display:flex;flex-direction:column;gap:12px}
+.avatar{width:52px;height:52px;border-radius:14px;background:var(--grad);color:#fff;display:grid;place-items:center;font:800 italic 20px var(--display)}
+.tier{background:var(--rail);color:#fff;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.tier .pts{font:700 26px/1 var(--mono)}
+.prog{height:6px;border-radius:3px;background:rgba(255,255,255,.12)} .prog i{display:block;height:100%;border-radius:3px;background:var(--grad)}
+.segs{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.segcard{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px;background:var(--surface)}
+.segcard .n{font:700 22px/1 var(--display)}
+.phone{width:240px;max-width:100%;border-radius:26px;border:8px solid #1A1F24;background:#EEF1F3;padding:14px 10px;display:flex;flex-direction:column;gap:8px;color:#1C2A36;margin-inline:auto}
+.bubble{background:#fff;border-radius:14px 14px 14px 4px;padding:10px;font-size:12px;line-height:1.4}
+
+/* ---------- devices ---------- */
+.devgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.stars{color:var(--accent);letter-spacing:1px;font-size:13px}
+.stars s{color:var(--line);text-decoration:none}
+.qrow{display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+.qrow:last-child{border-bottom:0}
+.limit{display:flex;flex-direction:column;gap:6px}
+.limit .meter i{background:var(--warn)}
+.toggle{width:38px;height:22px;border-radius:11px;background:var(--line);border:0;position:relative;padding:0;flex:none}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
+.toggle[aria-pressed="true"]{background:var(--ok)}
+.toggle[aria-pressed="true"]::after{left:19px}
+.setrow{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+.setrow:last-child{border-bottom:0}
+.setrow div{flex:1}
+.setrow small{display:block;color:var(--muted);font-size:11.5px}
+
+/* ---------- toast ---------- */
+.toast[hidden]{display:none}
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--surface);border-radius:10px;padding:11px 16px;font-weight:700;font-size:13px;z-index:60;display:flex;gap:8px;align-items:center;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1180px){
+  .reg,.invgrid,.fcgrid,.invwrap,.cust{grid-template-columns:1fr}
+  .ticket{position:static;max-height:none}
+  .hello,.hourly,.devgrid{grid-template-columns:1fr}
+}
+@media (max-width:820px){
+  .app{grid-template-columns:1fr}
+  .rail{position:fixed;bottom:0;top:auto;left:0;right:0;height:auto;z-index:40;flex-direction:row;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));overflow-x:auto;gap:2px}
+  .brand,.navlabel,.railfoot{display:none}
+  .nav{flex-direction:column;gap:3px;font-size:10px;padding:6px 8px;min-width:64px}
+  .nav .cnt{position:absolute;top:2px;right:6px;margin:0;padding:2px 4px;font-size:9px}
+  .content{padding:16px 16px 100px}
+  .top{padding:10px 16px}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .legend,.insight{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:repeat(4,1fr);row-gap:10px}
+  .idwrap{grid-template-columns:1fr}
+  .methods,.cashgrid{grid-template-columns:repeat(2,1fr)}
+  .alert{grid-template-columns:40px 1fr}
+  .alert .acts{grid-column:1/-1;justify-content:flex-start}
+  .top .sub{display:none}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+<div class="app">
+  <nav class="rail" id="rail" aria-label="Main"></nav>
+  <div class="main">
+    <header class="top" id="top"></header>
+    <main class="content" id="view"></main>
+  </div>
+</div>
+<div id="modal"></div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+const MARK = "data:image/jpeg;base64,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";
+
+/* ------------------------------------------------ icons */
+const P = {
+  command:'<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>',
+  register:'<circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21.5 8H6"/>',
+  inventory:'<path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/>',
+  forecast:'<path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/>',
+  invoices:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',
+  bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',
+  users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+  devices:'<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M9 6h6v4H9z"/><path d="M9 14h.01M12 14h.01M15 14h.01M9 17h.01M12 17h.01M15 17h.01"/>',
+  wifi:'<path d="M5 12.5a11 11 0 0 1 14 0M1.5 9a16 16 0 0 1 21 0M8.5 16a6 6 0 0 1 7 0M12 20h.01"/>',
+  wifioff:'<path d="M2 2l20 20M8.5 16a6 6 0 0 1 7 0M12 20h.01M5 12.5a11 11 0 0 1 4-2.2M16.7 10.7a11 11 0 0 1 2.3 1.8M1.5 9A16 16 0 0 1 6 6.2M10.7 5a16 16 0 0 1 11.8 4"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+  scan:'<path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M11 8v8M14 8v8M17 8v8"/>',
+  id:'<rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M5 16c.6-1.4 1.8-2 3-2s2.4.6 3 2M14 10h4M14 14h4"/>',
+  card:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/>',
+  tap:'<path d="M8.5 8a5 5 0 0 1 0 8M12 5.5a9 9 0 0 1 0 13M15.5 3a13 13 0 0 1 0 18"/>',
+  cash:'<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/>',
+  split:'<path d="M16 3h5v5M8 3H3v5M21 3l-7 7M3 3l7 7M12 14v7"/>',
+  check:'<path d="M20 6L9 17l-5-5"/>',
+  x:'<path d="M18 6L6 18M6 6l12 12"/>',
+  alert:'<path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+  spark:'<path d="M12 3l1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2z"/><path d="M19 3v4M17 5h4"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  truck:'<path d="M1 4h14v12H1zM15 9h4l3 3v4h-7z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/>',
+  dollar:'<path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+  tag:'<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><path d="M7 7h.01"/>',
+  cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M10 14l4 4M14 14l-4 4"/>',
+  box:'<path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M8 11l8 4M16 11l-8 4"/>',
+  mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/>',
+  upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+  camera:'<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',
+  moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>',
+  notes:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  users2:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  game:'<rect x="2" y="6" width="20" height="12" rx="6"/><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"/>',
+  cloud:'<path d="M17.5 19H7a5 5 0 1 1 1.1-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/>',
+  store:'<path d="M3 9l1.5-5h15L21 9M3 9v11h18V9M3 9h18M9 20v-6h6v6"/>',
+  edit:'<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/>',
+  gift:'<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/>',
+  sync:'<path d="M21 12a9 9 0 0 1-15.5 6.2L3 16M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M3 21v-5h5"/>',
+};
+const ic = (n, s='') => `<svg class="i" viewBox="0 0 24 24" ${s}>${P[n]||''}</svg>`;
+const $ = s => document.querySelector(s);
+const money = (n, d=2) => (n<0?'-':'') + '$' + Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ------------------------------------------------ sample data (all fictional demo figures) */
+const TAX = 0.0875;
+const PRODUCTS = [
+  {id:'tito175', n:"Tito's Handmade Vodka", sz:'1.75 L', abv:40, cat:'Spirits', p:34.99, stock:22, c:['#D9E4E8','#9FB5BE'], r:1, crv:0},
+  {id:'jame750', n:'Jameson Irish Whiskey', sz:'750 ml', abv:40, cat:'Spirits', p:29.99, stock:41, c:['#2F6B3E','#C9A94E'], r:1, crv:0},
+  {id:'casa750', n:'Casamigos Blanco', sz:'750 ml', abv:40, cat:'Spirits', p:54.99, stock:6, c:['#E9ECEF','#3C3C3C'], r:1, crv:0},
+  {id:'hen750', n:'Hennessy VS Cognac', sz:'750 ml', abv:40, cat:'Spirits', p:44.99, stock:18, c:['#6A3B18','#D9A441'], r:1, crv:0},
+  {id:'crown750', n:'Crown Royal', sz:'750 ml', abv:40, cat:'Spirits', p:32.99, stock:27, c:['#4B2A6E','#D4B25C'], r:1, crv:0},
+  {id:'bac1l', n:'Bacardi Superior Rum', sz:'1 L', abv:40, cat:'Spirits', p:17.99, stock:33, c:['#F1F1F1','#C1272D'], r:1, crv:0},
+  {id:'josh750', n:'Josh Cellars Cabernet', sz:'750 ml', abv:13.5, cat:'Wine', p:14.99, stock:48, c:['#4A1320','#1E1E1E'], r:1, crv:0},
+  {id:'lamarca', n:'La Marca Prosecco', sz:'750 ml', abv:11, cat:'Wine', p:15.99, stock:36, c:['#8BB3A0','#E8D9A8'], r:1, crv:0},
+  {id:'kim750', n:'Kim Crawford Sauv Blanc', sz:'750 ml', abv:13, cat:'Wine', p:16.99, stock:9, c:['#DDE8C9','#FFFFFF'], r:1, crv:0},
+  {id:'meiomi', n:'Meiomi Pinot Noir', sz:'750 ml', abv:13.7, cat:'Wine', p:21.99, stock:24, c:['#5B1A2B','#E9E1D0'], r:1, crv:0},
+  {id:'bud12', n:'Bud Light 12pk Cans', sz:'12 × 12 oz', abv:4.2, cat:'Beer & Seltzer', p:12.99, stock:64, c:['#1F4EA3','#FFFFFF'], r:1, crv:0.60},
+  {id:'modelo12', n:'Modelo Especial 12pk', sz:'12 × 12 oz', abv:4.4, cat:'Beer & Seltzer', p:17.99, stock:58, c:['#1B2F5C','#D9B64B'], r:1, crv:0.60},
+  {id:'claw12', n:'White Claw Variety 12pk', sz:'12 × 12 oz', abv:5, cat:'Beer & Seltzer', p:19.99, stock:40, c:['#FFFFFF','#8FB8DE'], r:1, crv:0.60},
+  {id:'noon8', n:'High Noon Variety 8pk', sz:'8 × 12 oz', abv:4.5, cat:'Beer & Seltzer', p:24.99, stock:12, c:['#F6C9B3','#6DBBD8'], r:1, crv:0.40},
+  {id:'tonic4', n:'Fever-Tree Tonic 4pk', sz:'4 × 200 ml', abv:0, cat:'Mixers & Snacks', p:6.49, stock:30, c:['#E4ECEA','#2E6F77'], r:0, crv:0.20},
+  {id:'redbull4', n:'Red Bull 4pk', sz:'4 × 8.4 oz', abv:0, cat:'Mixers & Snacks', p:9.99, stock:44, c:['#2B4FA0','#C8C9CC'], r:0, crv:0.20},
+  {id:'limes', n:'Limes, 3 ct', sz:'produce', abv:0, cat:'Mixers & Snacks', p:1.49, stock:60, c:['#7DB343','#A5D16A'], r:0, crv:0},
+  {id:'ice10', n:'Bagged Ice', sz:'10 lb', abv:0, cat:'Mixers & Snacks', p:3.99, stock:80, c:['#DDEFFA','#B9DDF2'], r:0, crv:0},
+];
+const CATS = ['All','Spirits','Wine','Beer & Seltzer','Mixers & Snacks'];
+
+const HEAT = [
+  ['Bud Light 12pk','crit','3 days cover',1],['Casamigos Blanco','crit','1 day cover',0],['Kim Crawford SB','crit','Stockout 5 days',0],
+  ['Hard seltzer 24pk mix','crit','Expires 18 days',0],['Rosé 2023 closeouts','crit','No sale 94 days',0],['Josh Cabernet','ok','Healthy margin',1],
+  ['High Noon 8pk','warn','Below reorder pt',0],['Modelo 12pk','ok','Normal velocity',0],['Tito\'s 1.75 L','warn','Supplier delay 2 d',1],
+  ['Meiomi Pinot','warn','Cost +8.5%',0],['Craft IPA 4pk','crit','Expires 21 days',0],['Jameson 750','ok','Healthy',0],
+  ['Hennessy VS','ok','Healthy',0],['Crown Royal','ok','Healthy',0],['Flavored vodka','over','142 days on hand',2],
+  ['Magnum Champagne','over','$3.1K tied up',0],['Bacardi 1 L','ok','Healthy',0],['La Marca Prosecco','ok','Healthy',0],
+  ['White Claw 12pk','warn','Below reorder pt',0],['Pumpkin ale','over','Seasonal surplus',0],['Mini bottles 50ml','ok','Healthy',0],
+  ['Red Bull 4pk','ok','Healthy',0],['Aperol 750','warn','Price anomaly',0],['Sake 720 ml','over','98 days on hand',0],
+  ['Boxed wine 3 L','ok','Normal velocity',0],['Cigars humidor','over','$2.4K tied up',0],['Ice 10 lb','ok','Healthy',0],
+  ['Limes','crit','Spoils in 3 days',0],['Fever-Tree tonic','ok','Healthy',0],['Mezcal 750','warn','Supplier delay',0],
+  ['Blended scotch','over','112 days on hand',0],['Pinot Grigio','ok','Healthy',0],['Tequila reposado','ok','Healthy',0],
+  ['Imported lager','warn','Below reorder pt',0],['Cider 6pk','over','Slow mover',0],['Rum spiced','ok','Healthy',0],
+];
+
+const FC = {
+  bud12:{n:'Bud Light 12pk Cans', base:12, wk:1.6, stock:72, lead:2, pack:2, unit:'12pks', supplier:'Valley Beer Distributing'},
+  tito175:{n:"Tito's Handmade Vodka 1.75 L", base:1.6, wk:1.8, stock:22, lead:3, pack:6, unit:'bottles', supplier:'Summit Wine & Spirits'},
+  claw12:{n:'White Claw Variety 12pk', base:5, wk:1.7, stock:40, lead:2, pack:2, unit:'12pks', supplier:'Valley Beer Distributing'},
+  lamarca:{n:'La Marca Prosecco 750 ml', base:3.1, wk:1.5, stock:36, lead:4, pack:12, unit:'bottles', supplier:'Summit Wine & Spirits'},
+};
+
+const INVOICE = [
+  {sku:'TITO-175', d:"Tito's Handmade Vodka 1.75L", m:"Tito's Handmade Vodka · 1.75 L", q:12, qo:12, cost:24.10, prev:24.10, conf:99},
+  {sku:'MEIO-PN75', d:'MEIOMI PINOT NOIR 750', m:'Meiomi Pinot Noir · 750 ml', q:12, qo:12, cost:13.20, prev:12.17, conf:97},
+  {sku:'LAMR-PRO75', d:'LA MARCA PROSEC 750ML', m:'La Marca Prosecco · 750 ml', q:24, qo:24, cost:10.45, prev:10.60, conf:95},
+  {sku:'CASA-BL75', d:'CASAMIGOS BLNCO 750', m:'Casamigos Blanco · 750 ml', q:6, qo:12, cost:38.90, prev:38.90, conf:98, note:'Short 6 vs PO #10234'},
+  {sku:'HEN-VS75', d:'HENNESSY V.S 750ML', m:'Hennessy VS Cognac · 750 ml', q:12, qo:12, cost:31.75, prev:31.75, conf:96, note:'7 damaged on receipt'},
+  {sku:'???', d:'APEROL SPRITZ RTD 4PK', m:null, q:8, qo:0, cost:11.80, prev:null, conf:41, note:'Not in catalog'},
+];
+
+const ALERTS = [
+  {id:1, t:'stock', sev:'crit', ic:'box', h:'Inventory shortage', p:'Bud Light 12-pack is projected to run out in 3 days.', when:'6:02 AM', acts:['Create PO','View forecast'], go:'forecast'},
+  {id:2, t:'supplier', sev:'warn', ic:'truck', h:'Supplier follow-up', p:'Order #10234 has not been received. Expected delivery was yesterday.', when:'7:15 AM', acts:['Call supplier','Send reminder']},
+  {id:3, t:'money', sev:'warn', ic:'dollar', h:'Payment due', p:'$12,450 supplier payment to Summit Wine & Spirits is due in 3 days.', when:'7:30 AM', acts:['Schedule payment','View bill']},
+  {id:4, t:'supplier', sev:'warn', ic:'mail', h:'Purchase order follow-up', p:'Valley Beer Distributing has not responded to PO #10241 (sent 2 days ago).', when:'8:00 AM', acts:['Draft follow-up','Mark confirmed']},
+  {id:5, t:'damage', sev:'crit', ic:'alert', h:'Damage follow-up', p:'7 units were reported damaged. Supplier credit or claim has not been recorded.', when:'Yesterday', acts:['File claim','Attach photos'], go:'invoices'},
+  {id:6, t:'stock', sev:'warn', ic:'cal', h:'Product expiry', p:'32 units will expire within 30 days, mostly hard seltzer and craft IPA.', when:'Yesterday', acts:['Create markdown','View items'], go:'inventory'},
+  {id:7, t:'money', sev:'info', ic:'tag', h:'Price change', p:'Supplier price for Meiomi Pinot Noir increased 8.5% compared with the previous invoice.', when:'Yesterday', acts:['Update retail price','Keep price'], go:'invoices'},
+];
+
+const NOTES = {
+  command:{deck:'Deck p.11 · AI Owner Command Center', purpose:'One morning view for the owner: today\'s numbers plus the five things that need attention, each linking to the screen that fixes it.', data:['Sales, margin, inventory value (POS + inventory service)','Priority feed ranked by $ impact and urgency','Hourly sales with an AI projection for the rest of the day'], build:['GET /dashboard/today','GET /ai/priorities?limit=5','Push refresh every 5 min; owner and manager roles only']},
+  register:{deck:'Deck p.2–5 · Checkout, ID scan, payments, offline', purpose:'Fast lane checkout. Any 21+ item locks tender until an ID scan passes, and the sale keeps working when the internet drops.', data:['Catalog with category, size, ABV, CRV deposit, age flag','Cart, tax 8.75%, CRV, loyalty member','ID result: DOB, age, expiry, authenticity checks'], build:['Barcode scanner as keyboard wedge + camera fallback','ID SDK (Scandit / IDScan.net) on-device, store result not image','Terminal SDK (PAX, Verifone, Stripe) · offline store-and-forward queue in IndexedDB']},
+  inventory:{deck:'Deck p.9–10 · Inventory Heat Map + AI Insight', purpose:'Colour shows the state of every SKU; the AI panel turns it into a ranked to-do list.', data:['Days of cover = on hand ÷ forecast daily demand','Reorder point, expiry date, last-sale date, margin','Capital tied up = on hand × cost for overstock'], build:['Nightly + on-sale recalculation of state','Tile size = inventory value (treemap)','Actions create POs, markdowns or transfers']},
+  forecast:{deck:'Deck p.8 · AI Business Forecasting', purpose:'Predict demand per SKU and tell the owner when to order and how much.', data:['28 days history, 14 days forecast with confidence band','Drivers: weekday, holidays, weather, local events, promos','Supplier lead time and case pack'], build:['Model service returns point + P10/P90','Recommendation = demand over lead time + safety stock − on hand','One-click draft PO to supplier']},
+  invoices:{deck:'Deck p.6 · AI Invoice Processing (8-step flow)', purpose:'Photograph a supplier invoice; AI reads it, matches lines to the catalog and flags price, quantity and damage issues for owner approval.', data:['OCR fields: supplier, invoice #, date, lines, totals','Match confidence per line against catalog','Variance vs last cost and vs purchase order'], build:['Upload to object storage → OCR / document model','Draft inventory update held until owner approves','Approved lines post to inventory and accounting export']},
+  alerts:{deck:'Deck p.7 · Intelligent AI Notifications', purpose:'Seven alert types, each with the action that resolves it, so nothing needs a second screen.', data:['Stock, supplier, payment, PO, damage, expiry, price change','Severity, created time, resolution state'], build:['Rules + AI engine emits events','Delivery: in-app, SMS, email, push per owner preference','Resolved state feeds audit log']},
+  customers:{deck:'Deck p.2 · Customer engagement & personalization', purpose:'Know regulars at the counter and send offers that match what they already buy.', data:['Member profile, visit history, category mix','Segments built from purchase patterns','Opt-in status for SMS / email'], build:['Look up by phone at checkout','Segment engine runs nightly','Compliance: no alcohol offers to unverified or opted-out members']},
+  devices:{deck:'Deck p.3–5 · ID scan vendors, card devices, offline gateway', purpose:'Configure lane hardware, choose the ID provider and set the risk limits for offline card sales.', data:['Provider evaluation criteria from deck p.3','Terminal status per lane','Offline queue, per-sale and total limits, upload window'], build:['Device registry + heartbeat','Provider adapter interface so vendors can be swapped','Queue auto-uploads on reconnect; declined offline sales create a follow-up alert']},
+};
+
+/* ------------------------------------------------ state */
+const S = {
+  route:'command', online:true, notes:false,
+  cart:[], cat:'All', q:'', id:null, member:null, saleNo:1048,
+  queue:[{no:1039,amt:48.97,t:'Thu 9:41 PM',card:'Visa ·· 4412'},{no:1040,amt:112.36,t:'Thu 9:47 PM',card:'Mastercard ·· 0987'}],
+  done:new Set(), alertFilter:'all', heat:null, tile:null, fc:'bud12',
+  inv:INVOICE.map((l,i)=> i===5 ? 'review' : (l.note||l.cost!==l.prev ? 'review' : 'ok')), invStep:7,
+  offlineLimit:true, custSeg:null,
+};
+try{ const r = localStorage.getItem('bev-route'); if(r && NOTES[r]) S.route = r; }catch(e){}
+const h = (location.hash||'').slice(1); if (NOTES[h]) S.route = h;
+
+const ROUTES = [
+  ['command','Command Center','command','Owner'],
+  ['register','Register','register','Store'],
+  ['inventory','Inventory','inventory','Store'],
+  ['forecast','Forecasting','forecast','Intelligence'],
+  ['invoices','Invoices','invoices','Intelligence'],
+  ['alerts','Alerts','bell','Intelligence'],
+  ['customers','Customers','users','Growth'],
+  ['devices','Devices & Offline','devices','Setup'],
+];
+const TITLES = {
+  command:['Good morning','Friday, September 25 · Oak Street Liquor #014'],
+  register:['Register · Lane 1','Cashier: Maria G. · Shift opened 8:00 AM'],
+  inventory:['Inventory Heat Map','1,284 SKUs · $184K on hand'],
+  forecast:['Demand Forecast','Next 14 days · updated 5:30 AM'],
+  invoices:['AI Invoice Processing','Invoice #HB-58812 · Summit Wine & Spirits'],
+  alerts:['Notifications','AI-generated, sorted by urgency'],
+  customers:['Customers','2,418 loyalty members'],
+  devices:['Devices & Offline Mode','Lane hardware, ID provider, offline payment limits'],
+};
+
+/* ------------------------------------------------ shell */
+function openAlerts(){ return ALERTS.filter(a=>!S.done.has(a.id)).length; }
+function renderRail(){
+  let last='', html = `<div class="brand"><img src="${MARK}" alt=""><div><b>BEVNETIC</b><small>Automated sales systems</small></div></div>`;
+  for (const [id,label,icon,grp] of ROUTES){
+    if (grp!==last){ html += `<div class="navlabel">${grp}</div>`; last=grp; }
+    const cnt = id==='alerts' ? `<span class="cnt">${openAlerts()}</span>` : id==='devices' && S.queue.length ? `<span class="cnt">${S.queue.length}</span>` : '';
+    html += `<a class="nav ${S.route===id?'on':''}" href="#${id}" data-go="${id}">${ic(icon)}<span>${label}</span>${cnt}</a>`;
+  }
+  html += `<div class="railfoot"><strong>Oak Street Liquor #014</strong>Sacramento, CA · 3 lanes<br>POC build · demo data</div>`;
+  $('#rail').innerHTML = html;
+}
+function renderTop(){
+  const [t,sub] = TITLES[S.route];
+  const net = S.online
+    ? `<button class="pill" data-act="net" title="Simulate an internet outage">${'<span class="dot"></span>'}Online · synced</button>`
+    : `<button class="pill off" data-act="net" title="Restore connection">${'<span class="dot"></span>'}Offline · ${S.queue.length} queued</button>`;
+  $('#top').innerHTML = `<div><h1>${t}</h1><div class="sub">${sub}</div></div><span class="spacer"></span>
+    ${net}
+    <button class="iconbtn" data-go="alerts" aria-label="Notifications">${ic('bell')}<span class="badge">${openAlerts()}</span></button>
+    <button class="iconbtn" data-act="notes" aria-pressed="${S.notes}" title="Show wireframe notes" aria-label="Wireframe notes">${ic('notes')}</button>
+    <button class="iconbtn" data-act="theme" title="Switch theme" aria-label="Switch theme">${ic(isDark()?'sun':'moon')}</button>`;
+}
+function isDark(){ const t=document.documentElement.dataset.theme; return t ? t==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
+function spec(){
+  const n = NOTES[S.route];
+  return `<section class="spec" aria-label="Wireframe notes"><h3>${ic('notes')}Wireframe notes · ${n.deck}</h3>
+    <div><b>Purpose</b>${n.purpose}</div>
+    <div><b>Data on screen</b><ul>${n.data.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+    <div><b>Build notes</b><ul>${n.build.map(x=>`<li>${x}</li>`).join('')}</ul></div></section>`;
+}
+function render(){
+  document.body.classList.toggle('notes', S.notes);
+  renderRail(); renderTop();
+  $('#view').innerHTML = spec() + VIEWS[S.route]();
+  if (S.route==='forecast') drawForecast();
+}
+function go(r){ S.route=r; try{localStorage.setItem('bev-route',r)}catch(e){} render(); window.scrollTo(0,0); }
+let toastT; function toast(msg, icon='check'){ const t=$('#toast'); t.innerHTML = ic(icon)+esc(msg); t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,2600); }
+
+/* ------------------------------------------------ helpers */
+function sparkPath(arr,w=160,hgt=34){ const mx=Math.max(...arr), mn=Math.min(...arr); const sx=w/(arr.length-1);
+  const pts=arr.map((v,i)=>[i*sx, hgt-3-((v-mn)/(mx-mn||1))*(hgt-8)]);
+  const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join('');
+  return {line, area: line+`L${w} ${hgt}L0 ${hgt}Z`, end:pts[pts.length-1]}; }
+function spark(arr,color='var(--accent)'){ const s=sparkPath(arr);
+  return `<svg class="spark" viewBox="0 0 160 34" preserveAspectRatio="none" aria-hidden="true"><path d="${s.area}" fill="${color}" opacity=".12"/><path d="${s.line}" fill="none" stroke="${color}" stroke-width="1.6" vector-effect="non-scaling-stroke"/><circle cx="${s.end[0]}" cy="${s.end[1]}" r="2.6" fill="${color}"/></svg>`; }
+function bottle(p){ return `<div class="bottle" aria-hidden="true"><i style="width:14px;height:${p.cat==='Beer & Seltzer'?22:34}px;background:${p.c[0]};border:1px solid rgba(0,0,0,.15)"></i><i style="width:8px;height:${p.cat==='Mixers & Snacks'?16:26}px;background:${p.c[1]};border:1px solid rgba(0,0,0,.15)"></i></div>`; }
+
+/* ------------------------------------------------ views */
+const VIEWS = {};
+
+VIEWS.command = () => {
+  const hourly = [0,0,310,640,820,1140,1360,1210,1480,1920,2650,3380,3900,3610];
+  const labels = ['8a','9a','10a','11a','12p','1p','2p','3p','4p','5p','6p','7p','8p','9p'];
+  const nowIdx = 2; // 10 AM
+  const actual = [180,420,0,0,0,0,0,0,0,0,0,0,0,0];
+  const mx = Math.max(...hourly);
+  const bars = hourly.map((v,i)=> i<nowIdx ? `<div style="height:${Math.max(4,actual[i]/mx*100)}%"></div>` : i===nowIdx ? `<div class="now" style="height:${310/mx*100}%" title="In progress"></div>` : `<div class="fc" style="height:${v/mx*100}%"></div>`).join('');
+  const prio = [
+    ['var(--crit)','3 products may stock out within 48 hours','Forecast','forecast'],
+    ['var(--accent)',"Summit Wine & Spirits didn't deliver yesterday's order",'Alerts','alerts'],
+    ['var(--ok)','$12,450 supplier payment due Friday','Alerts','alerts'],
+    ['var(--over)','Meiomi Pinot Noir margin dropped by 6%','Invoice','invoices'],
+    ['var(--violet)','32 units approaching expiry','Inventory','inventory'],
+  ];
+  return `
+  <div class="hello">
+    <section data-note="KPI strip · 7 tiles from deck p.11">
+      <div class="cardhead"><span class="eyebrow">Today's business</span><span class="spacer"></span><span class="chip plain">Yesterday, full day</span></div>
+      <div class="kpis">
+        <div class="kpi wide"><span class="eyebrow">Sales</span><span class="v num">$24,820</span><span class="d up">▲ 11.2% vs last Thu</span>${spark([18,19,17,21,20,23,22,24.8])}</div>
+        <div class="kpi"><span class="eyebrow">Gross margin</span><span class="v">28.4%</span><span class="d dn">▼ 0.6 pts</span></div>
+        <div class="kpi"><span class="eyebrow">Inventory value</span><span class="v">$184K</span><span class="d muted">1,284 SKUs</span></div>
+        <button class="kpi" data-go="inventory" style="border:0;text-align:left"><span class="eyebrow">Low stock</span><span class="v" style="color:var(--crit)">17 items</span><span class="d muted">5 critical</span></button>
+        <button class="kpi" data-go="inventory" style="border:0;text-align:left"><span class="eyebrow">Expiring</span><span class="v" style="color:var(--warn)">32 items</span><span class="d muted">within 30 days</span></button>
+        <button class="kpi" data-go="alerts" style="border:0;text-align:left"><span class="eyebrow">Supplier follow-ups</span><span class="v">8</span><span class="d muted">2 overdue</span></button>
+        <button class="kpi" data-go="alerts" style="border:0;text-align:left"><span class="eyebrow">Payments due</span><span class="v">$12.4K</span><span class="d muted">this week</span></button>
+      </div>
+    </section>
+    <section class="assistant" data-note="AI assistant · ranked by $ impact">
+      <div style="display:flex;gap:8px;align-items:center"><span class="chip ai">${ic('spark')} AI Assistant</span><span style="font-size:12px;color:#8FA2AD">Updated 6:00 AM</span></div>
+      <div class="quote">“Good morning. Here are the 5 things that need your attention today.”</div>
+      <div class="prio">${prio.map(p=>`<button data-go="${p[3]}"><span class="sev" style="background:${p[0]}"></span><span>${p[1]}</span><span class="go">${p[2]} →</span></button>`).join('')}</div>
+      <button class="btn grad" data-go="alerts">Review all AI recommended actions →</button>
+    </section>
+  </div>
+  <div class="hourly">
+    <section class="card" data-note="Hourly sales · actual vs AI projection">
+      <div class="cardhead"><h2>Today so far</h2><span class="chip ok">$910 by 10 AM</span><span class="spacer"></span><span class="muted" style="font-size:12px">Projected close <b class="num" style="color:var(--ink)">$23,900</b></span></div>
+      <div class="bars">${bars}</div>
+      <div class="barlbl">${labels.map(l=>`<span>${l}</span>`).join('')}</div>
+      <div style="display:flex;gap:14px;font-size:11.5px;margin-top:10px" class="muted"><span>■ <span style="color:var(--accent)">Actual</span></span><span>▨ <span style="color:var(--violet)">AI projection</span> (Friday, 88°F, home game tonight)</span></div>
+    </section>
+    <section class="card mix" data-note="Category mix · yesterday">
+      <div class="cardhead"><h2>Sales by category</h2></div>
+      <ul>
+        ${[['Spirits',11420,46],['Beer & Seltzer',7690,31],['Wine',4470,18],['Mixers',1240,5]].map(r=>`<li><span>${r[0]}</span><span class="meter"><i style="width:${r[2]*2}%"></i></span><span class="num r">${money(r[1],0)}</span></li>`).join('')}
+      </ul>
+      <div class="muted" style="font-size:12px;margin-top:10px">412 transactions · avg basket <b class="num" style="color:var(--ink)">$60.24</b> · 38 ID scans declined 2</div>
+    </section>
+  </div>`;
+};
+
+VIEWS.register = () => {
+  const list = PRODUCTS.filter(p => (S.cat==='All'||p.cat===S.cat) && (!S.q || p.n.toLowerCase().includes(S.q.toLowerCase())));
+  const t = totals();
+  const restricted = S.cart.some(l => byId(l.id).r);
+  const idState = !restricted ? '' : S.id==='ok'
+    ? `<div class="idgate ok">${ic('check')} ID verified · age ${S.idAge} · 21+ items unlocked</div>`
+    : `<div class="idgate need">${ic('id')} 21+ items in cart · scan ID before payment</div>`;
+  return `
+  ${S.online ? '' : `<div class="offbanner">${ic('wifioff')} Internet is down. Sales keep working: cards are stored securely and upload when the connection returns (limit $250 per sale).</div>`}
+  <div class="reg">
+    <section style="display:flex;flex-direction:column;gap:12px;min-width:0">
+      <label class="scanbar" data-note="Scan / search · barcode wedge">${ic('scan')}<input id="q" placeholder="Scan a barcode or search 1,284 products" value="${esc(S.q)}" autocomplete="off"><span class="chip plain">F2</span></label>
+      <div class="cats" role="tablist">${CATS.map(c=>`<button class="${S.cat===c?'on':''}" data-cat="${c}">${c}</button>`).join('')}</div>
+      <div class="plu" data-note="Quick keys · tap to add">
+        ${list.map(p=>`<button class="prod" data-add="${p.id}">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">${bottle(p)}${p.r?'<span class="chip age">21+</span>':''}</div>
+          <span class="nm">${p.n}</span><span class="meta">${p.sz}${p.abv?` · ${p.abv}% ABV`:''}</span>
+          <span class="pr"><b>${money(p.p)}</b>${p.stock<=12?`<span class="low">${p.stock} left</span>`:`<span class="meta">${p.stock} in stock</span>`}</span>
+        </button>`).join('') || `<div class="empty">No products match “${esc(S.q)}”.</div>`}
+      </div>
+    </section>
+    <aside class="ticket" data-note="Sale ticket · locks tender until ID passes">
+      <header><div><div class="h2">Sale #${S.saleNo}</div><div class="muted" style="font-size:12px">${S.member ? `Member: ${S.member} · 1,240 pts` : 'Walk-in customer'}</div></div><span class="spacer"></span>
+        <button class="btn sm" data-act="member">${ic('users2')}${S.member?'Remove':'Add member'}</button></header>
+      ${idState}
+      <div class="lines">${S.cart.length ? S.cart.map(l=>{const p=byId(l.id); return `<div class="line">
+        <div><div style="font-weight:700;font-size:13px">${p.n} ${p.r?'<span class="chip age">21+</span>':''}</div><div class="q"><button data-dec="${p.id}" aria-label="Remove one">−</button>${l.qty}<button data-add="${p.id}" aria-label="Add one">+</button><span>× ${money(p.p)}${p.crv?` · CRV ${money(p.crv)}`:''}</span></div></div>
+        <div class="num" style="font-weight:700">${money(p.p*l.qty)}</div></div>`}).join('') : `<div class="empty">${ic('scan','style="width:30px;height:30px"')}<br>Scan or tap a product to start the sale.</div>`}</div>
+      <div class="totals">
+        <span class="muted">Subtotal</span><span class="num r">${money(t.sub)}</span>
+        ${S.member?`<span class="muted">Member discount 5%</span><span class="num r" style="color:var(--ok)">${money(-t.disc)}</span>`:''}
+        <span class="muted">CA redemption value (CRV)</span><span class="num r">${money(t.crv)}</span>
+        <span class="muted">Sales tax 8.75%</span><span class="num r">${money(t.tax)}</span>
+        <span class="grand">Total</span><span class="grand num r">${money(t.total)}</span>
+      </div>
+      <div class="paybar">
+        <button class="btn" data-act="clear" ${S.cart.length?'':'disabled'}>Void sale</button>
+        <button class="btn" data-act="idscan" ${restricted?'':'disabled'}>${ic('id')}Scan ID</button>
+        <button class="btn primary big" data-act="pay" ${S.cart.length?'':'disabled'}>${restricted && S.id!=='ok' ? ic('id')+' Verify ID & pay' : ic('card')+' Charge '+money(t.total)}</button>
+      </div>
+    </aside>
+  </div>`;
+};
+function byId(id){ return PRODUCTS.find(p=>p.id===id); }
+function totals(){
+  let sub=0, crv=0; for (const l of S.cart){ const p=byId(l.id); sub+=p.p*l.qty; crv+=p.crv*l.qty; }
+  const disc = S.member ? sub*0.05 : 0; const tax=(sub-disc)*TAX;
+  return {sub, crv, disc, tax, total: sub-disc+crv+tax};
+}
+
+VIEWS.inventory = () => {
+  const L = [['crit','Critical','Stockout risk · expiring · dead stock'],['warn','Attention required','Below reorder · supplier delay · price anomaly'],['ok','Healthy','Optimal stock · normal velocity'],['over','Overstock','Excess · slow-moving · capital tied up']];
+  const sel = S.tile!=null ? HEAT[S.tile] : null;
+  return `
+  <div class="legend" data-note="State legend doubles as filter">${L.map(l=>`<button class="lg ${l[0]} ${S.heat===l[0]?'on':''}" data-heat="${l[0]}"><span class="t"><i></i>${l[1]}</span><span class="n num">${{crit:12,warn:38,ok:'1,148',over:86}[l[0]]}</span><small>${l[2]}</small></button>`).join('')}</div>
+  <section class="insight" data-note="AI Insight · deck p.10">
+    <div><b>12</b>products require immediate action</div>
+    <div><b>$18,400</b>of capital is tied up in slow-moving inventory</div>
+    <div><b>5</b>products are likely to stock out within 7 days</div>
+  </section>
+  <div class="invgrid">
+    <section class="card">
+      <div class="cardhead"><h2>All SKUs by state</h2><span class="muted" style="font-size:12px">Tile size = inventory value</span><span class="spacer"></span>${S.heat?`<button class="btn sm" data-heat="${S.heat}">Clear filter</button>`:''}</div>
+      <div class="heat" data-note="Treemap-style heat map · click a tile">${HEAT.map((x,i)=>`<button class="tile ${x[1]} ${x[3]===1?'big':x[3]===2?'wide':''} ${S.heat&&S.heat!==x[1]?'dim':''} ${S.tile===i?'sel':''}" data-tile="${i}"><span class="tn">${x[0]}</span><span class="tv">${x[2]}</span></button>`).join('')}</div>
+    </section>
+    <aside style="display:flex;flex-direction:column;gap:16px">
+      ${sel ? `<section class="card detail"><div class="cardhead"><h2>${sel[0]}</h2><span class="spacer"></span><span class="chip ${sel[1]}">${L.find(l=>l[0]===sel[1])[1]}</span></div>
+        <div class="muted" style="font-size:13px">${sel[2]}</div>
+        <dl><dt>On hand</dt><dd>${[72,6,9,40,31,48][S.tile%6]} units</dd><dt>Forecast daily demand</dt><dd>${[19,4,1.8,3,0.2,6][S.tile%6]}</dd><dt>Reorder point</dt><dd>${[80,10,14,24,6,30][S.tile%6]}</dd><dt>Unit cost / retail</dt><dd>$9.10 / $12.99</dd><dt>Last received</dt><dd>Sep 19</dd></dl>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn primary sm" data-go="forecast">View forecast</button><button class="btn sm" data-toast="Draft PO created">Create PO</button><button class="btn sm" data-toast="Markdown scheduled for tomorrow">Mark down</button></div></section>` : ''}
+      <section class="card" data-note="AI action list · prioritized">
+        <div class="cardhead"><span class="chip ai">${ic('spark')} AI recommended actions</span></div>
+        <div class="actions">
+          ${[['crit','box','Reorder Bud Light 12pk: 57 cases','Runs out Monday. Valley Beer delivers in 2 days.','Create PO'],
+             ['crit','box','Reorder Casamigos Blanco: 12 bottles','1 day of cover. Short-shipped on PO #10234.','Create PO'],
+             ['crit','cal','Mark down 24 hard seltzer 24pk 20%','Expires in 18 days at current velocity.','Mark down'],
+             ['warn','tag','Review Meiomi retail price','Cost +8.5%. Margin fell from 44% to 38%.','Reprice'],
+             ['over','dollar','Stop reordering flavored vodka','142 days on hand, $2.9K tied up.','Pause'],
+             ['over','store','Move pumpkin ale to endcap','Seasonal surplus. Promo lifts sell-through ~30%.','Plan promo']]
+            .map(a=>`<div class="act"><span class="ic ${a[0]}">${ic(a[1])}</span><div><p>${a[2]}</p><small>${a[3]}</small></div><button class="btn sm" data-toast="${a[4]} · done">${a[4]}</button></div>`).join('')}
+        </div>
+      </section>
+    </aside>
+  </div>`;
+};
+
+VIEWS.forecast = () => {
+  const f = FC[S.fc]; const r = reco(f);
+  return `
+  <div class="skus" data-note="SKU picker">${Object.entries(FC).map(([k,v])=>`<button class="btn ${S.fc===k?'primary':''} sm" data-fc="${k}">${v.n}</button>`).join('')}</div>
+  <div class="fcgrid">
+    <section class="card" data-note="Chart · history, forecast, P10–P90 band, stock">
+      <div class="cardhead"><h2>${f.n}</h2><span class="chip ${r.days<=4?'crit':'ok'}">${r.days<=4?`Runs out in ${r.days} days`:`${r.days}+ days of cover`}</span><span class="spacer"></span>
+        <span style="display:flex;gap:12px;font-size:11.5px" class="muted"><span><b style="color:var(--ink)">━</b> Actual</span><span><b style="color:var(--violet)">┅</b> Forecast</span><span><b style="color:var(--crit)">┆</b> Stock runs out</span></span></div>
+      <div id="chart" class="tablewrap"></div>
+      <div class="muted" style="font-size:12px;margin-top:8px">Units per day. Shaded band shows the range the model expects 8 days in 10.</div>
+    </section>
+    <aside style="display:flex;flex-direction:column;gap:16px">
+      <section class="reco" data-note="AI recommendation">
+        <span class="chip ai" style="align-self:flex-start">${ic('spark')} AI recommendation</span>
+        <div class="big">Order ${r.cases} cases</div>
+        <div style="font-size:13px">${r.qty} ${f.unit} (${f.pack} per case) by <b>${r.by}</b> from ${f.supplier} to cover the next ${f.lead + 7} days.</div>
+        <ul><li>Next 7 days demand ≈ <b>${r.week}</b> ${f.unit}</li><li>On hand <b>${f.stock}</b> · lead time <b>${f.lead} days</b></li><li>Safety stock covers a hot weekend (+20%)</li></ul>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" data-toast="Draft PO sent to ${f.supplier}">Create draft PO</button><button class="btn ghost" style="color:#fff;border-color:#3A4B56" data-toast="Recommendation snoozed until tomorrow">Snooze</button></div>
+      </section>
+      <section class="card" data-note="Forecast drivers · deck p.8">
+        <div class="cardhead"><h2>What's driving it</h2></div>
+        <div class="drivers">
+          ${[['cal','Weekend traffic (Fri–Sat)','+70%','up'],['sun','Heat wave, 88–94°F','+18%','up'],['game','River Cats home game Sat','+12%','up'],['forecast','Historical trend, 8 weeks','+4%','up'],['truck','Supplier lead time','2–4 d',''],['tag','No promo this week','0%','']]
+            .map(d=>`<div class="drv"><span class="ic">${ic(d[0])}</span><span>${d[1]}</span><b class="${d[3]}">${d[2]}</b></div>`).join('')}
+        </div>
+      </section>
+    </aside>
+  </div>`;
+};
+function series(f){ // deterministic demo series, today = Fri Sep 25 2026
+  let seed = f.base*97; const rnd=()=>{ seed=(seed*9301+49297)%233280; return seed/233280; };
+  const pts=[]; const start = new Date(2026,7,28); // Aug 28
+  for (let i=0;i<42;i++){ const d=new Date(start); d.setDate(start.getDate()+i); const dow=d.getDay();
+    const m = (dow===5||dow===6) ? f.wk : dow===0 ? 1.25 : 1; const heat = (i>=28&&i<=31)?1.18:1;
+    const v = f.base*m*heat*(0.85+rnd()*0.3)*(1+i*0.002); pts.push({d, v:Math.round(v*10)/10, fc:i>=28}); }
+  return pts;
+}
+function reco(f){ const s=series(f).filter(p=>p.fc); let stock=f.stock, days=0;
+  for (const p of s){ if (stock-p.v<0) break; stock-=p.v; days++; }
+  const week = Math.round(s.slice(0,7).reduce((a,p)=>a+p.v,0));
+  const need = Math.max(0, Math.round(s.slice(0,f.lead+7).reduce((a,p)=>a+p.v,0)*1.2) - f.stock);
+  const cases = Math.ceil(need/f.pack), qty = cases*f.pack;
+  const DOW = ['Friday','Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday'];
+  const by = days - f.lead - 1 <= 0 ? 'today' : DOW[days-f.lead-1] || 'next week';
+  return {days, week, qty, cases, by};
+}
+function drawForecast(){
+  const f = FC[S.fc], pts = series(f), W=760, H=280, L=40, R=16, T=14, B=34;
+  const mx = Math.max(...pts.map(p=>p.v*1.2)), step = mx>60?20:mx>20?10:mx>8?4:2, top=Math.ceil(mx/step)*step;
+  const x = i => L + i*(W-L-R)/(pts.length-1), y = v => T + (1-v/top)*(H-T-B);
+  let g=''; for (let v=0; v<=top; v+=step) g+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L-8}" y="${y(v)+3.5}" text-anchor="end">${v}</text>`;
+  const hist = pts.filter(p=>!p.fc), fi = pts.findIndex(p=>p.fc);
+  const hp = hist.map((p,i)=>(i?'L':'M')+x(i)+' '+y(p.v)).join('');
+  const fpts = pts.slice(fi-1);
+  const fp = fpts.map((p,i)=>(i?'L':'M')+x(fi-1+i)+' '+y(p.v)).join('');
+  const spread = j => j ? 0.12 + j*0.008 : 0;
+  const band = fpts.map((p,j)=>(j?'L':'M')+x(fi-1+j)+' '+y(p.v*(1+spread(j)))).join('')
+    + fpts.map((p,j)=>[p,j]).reverse().map(([p,j])=>'L'+x(fi-1+j)+' '+y(p.v*(1-spread(j)))).join('') + 'Z';
+  // day the current stock runs out, from the same forecast
+  const out = reco(f).days, ox = fi+out < pts.length ? x(fi+out) : null;
+  const outMark = ox==null ? '' : `<line x1="${ox}" x2="${ox}" y1="${T}" y2="${H-B}" stroke="var(--crit)" stroke-width="1.5" stroke-dasharray="4 3"/><rect x="${ox-44}" y="${T}" width="88" height="18" rx="4" fill="var(--crit)"/><text x="${ox}" y="${T+12.5}" text-anchor="middle" style="fill:#fff;font-weight:600">Out of stock</text>`;
+  let xl=''; pts.forEach((p,i)=>{ if (i%7===0 || i===fi) xl+=`<text x="${x(i)}" y="${H-12}" text-anchor="middle" ${i===fi?'style="fill:var(--ink);font-weight:600"':''}>${i===fi?'Today':p.d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</text>`; });
+  $('#chart').innerHTML = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Daily unit sales and forecast for ${esc(f.n)}" style="min-width:560px">
+    ${g}<rect x="${x(fi)}" y="${T}" width="${W-R-x(fi)}" height="${H-T-B}" fill="var(--violet)" opacity=".04"/>
+    <line x1="${x(fi)}" x2="${x(fi)}" y1="${T}" y2="${H-B}" stroke="var(--muted)" stroke-dasharray="3 3"/>
+    <path d="${band}" fill="var(--violet)" opacity=".14"/>
+    <path d="${hp}" fill="none" stroke="var(--ink)" stroke-width="1.8"/>
+    <path d="${fp}" fill="none" stroke="var(--violet)" stroke-width="2" stroke-dasharray="5 4"/>
+    ${outMark}
+    <circle cx="${x(fi-1)}" cy="${y(hist[hist.length-1].v)}" r="3.5" fill="var(--ink)"/>
+    ${xl}</svg>`;
+}
+
+VIEWS.invoices = () => {
+  const steps = ['Upload / photo','AI OCR','Extract supplier & items','Match to catalog','Find variances','Draft update','Owner review','Inventory updated'];
+  const lines = INVOICE.map((l,i)=>{
+    const st = S.inv[i]; const vp = l.prev ? (l.cost-l.prev)/l.prev*100 : null;
+    return `<tr class="${st==='rej'?'rej':''}">
+      <td><div style="font-weight:700">${l.m ? esc(l.m) : '<span style="color:var(--crit)">No match found</span>'}</div><div class="mono muted" style="font-size:11px">“${esc(l.d)}”</div>${l.note?`<span class="chip ${l.conf<60?'crit':'warn'}" style="margin-top:4px">${l.note}</span>`:''}</td>
+      <td><span class="conf"><i><b style="width:${l.conf}%;background:${l.conf<60?'var(--crit)':l.conf<96?'var(--warn)':'var(--ok)'}"></b></i>${l.conf}%</span></td>
+      <td class="num r">${l.q}${l.qo&&l.qo!==l.q?`<div class="var-up" style="font-size:11px">PO ${l.qo}</div>`:''}</td>
+      <td class="num r">${money(l.cost)}</td>
+      <td class="num r">${vp==null?'<span class="muted">new</span>':Math.abs(vp)<.1?'<span class="muted">—</span>':`<span class="${vp>0?'var-up':'var-dn'}">${vp>0?'+':''}${vp.toFixed(1)}%</span>`}</td>
+      <td class="num r">${money(l.cost*l.q)}</td>
+      <td><div class="rowact"><button class="${st==='ok'?'on-ok':''}" data-inv="${i}" data-v="ok" aria-label="Approve line">${ic('check')}</button><button data-toast="Line opened for editing" aria-label="Edit line">${ic('edit')}</button><button class="${st==='rej'?'on-bad':''}" data-inv="${i}" data-v="rej" aria-label="Reject line">${ic('x')}</button></div></td></tr>`;}).join('');
+  const total = INVOICE.reduce((a,l,i)=>a+(S.inv[i]==='rej'?0:l.cost*l.q),0);
+  const pending = S.inv.filter(v=>v==='review').length;
+  return `
+  <section class="card" data-note="8-step flow · deck p.6">
+    <div class="steps">${steps.map((s,i)=>`<div class="step ${i+1<S.invStep?'done':i+1===S.invStep?'cur':''}"><i></i><span>STEP ${i+1}</span>${s}</div>`).join('')}</div>
+  </section>
+  <div class="invwrap">
+    <aside style="display:flex;flex-direction:column;gap:12px">
+      <label class="drop" data-note="Upload or take photo">${ic('camera')}<span><b style="color:var(--ink)">Drop an invoice or take a photo</b><br>PDF, JPG or PNG · multi-page OK</span><input type="file" id="invfile" accept="image/*,.pdf" hidden></label>
+      <div class="paper" data-note="Source doc with AI read regions">
+        <h4>SUMMIT WINE &amp; SPIRITS</h4>
+        <div>INVOICE HB-58812 · 09/24/2026<br>Ship to: OAK STREET LIQUOR #014<br>PO: 10234 · Terms NET 15</div><br>
+        ${INVOICE.map(l=>`<div class="row"><span>${esc(l.d)}</span><span>${l.q}</span><span style="text-align:right">${(l.cost*l.q).toFixed(2)}</span></div>`).join('')}
+        <div class="row" style="border:0;font-weight:700"><span>TOTAL</span><span></span><span style="text-align:right">${INVOICE.reduce((a,l)=>a+l.cost*l.q,0).toFixed(2)}</span></div>
+        <span class="hl" style="left:10px;top:10px;width:170px;height:22px"></span>
+        <span class="hl" style="left:10px;top:86px;right:10px;height:112px"></span>
+      </div>
+      <div class="muted" style="font-size:12px">Read in 4.2 s · 6 lines · supplier matched to vendor V-0021</div>
+    </aside>
+    <section class="card" data-note="Owner review · approve / edit / reject">
+      <div class="cardhead"><h2>Review draft inventory update</h2><span class="chip ${pending?'warn':'ok'}">${pending?pending+' lines need review':'All lines reviewed'}</span><span class="spacer"></span><span class="muted">Invoice total <b class="num" style="color:var(--ink)">${money(total)}</b></span></div>
+      <div class="tablewrap"><table style="min-width:680px"><thead><tr><th>Line · matched product</th><th>Match</th><th class="r">Qty</th><th class="r">Unit cost</th><th class="r">vs last</th><th class="r">Ext.</th><th>Action</th></tr></thead><tbody>${lines}</tbody></table></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:14px;border-top:1px solid var(--line);padding-top:14px">
+        <button class="btn" data-toast="Claim for 7 damaged Hennessy VS drafted">${ic('alert')}Draft damage claim</button>
+        <button class="btn" data-act="invall">Approve all matched</button>
+        <button class="btn primary" data-act="invpost" ${pending?'disabled':''}>Post to inventory &amp; accounting</button>
+      </div>
+    </section>
+  </div>`;
+};
+
+VIEWS.alerts = () => {
+  const F = [['all','All'],['stock','Inventory'],['supplier','Suppliers'],['money','Payments & price'],['damage','Damage']];
+  const list = ALERTS.filter(a => S.alertFilter==='all' || a.t===S.alertFilter);
+  const col = {crit:['var(--crit-soft)','var(--crit)'],warn:['var(--warn-soft)','var(--warn)'],info:['var(--over-soft)','var(--over)']};
+  return `
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div class="seg">${F.map(f=>`<button class="${S.alertFilter===f[0]?'on':''}" data-af="${f[0]}">${f[1]}</button>`).join('')}</div><span class="spacer" style="flex:1"></span><span class="muted" style="font-size:12px">Delivered to app, SMS and email</span></div>
+  <div class="alerts" data-note="7 alert types · each with a resolving action">
+    ${list.map(a=>`<article class="alert ${S.done.has(a.id)?'done':''}">
+      <span class="ic" style="background:${col[a.sev][0]};color:${col[a.sev][1]}">${ic(a.ic)}</span>
+      <div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><h3>${a.h}</h3><span class="when">${a.when}</span>${S.done.has(a.id)?'<span class="chip ok">Resolved</span>':''}</div><p>${a.p}</p></div>
+      <div class="acts">${S.done.has(a.id)?`<button class="btn sm ghost" data-undo="${a.id}">Reopen</button>`:`<button class="btn sm primary" data-resolve="${a.id}" data-msg="${a.acts[0]}">${a.acts[0]}</button>${a.go?`<button class="btn sm" data-go="${a.go}">${a.acts[1]}</button>`:`<button class="btn sm" data-resolve="${a.id}" data-msg="${a.acts[1]}">${a.acts[1]}</button>`}`}</div>
+    </article>`).join('')}
+  </div>`;
+};
+
+VIEWS.customers = () => {
+  const segs = [['Weekend wine buyers',412,'Buy wine Fri–Sat, avg $48','Wine'],['Tequila fans',188,'3+ agave purchases in 90 days','Spirits'],['Game-day beer runs',636,'Beer + ice within 3 h of kickoff','Beer'],['Lapsing regulars',97,'No visit in 45 days, was weekly','Win-back']];
+  const seg = S.custSeg!=null ? segs[S.custSeg] : segs[0];
+  return `
+  <div class="cust">
+    <section class="card member" data-note="Member profile · shown at checkout">
+      <div style="display:flex;gap:12px;align-items:center"><span class="avatar">JD</span><div><div class="h2">Jordan D.</div><div class="muted" style="font-size:12px">Member since 2023 · (916) •••-0142 · SMS opt-in</div></div></div>
+      <div class="tier"><div style="display:flex;justify-content:space-between;font-size:12px;color:#B9C8D0"><span>Gold tier</span><span>260 pts to Platinum</span></div><div class="pts">1,240 pts</div><div class="prog"><i style="width:82%"></i></div></div>
+      <div><div class="eyebrow" style="margin-bottom:6px">Usually buys</div><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip plain">Casamigos Blanco</span><span class="chip plain">Limes</span><span class="chip plain">Modelo 12pk</span><span class="chip plain">Fever-Tree</span></div></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center">
+        ${[['Visits / mo','5.2'],['Avg basket','$71'],['Last visit','Sat']].map(k=>`<div style="background:var(--surface-2);border-radius:8px;padding:8px"><div class="num" style="font-weight:700;font-size:16px">${k[1]}</div><div class="muted" style="font-size:11px">${k[0]}</div></div>`).join('')}
+      </div>
+      <div style="border-radius:10px;padding:12px;background:var(--violet-soft);font-size:13px"><span class="chip ai">${ic('spark')} Suggest at counter</span><div style="margin-top:6px">Casamigos is back in stock tomorrow. Offer to hold a bottle, and mention the $2 off limes + tonic bundle.</div></div>
+    </section>
+    <section style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <div class="segs" data-note="AI segments from purchase patterns">${segs.map((s,i)=>`<button class="segcard" style="text-align:left;${(S.custSeg??0)===i?'border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)':''}" data-seg="${i}"><span class="chip plain" style="align-self:flex-start">${s[3]}</span><span class="n num">${s[1]}</span><b>${s[0]}</b><span class="muted" style="font-size:12px">${s[2]}</span></button>`).join('')}</div>
+      <div class="card" style="display:grid;grid-template-columns:1fr 240px;gap:20px;align-items:center" data-note="Campaign composer + SMS preview">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="h2">Campaign · ${seg[0]}</div>
+          <div class="muted" style="font-size:13px">${seg[1]} members · only 21+ verified, opted-in members receive alcohol offers.</div>
+          <label style="font-size:12px;font-weight:700">Offer<select id="offer" style="display:block;width:100%;margin-top:4px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--surface)"><option>10% off ${seg[3]==='Win-back'?'next visit':seg[3]} this weekend</option><option>Double points Friday–Sunday</option><option>Free bag of ice with any 12pk</option></select></label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip ok">Predicted redemption 14%</span><span class="chip plain">Est. revenue +$2,300</span></div>
+          <div style="display:flex;gap:8px"><button class="btn primary" data-toast="Campaign scheduled for Friday 3 PM">Schedule for Fri 3 PM</button><button class="btn" data-toast="Test message sent to store phone">Send test</button></div>
+        </div>
+        <div class="phone"><span style="font-size:10px;text-align:center;color:#6A7A86">Oak Street Liquor</span><div class="bubble">Hi Jordan! This weekend only: 10% off ${seg[3]==='Win-back'?'your next visit':seg[3].toLowerCase()} at Oak Street Liquor. Show this text at checkout. Reply STOP to opt out.</div></div>
+      </div>
+    </section>
+  </div>`;
+};
+
+VIEWS.devices = () => {
+  const vendors = [['Scandit','ID scan + validation, on-device',5],['IDScan.net','ID verification / document APIs',5],['Anyline','Mobile scanning SDK',4],['Microblink','ID / document scanning',4]];
+  const terms = [['Lane 1','PAX A920 Pro','EMV · NFC · Apple/Google Pay · PIN',true],['Lane 2','Verifone V400m','EMV · NFC · PIN · customer display',true],['Lane 3','Stripe Reader S700','EMV · NFC · QR',false]];
+  const qtotal = S.queue.reduce((a,q)=>a+q.amt,0);
+  return `
+  <div class="devgrid">
+    <section class="card" data-note="ID provider · evaluation from deck p.3">
+      <div class="cardhead"><h2>ID verification provider</h2><span class="spacer"></span><span class="chip ok">Scandit active</span></div>
+      <div class="tablewrap"><table><thead><tr><th>Provider</th><th>Capability</th><th>POS fit</th><th></th></tr></thead><tbody>
+        ${vendors.map((v,i)=>`<tr><td style="font-weight:700">${v[0]}</td><td class="muted">${v[1]}</td><td class="stars">${'★'.repeat(v[2])}<s>${'★'.repeat(5-v[2])}</s></td><td>${i===0?'<span class="chip ok">In use</span>':'<button class="btn sm">Test</button>'}</td></tr>`).join('')}
+      </tbody></table></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">${['PDF417 barcode','OCR front','Fake-ID detection','Age calc','Works offline','iOS / Android / Web','No image stored','Audit log'].map(x=>`<span class="chip plain">${ic('check','style="width:12px;height:12px"')}${x}</span>`).join('')}</div>
+    </section>
+    <section class="card" data-note="Card terminals per lane · deck p.4">
+      <div class="cardhead"><h2>Card terminals</h2></div>
+      ${terms.map(t=>`<div class="setrow"><span class="iconbtn" style="flex:none">${ic('card')}</span><div><b>${t[0]} · ${t[1]}</b><small>${t[2]}</small></div><span class="chip ${t[3]?'ok':'warn'}">${t[3]?'Connected':'Pairing needed'}</span></div>`).join('')}
+    </section>
+    <section class="card" data-note="Offline payment policy · deck p.5">
+      <div class="cardhead"><h2>Offline payments</h2><span class="spacer"></span><span class="chip ${S.online?'ok':'crit'}">${S.online?'Online':'Offline now'}</span></div>
+      <div class="setrow"><div><b>Accept cards while offline</b><small>Card is encrypted on the terminal and uploaded when the internet returns.</small></div><button class="toggle" aria-pressed="${S.offlineLimit}" data-act="offtoggle" aria-label="Accept cards while offline"></button></div>
+      <div class="setrow"><div><b>Limit per sale</b><small>Larger sales ask for cash or another card.</small></div><span class="num" style="font-weight:700">$250</span></div>
+      <div class="setrow"><div><b>Upload window</b><small>Offline sales older than this may be declined by the processor.</small></div><span class="num" style="font-weight:700">24 h</span></div>
+      <div class="limit" style="margin-top:10px"><div style="display:flex;justify-content:space-between;font-size:12px"><span class="muted">Offline total at risk</span><span class="num"><b>${money(qtotal)}</b> of $2,500</span></div><div class="meter"><i style="width:${Math.min(100,qtotal/25)}%"></i></div></div>
+    </section>
+    <section class="card" data-note="Store-and-forward queue">
+      <div class="cardhead"><h2>Waiting to upload</h2><span class="chip plain">${S.queue.length} sales</span><span class="spacer"></span><button class="btn sm" data-act="sync" ${S.online&&S.queue.length?'':'disabled'}>${ic('sync')}Upload now</button></div>
+      ${S.queue.length ? S.queue.map(q=>`<div class="qrow"><span class="iconbtn">${ic('cloud')}</span><div><b>Sale #${q.no}</b> · ${q.card}<div class="muted" style="font-size:11.5px">${q.t}</div></div><span class="num" style="font-weight:700">${money(q.amt)}</span><span class="chip warn">Queued</span></div>`).join('') : `<div class="empty">${ic('check')} Everything is uploaded.</div>`}
+      <div class="muted" style="font-size:12px;margin-top:8px">${S.online?'Connection is up. Queued sales upload automatically within a minute.':'Waiting for the internet to come back.'}</div>
+    </section>
+  </div>`;
+};
+
+/* ------------------------------------------------ modals: ID + payment */
+function closeModal(){ $('#modal').innerHTML=''; }
+function barcode(){ let s=''; let seed=7; for (let i=0;i<90;i++){ seed=(seed*16807)%2147483647; s+= seed%3 ? '<i></i>' : '<i style="background:transparent"></i>'; } return s; }
+function idModal(phase='ready', under=false){
+  const dob = under ? '2006-03-11' : '1992-02-14', age = under ? 20 : 34;
+  const checks = [['PDF417 barcode decoded','AAMVA v10'],['Front text matches barcode','name, DOB, ID #'],['Security features','layout + font + hologram zone'],['Not expired','exp 2029-02-14'],['Age 21 or older',`DOB ${dob}`]];
+  const row = (c,i) => { let cls='', st='';
+    if (phase==='ready'){ cls=''; st='waiting'; }
+    else if (phase==='scanning'){ cls = 'run'; st='checking'; }
+    else { const bad = under && i===4; cls = bad?'bad':'ok'; st = bad?`age ${age}`:c[1]; }
+    return `<li><span class="tick ${cls}">${cls==='ok'?ic('check'):cls==='bad'?ic('x'):''}</span>${c[0]}<span class="st muted">${st}</span></li>`; };
+  const verdict = phase!=='done' ? '' : under
+    ? `<div class="verdict bad">${ic('x','style="width:30px;height:30px"')}<div><div class="agebig">${age}</div><b>Under 21. Do not sell 21+ items.</b><div style="font-size:12px">Remove restricted items or decline the sale. Logged to audit trail.</div></div></div>`
+    : `<div class="verdict ok">${ic('check','style="width:30px;height:30px"')}<div><div class="agebig">${age}</div><b>Verified. OK to sell.</b><div style="font-size:12px">Result stored without the ID image · audit #A-77120</div></div></div>`;
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Verify ID">
+    <header>${ic('id')}<h2>Verify customer ID</h2><span class="chip plain">${S.online?'Scandit · on-device':'Offline mode · on-device'}</span><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body idwrap">
+      <div>
+        <div class="idcard"><span class="st">CALIFORNIA · DRIVER LICENSE</span><span class="ph"></span>
+          <dl><dt>Name</dt><dd>${under?'TAYLOR, SAM':'DUNN, JORDAN'}</dd><dt>DOB</dt><dd>${phase==='ready'?'•• / •• / ••••':dob}</dd><dt>ID #</dt><dd>D8841207</dd><dt>Exp</dt><dd>02/14/2029</dd></dl>
+          ${phase==='scanning'?'<span class="laser"></span>':''}</div>
+        <div class="pdf417">${barcode()}</div>
+        <div class="muted" style="font-size:12px;margin-top:8px">Hold the back of the ID under the lane scanner, or use the camera.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px"><ul class="checks">${checks.map(row).join('')}</ul>${verdict}</div>
+    </div>
+    <footer>
+      ${phase==='ready'?`<button class="btn" data-idsim="under">Demo: scan underage ID</button><button class="btn" data-toast="Manual DOB entry needs manager PIN">Enter DOB manually</button><button class="btn primary" data-idsim="ok">${ic('scan')}Scan ID</button>`:''}
+      ${phase==='done'&&under?`<button class="btn danger" data-act="declinesale">Remove 21+ items</button><button class="btn" data-close>Close</button>`:''}
+      ${phase==='done'&&!under?`<button class="btn primary" data-act="idcontinue">${S.payAfterId?'Continue to payment':'Done'}</button>`:''}
+    </footer></div></div>`;
+}
+function runId(under){
+  idModal('scanning', under);
+  setTimeout(()=>{ S.id = under ? 'bad' : 'ok'; S.idAge = under?20:34; idModal('done', under); }, 1500);
+}
+let payMethod='card';
+function payModal(phase='choose'){
+  const t = totals(); const over = !S.online && t.total>250;
+  const body = phase==='choose' ? `
+      <div class="methods">${[['card','Card','card'],['tap','Tap / wallet','tap'],['cash','Cash','cash'],['split','Split','split']].map(m=>`<button class="${payMethod===m[0]?'on':''}" data-pm="${m[0]}">${ic(m[2])}${m[1]}</button>`).join('')}</div>
+      ${payMethod==='cash' ? `<div class="cashgrid">${['Exact',Math.ceil(t.total/5)*5,Math.ceil(t.total/20)*20,Math.ceil(t.total/50)*50+50].map(v=>`<button class="btn" data-cash="${v==='Exact'?t.total:v}">${v==='Exact'?'Exact':money(v,0)}</button>`).join('')}</div>`
+        : payMethod==='split' ? `<div class="muted">Split between up to 4 cards or card + cash. Enter the first amount on the terminal.</div>`
+        : `<div class="term"><div class="scr"><span style="font-size:11px;color:#8FA2AD">PAX A920 · Lane 1</span><span class="amt">${money(t.total)}</span><span style="font-size:12px">${S.online?'Insert, tap or swipe':'Offline: insert or tap'}</span></div><span class="nfc">${ic('tap','style="width:26px;height:26px;color:#FFA350"')}</span><span style="font-size:11px;color:#8FA2AD">EMV · NFC · Apple Pay · Google Pay · PIN</span></div>`}
+      ${!S.online ? `<div class="offbanner">${ic('wifioff')} ${over?`Offline limit is $250 per sale. Ask for cash or split the payment.`:'You are offline. This card will be stored and uploaded when the connection returns.'}</div>`:''}`
+    : phase==='wait' ? `<div class="term"><div class="scr"><span class="amt">${money(t.total)}</span><span style="font-size:12px">Waiting for customer…</span></div><span class="nfc">${ic('tap','style="width:26px;height:26px;color:#FFA350"')}</span></div>`
+    : `<div class="verdict ok" style="justify-content:center">${ic('check','style="width:34px;height:34px"')}<div><div class="agebig" style="font-size:34px">${S.online?'Approved':'Stored offline'}</div><b>Sale #${S.saleNo} · ${money(t.total)}</b><div style="font-size:12px">${S.online?'Visa ·· 4412 · auth 084213':'Will upload automatically when the internet returns'} · receipt ${S.member?'texted to member':'printed'}</div></div></div>`;
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Take payment" style="width:min(560px,100%)">
+    <header>${ic('card')}<h2>Take payment</h2><span class="spacer"></span><span class="num" style="font-weight:700;font-size:18px">${money(t.total)}</span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body">${body}</div>
+    <footer>${phase==='choose'?`<button class="btn" data-close>Back</button><button class="btn primary" data-act="charge" ${over&&payMethod!=='cash'?'disabled':''}>${payMethod==='cash'?'Cash received':'Send to terminal'}</button>`:phase==='done'?`<button class="btn primary" data-act="newsale">Start next sale</button>`:''}</footer>
+  </div></div>`;
+}
+function charge(){
+  payModal('wait');
+  setTimeout(()=>{ if (!S.online) S.queue.push({no:S.saleNo, amt:Math.round(totals().total*100)/100, t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), card:'Visa ·· 4412'}); payModal('done'); renderRail(); renderTop(); }, payMethod==='cash'?300:1400);
+}
+
+/* ------------------------------------------------ events */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim]');
+  if (!el) return;
+  const d = el.dataset;
+  if ('scrim' in d && e.target!==el) return;
+  if ('scrim' in d || 'close' in d){ closeModal(); if (S.route==='register') render(); return; }
+  if (d.go){ e.preventDefault(); go(d.go); return; }
+  if (d.add){ const l=S.cart.find(x=>x.id===d.add); l?l.qty++:S.cart.push({id:d.add,qty:1}); render(); return; }
+  if (d.dec){ const l=S.cart.find(x=>x.id===d.dec); if(l && --l.qty<=0) S.cart=S.cart.filter(x=>x!==l); if(!S.cart.some(x=>byId(x.id).r)) S.id=null; render(); return; }
+  if (d.cat){ S.cat=d.cat; render(); return; }
+  if (d.heat){ S.heat = S.heat===d.heat ? null : d.heat; render(); return; }
+  if (d.tile){ S.tile = +d.tile; render(); return; }
+  if (d.fc){ S.fc=d.fc; render(); return; }
+  if (d.inv){ const i=+d.inv; S.inv[i] = S.inv[i]===d.v ? 'review' : d.v; render(); return; }
+  if (d.af){ S.alertFilter=d.af; render(); return; }
+  if (d.resolve){ S.done.add(+d.resolve); toast(d.msg+' · marked resolved'); render(); return; }
+  if (d.undo){ S.done.delete(+d.undo); render(); return; }
+  if (d.seg){ S.custSeg=+d.seg; render(); return; }
+  if (d.idsim){ runId(d.idsim==='under'); return; }
+  if (d.pm){ payMethod=d.pm; payModal(); return; }
+  if (d.cash){ const ch = +d.cash - totals().total; toast('Change due '+money(Math.max(0,ch))); charge(); return; }
+  if (d.toast){ toast(d.toast); return; }
+  switch (d.act){
+    case 'net': S.online=!S.online; if (S.online && S.queue.length){ toast(`Back online · uploading ${S.queue.length} queued sales`,'sync'); setTimeout(()=>{ S.queue=[]; render(); toast('All offline sales uploaded'); }, 2200); } else if(!S.online) toast('Simulating internet outage','wifioff'); render(); break;
+    case 'notes': S.notes=!S.notes; render(); break;
+    case 'theme': document.documentElement.dataset.theme = isDark()?'light':'dark'; render(); if(S.route==='forecast') drawForecast(); break;
+    case 'member': S.member = S.member?null:'Jordan D.'; render(); break;
+    case 'clear': S.cart=[]; S.id=null; render(); toast('Sale voided'); break;
+    case 'idscan': S.payAfterId=false; idModal(); break;
+    case 'pay': if (S.cart.some(x=>byId(x.id).r) && S.id!=='ok'){ S.payAfterId=true; idModal(); } else { payMethod='card'; payModal(); } break;
+    case 'idcontinue': if (S.payAfterId){ payMethod='card'; payModal(); } else { closeModal(); render(); } break;
+    case 'declinesale': S.cart=S.cart.filter(x=>!byId(x.id).r); S.id=null; closeModal(); render(); toast('21+ items removed · refusal logged','alert'); break;
+    case 'charge': charge(); break;
+    case 'newsale': S.cart=[]; S.id=null; S.member=null; S.saleNo++; closeModal(); render(); break;
+    case 'invall': S.inv = S.inv.map((v,i)=> INVOICE[i].conf>=90 && v==='review' ? 'ok' : v); render(); toast('Matched lines approved · 1 unmatched line left'); break;
+    case 'invpost': S.invStep=8; render(); toast('Inventory and accounting updated'); break;
+    case 'offtoggle': S.offlineLimit=!S.offlineLimit; render(); break;
+    case 'sync': S.queue=[]; render(); toast('Queued sales uploaded'); break;
+  }
+});
+document.addEventListener('input', e => {
+  if (e.target.id==='q'){ S.q=e.target.value; const pos=e.target.selectionStart; render(); const q=$('#q'); q.focus(); q.setSelectionRange(pos,pos); }
+});
+document.addEventListener('keydown', e => {
+  if (e.key==='Escape' && $('#modal').innerHTML) { closeModal(); render(); }
+  if (e.key==='F2' && S.route==='register'){ e.preventDefault(); $('#q')?.focus(); }
+  if (e.key==='Enter' && e.target.id==='q'){ const m = PRODUCTS.find(p=>p.n.toLowerCase().includes(S.q.toLowerCase()) && (S.cat==='All'||p.cat===S.cat)); if (m){ S.q=''; const l=S.cart.find(x=>x.id===m.id); l?l.qty++:S.cart.push({id:m.id,qty:1}); render(); $('#q').focus(); } }
+});
+document.addEventListener('change', e => {
+  if (e.target.id==='invfile' && e.target.files.length){ S.invStep=2; render(); toast('Reading '+e.target.files[0].name+'…','spark'); let s=2; const t=setInterval(()=>{ s++; S.invStep=s; S.inv=INVOICE.map((l,i)=> l.note||l.cost!==l.prev ? 'review':'ok'); render(); if(s>=7) clearInterval(t); }, 550); }
+});
+window.addEventListener('hashchange', () => { const r=location.hash.slice(1); if (NOTES[r] && r!==S.route) go(r); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
+
+render();
+</script>
