@@ -643,6 +643,9 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 .npsec{display:flex;flex-direction:column;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--line)}
 .npsec:last-child{border-bottom:0}
 .npsec h4{margin:0;font:800 11px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.npcats button{display:inline-flex;align-items:center;gap:6px;padding:5px 10px 5px 6px}
+.npcats .mini{display:block;width:13px;height:26px}
+.npcats .mini svg{width:100%;height:100%;display:block}
 .frow3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .nprev{position:sticky;top:0;display:flex;flex-direction:column;gap:12px}
 .nprev .prod{min-height:0;pointer-events:none;margin-top:30px}
@@ -783,19 +786,27 @@ const PRODUCTS = [
   {id:'modelo12', n:'Modelo Especial 12pk', sz:'12 × 12 oz', abv:4.4, cat:'Beer & Seltzer', p:17.99, stock:58, c:['#1B2F5C','#D9B64B'], lb:'MODELO', sh:'pack', r:1, crv:0.60},
   {id:'claw12', n:'White Claw Variety 12pk', sz:'12 × 12 oz', abv:5, cat:'Beer & Seltzer', p:19.99, stock:40, c:['#F1F4F7','#1D1D1D'], lb:'WHITE CLAW', sh:'pack', r:1, crv:0.60},
   {id:'noon8', n:'High Noon Variety 8pk', sz:'8 × 12 oz', abv:4.5, cat:'Beer & Seltzer', p:24.99, stock:12, c:['#F6C9B3','#1F6F8B'], lb:'HIGH NOON', sh:'pack', r:1, crv:0.40},
-  {id:'tonic4', n:'Fever-Tree Tonic 4pk', sz:'4 × 200 ml', abv:0, cat:'Mixers & Snacks', p:6.49, stock:30, c:['#DCE8E5','#2E6F77'], lb:'FEVER-TREE', sh:'mixer', r:0, crv:0.20},
-  {id:'redbull4', n:'Red Bull 4pk', sz:'4 × 8.4 oz', abv:0, cat:'Mixers & Snacks', p:9.99, stock:44, c:['#2B4FA0','#C8C9CC'], lb:'RED BULL', sh:'can', r:0, crv:0.20},
-  {id:'limes', n:'Limes, 3 ct', sz:'produce', abv:0, cat:'Mixers & Snacks', p:1.49, stock:60, c:['#6FA83A','#A5D16A'], lb:'', sh:'lime', r:0, crv:0},
-  {id:'ice10', n:'Bagged Ice', sz:'10 lb', abv:0, cat:'Mixers & Snacks', p:3.99, stock:80, c:['#DDEFFA','#2C74D6'], lb:'ICE', sh:'ice', r:0, crv:0},
+  {id:'tonic4', n:'Fever-Tree Tonic 4pk', sz:'4 × 200 ml', abv:0, cat:'Mixers', p:6.49, stock:30, c:['#DCE8E5','#2E6F77'], lb:'FEVER-TREE', sh:'mixer', r:0, crv:0.20},
+  {id:'redbull4', n:'Red Bull 4pk', sz:'4 × 8.4 oz', abv:0, cat:'Mixers', p:9.99, stock:44, c:['#2B4FA0','#C8C9CC'], lb:'RED BULL', sh:'can', r:0, crv:0.20},
+  {id:'limes', n:'Limes, 3 ct', sz:'produce', abv:0, cat:'Mixers', p:1.49, stock:60, c:['#6FA83A','#A5D16A'], lb:'', sh:'lime', r:0, crv:0, tx:0},
+  {id:'ice10', n:'Bagged Ice', sz:'10 lb', abv:0, cat:'Mixers', p:3.99, stock:80, c:['#DDEFFA','#2C74D6'], lb:'ICE', sh:'ice', r:0, crv:0, tx:0},
+  {id:'coke2l', n:'Coca-Cola 2 L', sz:'2 L', abv:0, cat:'Mixers', p:3.49, stock:28, c:['#3B1E14','#D8232A'], lb:'COCA-COLA', sh:'soda', r:0, crv:0.10},
+  {id:'lays8', n:"Lay's Classic Chips", sz:'8 oz', abv:0, cat:'Snacks', p:4.99, stock:26, c:['#F7C21A','#D8232A'], lb:"LAY'S", sh:'chips', r:0, crv:0, tx:0},
+  {id:'jerky', n:"Jack Link's Beef Jerky", sz:'2.85 oz', abv:0, cat:'Snacks', p:7.49, stock:9, c:['#1E1E1E','#E8B22A'], lb:"JACK LINK'S", sh:'pouch', r:0, crv:0, tx:0},
+  {id:'peanuts', n:'Planters Salted Peanuts', sz:'16 oz', abv:0, cat:'Snacks', p:5.99, stock:18, c:['#1F4EA3','#F2D24B'], lb:'PLANTERS', sh:'jar', r:0, crv:0, tx:0},
+  {id:'snickers', n:'Snickers Share Size', sz:'3.29 oz', abv:0, cat:'Snacks', p:2.49, stock:48, c:['#5A3417','#1F5AA6'], lb:'SNICKERS', sh:'bar', r:0, crv:0, tx:0},
+  {id:'cups50', n:'Red Party Cups, 50 ct', sz:'50 ct', abv:0, cat:'Snacks', p:6.99, stock:15, c:['#C8242B','#FFFFFF'], lb:'PARTY CUPS', sh:'cups', r:0, crv:0},
 ];
 const PAIRS = {
-  casa750:[['limes','68% of tequila buyers add limes']], bac1l:[['limes','Mojito and daiquiri buyers add limes']],
-  tito175:[['tonic4','Top mixer with this vodka'],['redbull4','Popular Fri–Sat nights']], jame750:[['redbull4','Often bought together on weekends']],
-  bud12:[['ice10','Hot day: 3 in 5 beer buyers grab ice']], modelo12:[['limes','Modelo + limes is a top pair'],['ice10','88°F today']],
-  claw12:[['ice10','88°F today']], noon8:[['ice10','88°F today']], hen750:[['redbull4','Often bought together']],
+  casa750:[['limes','68% of tequila buyers add limes']],
+  tito175:[['tonic4','Top mixer with this vodka'],['redbull4','Popular Fri–Sat nights']], jame750:[['redbull4','Often bought together on weekends'],['coke2l','Whiskey and cola']], bac1l:[['limes','Mojito and daiquiri buyers add limes'],['coke2l','Rum and cola']],
+  bud12:[['ice10','Hot day: 3 in 5 beer buyers grab ice'],['lays8','Beer + chips: top pair on game days']], modelo12:[['limes','Modelo + limes is a top pair'],['ice10','88°F today'],['peanuts','Beer and nuts']],
+  claw12:[['ice10','88°F today'],['cups50','Party buyers often add cups']], noon8:[['ice10','88°F today']], hen750:[['redbull4','Often bought together']],
 };
 const SWAPS = { kim750:{to:'oyster', why:['Same style: New Zealand Sauvignon Blanc','$3.00 less for the customer','Your margin is 6 points higher','22 bottles on the shelf'], back:'Kim Crawford is back Tuesday on PO #10241'} };
-const CATS = ['All','Spirits','Wine','Beer & Seltzer','Mixers & Snacks'];
+const CATS = ['All','Spirits','Wine','Beer & Seltzer','Mixers','Snacks'];
+const NONALC = c => c==='Mixers' || c==='Snacks';
+const taxable = p => p.tx!==0 && p.tx!==false;
 
 const HEAT = [
   ['Bud Light 12pk','crit','3 days cover',1],['Casamigos Blanco','crit','3 days cover',0],['Kim Crawford SB','crit','Stockout 5 days',0],
@@ -810,6 +821,8 @@ const HEAT = [
   ['Limes','crit','Spoils in 3 days',0],['Fever-Tree tonic','ok','Healthy',0],['Mezcal 750','warn','Supplier delay',0],
   ['Blended scotch','over','112 days on hand',0],['Pinot Grigio','ok','Healthy',0],['Tequila reposado','ok','Healthy',0],
   ['Imported lager','warn','Below reorder pt',0],['Cider 6pk','over','Slow mover',0],['Rum spiced','ok','Healthy',0],
+  ['Coca-Cola 2 L','ok','Healthy',0],['Lay\'s Classic 8 oz','ok','Healthy',0],['Jack Link\'s Jerky','warn','Below reorder pt',0],
+  ['Planters Peanuts','ok','Healthy',0],['Snickers Share','ok','Healthy',0],['Party cups 50 ct','ok','Healthy',0],
 ];
 
 // per-SKU stock + ordering details, same order as HEAT (demo data)
@@ -851,11 +864,17 @@ const INV = [
   {v:'Valley Beer Distributing', oh:18, u:'6-packs', d:4, lo:'Sep 12', lq:'4 cases', po:'', rp:30, lt:2, c:8.10, r:11.99, ls:'Today'},
   {v:'Valley Beer Distributing', oh:9, u:'6-packs', d:60, lo:'Jul 8', lq:'2 cases', po:'', rp:6, lt:2, c:7.80, r:11.99, ls:'Sep 9'},
   {v:'Summit Wine & Spirits', oh:22, u:'bottles', d:20, lo:'Sep 5', lq:'2 cases', po:'', rp:10, lt:3, c:14.30, r:21.99, ls:'Today'},
+  {v:'Metro Cash & Carry', oh:28, u:'bottles', d:9, lo:'Sep 22', lq:'4 cases', po:'', rp:16, lt:0, c:1.95, r:3.49, ls:'Today'},
+  {v:'Snack Direct (Frito-Lay route)', oh:26, u:'bags', d:6, lo:'Sep 21', lq:'3 cases', po:'', rp:18, lt:1, c:2.85, r:4.99, ls:'Today'},
+  {v:'Metro Cash & Carry', oh:9, u:'pouches', d:4, lo:'Sep 12', lq:'2 boxes', po:'', rp:12, lt:0, c:4.20, r:7.49, ls:'Today'},
+  {v:'Metro Cash & Carry', oh:18, u:'jars', d:21, lo:'Sep 8', lq:'1 case', po:'', rp:8, lt:0, c:3.40, r:5.99, ls:'Yesterday'},
+  {v:'Metro Cash & Carry', oh:48, u:'bars', d:16, lo:'Sep 15', lq:'2 boxes', po:'', rp:24, lt:0, c:1.30, r:2.49, ls:'Today'},
+  {v:'Metro Cash & Carry', oh:15, u:'packs', d:12, lo:'Sep 8', lq:'1 case', po:'', rp:8, lt:0, c:3.60, r:6.99, ls:'Sep 24'},
 ];
 const shortV = v => v.replace(/ (Wine & Spirits|Distributing|Beverage|Imports|Cash & Carry|Co\.)$/,'');
 const daysTxt = d => d==null ? 'no recent sales' : d===0 ? 'out of stock' : `${d} day${d===1?'':'s'} left`;
 const REORDER_BUY = {0:'bud', 8:'tito', 28:'tonic'};
-const HEAT_PID = {0:'bud12',1:'casa750',2:'kim750',5:'josh750',6:'noon8',7:'modelo12',8:'tito175',9:'meiomi',11:'jame750',12:'hen750',13:'crown750',16:'bac1l',17:'lamarca',18:'claw12',21:'redbull4',26:'ice10',27:'limes',28:'tonic4'};
+const HEAT_PID = {0:'bud12',1:'casa750',2:'kim750',5:'josh750',6:'noon8',7:'modelo12',8:'tito175',9:'meiomi',11:'jame750',12:'hen750',13:'crown750',16:'bac1l',17:'lamarca',18:'claw12',21:'redbull4',26:'ice10',27:'limes',28:'tonic4',36:'coke2l',37:'lays8',38:'jerky',39:'peanuts',40:'snickers',41:'cups50'};
 const FC = {
   bud12:{n:'Bud Light 12pk Cans', base:12, wk:1.6, stock:72, lead:2, pack:2, unit:'12pks', supplier:'Valley Beer Distributing'},
   tito175:{n:"Tito's Handmade Vodka 1.75 L", base:1.6, wk:1.8, stock:22, lead:3, pack:6, unit:'bottles', supplier:'Summit Wine & Spirits'},
@@ -1000,7 +1019,7 @@ const COSTS = [
   {pid:'bud12',    src:'Valley Beer price sheet · Oct', pack:2, unit:'12-pack', oldCase:18.40, newCase:19.10},
   {pid:'lamarca',  src:'Invoice HB-58812 · Summit', pack:12, unit:'bottle', oldCase:127.20, newCase:117.60},
 ];
-const CAT_KEY = {'Spirits':'sp','Wine':'wi','Beer & Seltzer':'be','Mixers & Snacks':'mx'};
+const CAT_KEY = {'Spirits':'sp','Wine':'wi','Beer & Seltzer':'be','Mixers':'mx','Snacks':'sn'};
 function roundPrice(x, rule){
   if (rule==='49'){ const f=Math.floor(x); return x<=f+0.49+1e-9 ? f+0.49 : x<=f+0.99+1e-9 ? f+0.99 : f+1.49; }
   const f=Math.floor(x); return x<=f+0.99+1e-9 ? f+0.99 : f+1.99;
@@ -1080,12 +1099,14 @@ const VENDORS = [
   {n:'Golden State Beverage', kind:'Wine distributor', lic:'Type 17 · 17-602377', rep:'Karen Liu', ph:'(916) 555-0119', em:'karen@goldenstate.example', terms:'Net 30', days:['Thu'], min:'$300', via:'Email', ontime:90, owed:0, due:'', color:'#7A1F33', since:'2021', extra:['Kendall-Jackson Chardonnay','Pinot Grigio','Boxed wine 3 L']},
   {n:'Pacific Crest Imports', kind:'Import specialist', lic:'Type 17 · 17-715540', rep:'Sam Patel', ph:'(415) 555-0163', em:'sam@pacificcrest.example', terms:'Cash on delivery', days:['Wed'], min:'5 cases', via:'Email', ontime:82, owed:0, due:'', color:'#2E6F77', since:'2022', extra:['Aperol 750','Sake 720 ml','Mezcal 750','Magnum Champagne']},
   {n:'Metro Cash & Carry', kind:'Cash & carry (you pick up)', lic:'Wholesale club · no alcohol', rep:'—', ph:'(916) 555-0100', em:'—', terms:'Card at pickup', days:['Any day'], min:'none', via:'You pick up', ontime:100, owed:0, due:'', color:'#5A6B76', since:'2019', extra:[]},
+  {n:'Snack Direct (Frito-Lay route)', kind:'Snack route delivery (DSD)', lic:'Food wholesaler · no alcohol', rep:'Tony Reyes', ph:'(916) 555-0131', em:'tony@snackdirect.example', terms:'Net 7', days:['Mon','Thu'], min:'none', via:'Rep stocks the rack', ontime:97, owed:0, due:'', color:'#C47A12', since:'2021', extra:[]},
   {n:'Coastal Cigar Co.', kind:'Tobacco wholesaler', lic:'Tobacco distributor · TD-30881', rep:'Mia Grant', ph:'(707) 555-0188', em:'mia@coastalcigar.example', terms:'Net 30', days:['Every other Tue'], min:'$250', via:'Email', ontime:88, owed:640, due:'Sat, Oct 5', color:'#6A3B18', since:'2023', extra:['Cigars humidor']},
 ];
 const VENDOR_OF = {tito175:'Summit Wine & Spirits', casa750:'Summit Wine & Spirits', hen750:'Summit Wine & Spirits', jame750:'Summit Wine & Spirits', crown750:'Summit Wine & Spirits', bac1l:'Summit Wine & Spirits', lamarca:'Summit Wine & Spirits', meiomi:'Summit Wine & Spirits', tonic4:'Summit Wine & Spirits',
   josh750:'Golden State Beverage', kim750:'Golden State Beverage', oyster:'Golden State Beverage',
   bud12:'Valley Beer Distributing', modelo12:'Valley Beer Distributing', claw12:'Valley Beer Distributing', noon8:'Valley Beer Distributing',
-  redbull4:'Metro Cash & Carry', limes:'Metro Cash & Carry', ice10:'Metro Cash & Carry'};
+  redbull4:'Metro Cash & Carry', limes:'Metro Cash & Carry', ice10:'Metro Cash & Carry',
+  coke2l:'Metro Cash & Carry', lays8:'Snack Direct (Frito-Lay route)', jerky:'Metro Cash & Carry', peanuts:'Metro Cash & Carry', snickers:'Metro Cash & Carry', cups50:'Metro Cash & Carry'};
 const WEEKDAYS = ['Mon','Tue','Wed','Thu','Fri','Sat'];
 const blankVendor = () => ({n:'', kind:'Spirits & wine distributor', lic:'', licOk:false, rep:'', ph:'', em:'', terms:'Net 15', days:['Tue'], min:'', via:'Email', pids:[]});
 const initials = n => n.split(/\s+/).filter(w=>/^[A-Za-z]/.test(w)).slice(0,2).map(w=>w[0]).join('').toUpperCase();
@@ -1133,7 +1154,7 @@ const SALES = [
   {no:1041, t:'Thu 10:05 PM', who:'Dev P.', items:[['casa750',1],['limes',2]], tender:'Amex ·· 1005', idm:'ID scanned', member:'Jordan D.'},
   {no:1038, t:'Thu 7:12 PM', who:'Sam R.', items:[['lamarca',2]], tender:'Visa ·· 7781', idm:'ID scanned', member:null},
 ];
-function saleCalc(items){ let sub=0, crv=0; items.forEach(([id,q])=>{ const p=byId(id); sub+=p.p*q; crv+=p.crv*q; }); const tax=sub*TAX; return {sub, crv, tax, total:sub+crv+tax}; }
+function saleCalc(items){ let sub=0, crv=0, txb=0; items.forEach(([id,q])=>{ const p=byId(id); sub+=p.p*q; crv+=p.crv*q; if (taxable(p)) txb+=p.p*q; }); const tax=txb*TAX; return {sub, crv, tax, total:sub+crv+tax}; }
 const unitRefund = p => p.p*(1+TAX) + p.crv;
 const RETURNS = [];
 
@@ -1151,7 +1172,7 @@ const S = {
   clock:'now', refuse:{why:'Appears intoxicated'},
   refusals:[{t:'Thu 11:42 PM', why:'Appears intoxicated', by:'Dev P.', val:41.97},{t:'Thu 7:15 PM', why:'Under 21 (ID scan)', by:'Maria G.', val:24.99},{t:'Wed 9:03 PM', why:'Buying for someone else', by:'Sam R.', val:54.99}],
   tour:null,
-  margins:{sp:28, wi:35, be:22, mx:40}, itemMargin:{}, groups:[{n:'Premium spirits', pids:['casa750','hen750'], m:30}], rounding:'99', priceEdit:{}, priceSel:null, priceDone:{}, tagsQ:[], priceWhen:'now',
+  margins:{sp:28, wi:35, be:22, mx:40, sn:45}, itemMargin:{}, groups:[{n:'Premium spirits', pids:['casa750','hen750'], m:30}], rounding:'99', priceEdit:{}, priceSel:null, priceDone:{}, tagsQ:[], priceWhen:'now',
   dealSheet:null, dealRows:SHEET.rows.map(()=>'review'), dealsAdded:[],
   bc:null, dupeDone:false, np:null, pendingNew:[],
   rcvTab:'receive', rcv:{po:'PO-10241', lines:[{pid:'modelo12', ord:20, rec:0, dmg:0, pack:2},{pid:'claw12', ord:10, rec:0, dmg:0, pack:2}], done:false},
@@ -1290,11 +1311,17 @@ function bottleSVG(p){
     can:`<rect x="7" y="50" width="21" height="67" rx="4" fill="${G}" ${st}/><rect x="32" y="50" width="21" height="67" rx="4" fill="${G}" ${st}/><rect x="7" y="72" width="21" height="16" fill="${l}"/><rect x="32" y="72" width="21" height="16" fill="${l}"/>${txt(17.5,83,20,p.lb.split(' ')[0],6)}${txt(42.5,83,20,p.lb.split(' ')[1]||'',6)}${gloss(9,54,58)}`,
     mixer:`<rect x="10" y="48" width="7" height="10" fill="${l}"/><path d="M8 70Q8 60 13.5 58Q19 60 19 70V114Q19 117 16 117H11Q8 117 8 114Z" fill="${G}" ${st}/><rect x="41" y="48" width="7" height="10" fill="${l}"/><path d="M39 70Q39 60 44.5 58Q50 60 50 70V114Q50 117 47 117H42Q39 117 39 114Z" fill="${G}" ${st}/><rect x="24" y="44" width="8" height="12" fill="${l}"/><path d="M21 68Q21 57 28 55Q35 57 35 68V114Q35 117 32 117H24Q21 117 21 114Z" fill="${G}" ${st}/><rect x="21" y="80" width="14" height="16" fill="${l}"/>${gloss(23,62,44)}`,
     lime:`<circle cx="19" cy="103" r="13" fill="${G}" ${st}/><circle cx="41" cy="103" r="13" fill="${G}" ${st}/><circle cx="30" cy="84" r="13" fill="${G}" ${st}/><circle cx="26" cy="80" r="3" fill="#fff" opacity=".45"/><circle cx="15" cy="99" r="3" fill="#fff" opacity=".4"/>`,
+    soda:`<rect x="25" y="18" width="10" height="8" rx="1.5" fill="${l}" ${st}/><path d="M26 26H34V33Q44 39 44 52V64Q41 68 44 72V110Q44 117 37 117H23Q16 117 16 110V72Q19 68 16 64V52Q16 39 26 33Z" fill="${G}" ${st}/><rect x="16" y="76" width="28" height="22" fill="${l}"/>${txt(30,90,28,p.lb,6)}${gloss(19,44,64)}`,
+    chips:`<path d="M9 42L51 42Q55 80 51 117L9 117Q5 80 9 42Z" fill="${G}" ${st}/><path d="M9 42l3.5-4 3.5 4 3.5-4 3.5 4 3.5-4 3.5 4 3.5-4 3.5 4 3.5-4 3.5 4 3.5-4 3.5 4Z" fill="${G}" ${st}/><ellipse cx="30" cy="76" rx="18" ry="13" fill="${l}"/>${txt(30,79,30,p.lb,8)}<ellipse cx="30" cy="102" rx="10" ry="6" fill="#F4D58A" opacity=".85"/>${gloss(11,48,60)}`,
+    pouch:`<path d="M12 46H48V111Q48 117 42 117H18Q12 117 12 111Z" fill="${G}" ${st}/><rect x="12" y="46" width="36" height="7" fill="rgba(0,0,0,.25)"/><circle cx="44" cy="58" r="1.6" fill="rgba(255,255,255,.6)"/><rect x="15" y="64" width="30" height="16" rx="2" fill="${l}"/>${txt(30,75,22,p.lb,6.5)}<rect x="20" y="88" width="20" height="20" rx="4" fill="#8A4B2A" stroke="rgba(255,255,255,.5)" stroke-width="1"/>${gloss(14,56,50)}`,
+    jar:`<rect x="15" y="50" width="30" height="13" rx="2" fill="${l}" ${st}/><rect x="12" y="62" width="36" height="55" rx="7" fill="${G}" ${st}/><rect x="12" y="74" width="36" height="28" fill="${l}"/>${txt(30,91,34,p.lb,7)}<circle cx="21" cy="110" r="3" fill="#D9A45A"/><circle cx="30" cy="111" r="3" fill="#D9A45A"/><circle cx="39" cy="110" r="3" fill="#D9A45A"/>${gloss(15,66,44)}`,
+    bar:`<g transform="rotate(-12 30 80)"><path d="M4 66h4l-2 3 2 3-2 3 2 3h-4Z M56 66h-4l2 3-2 3 2 3-2 3h4Z" fill="${G}"/><rect x="7" y="66" width="46" height="12" rx="2" fill="${G}" ${st}/>${txt(30,75,40,p.lb,7)}</g><path d="M4 94h4l-2 3.5 2 3.5-2 3.5 2 3.5h-4Z M56 94h-4l2 3.5-2 3.5 2 3.5-2 3.5h4Z" fill="${G}"/><rect x="7" y="94" width="46" height="14" rx="2" fill="${G}" ${st}/><rect x="7" y="98" width="46" height="6" fill="${l}"/>${txt(30,103,40,p.lb,5.5)}`,
+    cups:`<path d="M13 72H47L42 117H18Z" fill="${G}" ${st}/><path d="M13 60H47L46 70H14Z" fill="${G}" ${st} opacity=".85"/><path d="M13 48H47L46 58H14Z" fill="${G}" ${st} opacity=".7"/><ellipse cx="30" cy="48" rx="17" ry="3" fill="${shade(g,30)}" ${st}/><rect x="15.5" y="86" width="29" height="14" fill="${l}"/>${txt(30,96,28,p.lb,5.5)}<path d="M15 80H45" stroke="#fff" stroke-width="1" opacity=".5"/>`,
     ice:`<path d="M9 56Q30 44 51 56L53 112Q53 117 48 117H12Q7 117 7 112Z" fill="${G}" ${st}/><path d="M24 50L30 42L36 50" fill="none" stroke="${l}" stroke-width="2"/>${txt(30,92,34,p.lb,15)}<circle cx="18" cy="68" r="2" fill="#fff"/><circle cx="42" cy="104" r="2.5" fill="#fff"/>`,
   };
   return `<svg viewBox="0 0 60 120" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" x2="1"><stop offset="0" stop-color="${shade(g,-18)}"/><stop offset=".35" stop-color="${shade(g,22)}"/><stop offset="1" stop-color="${shade(g,-30)}"/></linearGradient></defs>${S[p.sh]||S.vodka}</svg>`;
 }
-function bottle(p){ return `<div class="bottle" aria-hidden="true"><i style="width:14px;height:${p.cat==='Beer & Seltzer'?22:34}px;background:${p.c[0]};border:1px solid rgba(0,0,0,.15)"></i><i style="width:8px;height:${p.cat==='Mixers & Snacks'?16:26}px;background:${p.c[1]};border:1px solid rgba(0,0,0,.15)"></i></div>`; }
+function bottle(p){ return `<div class="bottle" aria-hidden="true"><i style="width:14px;height:${p.cat==='Beer & Seltzer'?22:34}px;background:${p.c[0]};border:1px solid rgba(0,0,0,.15)"></i><i style="width:8px;height:${NONALC(p.cat)?16:26}px;background:${p.c[1]};border:1px solid rgba(0,0,0,.15)"></i></div>`; }
 
 /* ------------------------------------------------ views */
 const VIEWS = {};
@@ -1371,7 +1398,7 @@ VIEWS.register = () => {
     const act = out ? `data-swap="${p.id}"` : `data-add="${p.id}"`;
     return `<button class="prod ${out?'out':''} ${lk?'lock':''}" ${act}>
       <span class="art">${bottleSVG(p)}</span>
-      <span class="info"><span class="badges">${p.r?'<span class="chip age">21+</span>':''}${o&&!out?`<span class="otag">${o.tag}</span>`:''}${out?'<span class="stag">Sold out · swap</span>':''}${lk?`<span class="stag">${ic('lock','style="width:10px;height:10px"')} After hours</span>`:''}</span>
+      <span class="info"><span class="badges">${p.r?'<span class="chip age">21+</span>':''}${!taxable(p)?'<span class="chip plain" title="Not taxed">No tax</span>':''}${o&&!out?`<span class="otag">${o.tag}</span>`:''}${out?'<span class="stag">Sold out · swap</span>':''}${lk?`<span class="stag">${ic('lock','style="width:10px;height:10px"')} After hours</span>`:''}</span>
       <span class="nm">${p.n}</span><span class="meta">${p.sz}${p.abv?` · ${p.abv}% ABV`:''}</span>
       <span class="price">${money(p.p)}</span>
       <span class="stockpill ${out||!avail?'out':avail<=12?'low':'ok'}" title="Quantity left in inventory">${ic('box')}${out?'Out of stock':!avail?'All in this order':avail<=12?`Only <b>${avail}</b> left`:`<b>${avail}</b> in stock`}${inC&&!out?` · ${inC} in order`:''}</span></span>
@@ -1430,11 +1457,11 @@ function offerHits(){ // what the promotion engine would apply to the current ca
   return hits;
 }
 function totals(){
-  let sub=0, crv=0, line=0;
-  for (const l of S.cart){ const p=byId(l.id); sub+=p.p*l.qty; crv+=p.crv*l.qty; if (l.disc) line+=p.p*l.qty*l.disc/100; }
+  let sub=0, crv=0, line=0, txb=0;
+  for (const l of S.cart){ const p=byId(l.id); sub+=p.p*l.qty; crv+=p.crv*l.qty; if (l.disc) line+=p.p*l.qty*l.disc/100; if (taxable(p)) txb+=p.p*l.qty*(1-(l.disc||0)/100); }
   const offers=offerHits(), off=offers.reduce((a,o)=>a+o.amt,0), after=sub-off-line;
   const tdisc = !S.tdisc ? 0 : S.tdisc.kind==='%' ? after*S.tdisc.v/100 : Math.min(S.tdisc.v, after);
-  const disc = S.member ? (after-tdisc)*0.05 : 0, net=after-tdisc-disc, tax=net*TAX;
+  const disc = S.member ? (after-tdisc)*0.05 : 0, net=after-tdisc-disc, tax=net*(sub-line>0 ? txb/(sub-line) : 0)*TAX;
   const gross = net+crv+tax, credit = Math.min(S.credit||0, gross);
   return {sub, crv, offers, off, line, tdisc, disc, tax, credit, total:gross-credit, saved:off+line+tdisc+disc};
 }
@@ -1710,7 +1737,7 @@ VIEWS.offers = () => {
   const b = S.ob, pct = b.type==='% off' ? +b.val : b.type==='$ off' ? +b.val/20*100 : 0;
   const checks = [
     [pct<=30, pct<=30 ? 'Price stays above cost on every item' : `${pct.toFixed(0)}% off takes some items below cost. Most states ban that.`],
-    [b.type!=='Free item' || b.target==='Mixers & Snacks', b.type==='Free item' && b.target!=='Mixers & Snacks' ? 'Free alcohol is not allowed. Pick a non-alcohol item.' : 'No free alcohol'],
+    [b.type!=='Free item' || NONALC(b.target), b.type==='Free item' && !NONALC(b.target) ? 'Free alcohol is not allowed. Pick a non-alcohol item.' : 'No free alcohol'],
     [true, 'Applies only after ID check for 21+ items'],
   ];
   const ok = checks.every(c=>c[0]);
@@ -1743,7 +1770,7 @@ VIEWS.offers = () => {
       <label class="field">Name<input id="ob-name" value="${esc(b.name)}"></label>
       <div class="field">Offer type<div class="quick">${['% off','$ off','Multi-buy','Bundle','Free item'].map(t=>`<button class="${b.type===t?'on':''}" data-obt="${t}">${t}</button>`).join('')}</div></div>
       <div class="frow">
-        <label class="field">Applies to<select id="ob-target">${['Wine','Spirits','Beer & Seltzer','Mixers & Snacks','Selected products'].map(c=>`<option ${b.target===c?'selected':''}>${c}</option>`).join('')}</select></label>
+        <label class="field">Applies to<select id="ob-target">${['Wine','Spirits','Beer & Seltzer','Mixers','Snacks','Selected products'].map(c=>`<option ${b.target===c?'selected':''}>${c}</option>`).join('')}</select></label>
         <label class="field">${b.type==='$ off'?'Amount ($)':b.type==='% off'?'Percent off':'Value'}<input id="ob-val" type="number" min="0" value="${esc(b.val)}"></label>
       </div>
       <div class="frow">
@@ -1838,7 +1865,7 @@ function eod(d){
   const hours = open ? [180,420,310,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] : hw.map(w=>Math.round(net*w/hs));
   return { d, open, net, tx, gross, disc, ret, tax, crv, total, card, tap, cash, off, pay, drops, expected, counted: r2(expected+os), os,
     items: Math.round(tx*2.51), voids: open?0:3+Math.floor(h*6), voidAmt: open?0:r2(112.40*(0.5+h)), nosale: Math.floor(h*4), refunds: open?0:2+Math.floor(h*4),
-    cats: [['Spirits',.46],['Beer & Seltzer',.31],['Wine',.18],['Mixers & Snacks',.05]].map(([n,w])=>[n, Math.round(net*w)]),
+    cats: [['Spirits',.46],['Beer & Seltzer',.31],['Wine',.18],['Mixers',.03],['Snacks',.02]].map(([n,w])=>[n, Math.round(net*w)]),
     cashiers: [['Maria G.',.4517],['Dev P.',.3602],['Sam R.',.1881]].map(([n,w])=>[n, Math.round(net*w), Math.round(tx*w)]),
     ids: {scan: Math.round(tx*0.092), eye: Math.round(tx*0.512), typed: open?0:Math.floor(h*3), refused: ymd(d)==='2026-09-24'?2:Math.floor(h*3)},
     hours, z: open ? null : 'Z-' + String(Math.round((d-RP_START)/864e5)+1).padStart(4,'0'), margin: dayMargin(d) };
@@ -1982,10 +2009,26 @@ function barcodeModal(){
     <footer><button class="btn" data-act="bcnew">It’s a new product</button><button class="btn primary" data-act="bclink" ${B.pick?'':'disabled'}>Link barcode and add to sale</button></footer></div></div>`;
 }
 /* ---- add a new product ---- */
-const SHAPES = [['vodka','Tall bottle'],['whiskey','Square bottle'],['tequila','Squat bottle'],['wine','Wine'],['sparkling','Sparkling'],['pack','Box pack'],['can','Cans'],['mixer','Small bottles']];
+const SHAPES_ALC = [['vodka','Tall bottle'],['whiskey','Square bottle'],['tequila','Squat bottle'],['wine','Wine'],['sparkling','Sparkling'],['pack','Box pack'],['can','Cans']];
+const SHAPES_MX = [['mixer','Small bottles'],['can','Cans'],['soda','Soda bottle'],['lime','Fruit'],['ice','Ice bag']];
+const SHAPES_SN = [['chips','Chip bag'],['pouch','Pouch'],['jar','Jar'],['bar','Candy bar'],['cups','Cups / supplies']];
+const shapesFor = c => c==='Mixers' ? SHAPES_MX : c==='Snacks' ? SHAPES_SN : SHAPES_ALC;
+const NP_CATS = [['Spirits','Spirits','vodka'],['Wine','Wine','wine'],['Beer & Seltzer','Beer & seltzer','pack'],['Mixers','Mixers & ice','mixer'],['Snacks','Snacks','chips']];
+const CAT_DEF = {
+  'Spirits':{vendor:'Summit Wine & Spirits', sz:'750 ml', abv:'40', sh:'vodka', pack:'12', rp:'6', c0:'#E4ECEF', c1:'#F2A541', ph:['e.g. Deep Eddy Ruby Red Vodka','750 ml · 1.75 L · 50 ml','e.g. Aisle 2 · bay 4']},
+  'Wine':{vendor:'Golden State Beverage', sz:'750 ml', abv:'13', sh:'wine', pack:'12', rp:'6', c0:'#3E1220', c1:'#F1ECE2', ph:['e.g. Bogle Old Vine Zinfandel','750 ml · 1.5 L · 3 L box','e.g. Wine wall · red · 3']},
+  'Beer & Seltzer':{vendor:'Valley Beer Distributing', sz:'12 × 12 oz', abv:'5', sh:'pack', pack:'2', rp:'10', c0:'#1B2F5C', c1:'#D9B64B', ph:['e.g. Pacifico 12pk Bottles','12 × 12 oz · 6 × 16 oz · 24 oz','e.g. Cooler 2 · door 3']},
+  'Mixers':{vendor:'Metro Cash & Carry', sz:'4 × 200 ml', abv:'0', sh:'mixer', pack:'6', rp:'10', c0:'#DCE8E5', c1:'#2E6F77', ph:['e.g. Canada Dry Ginger Ale 2 L','2 L · 4 × 200 ml · 10 lb','e.g. Cooler 1 · door 1']},
+  'Snacks':{vendor:'Snack Direct (Frito-Lay route)', sz:'8 oz', abv:'0', sh:'chips', pack:'12', rp:'12', c0:'#F7C21A', c1:'#D8232A', ph:["e.g. Takis Fuego Rolled Chips",'8 oz · 2.85 oz · 12 ct','e.g. Front counter · rack 2']},
+};
+const TAX_HINT = {'Snacks':'Food (chips, nuts, candy, jerky) is not taxed in California. Turn Taxable on for non-food items like cups or lighters.', 'Mixers':'Soda, tonic, juice and energy drinks are taxed. Ice and fresh fruit are not.'};
+function setNpCat(c){ const d=S.np, was=CAT_DEF[d.cat], now=CAT_DEF[c]; if (!now) return;
+  ['sz','abv','pack','rp','c0','c1','vendor'].forEach(k=>{ if (!d[k] || d[k]===was[k]) d[k]=now[k]; });
+  if (!shapesFor(c).some(([k])=>k===d.sh)) d.sh=now.sh;
+  d.cat=c; d.r=!NONALC(c); if (NONALC(c)) d.abv='0'; d.taxable = c!=='Snacks'; }
 const containers = sz => { const m=String(sz).match(/^(\d+)\s*[×x]/); return m ? +m[1] : 1; };
-function containerMl(sz){ const t=String(sz).toLowerCase(), per=t.split(/[×x]/).pop(); const n=parseFloat(per)||0; return /l\b/.test(per)&&!/ml/.test(per) ? n*1000 : /oz/.test(per) ? n*29.57 : n; }
-function crvFor(d){ if (d.cat==='Wine' || d.cat==='Spirits') return 0; const ml=containerMl(d.sz); if (!ml) return 0; const st=S.settings; return Math.round(containers(d.sz)*(ml>=710 ? +st.crvL : +st.crvS)*100)/100; }
+function containerMl(sz){ const t=String(sz).toLowerCase(), per=t.split(/[×x]/).pop(); const n=parseFloat(per)||0; return /\bl\b/.test(per)&&!/ml/.test(per) ? n*1000 : /oz/.test(per) ? n*29.57 : /ml/.test(per) ? n : 0; }
+function crvFor(d){ if (d.cat!=='Beer & Seltzer' && d.cat!=='Mixers') return 0; const ml=containerMl(d.sz); if (!ml) return 0; const st=S.settings; return Math.round(containers(d.sz)*(ml>=710 ? +st.crvL : +st.crvS)*100)/100; }
 function blankProduct(pre={}){ return Object.assign({n:'', brand:'', cat:'Spirits', sz:'750 ml', abv:'40', r:true, taxable:true, bc:'', casebc:'', vcode:'', vendor:'Summit Wine & Spirits', pack:'12', caseCost:'', price:'', priceEdited:false, qty:'0', rp:'6', loc:'', sh:'vodka', c0:'#E4ECEF', c1:'#F2A541', from:null}, pre); }
 function npDerived(d){
   const unit = (+d.caseCost>0 && +d.pack>0) ? +d.caseCost/ +d.pack : 0, tgt = S.margins[CAT_KEY[d.cat]] || 30;
@@ -1999,7 +2042,7 @@ function npDerived(d){
 function VENDOR_OF_BRAND(brand, vendor){ if (!brand) return null; const b=brand.toLowerCase(); const hit=Object.entries(VENDOR_OF).find(([k,v])=>byId(k)&&byId(k).n.toLowerCase().startsWith(b)&&v!==vendor); return hit?hit[1]:null; }
 function npRerender(){ clearTimeout(npRerender.t); npRerender.t=setTimeout(()=>{ if (!S.np) return; productModal(); if (S.npFocus && document.getElementById(S.npFocus)) refocus(S.npFocus); }, 0); }
 function productModal(){
-  const d=S.np, x=npDerived(d), role=USERS.find(u=>u.n===S.user)?.role;
+  const d=S.np, x=npDerived(d), role=USERS.find(u=>u.n===S.user)?.role, nonalc=NONALC(d.cat), cd=CAT_DEF[d.cat]||CAT_DEF.Spirits;
   const f=(k,l,extra='',w='')=>`<label class="field" ${w}>${l}<input id="np-${k}" value="${esc(d[k])}" ${extra}></label>`;
   const preview = {id:'__np', n:d.n||'New product', sz:d.sz, abv:+d.abv||0, cat:d.cat, p:x.price, stock:+d.qty||0, c:[d.c0,d.c1], lb:(d.lb||d.brand||d.n.split(' ')[0]||'NEW').toUpperCase().slice(0,12), sh:d.sh, r:d.r, crv:x.crv};
   $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Add product" style="width:min(900px,100%)">
@@ -2009,12 +2052,14 @@ function productModal(){
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn sm" data-act="npai">${ic('spark')}Fill in with AI</button><span class="muted" style="font-size:12px">Reads the name, invoice line or barcode and fills in what it can. Check everything before saving.</span></div>
         ${x.dup?`<div class="clockban soon">${ic('swap')} Looks like <b>&nbsp;${esc(x.dup.n)} · ${x.dup.sz}&nbsp;</b> already exists. <button class="btn sm" style="margin-left:auto" data-npuse="${x.dup.id}">Use existing instead</button></div>`:''}
         <div class="npsec"><h4>Basics</h4>
-          <div class="frow">${f('n','Product name *','placeholder="e.g. Aperol Spritz Ready-to-Drink 4pk"')}${f('brand','Brand','placeholder="e.g. Aperol"')}</div>
-          <div class="frow3"><label class="field">Category *<select id="np-cat">${CATS.filter(c=>c!=='All').map(c=>`<option ${d.cat===c?'selected':''}>${c}</option>`).join('')}</select></label>${f('sz','Size *','placeholder="750 ml · 1.75 L · 12 × 12 oz"')}${f('abv','ABV %','type="number" step="0.1" min="0" max="80"')}</div>
+          <div class="field">What are you adding? *<div class="quick npcats">${NP_CATS.map(([c,l,sh])=>`<button class="${d.cat===c?'on':''}" data-npcat="${c}"><span class="mini">${bottleSVG({c:[CAT_DEF[c].c0,CAT_DEF[c].c1], lb:'', sh})}</span>${l}</button>`).join('')}</div></div>
+          <div class="frow">${f('n','Product name *',`placeholder="${cd.ph[0]}"`)}${f('brand','Brand','placeholder="e.g. '+(d.cat==='Snacks'?'Takis':d.cat==='Mixers'?'Canada Dry':'Aperol')+'"')}</div>
+          <div class="frow3">${f('sz','Size *',`placeholder="${cd.ph[1]}"`)}${nonalc?`<div class="field">Alcohol<span style="font-size:13px;padding:8px 0;color:var(--muted)">None · sells any hour, no ID</span></div>`:f('abv','ABV %','type="number" step="0.1" min="0" max="80"')}<div class="field">Category<span style="font-size:13px;padding:8px 0;font-weight:700">${esc(d.cat)}</span></div></div>
           <div style="display:flex;gap:14px;flex-wrap:wrap">
             <div class="setrow" style="border:0;padding:0;gap:8px"><button class="toggle" aria-pressed="${d.r}" data-act="npr" aria-label="21+ only"></button><span style="font-size:13px"><b>21+ only</b> (ID check at the register)</span></div>
             <div class="setrow" style="border:0;padding:0;gap:8px"><button class="toggle" aria-pressed="${d.taxable}" data-act="nptax" aria-label="Taxable"></button><span style="font-size:13px"><b>Taxable</b></span></div>
-            <span class="chip plain">CRV ${money(x.crv)} per unit ${x.crv?`(${containers(d.sz)} container${containers(d.sz)>1?'s':''})`:'(not charged on wine and spirits)'}</span></div></div>
+            <span class="chip plain">CRV ${money(x.crv)} per unit ${x.crv?`(${containers(d.sz)} container${containers(d.sz)>1?'s':''})`:d.cat==='Snacks'||(d.cat==='Mixers'&&!containerMl(d.sz))?'(not a drink container)':'(not charged on wine and spirits)'}</span></div>
+          ${TAX_HINT[d.cat]?`<div class="muted" style="font-size:12px">${TAX_HINT[d.cat]}</div>`:''}</div>
         <div class="npsec"><h4>Codes</h4>
           <div class="frow3">${f('bc','Barcode (UPC)','inputmode="numeric" placeholder="Scan or type"')}${f('casebc','Case barcode','inputmode="numeric"')}${f('vcode','Vendor item code','placeholder="e.g. SW-61220"')}</div>
           <div class="muted" style="font-size:12px">Store SKU is created automatically.</div></div>
@@ -2029,23 +2074,23 @@ function productModal(){
           <div class="muted" style="font-size:12px">${x.sug?`Suggested ${money(x.sug)} = ${money(x.unit)} ÷ (1 − ${(x.tgt/100).toFixed(2)}), rounded up.${d.priceEdited?' <button class="btn sm ghost" style="padding:1px 6px" data-act="npsug">Use suggested</button>':''}`:'Enter the case cost to get a suggested price.'}</div>
           ${x.unit && x.price && x.price<=x.unit?`<div class="clockban locked">${ic('alert')} The shelf price is below cost.</div>`:''}</div>
         <div class="npsec"><h4>Stock</h4>
-          <div class="frow3">${f('qty','Starting quantity','type="number" min="0"')}${f('rp','Reorder point','type="number" min="0"')}${f('loc','Shelf location','placeholder="e.g. Cooler 2 · door 3"')}</div></div>
+          <div class="frow3">${f('qty','Starting quantity','type="number" min="0"')}${f('rp','Reorder point','type="number" min="0"')}${f('loc','Shelf location',`placeholder="${cd.ph[2]}"`)}</div></div>
       </div>
       <aside class="nprev">
         <div class="eyebrow">Register card preview</div>
         <div class="prod"><span class="art">${bottleSVG(preview)}</span><span class="info"><span class="badges">${d.r?'<span class="chip age">21+</span>':''}<span class="chip ai">New</span></span><span class="nm">${esc(preview.n)}</span><span class="meta">${esc(d.sz)}${+d.abv?` · ${d.abv}% ABV`:''}</span><span class="price">${x.price?money(x.price):'$—'}</span><span class="stockpill ${+d.qty?'ok':'out'}">${ic('box')}${+d.qty?`<b>${+d.qty}</b> in stock`:'No stock yet'}</span></span></div>
-        <div class="field">Bottle shape<div class="quick">${SHAPES.map(([k,l])=>`<button class="${d.sh===k?'on':''}" data-npsh="${k}" style="padding:5px 9px;font-size:11.5px">${l}</button>`).join('')}</div></div>
-        <div class="colorrow"><label style="display:flex;gap:6px;align-items:center">Glass <input type="color" id="np-c0" value="${d.c0}"></label><label style="display:flex;gap:6px;align-items:center">Label <input type="color" id="np-c1" value="${d.c1}"></label></div>
+        <div class="field">${nonalc?'Package':'Bottle shape'}<div class="quick">${shapesFor(d.cat).map(([k,l])=>`<button class="${d.sh===k?'on':''}" data-npsh="${k}" style="padding:5px 9px;font-size:11.5px">${l}</button>`).join('')}</div></div>
+        <div class="colorrow"><label style="display:flex;gap:6px;align-items:center">${NONALC(d.cat)?'Pack':'Glass'} <input type="color" id="np-c0" value="${d.c0}"></label><label style="display:flex;gap:6px;align-items:center">Label <input type="color" id="np-c1" value="${d.c1}"></label></div>
       </aside>
     </div>
     <footer><span class="muted" style="font-size:12px;margin-right:auto">${x.ok?'Ready: appears on the Register, Inventory, Pricing and the vendor’s list':'Name, size and a shelf price above cost are required'}</span><button class="btn" data-close>Cancel</button><button class="btn primary" data-act="npsave" ${x.ok?'':'disabled'}>Save product</button></footer></div></div>`;
 }
 function saveProduct(){
   const d=S.np, x=npDerived(d); let base=(d.brand||d.n).toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,8)||'item', id=base, k=2; while (byId(id)) id=base+(k++);
-  const p = {id, n:d.n.trim(), sz:d.sz.trim(), abv:+d.abv||0, cat:d.cat, p:Math.round(x.price*100)/100, stock:+d.qty||0, c:[d.c0,d.c1], lb:(d.brand||d.n.split(' ')[0]).toUpperCase().slice(0,12), sh:d.sh, r:d.r, crv:x.crv, isNew:true};
+  const p = {id, n:d.n.trim(), sz:d.sz.trim(), abv:+d.abv||0, cat:d.cat, p:Math.round(x.price*100)/100, stock:+d.qty||0, c:[d.c0,d.c1], lb:(d.brand||d.n.split(' ')[0]).toUpperCase().slice(0,12), sh:d.sh, r:d.r, crv:x.crv, ...(d.taxable?{}:{tx:0}), isNew:true};
   PRODUCTS.push(p); VENDOR_OF[id]=d.vendor;
   CODES[id]=[{t:'Store SKU', v:id.toUpperCase()+'-'+String(Math.round(containerMl(d.sz))||1)}, ...(d.bc?[{t:'Barcode', v:d.bc.replace(/\s/g,''), n:'Bottle / pack', fresh:true}]:[]), ...(d.casebc?[{t:'Case barcode', v:d.casebc.replace(/\s/g,''), n:`Case of ${d.pack}`}]:[]), ...(d.vcode?[{t:'Vendor code', v:d.vcode, n:d.vendor}]:[])];
-  HEAT.push([p.n, 'ok', 'New product', 0]); INV.push({v:d.vendor, oh:p.stock, u:containers(d.sz)>1?'packs':'bottles', d:null, lo:d.from!=null?'Sep 25':'—', lq:d.from!=null?`${INVOICE[d.from].q} units`:'—', po:'', rp:+d.rp||0, lt:3, c:x.unit, r:p.p, ls:'Not sold yet'}); HEAT_PID[HEAT.length-1]=id;
+  HEAT.push([p.n, 'ok', 'New product', 0]); INV.push({v:d.vendor, oh:p.stock, u:containers(d.sz)>1?'packs':({chips:'bags',pouch:'pouches',jar:'jars',bar:'bars',cups:'packs',ice:'bags',lime:'bags'})[d.sh]||'bottles', d:null, lo:d.from!=null?'Sep 25':'—', lq:d.from!=null?`${INVOICE[d.from].q} units`:'—', po:'', rp:+d.rp||0, lt:3, c:x.unit, r:p.p, ls:'Not sold yet'}); HEAT_PID[HEAT.length-1]=id;
   if (!S.tagsQ.includes(id)) S.tagsQ.push(id);
   if (d.from!=null){ INVOICE[d.from].m = `${p.n} · ${p.sz}`; S.invLink[d.from]='new'; }
   S.pendingNew = (S.pendingNew||[]).filter(b=>b!==d.bc);
@@ -2058,9 +2103,14 @@ function aiFillProduct(){
   if (/APEROL/.test(src)) Object.assign(d, {n:'Aperol Spritz Ready-to-Drink 4pk', brand:'Aperol', cat:'Beer & Seltzer', sz:'4 × 200 ml', abv:'8', r:true, pack:'6', caseCost:(INVOICE[d.from]?INVOICE[d.from].cost*6:70.80).toFixed(2), vendor:'Summit Wine & Spirits', sh:'can', c0:'#F26B21', c1:'#FFFFFF', vcode:d.vcode||'SW-61220', loc:'Cooler 2 · door 4', rp:'6', qty:String(INVOICE[d.from]?INVOICE[d.from].q:0)});
   else if (d.bc && d.bc.startsWith('619947')) Object.assign(d, {n:d.n||"Tito's Handmade Vodka 750 ml", brand:"Tito's", cat:'Spirits', sz:'750 ml', abv:'40', pack:'12', caseCost:'189.60', vendor:'Summit Wine & Spirits', sh:'vodka', c0:'#E4ECEF', c1:'#EDE3CC'});
   else { if (!d.n && src) d.n = src.toLowerCase().replace(/\b(new lbl|new label)\b/g,'').replace(/\s+/g,' ').trim().replace(/\b\w/g,ch=>ch.toUpperCase()).replace(/\b(\d+)(ml|l)\b/gi,'$1 $2');
-    const mz=src.match(/(\d+(?:\.\d+)?)\s?(ML|L)\b|\b(750|1\.75|375|200)\b/); if (mz && (!d.sz||d.sz==='750 ml')) d.sz = mz[1] ? `${mz[1]} ${mz[2]==='L'?'L':'ml'}` : (mz[3]==='1.75'?'1.75 L':`${mz[3]} ml`);
-    const cat = /WINE|CAB|PINOT|CHARD|SAUV|ROS[EÉ]|PROSEC/.test(src)?'Wine':/IPA|LAGER|BEER|SELTZER|12PK|6PK|CAN/.test(src)?'Beer & Seltzer':/TONIC|SODA|ICE|MIX/.test(src)?'Mixers & Snacks':'Spirits';
-    Object.assign(d, {cat, sz:d.sz||'750 ml', abv:cat==='Mixers & Snacks'?'0':cat==='Beer & Seltzer'?'5':cat==='Wine'?'13':'40', r:cat!=='Mixers & Snacks', sh:cat==='Wine'?'wine':cat==='Beer & Seltzer'?'pack':cat==='Mixers & Snacks'?'mixer':'vodka', pack:cat==='Beer & Seltzer'?'2':'12'}); }
+    const snack = /CHIP|DORITO|CHEETO|TAKIS|FRITO|PRETZEL|POPCORN|JERKY|SLIM JIM|PEANUT|CASHEW|ALMOND|\bNUTS?\b|TRAIL MIX|CANDY|SNICKERS|M&M|SKITTLES|CHOC|\bBARS?\b|GUM|MINTS?\b|COOKIE|CRACKER|SNACK|\bCUPS?\b|LIGHTER|NAPKIN/.test(src);
+    const cat = snack?'Snacks':/WINE|CAB|PINOT|CHARD|SAUV|ROS[EÉ]|PROSEC/.test(src)?'Wine':/TONIC|SODA|COLA|COKE|SPRITE|GINGER|\bICE\b|MIXER|MARGARITA MIX|BLOODY|LIME|LEMON|JUICE|WATER|RED BULL|MONSTER|ENERGY/.test(src)?'Mixers':/IPA|LAGER|BEER|SELTZER|12PK|6PK|\bCANS?\b/.test(src)?'Beer & Seltzer':'Spirits';
+    const def=CAT_DEF[cat]; d.cat=cat;
+    const sh = cat==='Snacks' ? (/JERKY|SLIM JIM/.test(src)?'pouch':/PEANUT|CASHEW|ALMOND|NUTS?\b|TRAIL/.test(src)?'jar':/CANDY|SNICKERS|CHOC|BARS?\b|GUM|MINT/.test(src)?'bar':/CUPS?\b|LIGHTER|NAPKIN/.test(src)?'cups':'chips')
+      : cat==='Mixers' ? (/\bICE\b/.test(src)?'ice':/LIME|LEMON/.test(src)?'lime':/RED BULL|MONSTER|ENERGY|\bCANS?\b/.test(src)?'can':/COLA|COKE|SPRITE|\b2 ?L\b|LITER/.test(src)?'soda':'mixer') : cat==='Wine'?'wine':cat==='Beer & Seltzer'?'pack':'vodka';
+    const mz=src.match(/(\d+(?:\.\d+)?)\s?(ML|L|OZ|LB|CT)\b|\b(750|1\.75|375|200)\b/); if (mz && (!d.sz||d.sz==='750 ml'||d.sz===def.sz)) d.sz = mz[1] ? `${mz[1]} ${({L:'L',ML:'ml',OZ:'oz',LB:'lb',CT:'ct'})[mz[2]]}` : (mz[3]==='1.75'?'1.75 L':`${mz[3]} ml`);
+    if (!mz && (!d.sz||d.sz==='750 ml')) d.sz=def.sz;
+    Object.assign(d, {abv:def.abv, r:!NONALC(cat), taxable:!(cat==='Snacks' && sh!=='cups') && !(cat==='Mixers' && (sh==='ice'||sh==='lime')), sh, pack:def.pack, c0:def.c0, c1:def.c1, vendor:Object.values(CAT_DEF).some(v=>v.vendor===d.vendor)?def.vendor:d.vendor}); }
   if (!d.brand && d.n) d.brand = d.n.split(' ')[0];
   d.priceEdited=false; productModal(); toast('Filled in by AI · check the details','spark');
 }
@@ -2085,7 +2135,7 @@ function vendorModal(){
     <header>${ic('store')}<h2>Add a vendor</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
     <div class="body" style="gap:14px">
       <div class="frow">${inp('nv-n','Company name *',N.n,'e.g. Bay Area Craft Distributors')}
-        <label class="field">Type<select id="nv-kind">${['Spirits & wine distributor','Beer & seltzer distributor','Wine distributor','Import specialist','Cash & carry (you pick up)','Tobacco wholesaler','Other supplier'].map(k=>`<option ${N.kind===k?'selected':''}>${k}</option>`).join('')}</select></label></div>
+        <label class="field">Type<select id="nv-kind">${['Spirits & wine distributor','Beer & seltzer distributor','Wine distributor','Import specialist','Cash & carry (you pick up)','Tobacco wholesaler','Snack route delivery (DSD)','Other supplier'].map(k=>`<option ${N.kind===k?'selected':''}>${k}</option>`).join('')}</select></label></div>
       <div class="field">Distributor licence number *
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input id="nv-lic" value="${esc(N.lic)}" placeholder="e.g. 17-123456" style="flex:1;min-width:160px">
           ${N.licOk?`<span class="chip ok">${ic('shield','style="width:12px;height:12px"')} Active wholesale licence</span>`:`<button class="btn sm" data-act="nvlic">Check licence</button>`}</div>
@@ -2437,7 +2487,7 @@ VIEWS.pricing = () => {
   const selN = open.filter(r=>S.priceSel[r.c.pid]).length;
   const raiseN = rows.filter(r=>r.kind==='raise' && !S.priceDone[r.c.pid]).length;
   const kindChip = {raise:['crit','Below target · raise'], keep:['ok','Still above target · keep'], lower:['over','Cost fell · could lower']};
-  const catRow = [['sp','Spirits'],['wi','Wine'],['be','Beer & Seltzer'],['mx','Mixers & Snacks']];
+  const catRow = [['sp','Spirits'],['wi','Wine'],['be','Beer & Seltzer'],['mx','Mixers'],['sn','Snacks']];
   return `
   <section class="stats">
     <div><b class="num">${COSTS.length}</b><small>cost changes from 3 vendor documents</small></div>
@@ -2910,7 +2960,7 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-ilink],[data-bcpick],[data-npsh],[data-npuse],[data-npbc],[data-signwho],[data-pinkey],[data-rcvtab],[data-rcvq],[data-strdef],[data-clockuser],[data-salesel],[data-retchk],[data-retq],[data-retwhy],[data-retdest],[data-retmeth],[data-vsel],[data-nvday],[data-nvvia],[data-nvp]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-ilink],[data-bcpick],[data-npsh],[data-npcat],[data-npuse],[data-npbc],[data-signwho],[data-pinkey],[data-rcvtab],[data-rcvq],[data-strdef],[data-clockuser],[data-salesel],[data-retchk],[data-retq],[data-retwhy],[data-retdest],[data-retmeth],[data-vsel],[data-nvday],[data-nvvia],[data-nvp]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -2948,6 +2998,7 @@ document.addEventListener('click', e => {
     else toast('New product created · set its shelf price in Pricing');
     render(); return; }
   if (d.npsh){ S.np.sh=d.npsh; productModal(); return; }
+  if (d.npcat){ setNpCat(d.npcat); S.np.priceEdited=false; productModal(); return; }
   if (d.npuse){ const P=byId(d.npuse), N=S.np; if (N.bc){ const c=codesFor(P.id); if (!c.some(x=>x.v===N.bc)) c.push({t:'Barcode', v:N.bc, n:'Linked instead of creating a duplicate', fresh:true}); }
     if (N.from!=null){ INVOICE[N.from].m=`${P.n} · ${P.sz}`; S.invLink[N.from]='link'; INVOICE[N.from].sug=P.id; } S.np=null; closeModal(); render(); toast(`Linked to ${P.n} · no duplicate created`); return; }
   if (d.npbc){ S.np=blankProduct({bc:d.npbc, fromPending:true}); aiFillProduct(); return; }
@@ -3142,7 +3193,6 @@ document.addEventListener('keydown', e => {
 document.addEventListener('change', e => {
   if (e.target.id && e.target.id.startsWith('np-') && S.np){ const k=e.target.id.slice(3); S.np[k]=e.target.value;
     if (k==='price') S.np.priceEdited = e.target.value!=='';
-    if (k==='cat'){ S.np.r = e.target.value!=='Mixers & Snacks'; }
     npRerender(); return; }
   if (e.target.id && e.target.id.startsWith('cnt-') && S.cnt){ S.cnt.lines[+e.target.id.slice(4)].c = e.target.value; render(); return; }
   if (e.target.id && e.target.id.startsWith('st-')){ const k=e.target.id.slice(3); S.settings[k]=e.target.value;
