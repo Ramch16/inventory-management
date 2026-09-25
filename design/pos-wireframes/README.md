@@ -22,6 +22,18 @@ All figures are demo data.
 | Allocated Bottles | New | Rare-release raffles and waitlists, draw winners, per-ID purchase limits, reseller filtering |
 | Devices & Offline | p.3–5 | ID provider comparison, lane terminals, offline limits, store-and-forward queue |
 
+## Guided demo
+
+Press **▶ Demo** in the top bar (or open the page with `#demo` at the end of the URL).
+A 14-step tour opens each screen, sets up the example, highlights the feature and shows
+presenter notes under "What to say". Use **Next / Back** or the arrow keys; everything
+stays clickable during the tour. The story runs:
+
+1. Morning briefing → 2. Alerts → 3. Forecast → 4. Vendor deal comparison →
+5. Deal trap skipped → 6. AI invoice → 7. Liquor checkout with offers and add-ons →
+8. Sold-out swap → 9. ID check → 10. Offline payment → 11. Compliance lock →
+12. Allocated bottles → 13. Damaged goods → 14. Inventory heat map
+
 ## Controls in the top bar
 
 - **Online / Offline pill**: simulates an internet outage. The register keeps
