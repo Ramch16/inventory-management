@@ -1312,9 +1312,9 @@ try{ const r = localStorage.getItem('bev-route'); if(r && NOTES[r]) S.route = r;
 const h = (location.hash||'').slice(1); if (NOTES[h]) S.route = h;
 
 const ROUTES = [
-  ['command','Command Center','command','Owner'],
-  ['reports','Reports','chart','Owner'],
-  ['stores','All Stores','building','Owner'],
+  ['command','Command Center','command','Business'],
+  ['reports','Reports','chart','Business'],
+  ['stores','All Stores','building','Business'],
   ['register','Register','register','Store'],
   ['display','Customer Display','monitor','Store'],
   ['returns','Sales & Returns','sync','Store'],
