@@ -613,6 +613,18 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 .sheet.receipt .tot td{border-top:1px dashed #111}
 .sheet.receipt .foot{flex-direction:column;align-items:center;border-top:1px dashed #111}
 .rpgrid>*{min-width:0}
+.codes{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.codes div{display:grid;grid-template-columns:96px 1fr;gap:8px;font-size:12px;align-items:baseline}
+.codes span{color:var(--muted)}
+.codes b{font-family:var(--mono);font-weight:600;overflow-wrap:anywhere}
+.codes small{display:block;color:var(--muted);font-size:10.5px;font-family:var(--body)}
+.suggest{margin-top:6px;border-radius:10px;padding:8px 10px;background:var(--violet-soft);font-size:12px;display:flex;flex-direction:column;gap:6px}
+.bclist{display:flex;flex-direction:column;gap:6px;max-height:240px;overflow:auto}
+.bclist button{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:10px;padding:6px 10px;background:var(--surface)}
+.bclist button svg{height:32px;width:auto}
+.bclist button.on{border-color:var(--accent);background:var(--accent-soft)}
+.dupe{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center}
+@media (max-width:820px){.dupe{grid-template-columns:1fr}}
 .vnd{display:grid;grid-template-columns:360px 1fr;gap:16px;align-items:start}
 .vnd>*{min-width:0}
 .vrow{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
@@ -819,6 +831,7 @@ const INVOICE = [
   {sku:'LAMR-PRO75', d:'LA MARCA PROSEC 750ML', m:'La Marca Prosecco · 750 ml', q:24, qo:24, cost:10.45, prev:10.60, conf:95},
   {sku:'CASA-BL75', d:'CASAMIGOS BLNCO 750', m:'Casamigos Blanco · 750 ml', q:6, qo:12, cost:38.90, prev:38.90, conf:98, note:'Short 6 vs PO #10234'},
   {sku:'HEN-VS75', d:'HENNESSY V.S 750ML', m:'Hennessy VS Cognac · 750 ml', q:12, qo:12, cost:31.75, prev:31.75, conf:96, note:'7 damaged on receipt'},
+  {sku:'SW-50912', d:'CROWN ROYAL FINE DE LUXE 750 NEW LBL', m:null, sug:'crown750', sugWhy:'same brand, size and case pack; price matches', q:12, qo:12, cost:23.10, prev:23.10, conf:97, note:'New item code'},
   {sku:'???', d:'APEROL SPRITZ RTD 4PK', m:null, q:8, qo:0, cost:11.80, prev:null, conf:41, note:'Not in catalog'},
 ];
 
@@ -840,7 +853,7 @@ const NOTES = {
   pricing:{deck:'New · cost changes → retail prices', purpose:'When a vendor PO, price sheet or invoice changes a cost, suggest the new shelf price from the category’s target margin, apply rounding and limits, let the owner approve, then update the register and queue shelf tags.', data:['Case cost old → new and cost per unit (case ÷ pack)','Margin rules: this product → brand/group → category default','Target margin per category, rounding rule, 10% change limit','Current and new margin and markup per product'], build:['Suggested price = unit cost ÷ (1 − target margin), rounded up to the price ending','Checks: never below cost, state minimum-price rules, multi-pack consistency','Approved prices go live now or at opening; tags go to the label printer; price history kept']},
   vendors:{deck:'New · vendor management', purpose:'Keep every distributor in one place: contact, licence, terms, delivery days, what they supply, what you owe, open orders and deals. Add a new vendor and assign the brands they carry.', data:['Vendor: licence, rep, phone, email, terms, delivery days, minimum order, how POs are sent','Products each vendor supplies (one distributor per brand)','On-time rate from past POs, balance owed, open POs, active deals'], build:['Licence check against the state ABC licence lookup before the first order','Moving a brand to a new vendor takes effect on the next PO; history stays with the old vendor','Vendor record feeds Purchasing, Pricing, Vendor deals and Inventory']},
   purchasing:{deck:'New · vendor deals + purchase orders', purpose:'Each brand comes from one distributor in the store’s area. For each product, compare that vendor’s own options (buy just what you need, or take one of its deals) as the real cost per case, then group products into one PO per vendor. Deals arrive by deal sheet, forwarded rep email, vendor portal or state price posting.', data:['Product → its one vendor: case cost, lead time, on-time rate, terms, minimum','Every active deal from that vendor: free cases, discounted extra case, % or $ volume tiers','Forecast need for the next 30 days and daily sales in cases'], build:['Deals don’t stack: each is evaluated on its own against buying at list','Plan search: every quantity from need to need + 15, rejecting plans with more than 30 days of extra stock','State rules flag deal types a distributor may not offer']},
-  inventory:{deck:'Deck p.9–10 · Inventory Heat Map + AI Insight', purpose:'Colour shows the state of every SKU; the AI panel turns it into a ranked to-do list.', data:['Per product: stock left, days left, reorder point, vendor, last order date and quantity, open order','Days of cover = on hand ÷ forecast daily demand','Reorder point, expiry date, last-sale date, margin','Capital tied up = on hand × cost for overstock'], build:['Nightly + on-sale recalculation of state','Tile size = inventory value (treemap)','Actions create POs, markdowns or transfers']},
+  inventory:{deck:'Deck p.9–10 · Inventory Heat Map + AI Insight', purpose:'Colour shows the state of every SKU; the AI panel turns it into a ranked to-do list.', data:['Per product: stock left, days left, reorder point, vendor, last order date and quantity, open order','Codes: store SKU, barcodes (old and new label, case), vendor item codes; duplicate detection and merge','Days of cover = on hand ÷ forecast daily demand','Reorder point, expiry date, last-sale date, margin','Capital tied up = on hand × cost for overstock'], build:['Nightly + on-sale recalculation of state','Tile size = inventory value (treemap)','Actions create POs, markdowns or transfers']},
   assortment:{deck:'New · dead stock + best sellers (extends deck p.9–10)', purpose:'Find products that no longer sell, clear them, and replace them with products that sell in similar stores. Rank best sellers and warn before they run out.', data:['Days since last sale, units on hand, cash tied up, shelf location','Replacement: same shelf and price band, sales in similar stores, margin, vendor','Best sellers by units, revenue or profit for 7 / 30 / 90 days, trend, days of cover'], build:['Dead stock rule: no sale in 60+ days (owner can change it)','Replacement engine: category + price band + local market sales + this store’s basket data','One tap creates a clearance offer and a trial-case draft PO']},
   forecast:{deck:'Deck p.8 · AI Business Forecasting', purpose:'Predict demand per SKU and tell the owner when to order and how much.', data:['28 days history, 14 days forecast with confidence band','Drivers: weekday, holidays, weather, local events, promos','Supplier lead time and case pack'], build:['Model service returns point + P10/P90','Recommendation = demand over lead time + safety stock − on hand','One-click draft PO to supplier']},
   invoices:{deck:'Deck p.6 · AI Invoice Processing (8-step flow)', purpose:'Photograph a supplier invoice; AI reads it, matches lines to the catalog and flags price, quantity and damage issues for owner approval.', data:['OCR fields: supplier, invoice #, date, lines, totals','Match confidence per line against catalog','Variance vs last cost and vs purchase order'], build:['Upload to object storage → OCR / document model','Draft inventory update held until owner approves','Approved lines post to inventory and accounting export']},
@@ -971,7 +984,7 @@ function priceRow(c){
 }
 const POS_DATA = [
   {no:'PO-10241', v:'Valley Beer Distributing', lines:'Modelo 12pk ×20 cases · White Claw ×10 cases', total:612.40, st:'Sent', note:'No reply in 2 days'},
-  {no:'PO-10234', v:'Summit Wine & Spirits', lines:'Casamigos ×12 · Hennessy VS ×12 · 4 more lines', total:1407.20, st:'Partly received', note:'Short 6 Casamigos · invoice HB-58812'},
+  {no:'PO-10234', v:'Summit Wine & Spirits', lines:'Casamigos ×12 · Hennessy VS ×12 · 5 more lines', total:1684.40, st:'Partly received', note:'Short 6 Casamigos · invoice HB-58812'},
   {no:'PO-10228', v:'Golden State Beverage', lines:'Josh Cabernet ×4 cases · Meiomi ×2 cases', total:688.00, st:'Received', note:'Matched to invoice, paid'},
 ];
 /* ---- shelf optimizer (demo figures; replacements are ideas, not endorsements) ---- */
@@ -1034,12 +1047,26 @@ const WEEKDAYS = ['Mon','Tue','Wed','Thu','Fri','Sat'];
 const blankVendor = () => ({n:'', kind:'Spirits & wine distributor', lic:'', licOk:false, rep:'', ph:'', em:'', terms:'Net 15', days:['Tue'], min:'', via:'Email', pids:[]});
 const initials = n => n.split(/\s+/).filter(w=>/^[A-Za-z]/.test(w)).slice(0,2).map(w=>w[0]).join('').toUpperCase();
 
+/* ---- product codes: one product, many identifiers (demo values) ---- */
+const CODES = {
+  tito175:[{t:'Store SKU', v:'TITO-175'},{t:'Barcode', v:'619947000171', n:'Bottle'},{t:'Case barcode', v:'10619947000178', n:'Case of 6'},{t:'Vendor code', v:'SW-44821', n:'Summit Wine & Spirits'}],
+  crown750:[{t:'Store SKU', v:'CROWN-750'},{t:'Barcode', v:'082000000051', n:'Bottle'},{t:'Vendor code', v:'SW-31077', n:'Summit Wine & Spirits'}],
+};
+function codesFor(pid){
+  if (!CODES[pid]){ let h=0; for (const ch of pid) h=(h*31+ch.charCodeAt(0))%1e9; const v=VENDOR_OF[pid]||'';
+    CODES[pid]=[{t:'Store SKU', v:pid.toUpperCase().replace(/(\d+)$/,'-$1')},{t:'Barcode', v:String(h*97%1e11).padStart(11,'0')+'4', n:'Bottle / pack'},...(v?[{t:'Vendor code', v:initials(v)+'-'+String(h%90000+10000), n:v}]:[])]; }
+  return CODES[pid];
+}
+const fmtCode = v => /^\d{12}$/.test(v) ? `${v[0]} ${v.slice(1,6)} ${v.slice(6,11)} ${v[11]}` : /^\d{14}$/.test(v) ? `${v[0]} ${v.slice(1,3)} ${v.slice(3,8)} ${v.slice(8,13)} ${v[13]}` : v;
+function findByCode(code){ for (const p of PRODUCTS) if (codesFor(p.id).some(c=>c.v===code)) return p; return null; }
+function codesHTML(pid){ return `<div class="codes">${codesFor(pid).map(c=>`<div><span>${c.t}</span><b>${fmtCode(c.v)}${c.fresh?' <span class="chip ai" style="font-family:var(--body)">New</span>':''}<small>${esc(c.n||'')}</small></b></div>`).join('')}</div>`; }
+
 const S = {
   route:'command', online:true, notes:false,
   cart:[], cat:'All', q:'', id:null, member:null, saleNo:1048,
   queue:[{no:1039,amt:48.97,t:'Thu 9:41 PM',card:'Visa ·· 4412'},{no:1040,amt:112.36,t:'Thu 9:47 PM',card:'Mastercard ·· 0987'}],
   done:new Set(), alertFilter:'all', heat:null, tile:null, fc:'bud12',
-  inv:INVOICE.map((l,i)=> i===5 ? 'review' : (l.note||l.cost!==l.prev ? 'review' : 'ok')), invStep:7,
+  inv:INVOICE.map(l=> (l.note||!l.m||l.cost!==l.prev) ? 'review' : 'ok'), invStep:7, invLink:{},
   offlineLimit:true, custSeg:null,
   tdisc:null, dm:null, pinOk:false,
   clock:'now', refuse:{why:'Appears intoxicated'},
@@ -1047,6 +1074,7 @@ const S = {
   tour:null,
   margins:{sp:28, wi:35, be:22, mx:40}, itemMargin:{}, groups:[{n:'Premium spirits', pids:['casa750','hen750'], m:30}], rounding:'99', priceEdit:{}, priceSel:null, priceDone:{}, tagsQ:[], priceWhen:'now',
   dealSheet:null, dealRows:SHEET.rows.map(()=>'review'), dealsAdded:[],
+  bc:null, dupeDone:false,
   vSel:'Summit Wine & Spirits', vQ:'', nv:null,
   rp:{tab:'eod', day:'2026-09-24', from:'2026-09-01', to:'2026-09-24', year:2026, fmt:'page', email:true},
   invView:'tiles',
@@ -1257,7 +1285,7 @@ VIEWS.register = () => {
   ${locked ? `<div class="clockban locked">${ic('lock')} Alcohol sales are locked until 6:00 AM (California law). Mixers, ice and snacks can still be sold.</div>` : ''}
   <div class="reg">
     <section style="display:flex;flex-direction:column;gap:16px;min-width:0">
-      <label class="scanbar" data-note="Scan / search · barcode wedge">${ic('search')}<input id="q" placeholder="Scan a barcode or search 1,284 products" value="${esc(S.q)}" autocomplete="off"><span class="iconbtn" title="Camera scan">${ic('scan')}</span></label>
+      <label class="scanbar" data-note="Scan / search · barcode wedge">${ic('search')}<input id="q" placeholder="Scan a barcode or search 1,284 products" value="${esc(S.q)}" autocomplete="off"><button class="btn sm ghost" data-act="scandemo" title="Simulate scanning a bottle with a new label">Demo: new label</button><span class="iconbtn" title="Camera scan">${ic('scan')}</span></label>
       <div class="cats" role="tablist">${CATS.map(c=>`<button class="${S.cat===c?'on':''}" data-cat="${c}">${c==='All'?'All products':c}<span class="n">${count(c)}</span></button>`).join('')}</div>
       <div class="plu" data-note="Product cards · drawn bottle art from catalog data">
         ${list.map(card).join('') || `<div class="empty">No products match “${esc(S.q)}”.</div>`}
@@ -1353,6 +1381,7 @@ VIEWS.inventory = () => {
           <dt>Quantity ordered</dt><dd>${d.lq}</dd>
           <dt>Open order</dt><dd>${d.po||'none'}</dd>
           <dt>Unit cost / shelf price</dt><dd>${money(d.c)} / ${money(d.r)} · ${marginOf(d.r,d.c).toFixed(0)}% margin</dd>
+          ${HEAT_PID[S.tile] ? `<dt style="grid-column:1/-1;margin-top:6px;font-weight:700;color:var(--ink)">Codes for this product</dt><dd style="grid-column:1/-1;text-align:left">${codesHTML(HEAT_PID[S.tile])}</dd>` : ''}
           ${HEAT_PID[S.tile] ? (()=>{ const t=tgtFor(HEAT_PID[S.tile]), cm=marginOf(d.r,d.c); return `<dt>Target margin</dt><dd>${t.m}% · ${esc(t.label)}${cm<t.m-0.5?' <span class="chip crit" style="margin-left:4px">below</span>':''}</dd>`; })() : ''}
           <dt>Last sale</dt><dd>${d.ls}</dd></dl>
         <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">${low||(d.d!=null&&d.d<=5)?`<button class="btn primary sm" ${REORDER_BUY[S.tile]?`data-buygo="${REORDER_BUY[S.tile]}"`:'data-go="purchasing"'}>Reorder</button>`:''}<button class="btn sm" data-go="forecast">View forecast</button>${d.d==null||d.d>60?`<button class="btn sm" data-go="assortment">Find a replacement</button>`:''}<button class="btn sm" data-toast="Markdown scheduled for tomorrow">Mark down</button></div>`; })()}</section>` : ''}
@@ -1363,9 +1392,10 @@ VIEWS.inventory = () => {
              ['crit','box','Reorder Casamigos Blanco: 12 bottles','3 days of cover. Short-shipped on PO #10234.','Create PO'],
              ['crit','cal','Mark down 24 hard seltzer 24pk 20%','Expires in 18 days at current velocity.','Mark down'],
              ['warn','tag','Review Meiomi retail price','Cost +8.5%. Margin fell from 45% to 40%.','Reprice'],
+             ...(S.dupeDone?[]:[['warn','swap','Possible duplicate: 2 records for Tito’s 1.75 L','Created when the new label arrived. Stock is split 22 + 4.','Merge']]),
              ['over','dollar','Stop reordering flavored vodka','142 days on hand, $2.9K tied up.','Pause'],
              ['over','store','Move pumpkin ale to endcap','Seasonal surplus. Promo lifts sell-through ~30%.','Plan promo']]
-            .map(a=>`<div class="act"><span class="ic ${a[0]}">${ic(a[1])}</span><div><p>${a[2]}</p><small>${a[3]}</small></div>${a[4]==='Pause'?`<button class="btn sm primary" data-go="assortment">Find a replacement</button>`:`<button class="btn sm" data-toast="${a[4]} · done">${a[4]}</button>`}</div>`).join('')}
+            .map(a=>`<div class="act"><span class="ic ${a[0]}">${ic(a[1])}</span><div><p>${a[2]}</p><small>${a[3]}</small></div>${a[4]==='Merge'?`<button class="btn sm primary" data-act="dupe">Review</button>`:a[4]==='Pause'?`<button class="btn sm primary" data-go="assortment">Find a replacement</button>`:`<button class="btn sm" data-toast="${a[4]} · done">${a[4]}</button>`}</div>`).join('')}
         </div>
       </section>
     </aside>
@@ -1450,7 +1480,14 @@ VIEWS.invoices = () => {
   const lines = INVOICE.map((l,i)=>{
     const st = S.inv[i]; const vp = l.prev ? (l.cost-l.prev)/l.prev*100 : null;
     return `<tr class="${st==='rej'?'rej':''}">
-      <td><div style="font-weight:700">${l.m ? esc(l.m) : '<span style="color:var(--crit)">No match found</span>'}</div><div class="mono muted" style="font-size:11px">“${esc(l.d)}”</div>${l.note?`<span class="chip ${l.conf<60?'crit':'warn'}" style="margin-top:4px">${l.note}</span>`:''}</td>
+      <td>${(()=>{ const lk=S.invLink[i];
+        if (l.m) return `<div style="font-weight:700">${esc(l.m)}</div><div class="mono muted" style="font-size:11px">“${esc(l.d)}”</div>${l.note?`<span class="chip ${l.conf<60?'crit':'warn'}" style="margin-top:4px">${l.note}</span>`:''}`;
+        if (lk==='link'){ const p=byId(l.sug); return `<div style="font-weight:700">${esc(p.n)} · ${p.sz}</div><div class="mono muted" style="font-size:11px">“${esc(l.d)}”</div><span class="chip ok" style="margin-top:4px">Linked · code ${l.sku} saved to this product</span>`; }
+        if (lk==='new') return `<div style="font-weight:700">New product: ${esc(l.d)}</div><span class="chip over" style="margin-top:4px">Created · set a shelf price in Pricing</span>`;
+        if (l.sug){ const p=byId(l.sug); return `<div style="font-weight:700;color:var(--warn)">Unknown item code ${l.sku}</div><div class="mono muted" style="font-size:11px">“${esc(l.d)}”</div>
+          <div class="suggest"><span>${ic('spark','style="width:12px;height:12px;vertical-align:-2px;color:var(--violet)"')} Looks like <b>${esc(p.n)} · ${p.sz}</b> (${l.conf}%): ${l.sugWhy}.</span>
+          <span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm primary" data-ilink="${i}" data-v="link">Link to existing product</button><button class="btn sm" data-ilink="${i}" data-v="new">It’s a new product</button></span></div>`; }
+        return `<div style="font-weight:700;color:var(--crit)">No match found</div><div class="mono muted" style="font-size:11px">“${esc(l.d)}”</div>${l.note?`<span class="chip crit" style="margin-top:4px">${l.note}</span>`:''}<div style="margin-top:6px"><button class="btn sm" data-ilink="${i}" data-v="new">Create new product</button></div>`; })()}</td>
       <td><span class="conf"><i><b style="width:${l.conf}%;background:${l.conf<60?'var(--crit)':l.conf<96?'var(--warn)':'var(--ok)'}"></b></i>${l.conf}%</span></td>
       <td class="num r">${l.q}${l.qo&&l.qo!==l.q?`<div class="var-up" style="font-size:11px">PO ${l.qo}</div>`:''}</td>
       <td class="num r">${money(l.cost)}</td>
@@ -1472,7 +1509,7 @@ VIEWS.invoices = () => {
         ${INVOICE.map(l=>`<div class="row"><span>${esc(l.d)}</span><span>${l.q}</span><span style="text-align:right">${(l.cost*l.q).toFixed(2)}</span></div>`).join('')}
         <div class="row" style="border:0;font-weight:700"><span>TOTAL</span><span></span><span style="text-align:right">${INVOICE.reduce((a,l)=>a+l.cost*l.q,0).toFixed(2)}</span></div>
         <span class="hl" style="left:10px;top:10px;width:170px;height:22px"></span>
-        <span class="hl" style="left:10px;top:86px;right:10px;height:112px"></span>
+        <span class="hl" style="left:10px;top:86px;right:10px;height:128px"></span>
       </div>
       <div class="muted" style="font-size:12px">Read in 4.2 s · 6 lines · supplier matched to vendor V-0021</div>
     </aside>
@@ -1827,6 +1864,34 @@ VIEWS.vendors = () => {
     </section>
   </div>`;
 };
+function barcodeModal(){
+  const B=S.bc, q=B.q.toLowerCase(), prefix=B.code.slice(0,6);
+  const likely = PRODUCTS.filter(p=>codesFor(p.id).some(c=>/^Barcode/.test(c.t) && c.v.slice(0,6)===prefix));
+  const list = (q ? PRODUCTS.filter(p=>p.n.toLowerCase().includes(q)) : [...likely, ...PRODUCTS.filter(p=>!likely.includes(p))]).slice(0,8);
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Barcode not recognized" style="width:min(560px,100%)">
+    <header>${ic('scan')}<h2>Barcode not recognized</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="gap:12px">
+      <div style="font:600 18px var(--mono);letter-spacing:.04em">${fmtCode(B.code)}</div>
+      <div class="muted" style="font-size:13px">Often a new label on a product you already sell. Pick the product in the customer’s hand to link this barcode to it.</div>
+      ${likely.length && !q ? `<div class="suggest"><span>${ic('spark','style="width:12px;height:12px;vertical-align:-2px;color:var(--violet)"')} Same maker’s code as <b>${likely.map(p=>esc(p.n)+' · '+p.sz).join(', ')}</b>. Check the size before linking.</span></div>`:''}
+      <label class="scanbar" style="padding:4px 8px 4px 12px">${ic('search')}<input id="bc-q" placeholder="Search your products" value="${esc(B.q)}" autocomplete="off"></label>
+      <div class="bclist">${list.map(p=>`<button class="${B.pick===p.id?'on':''}" data-bcpick="${p.id}">${bottleSVG(p)}<span><b>${esc(p.n)}</b><div class="muted" style="font-size:11.5px">${p.sz} · ${money(p.p)}</div></span>${likely.includes(p)?'<span class="chip ai">Likely</span>':''}</button>`).join('')||'<div class="empty">No product matches.</div>'}</div>
+      <div class="muted" style="font-size:12px">The link is saved for next time and a manager reviews it. A different size or pack is a different product.</div>
+    </div>
+    <footer><button class="btn" data-toast="Sent to a manager to create the new product">It’s a new product</button><button class="btn primary" data-act="bclink" ${B.pick?'':'disabled'}>Link barcode and add to sale</button></footer></div></div>`;
+}
+function dupeModal(){
+  const a=byId('tito175');
+  const card = (t, sku, oh, sold, created, codes) => `<div class="swapcard" style="align-items:stretch;text-align:left"><span class="art" style="align-self:center">${bottleSVG(a)}</span><b>${t}</b><dl class="kv" style="font-size:12px"><dt>Store SKU</dt><dd>${sku}</dd><dt>On hand</dt><dd>${oh}</dd><dt>Sold, 30 days</dt><dd>${sold}</dd><dt>Shelf price</dt><dd>${money(a.p)}</dd><dt>Created</dt><dd>${created}</dd></dl><div class="muted" style="font-size:11.5px">Barcode ${codes}</div></div>`;
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Possible duplicate" style="width:min(720px,100%)">
+    <header>${ic('swap')}<h2>Possible duplicate product</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="gap:14px">
+      <div class="dupe">${card("Tito's Handmade Vodka 1.75 L",'TITO-175','22 bottles','118','2019','6 19947 00017 1')}<span style="justify-self:center">${ic('swap','style="width:26px;height:26px;color:var(--accent)"')}</span>${card('TITOS VODKA 1.75L NEW LBL','TITO-175-N','4 bottles','6','Sep 20, from an invoice','6 19947 00031 7')}</div>
+      <ul class="why"><li>${ic('check')}Same brand and the same 1.75 L size</li><li>${ic('check')}Same case pack (6) and the same vendor, Summit</li><li>${ic('check')}Same shelf price, and the barcodes share the maker’s prefix</li></ul>
+      <div class="comply"><div>After merging: <b>26 bottles</b> on one product, both barcodes scan, sales history and forecast combined. The second record is archived, not deleted.</div></div>
+    </div>
+    <footer><button class="btn" data-close>Keep separate</button><button class="btn primary" data-act="dupemerge">Merge into Tito’s Handmade Vodka 1.75 L</button></footer></div></div>`;
+}
 function vendorModal(){
   const N=S.nv, moving = N.pids.filter(k=>VENDOR_OF[k]);
   const canSave = N.n.trim() && N.licOk;
@@ -2418,7 +2483,7 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-vsel],[data-nvday],[data-nvvia],[data-nvp]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-ilink],[data-bcpick],[data-vsel],[data-nvday],[data-nvvia],[data-nvp]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -2436,6 +2501,11 @@ document.addEventListener('click', e => {
   if (d.resolve){ S.done.add(+d.resolve); toast(d.msg+' · marked resolved'); render(); return; }
   if (d.undo){ S.done.delete(+d.undo); render(); return; }
   if (d.seg){ S.custSeg=+d.seg; render(); return; }
+  if (d.ilink){ const i=+d.ilink, l=INVOICE[i]; S.invLink[i]=d.v;
+    if (d.v==='link'){ const c=codesFor(l.sug); if (!c.some(x=>x.v===l.sku)) c.push({t:'Vendor code', v:l.sku, n:'New label · linked from invoice HB-58812', fresh:true}); toast(`Linked to ${byId(l.sug).n} · code ${l.sku} saved`); }
+    else toast('New product created · set its shelf price in Pricing');
+    render(); return; }
+  if (d.bcpick){ S.bc.pick=d.bcpick; barcodeModal(); return; }
   if (d.vsel){ S.vSel=d.vsel; if (d.vgo) go('vendors'); else render(); return; }
   if (d.nvday){ const a=S.nv.days; S.nv.days = a.includes(d.nvday) ? a.filter(x=>x!==d.nvday) : [...a, d.nvday].sort((x,y)=>WEEKDAYS.indexOf(x)-WEEKDAYS.indexOf(y)); vendorModal(); return; }
   if (d.nvvia){ S.nv.via=d.nvvia; vendorModal(); return; }
@@ -2506,6 +2576,13 @@ document.addEventListener('click', e => {
     case 'refuseok': S.refusals.unshift({t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), why:S.refuse.why, by:'Maria G.', val:Math.round(totals().total*100)/100}); S.cart=[]; S.id=null; S.tdisc=null; closeModal(); render(); toast('Sale refused · saved to compliance log','ban'); break;
     case 'swapok': { const id=el.dataset.v, l=S.cart.find(x=>x.id===id); l?l.qty++:S.cart.push({id,qty:1}); closeModal(); render(); toast('Swapped in '+byId(id).n); break; }
     case 'report': reportModal(); break;
+    case 'scandemo': S.bc={code:'619947000317', q:'', pick:'tito175'}; barcodeModal(); break;
+    case 'bclink': { const B=S.bc, p=byId(B.pick); const c=codesFor(p.id); if (!c.some(x=>x.v===B.code)) c.push({t:'Barcode', v:B.code, n:'Added at the register by Maria G. · manager review', fresh:true});
+      if (S.clock==='locked' && p.r){ closeModal(); render(); toast('Barcode saved · alcohol sales are locked until 6:00 AM','lock'); break; }
+      const l=S.cart.find(x=>x.id===p.id); l?l.qty++:S.cart.push({id:p.id,qty:1}); S.bc=null; closeModal(); render(); toast(`Barcode linked to ${p.n} · next scan adds it directly`); break; }
+    case 'dupe': dupeModal(); break;
+    case 'dupemerge': { S.dupeDone=true; INV[8].oh=26; INV[8].d=Math.round(26/1.6); const c=codesFor('tito175'); if (!c.some(x=>x.v==='619947000317')) c.push({t:'Barcode', v:'619947000317', n:'New label · merged from TITO-175-N', fresh:true});
+      byId('tito175').stock=26; closeModal(); render(); toast('Merged: 26 bottles on one product · both barcodes scan'); break; }
     case 'vnew': S.nv=blankVendor(); vendorModal(); break;
     case 'nvlic': if (!/\d{2}-?\d{5,6}/.test(S.nv.lic)){ toast('Enter a licence number like 17-123456','alert'); break; } S.nv.licOk=true; vendorModal(); toast('Licence found: active wholesale licence'); break;
     case 'nvsave': { const N=S.nv; if (!N.n.trim()||!N.licOk) break; const moved=N.pids.filter(k=>VENDOR_OF[k]).length;
@@ -2549,13 +2626,14 @@ document.addEventListener('click', e => {
     case 'declinesale': S.cart=S.cart.filter(x=>!byId(x.id).r); S.id=null; closeModal(); render(); toast('21+ items removed · refusal logged','alert'); break;
     case 'charge': charge(); break;
     case 'newsale': S.cart=[]; S.id=null; S.member=null; S.tdisc=null; S.saleNo++; closeModal(); render(); break;
-    case 'invall': S.inv = S.inv.map((v,i)=> INVOICE[i].conf>=90 && v==='review' ? 'ok' : v); render(); toast('Matched lines approved · 1 unmatched line left'); break;
+    case 'invall': { S.inv = S.inv.map((v,i)=> (INVOICE[i].m || S.invLink[i]) && INVOICE[i].conf>=90 && v==='review' ? 'ok' : v); const left=INVOICE.filter((l,i)=>!l.m && !S.invLink[i]).length; render(); toast(`Matched lines approved${left?` · ${left} line${left>1?'s':''} still need a product`:''}`); break; }
     case 'invpost': S.invStep=8; render(); toast('Inventory and accounting updated'); break;
     case 'offtoggle': S.offlineLimit=!S.offlineLimit; render(); break;
     case 'sync': S.queue=[]; render(); toast('Queued sales uploaded'); break;
   }
 });
 document.addEventListener('input', e => {
+  if (e.target.id==='bc-q' && S.bc){ S.bc.q=e.target.value; barcodeModal(); refocus('bc-q'); return; }
   if (e.target.id==='v-q'){ S.vQ=e.target.value; render(); refocus('v-q'); return; }
   if (e.target.id && e.target.id.startsWith('nv-') && S.nv){ const k=e.target.id.slice(3); S.nv[k]=e.target.value; if (k==='lic') S.nv.licOk=false;
     if (k==='n' || k==='lic'){ const pos=e.target.selectionStart; vendorModal(); const el=document.getElementById(e.target.id); el.focus(); try{el.setSelectionRange(pos,pos);}catch(x){} } return; }
@@ -2571,7 +2649,9 @@ document.addEventListener('keydown', e => {
   if (S.tour!=null && !/INPUT|SELECT|TEXTAREA/.test(e.target.tagName) && (e.key==='ArrowRight'||e.key==='ArrowLeft')){ e.preventDefault(); tourStep(S.tour + (e.key==='ArrowRight'?1:-1)); return; }
   if (e.key==='Escape' && $('#modal').innerHTML) { closeModal(); render(); }
   if (e.key==='F2' && S.route==='register'){ e.preventDefault(); $('#q')?.focus(); }
-  if (e.key==='Enter' && e.target.id==='q'){ const m = PRODUCTS.find(p=>p.n.toLowerCase().includes(S.q.toLowerCase()) && (S.cat==='All'||p.cat===S.cat)); if (m){ S.q=''; const l=S.cart.find(x=>x.id===m.id); l?l.qty++:S.cart.push({id:m.id,qty:1}); render(); $('#q').focus(); } }
+  if (e.key==='Enter' && e.target.id==='q'){ const raw=S.q.replace(/\s/g,'');
+    if (/^\d{8,14}$/.test(raw)){ const hit=findByCode(raw); S.q=''; if (hit){ if (S.clock==='locked' && hit.r){ render(); toast('Alcohol sales are locked until 6:00 AM','lock'); return; } const l=S.cart.find(x=>x.id===hit.id); l?l.qty++:S.cart.push({id:hit.id,qty:1}); render(); $('#q').focus(); } else { render(); S.bc={code:raw, q:'', pick:null}; const pre=PRODUCTS.find(p=>codesFor(p.id).some(c=>/^Barcode/.test(c.t)&&c.v.slice(0,6)===raw.slice(0,6))); if (pre) S.bc.pick=pre.id; barcodeModal(); } return; }
+    const m = PRODUCTS.find(p=>p.n.toLowerCase().includes(S.q.toLowerCase()) && (S.cat==='All'||p.cat===S.cat)); if (m){ S.q=''; const l=S.cart.find(x=>x.id===m.id); l?l.qty++:S.cart.push({id:m.id,qty:1}); render(); $('#q').focus(); } }
 });
 document.addEventListener('change', e => {
   if (e.target.id && e.target.id.startsWith('nv-') && S.nv){ S.nv[e.target.id.slice(3)]=e.target.value; return; }
@@ -2592,7 +2672,7 @@ document.addEventListener('change', e => {
   if (e.target.id==='dm-pid'){ S.dmg.pid=e.target.value; render(); return; }
   if (e.target.id==='dm-where'){ S.dmg.where=e.target.value; return; }
   if (e.target.id==='dm-photo' && e.target.files[0]){ S.dmg.photo=URL.createObjectURL(e.target.files[0]); render(); return; }
-  if (e.target.id==='invfile' && e.target.files.length){ S.invStep=2; render(); toast('Reading '+e.target.files[0].name+'…','spark'); let s=2; const t=setInterval(()=>{ s++; S.invStep=s; S.inv=INVOICE.map((l,i)=> l.note||l.cost!==l.prev ? 'review':'ok'); render(); if(s>=7) clearInterval(t); }, 550); }
+  if (e.target.id==='invfile' && e.target.files.length){ S.invStep=2; render(); toast('Reading '+e.target.files[0].name+'…','spark'); let s=2; const t=setInterval(()=>{ s++; S.invStep=s; S.inv=INVOICE.map(l=> (l.note||!l.m||l.cost!==l.prev) ? 'review':'ok'); render(); if(s>=7) clearInterval(t); }, 550); }
 });
 window.addEventListener('hashchange', () => { const r=location.hash.slice(1); if (NOTES[r] && r!==S.route) go(r); });
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
