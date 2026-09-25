@@ -279,6 +279,29 @@ body.notes [data-note]::after{content:attr(data-note);position:absolute;top:-10p
 .why{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none;font-size:13px}
 .why li{display:flex;gap:8px;align-items:center}
 .why svg{color:var(--ok)}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.vcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px;position:relative}
+.vcard.best{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 12px 28px -16px rgba(240,122,28,.6)}
+.vcard.skip{opacity:.8}
+.vcard h3{margin:0;font:700 16px/1.2 var(--display)}
+.vcard .deal{border-radius:10px;padding:8px 10px;background:var(--violet-soft);color:var(--violet);font-weight:700;font-size:12.5px;display:flex;gap:6px;align-items:center}
+.vcard .deal.none{background:var(--surface-2);color:var(--muted)}
+.vcard dl{display:grid;grid-template-columns:1fr auto;gap:5px 10px;margin:0;font-size:12.5px}
+.vcard dt{color:var(--muted)} .vcard dd{margin:0;font-family:var(--mono);font-weight:600;text-align:right}
+.vcard .eff{font:800 26px/1 var(--display);color:var(--accent)}
+.vcard .eff small{font:600 12px var(--body);color:var(--muted)}
+.vcard .trap{border-radius:10px;padding:8px 10px;background:var(--warn-soft);color:var(--warn);font-size:12px;font-weight:600}
+.meta3{display:flex;gap:6px;flex-wrap:wrap}
+.buyhead{display:grid;grid-template-columns:70px 1fr auto;gap:18px;align-items:center}
+.buyhead .field{align-items:flex-end}
+.buyhead>*{min-width:0}
+.buyhead .chip{white-space:normal}
+.pohead{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.pogrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.verdict2{border-radius:16px;padding:16px 18px;background:var(--rail);color:#E7EEF2;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;position:relative;overflow:hidden}
+.verdict2::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 100% 0%,rgba(255,154,46,.25),transparent 55%);pointer-events:none}
+.verdict2>*{position:relative}
+.verdict2 b.big{font:800 italic 22px/1.2 var(--display);color:#fff;display:block}
 .paybar .btn{padding:12px}
 .paybar .big{grid-column:1/-1;font-size:16px;padding:16px;border-radius:14px;background:var(--grad);border:0}
 .offbanner{display:flex;gap:10px;align-items:center;background:var(--crit-soft);color:var(--crit);border:1px solid color-mix(in srgb,var(--crit) 35%,transparent);border-radius:10px;padding:10px 14px;font-weight:600;font-size:13px}
@@ -441,9 +464,19 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 .toast[hidden]{display:none}
 .toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--surface);border-radius:10px;padding:11px 16px;font-weight:700;font-size:13px;z-index:60;display:flex;gap:8px;align-items:center;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
 
+/* grid columns may shrink below their content; wide tables scroll inside .tablewrap */
+.reg>*,.invgrid>*,.fcgrid>*,.invwrap>*,.cust>*,.offgrid>*,.dmggrid>*,.compgrid>*,.pogrid>*,.devgrid>*,.hello>*,.hourly>*,.vgrid>*,.rels>*{min-width:0}
+.rel .row .chip{white-space:normal}
+.campaign{display:grid;grid-template-columns:1fr 240px;gap:20px;align-items:center}
 /* ---------- responsive ---------- */
 @media (max-width:1180px){
-  .reg,.invgrid,.fcgrid,.invwrap,.cust,.offgrid,.dmggrid,.compgrid{grid-template-columns:1fr}
+  .reg,.invgrid,.fcgrid,.invwrap,.cust,.offgrid,.dmggrid,.compgrid,.pogrid{grid-template-columns:1fr}
+  .verdict2{grid-template-columns:1fr}
+  .buyhead{grid-template-columns:56px 1fr}
+  .buyhead .field{grid-column:1/-1;align-items:flex-start}
+  .vgrid{grid-template-columns:1fr}
+  .campaign{grid-template-columns:1fr}
+  .rels{grid-template-columns:1fr}
   .ticket{position:static;max-height:none}
   .hello,.hourly,.devgrid{grid-template-columns:1fr}
 }
@@ -625,6 +658,7 @@ const ALERTS = [
 const NOTES = {
   command:{deck:'Deck p.11 · AI Owner Command Center', purpose:'One morning view for the owner: today\'s numbers plus the five things that need attention, each linking to the screen that fixes it.', data:['Sales, margin, inventory value (POS + inventory service)','Priority feed ranked by $ impact and urgency','Hourly sales with an AI projection for the rest of the day'], build:['GET /dashboard/today','GET /ai/priorities?limit=5','Push refresh every 5 min; owner and manager roles only']},
   register:{deck:'Deck p.2–5 · Checkout, ID scan, payments, offline', purpose:'Fast lane checkout. Any 21+ item locks tender until an ID scan passes, and the sale keeps working when the internet drops.', data:['Catalog with category, size, ABV, CRV deposit, age flag','Cart, tax 8.75%, CRV, loyalty member','ID result: DOB, age, expiry, authenticity checks'], build:['Barcode scanner as keyboard wedge + camera fallback','ID SDK (Scandit / IDScan.net) on-device, store result not image','Terminal SDK (PAX, Verifone, Stripe) · offline store-and-forward queue in IndexedDB']},
+  purchasing:{deck:'New · vendor deals + purchase orders', purpose:'For each product, compare every vendor’s price and deal (free cases, discounted extra cases, volume tiers) at the quantity the store actually needs, then group the choices into one PO per vendor.', data:['Vendor price books: case cost, deal rules, minimums, lead time, terms','Forecast need for the next 30 days and daily sales in cases','On-time delivery rate from past POs'], build:['Deal engine: free goods, extra-case %, % tier, $ per case tier','Plan search: every quantity from need to need + 15, rejecting plans with more than 30 days of extra stock','State rules flag deal types that wholesalers may not offer; exclusive-territory brands show one vendor']},
   inventory:{deck:'Deck p.9–10 · Inventory Heat Map + AI Insight', purpose:'Colour shows the state of every SKU; the AI panel turns it into a ranked to-do list.', data:['Days of cover = on hand ÷ forecast daily demand','Reorder point, expiry date, last-sale date, margin','Capital tied up = on hand × cost for overstock'], build:['Nightly + on-sale recalculation of state','Tile size = inventory value (treemap)','Actions create POs, markdowns or transfers']},
   forecast:{deck:'Deck p.8 · AI Business Forecasting', purpose:'Predict demand per SKU and tell the owner when to order and how much.', data:['28 days history, 14 days forecast with confidence band','Drivers: weekday, holidays, weather, local events, promos','Supplier lead time and case pack'], build:['Model service returns point + P10/P90','Recommendation = demand over lead time + safety stock − on hand','One-click draft PO to supplier']},
   invoices:{deck:'Deck p.6 · AI Invoice Processing (8-step flow)', purpose:'Photograph a supplier invoice; AI reads it, matches lines to the catalog and flags price, quantity and damage issues for owner approval.', data:['OCR fields: supplier, invoice #, date, lines, totals','Match confidence per line against catalog','Variance vs last cost and vs purchase order'], build:['Upload to object storage → OCR / document model','Draft inventory update held until owner approves','Approved lines post to inventory and accounting export']},
@@ -666,6 +700,49 @@ const CLAIMS = [
   {no:'CL-2198', sup:'Summit Wine & Spirits', item:'Meiomi Pinot Noir ×4 broken in transit', amt:48.68, st:2},
 ];
 const CLAIM_ST = ['Draft','Submitted','Credit received'];
+/* ---- purchasing: vendor price books (fictional demo vendors) ---- */
+const BUY = [
+  {id:'tito', pid:'tito175', n:"Tito's Handmade Vodka 1.75 L", pack:'case of 6 bottles', need:8, daily:0.27, onHand:'22 bottles', vendors:[
+    {v:'Summit Wine & Spirits', cost:144.60, deal:{k:'free', buy:10, get:1}, lead:3, ontime:95, terms:'Net 15', min:1},
+    {v:'Golden State Beverage', cost:142.20, deal:{k:'extra', buy:10, pct:10}, lead:2, ontime:90, terms:'Net 30', min:1},
+    {v:'Pacific Crest Imports', cost:146.00, deal:{k:'tier', min:15, pct:8}, lead:4, ontime:82, terms:'Cash on delivery', min:5},
+  ]},
+  {id:'tonic', pid:'tonic4', n:'Fever-Tree Tonic 4pk', pack:'case of 6 four-packs', need:2, daily:0.07, onHand:'30 four-packs', vendors:[
+    {v:'Summit Wine & Spirits', cost:27.00, deal:null, lead:3, ontime:95, terms:'Net 15', min:1},
+    {v:'Metro Cash & Carry', cost:25.80, deal:null, lead:0, ontime:100, terms:'Card, you pick up', min:1},
+    {v:'Pacific Crest Imports', cost:26.40, deal:{k:'free', buy:5, get:1}, lead:4, ontime:82, terms:'Cash on delivery', min:1},
+  ]},
+  {id:'bud', pid:'bud12', n:'Bud Light 12pk Cans', pack:'case of 2 twelve-packs', need:57, daily:2.1, onHand:'72 twelve-packs', exclusive:true, vendors:[
+    {v:'Valley Beer Distributing', cost:18.40, deal:{k:'amt', min:50, off:1.00}, lead:2, ontime:96, terms:'Net 7', min:5},
+  ]},
+];
+const dealText = d => !d ? 'No deal' : d.k==='free' ? `Buy ${d.buy} cases, get ${d.get} free` : d.k==='extra' ? `Buy ${d.buy} cases, the next case is ${d.pct}% off` : d.k==='tier' ? `${d.pct}% off every case at ${d.min}+ cases` : `$${d.off.toFixed(2)} off every case at ${d.min}+ cases`;
+function evalDeal(vd, q){ // q = cases you pay full price for
+  const d=vd.deal; let paid=q*vd.cost, got=q, note='';
+  if (d && d.k==='free'){ const f=Math.floor(q/d.buy)*d.get; got+=f; if (f) note=`+${f} free`; }
+  if (d && d.k==='extra'){ const g=Math.floor(q/d.buy); if (g){ got+=g; paid+=g*vd.cost*(1-d.pct/100); note=`+${g} at ${d.pct}% off`; } }
+  if (d && d.k==='tier' && q>=d.min){ paid*=1-d.pct/100; note=`${d.pct}% off`; }
+  if (d && d.k==='amt' && q>=d.min){ paid-=q*d.off; note=`$${d.off.toFixed(2)} off per case`; }
+  return {q, paid, got, eff:paid/got, note};
+}
+function planFor(item, vd, fixedQ){
+  const extraDays = pl => (pl.got-item.need)/item.daily;
+  if (fixedQ!=null){ const pl=evalDeal(vd, Math.max(fixedQ, vd.min)); pl.extra=Math.max(0,extraDays(pl)); return pl; }
+  let best=null, bestDeal=null;
+  for (let q=Math.max(1,vd.min); q<=item.need+15; q++){
+    const pl=evalDeal(vd,q); if (pl.got<item.need) continue; pl.extra=extraDays(pl);
+    if (!bestDeal || pl.eff<bestDeal.eff-0.005) bestDeal=pl;              // cheapest per case, ignoring overstock
+    if (pl.extra<=30 && (!best || pl.eff<best.eff-0.005)) best=pl;       // cheapest per case within 30 days of stock
+  }
+  if (!best) best=evalDeal(vd, Math.max(item.need, vd.min));
+  best.trap = bestDeal && bestDeal.eff<best.eff-0.005 ? bestDeal : null;
+  return best;
+}
+const POS_DATA = [
+  {no:'PO-10241', v:'Valley Beer Distributing', lines:'Modelo 12pk ×20 cases · White Claw ×10 cases', total:612.40, st:'Sent', note:'No reply in 2 days'},
+  {no:'PO-10234', v:'Summit Wine & Spirits', lines:'Casamigos ×12 · Hennessy VS ×12 · 4 more lines', total:1407.20, st:'Partly received', note:'Short 6 Casamigos · invoice HB-58812'},
+  {no:'PO-10228', v:'Golden State Beverage', lines:'Josh Cabernet ×4 cases · Meiomi ×2 cases', total:688.00, st:'Received', note:'Matched to invoice, paid'},
+];
 const S = {
   route:'command', online:true, notes:false,
   cart:[], cat:'All', q:'', id:null, member:null, saleNo:1048,
@@ -677,6 +754,7 @@ const S = {
   clock:'now', refuse:{why:'Appears intoxicated'},
   refusals:[{t:'Thu 11:42 PM', why:'Appears intoxicated', by:'Dev P.', val:41.97},{t:'Thu 7:15 PM', why:'Under 21 (ID scan)', by:'Maria G.', val:24.99},{t:'Wed 9:03 PM', why:'Buying for someone else', by:'Sam R.', val:54.99}],
   winners:null, allocOk:false,
+  buy:'tito', buyQ:null, poTab:'compare', poDraft:[],
   ob:{name:'Wine Wednesday', type:'% off', val:15, target:'Wine', start:'2026-10-07', end:'2026-10-28', days:'Wed', members:false},
   dmg:{pid:'josh750', q:1, why:'Broken in store', where:'Sales floor', disp:'Write off', photo:null},
 };
@@ -687,6 +765,7 @@ const ROUTES = [
   ['command','Command Center','command','Owner'],
   ['register','Register','register','Store'],
   ['inventory','Inventory','inventory','Store'],
+  ['purchasing','Purchasing','truck','Store'],
   ['damage','Damaged Goods','broken','Store'],
   ['compliance','Compliance','shield','Store'],
   ['forecast','Forecasting','forecast','Intelligence'],
@@ -700,6 +779,7 @@ const ROUTES = [
 const TITLES = {
   command:['Good morning','Friday, September 25 · Oak Street Liquor #014'],
   register:['Register · Lane 1','Cashier: Maria G. · Shift opened 8:00 AM'],
+  purchasing:['Purchasing','Compare vendor prices and deals, then build one PO per vendor'],
   inventory:['Inventory Heat Map','1,284 SKUs · $184K on hand'],
   forecast:['Demand Forecast','Next 14 days · updated 5:30 AM'],
   invoices:['AI Invoice Processing','Invoice #HB-58812 · Summit Wine & Spirits'],
@@ -939,7 +1019,7 @@ VIEWS.inventory = () => {
       ${sel ? `<section class="card detail"><div class="cardhead"><h2>${sel[0]}</h2><span class="spacer"></span><span class="chip ${sel[1]}">${L.find(l=>l[0]===sel[1])[1]}</span></div>
         <div class="muted" style="font-size:13px">${sel[2]}</div>
         <dl><dt>On hand</dt><dd>${[72,6,9,40,31,48][S.tile%6]} units</dd><dt>Forecast daily demand</dt><dd>${[19,4,1.8,3,0.2,6][S.tile%6]}</dd><dt>Reorder point</dt><dd>${[80,10,14,24,6,30][S.tile%6]}</dd><dt>Unit cost / retail</dt><dd>$9.10 / $12.99</dd><dt>Last received</dt><dd>Sep 19</dd></dl>
-        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn primary sm" data-go="forecast">View forecast</button><button class="btn sm" data-toast="Draft PO created">Create PO</button><button class="btn sm" data-toast="Markdown scheduled for tomorrow">Mark down</button></div></section>` : ''}
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn primary sm" data-go="forecast">View forecast</button><button class="btn sm" data-go="purchasing">Create PO</button><button class="btn sm" data-toast="Markdown scheduled for tomorrow">Mark down</button></div></section>` : ''}
       <section class="card" data-note="AI action list · prioritized">
         <div class="cardhead"><span class="chip ai">${ic('spark')} AI recommended actions</span></div>
         <div class="actions">
@@ -973,7 +1053,7 @@ VIEWS.forecast = () => {
         <div class="big">Order ${r.cases} cases</div>
         <div style="font-size:13px">${r.qty} ${f.unit} (${f.pack} per case) by <b>${r.by}</b> from ${f.supplier} to cover the next ${f.lead + 7} days.</div>
         <ul><li>Next 7 days demand ≈ <b>${r.week}</b> ${f.unit}</li><li>On hand <b>${f.stock}</b> · lead time <b>${f.lead} days</b></li><li>Safety stock covers a hot weekend (+20%)</li></ul>
-        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" data-toast="Draft PO sent to ${f.supplier}">Create draft PO</button><button class="btn ghost" style="color:#fff;border-color:#3A4B56" data-toast="Recommendation snoozed until tomorrow">Snooze</button></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" data-buygo="${S.fc==='tito175'?'tito':'bud'}">Compare vendors &amp; create PO</button><button class="btn ghost" style="color:#fff;border-color:#3A4B56" data-toast="Recommendation snoozed until tomorrow">Snooze</button></div>
       </section>
       <section class="card" data-note="Forecast drivers · deck p.8">
         <div class="cardhead"><h2>What's driving it</h2></div>
@@ -1103,7 +1183,7 @@ VIEWS.customers = () => {
     </section>
     <section style="display:flex;flex-direction:column;gap:16px;min-width:0">
       <div class="segs" data-note="AI segments from purchase patterns">${segs.map((s,i)=>`<button class="segcard" style="text-align:left;${(S.custSeg??0)===i?'border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)':''}" data-seg="${i}"><span class="chip plain" style="align-self:flex-start">${s[3]}</span><span class="n num">${s[1]}</span><b>${s[0]}</b><span class="muted" style="font-size:12px">${s[2]}</span></button>`).join('')}</div>
-      <div class="card" style="display:grid;grid-template-columns:1fr 240px;gap:20px;align-items:center" data-note="Campaign composer + SMS preview">
+      <div class="card campaign" data-note="Campaign composer + SMS preview">
         <div style="display:flex;flex-direction:column;gap:10px">
           <div class="h2">Campaign · ${seg[0]}</div>
           <div class="muted" style="font-size:13px">${seg[1]} members · only 21+ verified, opted-in members receive alcohol offers.</div>
@@ -1254,6 +1334,65 @@ VIEWS.damage = () => {
 };
 
 const CLOCKS = {now:{t:'10:04 AM', pos:10+4/60, cls:'ok', big:'Alcohol sales allowed', sub:'Until 2:00 AM tonight · 15 h 56 min left'}, soon:{t:'1:58 AM', pos:1+58/60, cls:'soon', big:'Sales stop in 2 minutes', sub:'The register warns the cashier and finishes open sales'}, locked:{t:'2:05 AM', pos:2+5/60, cls:'locked', big:'Alcohol sales locked', sub:'Until 6:00 AM · non-alcohol items still sell'}};
+VIEWS.purchasing = () => {
+  const item = BUY.find(b=>b.id===S.buy), prod = byId(item.pid);
+  const plans = item.vendors.map(vd=>({vd, pl:planFor(item, vd, S.buyQ)}));
+  const best = plans.reduce((a,b)=> b.pl.eff < a.pl.eff-0.005 ? b : a);
+  const fastest = plans.reduce((a,b)=> b.vd.lead < a.vd.lead ? b : a), reliable = plans.reduce((a,b)=> b.vd.ontime > a.vd.ontime ? b : a);
+  const listTotal = best.pl.got*best.vd.cost, save = listTotal-best.pl.paid;
+  const other = plans.filter(x=>x!==best).sort((a,b)=>a.pl.eff-b.pl.eff)[0];
+  const vsOther = other ? (other.pl.eff-best.pl.eff)*best.pl.got : 0;
+  const draftBy = {}; S.poDraft.forEach(l=>{ (draftBy[l.v] ||= []).push(l); });
+  const stc = {Draft:'plain', Sent:'over', 'Partly received':'warn', Received:'ok'};
+  const compare = `
+  <div class="meta3" data-note="Products that need reordering">${BUY.map(b=>`<button class="btn sm ${S.buy===b.id?'primary':''}" data-buy="${b.id}">${b.n}</button>`).join('')}</div>
+  <section class="card buyhead" data-note="Need from the 30-day forecast">
+    <span style="height:110px;display:flex;justify-content:center">${bottleSVG(prod)}</span>
+    <div><h2 style="font-size:19px">${item.n}</h2><div class="muted" style="font-size:13px;margin-top:4px">Sold by the ${item.pack} · on hand ${item.onHand}</div>
+      <div class="meta3" style="margin-top:8px"><span class="chip ai">${ic('spark')} You need ${item.need} cases for the next 30 days</span><span class="chip plain">Sells about ${item.daily<1?`1 case every ${Math.round(1/item.daily)} days`:`${item.daily} cases a day`}</span>${item.exclusive?'<span class="chip warn">One distributor for this brand in your area</span>':''}</div></div>
+    <div class="field">Cases to buy
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="seg"><button class="${S.buyQ==null?'on':''}" data-act="buyai">AI picks</button><button class="${S.buyQ!=null?'on':''}" data-act="buyman">I choose</button></div>
+      ${S.buyQ!=null?`<div class="stepper"><button data-bq="-1" aria-label="Fewer">−</button><span>${S.buyQ}</span><button data-bq="1" aria-label="More">+</button></div>`:''}</div></div>
+  </section>
+  <section class="verdict2" data-note="AI verdict">
+    ${ic('spark','style="width:30px;height:30px;color:#FFA350"')}
+    <div><span class="chip ai" style="margin-bottom:6px">Best buy</span><b class="big">${best.vd.v}: pay for ${best.pl.q}, receive ${best.pl.got} cases</b>
+      <span style="font-size:13px;color:#B9C8D0">${money(best.pl.paid)} total · <b style="color:#fff">${money(best.pl.eff)} per case</b>${best.pl.note?` (${best.pl.note})`:''}. ${save>0.5?`Saves ${money(save)} against the list price. `:''}${vsOther>0.5?`${money(vsOther)} less than ${other.vd.v} for the same ${best.pl.got} cases. `:''}${best.pl.got>item.need?`The ${best.pl.got-item.need} extra cases sell in about ${Math.round(best.pl.extra)} days, so the deal is worth it.`:''}</span></div>
+    <button class="btn primary" data-addpo="${item.vendors.indexOf(best.vd)}">Add to ${best.vd.v.split(' ')[0]} PO</button>
+  </section>
+  <div class="vgrid" data-note="One card per vendor · plan at your quantity">
+    ${plans.map(({vd,pl},i)=>{ const isBest = plans.length>1 && vd===best.vd; return `<article class="vcard ${isBest?'best':''}">
+      <div class="meta3">${isBest?'<span class="chip ok">Lowest cost per case</span>':''}${plans.length>1&&vd===fastest.vd?`<span class="chip over">Fastest · ${vd.lead?vd.lead+' days':'same day'}</span>`:''}${plans.length>1&&vd===reliable.vd?'<span class="chip plain">Most reliable</span>':''}</div>
+      <h3>${vd.v}</h3>
+      <div class="deal ${vd.deal?'':'none'}">${ic(vd.deal?'gift':'tag','style="width:14px;height:14px"')}${dealText(vd.deal)}</div>
+      <dl><dt>List price per case</dt><dd>${money(vd.cost)}</dd><dt>Delivery</dt><dd>${vd.lead?vd.lead+' days':'Pick up today'}</dd><dt>On time</dt><dd>${vd.ontime}%</dd><dt>Terms</dt><dd>${vd.terms}</dd>${vd.min>1?`<dt>Minimum order</dt><dd>${vd.min} cases</dd>`:''}</dl>
+      <div style="border-top:1px solid var(--line);padding-top:10px"><div class="eyebrow" style="margin-bottom:6px">${S.buyQ==null?'Best plan for this vendor':'At your quantity'}</div>
+        <div class="eff">${money(pl.eff)} <small>per case</small></div>
+        <div class="muted" style="font-size:12.5px;margin-top:4px">Pay for <b style="color:var(--ink)">${pl.q}</b> · receive <b style="color:var(--ink)">${pl.got}</b>${pl.note?` (${pl.note})`:''} · total <b class="num" style="color:var(--ink)">${money(pl.paid)}</b></div>
+        ${pl.extra>30?`<div class="trap" style="margin-top:8px">${Math.round(pl.extra)} days of extra stock. Cash sits on the shelf.</div>`:''}
+        ${pl.trap?`<div class="trap" style="margin-top:8px">Deal skipped: buying ${pl.trap.q} to get ${pl.trap.got} drops the price to ${money(pl.trap.eff)} a case, but leaves ${pl.trap.got-item.need} extra cases, about ${Math.round(pl.trap.extra)} days of stock.</div>`:''}
+        ${vd.deal&&vd.deal.k==='free'?'<div class="muted" style="font-size:11.5px;margin-top:6px">Free-goods deal · checked against state rules</div>':''}</div>
+      <button class="btn ${isBest?'primary':''}" data-addpo="${i}">Add ${pl.got} cases to PO</button>
+    </article>`;}).join('')}
+  </div>`;
+  const orders = `
+  <div class="pogrid">
+    <section class="card" data-note="Draft POs · one per vendor">
+      <div class="cardhead"><h2>Draft POs</h2><span class="chip plain">${Object.keys(draftBy).length} vendors</span></div>
+      ${Object.keys(draftBy).length ? Object.entries(draftBy).map(([v,ls])=>{ const tot=ls.reduce((a,l)=>a+l.paid,0), sv=ls.reduce((a,l)=>a+l.save,0); return `<div style="border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px">
+        <div class="pohead"><div><b>${esc(v)}</b><div class="muted" style="font-size:12px">Draft · approve before sending</div></div><span class="num" style="font-weight:800">${money(tot)}</span></div>
+        ${ls.map(l=>`<div class="rule" style="padding:6px 0">${ic('box')}<div><b>${esc(l.n)}</b><small>Pay for ${l.q} · receive ${l.got} cases${l.note?` · ${l.note}`:''}</small></div><span class="num">${money(l.paid)}</span></div>`).join('')}
+        <div style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap">${sv>0.5?`<span class="chip ok">Deals save ${money(sv)}</span>`:''}<span class="spacer" style="flex:1"></span><button class="btn sm" data-podel="${esc(v)}">Delete</button><button class="btn sm primary" data-posend="${esc(v)}">Approve &amp; send</button></div></div>`; }).join('')
+        : `<div class="empty">No drafts yet. Compare vendors and add the best buy.</div>`}
+    </section>
+    <section class="card" data-note="PO tracker · Sent → Received">
+      <div class="cardhead"><h2>Purchase orders</h2></div>
+      ${POS_DATA.map(o=>`<div class="rule">${ic('truck')}<div><b>${o.no} · ${esc(o.v)}</b><small>${esc(o.lines)}</small><small>${esc(o.note)}</small></div><div style="text-align:right"><span class="chip ${stc[o.st]}">${o.st}</span><div class="num" style="margin-top:4px">${money(o.total)}</div>${o.st==='Partly received'?'<button class="btn sm" data-go="invoices" style="margin-top:4px">Open invoice</button>':''}</div></div>`).join('')}
+    </section>
+  </div>`;
+  return `<div class="seg" style="align-self:flex-start"><button class="${S.poTab==='compare'?'on':''}" data-potab="compare">Compare vendors</button><button class="${S.poTab==='orders'?'on':''}" data-potab="orders">Purchase orders ${S.poDraft.length?`(${Object.keys(draftBy).length} draft)`:''}</button></div>` + (S.poTab==='compare'?compare:orders);
+};
+
 VIEWS.compliance = () => {
   const c = CLOCKS[S.clock];
   const cashiers = [['Maria G.',212,'100%',0,100],['Sam R.',140,'99%',0,98],['Dev P.',188,'96%',2,91]];
@@ -1444,7 +1583,7 @@ function charge(){
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-alloc],[data-rf],[data-clock],[data-draw]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-alloc],[data-rf],[data-clock],[data-draw],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -1476,6 +1615,16 @@ document.addEventListener('click', e => {
   if (d.dw){ S.dmg.why=d.dw; if (d.dw==='Received damaged') S.dmg.disp='Supplier claim'; if (d.dw==='Dented packaging') S.dmg.disp='Sell at 30% off'; render(); return; }
   if (d.dd){ S.dmg.disp=d.dd; render(); return; }
   if (d.claim){ const c=CLAIMS[+d.claim]; c.st++; if (c.st===2) S.done.add(5); render(); toast(c.st===1?`${c.no} sent to ${c.sup}`:`${money(c.amt)} credit recorded`); return; }
+  if (d.buy){ S.buy=d.buy; S.buyQ=null; render(); return; }
+  if (d.buygo){ S.buy=d.buygo; S.buyQ=null; S.poTab='compare'; go('purchasing'); return; }
+  if (d.bq){ S.buyQ=Math.max(1,S.buyQ+ +d.bq); render(); return; }
+  if (d.potab){ S.poTab=d.potab; render(); return; }
+  if (d.addpo){ const item=BUY.find(b=>b.id===S.buy), vd=item.vendors[+d.addpo], pl=planFor(item, vd, S.buyQ);
+    S.poDraft=S.poDraft.filter(l=>l.item!==item.id);
+    S.poDraft.push({item:item.id, v:vd.v, n:item.n, q:pl.q, got:pl.got, paid:pl.paid, note:pl.note, save:pl.got*vd.cost-pl.paid});
+    render(); toast(`${pl.got} cases added to the ${vd.v} draft PO`); return; }
+  if (d.podel){ S.poDraft=S.poDraft.filter(l=>l.v!==d.podel); render(); return; }
+  if (d.posend){ const ls=S.poDraft.filter(l=>l.v===d.posend); POS_DATA.unshift({no:'PO-'+(10242+POS_DATA.length), v:d.posend, lines:ls.map(l=>`${l.n} ×${l.got} cases`).join(' · '), total:ls.reduce((a,l)=>a+l.paid,0), st:'Sent', note:'Sent by email just now'}); S.poDraft=S.poDraft.filter(l=>l.v!==d.posend); render(); toast('PO sent to '+d.posend); return; }
   if (d.swap){ swapModal(d.swap); return; }
   if (d.alloc){ S.allocOk=false; allocModal(); return; }
   if (d.rf){ S.refuse.why=d.rf; refuseModal(); return; }
@@ -1499,6 +1648,8 @@ document.addEventListener('click', e => {
     case 'allocscan': S.allocOk=true; allocModal(); break;
     case 'allocadd': { const l=S.cart.find(x=>x.id==='blanton'); if(!l) S.cart.push({id:'blanton',qty:1}); S.member='Jordan D.'; closeModal(); render(); toast('Allocated bottle added · limit recorded'); break; }
     case 'report': reportModal(); break;
+    case 'buyai': S.buyQ=null; render(); break;
+    case 'buyman': if (S.buyQ==null) S.buyQ=BUY.find(b=>b.id===S.buy).need; render(); break;
     case 'obmem': S.ob.members=!S.ob.members; render(); break;
     case 'obsave': OFFERS.unshift({id:'n'+Date.now(), n:S.ob.name||'New offer', type:S.ob.type, rule:`${S.ob.type==='% off'?S.ob.val+'% off':S.ob.type==='$ off'?'$'+S.ob.val+' off':S.ob.type} · ${S.ob.target}${S.ob.members?' · members only':''}`, sched:`${S.ob.days} · ${S.ob.start.slice(5)} to ${S.ob.end.slice(5)}`, status:d.v, red:0, goal:0, disc:0}); render(); toast(d.v==='Draft'?'Offer saved as draft':'Offer scheduled'); break;
     case 'dmgsave': { const f=S.dmg, p=byId(f.pid), cost=Math.round(p.p*0.66*f.q*100)/100;

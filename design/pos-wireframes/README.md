@@ -10,6 +10,7 @@ All figures are demo data.
 | --- | --- | --- |
 | Command Center | p.11 | KPI strip, AI "5 things today" list; every item links to the screen that fixes it |
 | Register | p.2–5 | Product cards with drawn bottle art, category counts, AI add-on suggestions, sold-out swap to the best alternative, allocated-bottle winner check, one-tap refuse sale, after-hours lock. Add items, offers applied automatically, line or whole-sale discounts (manager PIN over 15%, blocked over 30% so alcohol never sells below cost), 21+ lock, ID scan (pass and underage demo), card / tap / cash / split tender, CRV + tax |
+| Purchasing | New | Compare vendors per product: price, deal (free cases, discounted extra case, volume tiers), delivery, reliability, terms. AI picks the quantity with the lowest cost per case without more than 30 days of extra stock, flags deal traps, and builds one draft PO per vendor. PO tracker |
 | Damaged Goods | p.7 (extended) | Report breakage / expiry / returns with photo, stock adjusts, supplier claims move Draft → Submitted → Credited, damage log, loss pattern |
 | Compliance | New | Legal sale-hours timeline with demo clock (locks the register after 2 AM), rules the register enforces, cashier scorecard, refusal log, inspection report |
 | Inventory | p.9–10 | Heat map filtered by state, tile detail, AI action list |
