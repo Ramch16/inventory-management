@@ -159,6 +159,10 @@ body.notes [data-note]::after{content:attr(data-note);position:absolute;top:-10p
 .prod .price{font:800 23px/1 var(--display);color:var(--accent);margin-top:8px;display:flex;align-items:baseline;gap:8px}
 .prod .price small{font:600 11px/1 var(--body);color:var(--muted)}
 .prod .price small.low{color:var(--warn)}
+.stockpill{display:inline-flex;align-items:center;gap:5px;align-self:flex-start;margin-top:6px;font:700 11.5px/1 var(--body);border-radius:7px;padding:4px 8px}
+.stockpill svg{width:12px;height:12px}
+.stockpill b{font-family:var(--mono)}
+.stockpill.ok{background:var(--ok-soft);color:var(--ok)} .stockpill.low{background:var(--warn-soft);color:var(--warn)} .stockpill.out{background:var(--crit-soft);color:var(--crit)}
 .prod .badges{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px;min-height:18px}
 .prod.out .art{filter:grayscale(1) opacity(.45)}
 .prod.out .price{color:var(--muted)}
@@ -1271,13 +1275,14 @@ VIEWS.register = () => {
   const inCart = new Set(S.cart.map(l=>l.id)), sugg=[];
   for (const l of S.cart) for (const [id,why] of (PAIRS[l.id]||[])) if (!inCart.has(id) && !sugg.some(x=>x[0]===id)) sugg.push([id,why]);
   const count = c => PRODUCTS.filter(p=>c==='All'||p.cat===c).length;
-  const card = p => { const o=offerFor(p), out=!p.stock, lk=locked&&p.r;
+  const card = p => { const o=offerFor(p), out=!p.stock, lk=locked&&p.r, inC=(S.cart.find(l=>l.id===p.id)||{}).qty||0, avail=Math.max(0,p.stock-inC);
     const act = out ? `data-swap="${p.id}"` : `data-add="${p.id}"`;
     return `<button class="prod ${out?'out':''} ${lk?'lock':''}" ${act}>
       <span class="art">${bottleSVG(p)}</span>
       <span class="info"><span class="badges">${p.r?'<span class="chip age">21+</span>':''}${o&&!out?`<span class="otag">${o.tag}</span>`:''}${out?'<span class="stag">Sold out · swap</span>':''}${lk?`<span class="stag">${ic('lock','style="width:10px;height:10px"')} After hours</span>`:''}</span>
       <span class="nm">${p.n}</span><span class="meta">${p.sz}${p.abv?` · ${p.abv}% ABV`:''}</span>
-      <span class="price">${money(p.p)}${out?'<small>0 left</small>':p.stock<=12?`<small class="low">${p.stock} left</small>`:''}</span></span>
+      <span class="price">${money(p.p)}</span>
+      <span class="stockpill ${out||!avail?'out':avail<=12?'low':'ok'}" title="Quantity left in inventory">${ic('box')}${out?'Out of stock':!avail?'All in this order':avail<=12?`Only <b>${avail}</b> left`:`<b>${avail}</b> in stock`}${inC&&!out?` · ${inC} in order`:''}</span></span>
     </button>`; };
   return `
   ${S.online ? '' : `<div class="offbanner">${ic('wifioff')} Internet is down. Sales keep working: cards are stored securely and upload when the connection returns (limit $250 per sale).</div>`}
@@ -1298,7 +1303,7 @@ VIEWS.register = () => {
       ${idState}
       <div class="lines">${S.cart.length ? S.cart.map(l=>{const p=byId(l.id); const lt=p.p*l.qty*(1-(l.disc||0)/100); return `<div class="line">
         <span class="thumb">${bottleSVG(p)}</span>
-        <div style="min-width:0"><div class="ln">${p.n}</div><div class="lm">${p.sz}${p.crv?` · CRV ${money(p.crv)}`:''}</div>${l.disc?`<div class="ldisc">−${l.disc}% · ${esc(l.reason)}</div>`:''}<div class="lp">${money(lt)}</div></div>
+        <div style="min-width:0"><div class="ln">${p.n}</div><div class="lm">${p.sz}${p.crv?` · CRV ${money(p.crv)}`:''} · <span style="color:${p.stock-l.qty<=12?'var(--warn)':'inherit'}">${Math.max(0,p.stock-l.qty)} left after sale</span></div>${l.disc?`<div class="ldisc">−${l.disc}% · ${esc(l.reason)}</div>`:''}<div class="lp">${money(lt)}</div></div>
         <div class="qty"><button data-dec="${p.id}" aria-label="Remove one">−</button>${l.qty}<button data-add="${p.id}" aria-label="Add one">+</button></div></div>`}).join('') : `<div class="empty">${ic('scan','style="width:30px;height:30px"')}<br>Scan or tap a product to start the order.</div>`}</div>
       ${sugg.length ? `<div class="pairs" data-note="Counter AI · add-on suggestions"><span class="eyebrow" style="color:var(--violet)">${ic('spark','style="width:12px;height:12px;vertical-align:-2px"')} Suggest to customer</span>${sugg.slice(0,2).map(([id,why])=>{const x=byId(id); return `<div class="pair"><span class="thumb">${bottleSVG(x)}</span><div><b>${x.n}</b> · ${money(x.p)}<small>${why}</small></div><button class="btn sm" data-add="${id}">+ Add</button></div>`;}).join('')}</div>` : ''}
       <div class="totals">
@@ -2418,7 +2423,7 @@ function payModal(phase='choose'){
 }
 function charge(){
   payModal('wait');
-  setTimeout(()=>{ if (!S.online) S.queue.push({no:S.saleNo, amt:Math.round(totals().total*100)/100, t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), card:'Visa ·· 4412'}); payModal('done'); renderRail(); renderTop(); }, payMethod==='cash'?300:1400);
+  setTimeout(()=>{ S.cart.forEach(l=>{ const pr=byId(l.id); pr.stock=Math.max(0,pr.stock-l.qty); }); if (!S.online) S.queue.push({no:S.saleNo, amt:Math.round(totals().total*100)/100, t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), card:'Visa ·· 4412'}); payModal('done'); renderRail(); renderTop(); }, payMethod==='cash'?300:1400);
 }
 
 function startDealRead(){ S.dealSheet='reading'; S.dealRows=SHEET.rows.map(()=>'review'); render(); setTimeout(()=>{ S.dealSheet='done'; render(); toast('5 lines read · 2 deals worth taking','spark'); }, 1400); }
@@ -2490,7 +2495,7 @@ document.addEventListener('click', e => {
   if ('scrim' in d || 'close' in d){ closeModal(); if (S.route==='register') render(); return; }
   if (d.go){ e.preventDefault(); if (el.dataset.potabGo) S.poTab = el.dataset.potabGo==='1' ? 'orders' : el.dataset.potabGo; go(d.go); return; }
   if (d.add && S.clock==='locked' && byId(d.add).r){ toast('Alcohol sales are locked until 6:00 AM','lock'); return; }
-  if (d.add){ const l=S.cart.find(x=>x.id===d.add); l?l.qty++:S.cart.push({id:d.add,qty:1}); render(); return; }
+  if (d.add){ const pr=byId(d.add), l=S.cart.find(x=>x.id===d.add); if ((l?l.qty:0) >= pr.stock){ toast(pr.stock?`Only ${pr.stock} ${pr.n} in stock`:`${pr.n} is out of stock`,'alert'); return; } l?l.qty++:S.cart.push({id:d.add,qty:1}); render(); return; }
   if (d.dec){ const l=S.cart.find(x=>x.id===d.dec); if(l && --l.qty<=0) S.cart=S.cart.filter(x=>x!==l); if(!S.cart.some(x=>byId(x.id).r)) S.id=null; render(); return; }
   if (d.cat){ S.cat=d.cat; render(); return; }
   if (d.heat){ S.heat = S.heat===d.heat ? null : d.heat; render(); return; }
