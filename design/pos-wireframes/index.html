@@ -681,13 +681,14 @@ const ALERTS = [
   {id:4, t:'supplier', sev:'warn', ic:'mail', h:'Purchase order follow-up', p:'Valley Beer Distributing has not responded to PO #10241 (sent 2 days ago).', when:'8:00 AM', acts:['Draft follow-up','Mark confirmed']},
   {id:5, t:'damage', sev:'crit', ic:'alert', h:'Damage follow-up', p:'7 units were reported damaged. Supplier credit or claim has not been recorded.', when:'Yesterday', acts:['File claim','Open claim'], go:'damage'},
   {id:6, t:'stock', sev:'warn', ic:'cal', h:'Product expiry', p:'32 units will expire within 30 days, mostly hard seltzer and craft IPA.', when:'Yesterday', acts:['Create markdown','View items'], go:'inventory'},
+  {id:8, t:'deal', sev:'info', ic:'gift', h:'Vendor deal ending soon', p:'Summit’s “buy 10 cases, get 1 free” on Tito’s 1.75 L ends Oct 31. You reorder within 2 weeks anyway, so ordering now saves $144.60.', when:'8:30 AM', acts:['Mark seen','Compare vendors'], buygo:'tito'},
   {id:7, t:'money', sev:'info', ic:'tag', h:'Price change', p:'Supplier price for Meiomi Pinot Noir increased 8.5% compared with the previous invoice.', when:'Yesterday', acts:['Update retail price','Keep price'], go:'invoices'},
 ];
 
 const NOTES = {
   command:{deck:'Deck p.11 · AI Owner Command Center', purpose:'One morning view for the owner: today\'s numbers plus the five things that need attention, each linking to the screen that fixes it.', data:['Sales, margin, inventory value (POS + inventory service)','Priority feed ranked by $ impact and urgency','Hourly sales with an AI projection for the rest of the day'], build:['GET /dashboard/today','GET /ai/priorities?limit=5','Push refresh every 5 min; owner and manager roles only']},
   register:{deck:'Deck p.2–5 · Checkout, ID scan, payments, offline', purpose:'Fast lane checkout. Any 21+ item locks tender until an ID scan passes, and the sale keeps working when the internet drops.', data:['Catalog with category, size, ABV, CRV deposit, age flag','Cart, tax 8.75%, CRV, loyalty member','ID result: DOB, age, expiry, authenticity checks'], build:['Barcode scanner as keyboard wedge + camera fallback','ID SDK (Scandit / IDScan.net) on-device, store result not image','Terminal SDK (PAX, Verifone, Stripe) · offline store-and-forward queue in IndexedDB']},
-  purchasing:{deck:'New · vendor deals + purchase orders', purpose:'For each product, compare every vendor’s price and deal (free cases, discounted extra cases, volume tiers) at the quantity the store actually needs, then group the choices into one PO per vendor.', data:['Vendor price books: case cost, deal rules, minimums, lead time, terms','Forecast need for the next 30 days and daily sales in cases','On-time delivery rate from past POs'], build:['Deal engine: free goods, extra-case %, % tier, $ per case tier','Plan search: every quantity from need to need + 15, rejecting plans with more than 30 days of extra stock','State rules flag deal types that wholesalers may not offer; exclusive-territory brands show one vendor']},
+  purchasing:{deck:'New · vendor deals + purchase orders', purpose:'Deals arrive by deal-sheet upload, forwarded rep email, vendor portal or state price posting; AI turns each into a rule and says if it’s worth it. For each product, compare every vendor’s price and deal (free cases, discounted extra cases, volume tiers) at the quantity the store actually needs, then group the choices into one PO per vendor.', data:['Vendor price books: case cost, deal rules, minimums, lead time, terms','Forecast need for the next 30 days and daily sales in cases','On-time delivery rate from past POs'], build:['Deal engine: free goods, extra-case %, % tier, $ per case tier','Plan search: every quantity from need to need + 15, rejecting plans with more than 30 days of extra stock','State rules flag deal types that wholesalers may not offer; exclusive-territory brands show one vendor']},
   inventory:{deck:'Deck p.9–10 · Inventory Heat Map + AI Insight', purpose:'Colour shows the state of every SKU; the AI panel turns it into a ranked to-do list.', data:['Days of cover = on hand ÷ forecast daily demand','Reorder point, expiry date, last-sale date, margin','Capital tied up = on hand × cost for overstock'], build:['Nightly + on-sale recalculation of state','Tile size = inventory value (treemap)','Actions create POs, markdowns or transfers']},
   assortment:{deck:'New · dead stock + best sellers (extends deck p.9–10)', purpose:'Find products that no longer sell, clear them, and replace them with products that sell in similar stores. Rank best sellers and warn before they run out.', data:['Days since last sale, units on hand, cash tied up, shelf location','Replacement: same shelf and price band, sales in similar stores, margin, vendor','Best sellers by units, revenue or profit for 7 / 30 / 90 days, trend, days of cover'], build:['Dead stock rule: no sale in 60+ days (owner can change it)','Replacement engine: category + price band + local market sales + this store’s basket data','One tap creates a clearance offer and a trial-case draft PO']},
   forecast:{deck:'Deck p.8 · AI Business Forecasting', purpose:'Predict demand per SKU and tell the owner when to order and how much.', data:['28 days history, 14 days forecast with confidence band','Drivers: weekday, holidays, weather, local events, promos','Supplier lead time and case pack'], build:['Model service returns point + P10/P90','Recommendation = demand over lead time + safety stock − on hand','One-click draft PO to supplier']},
@@ -732,17 +733,17 @@ const CLAIM_ST = ['Draft','Submitted','Credit received'];
 /* ---- purchasing: vendor price books (fictional demo vendors) ---- */
 const BUY = [
   {id:'tito', pid:'tito175', n:"Tito's Handmade Vodka 1.75 L", pack:'case of 6 bottles', need:8, daily:0.27, onHand:'22 bottles', vendors:[
-    {v:'Summit Wine & Spirits', cost:144.60, deal:{k:'free', buy:10, get:1}, lead:3, ontime:95, terms:'Net 15', min:1},
-    {v:'Golden State Beverage', cost:142.20, deal:{k:'extra', buy:10, pct:10}, lead:2, ontime:90, terms:'Net 30', min:1},
-    {v:'Pacific Crest Imports', cost:146.00, deal:{k:'tier', min:15, pct:8}, lead:4, ontime:82, terms:'Cash on delivery', min:5},
+    {v:'Summit Wine & Spirits', cost:144.60, deal:{k:'free', buy:10, get:1, src:'October deal sheet (PDF)', ends:'Oct 31'}, lead:3, ontime:95, terms:'Net 15', min:1},
+    {v:'Golden State Beverage', cost:142.20, deal:{k:'extra', buy:10, pct:10, src:'Posted by rep in vendor portal', ends:'Oct 15'}, lead:2, ontime:90, terms:'Net 30', min:1},
+    {v:'Pacific Crest Imports', cost:146.00, deal:{k:'tier', min:15, pct:8, src:'Rep email, forwarded', ends:'Nov 30'}, lead:4, ontime:82, terms:'Cash on delivery', min:5},
   ]},
   {id:'tonic', pid:'tonic4', n:'Fever-Tree Tonic 4pk', pack:'case of 6 four-packs', need:2, daily:0.07, onHand:'30 four-packs', vendors:[
     {v:'Summit Wine & Spirits', cost:27.00, deal:null, lead:3, ontime:95, terms:'Net 15', min:1},
     {v:'Metro Cash & Carry', cost:25.80, deal:null, lead:0, ontime:100, terms:'Card, you pick up', min:1},
-    {v:'Pacific Crest Imports', cost:26.40, deal:{k:'free', buy:5, get:1}, lead:4, ontime:82, terms:'Cash on delivery', min:1},
+    {v:'Pacific Crest Imports', cost:26.40, deal:{k:'free', buy:5, get:1, src:'Rep email, forwarded', ends:'Oct 20'}, lead:4, ontime:82, terms:'Cash on delivery', min:1},
   ]},
   {id:'bud', pid:'bud12', n:'Bud Light 12pk Cans', pack:'case of 2 twelve-packs', need:57, daily:2.1, onHand:'72 twelve-packs', exclusive:true, vendors:[
-    {v:'Valley Beer Distributing', cost:18.40, deal:{k:'amt', min:50, off:1.00}, lead:2, ontime:96, terms:'Net 7', min:5},
+    {v:'Valley Beer Distributing', cost:18.40, deal:{k:'amt', min:50, off:1.00, src:'State price posting', ends:'Oct 31'}, lead:2, ontime:96, terms:'Net 7', min:5},
   ]},
 ];
 const dealText = d => !d ? 'No deal' : d.k==='free' ? `Buy ${d.buy} cases, get ${d.get} free` : d.k==='extra' ? `Buy ${d.buy} cases, the next case is ${d.pct}% off` : d.k==='tier' ? `${d.pct}% off every case at ${d.min}+ cases` : `$${d.off.toFixed(2)} off every case at ${d.min}+ cases`;
@@ -766,6 +767,22 @@ function planFor(item, vd, fixedQ){
   if (!best) best=evalDeal(vd, Math.max(item.need, vd.min));
   best.trap = bestDeal && bestDeal.eff<best.eff-0.005 ? bestDeal : null;
   return best;
+}
+const SHEET = {file:'Summit Wine & Spirits · October 2026 deals.pdf', vendor:'Summit Wine & Spirits', pages:2, rows:[
+  {prod:"Tito's Handmade Vodka 1.75 L", raw:'TITOS 1.75L 6PK  BUY 10 GET 1 FREE', deal:'Buy 10 cases, get 1 free', dates:'Oct 1 – 31', conf:99, v:'ok', vt:'Worth it: saves $144.60 on your next order', buy:'tito'},
+  {prod:'Casamigos Blanco 750 ml', raw:'CASAMIGOS BLNC 750 12PK  $4/CS OFF 3CS+', deal:'$4 off every case at 3+ cases', dates:'Oct 1 – 31', conf:96, v:'ok', vt:'Worth it: 3 cases sell in about 3 weeks, saves $12'},
+  {prod:'Hennessy VS Cognac 750 ml', raw:'HENN VS 750 12PK  5% 5CS+', deal:'5% off every case at 5+ cases', dates:'Oct 1 – 31', conf:95, v:'warn', vt:'Skip: 5 cases is about 70 days of stock for you'},
+  {prod:'Meiomi Pinot Noir 750 ml', raw:'MEIOMI PN 750  NEW FRONTLINE $158.40/CS', deal:'Price increase: case cost up 8.5%', dates:'From Oct 1', conf:97, v:'crit', vt:'Not a deal. Review your shelf price'},
+  {prod:'RumChata 750 ml', raw:'RUMCHATA 750 12PK  BUY 5 GET 1', deal:'Buy 5 cases, get 1 free', dates:'Oct 1 – 31', conf:92, v:'plain', vt:'You don’t sell this product'},
+]};
+const DEAL_V = {ok:['ok','Worth it'], warn:['warn','Skip'], crit:['crit','Price up'], plain:['plain','Not stocked']};
+function dealVerdict(item, vd){
+  const pl = planFor(item, vd, null), save = pl.got*vd.cost - pl.paid;
+  const best = item.vendors.map(v=>({v, pl:planFor(item, v, null)})).reduce((a,b)=> b.pl.eff < a.pl.eff-0.005 ? b : a);
+  if (pl.note && save>0.5 && best.v!==vd) return {cls:'warn', t:`Saves ${money(save)}, but ${best.v.v.split(' ')[0]} is cheaper per case`};
+  if (pl.note && save>0.5) return {cls:'ok', t:`Best deal: saves ${money(save)}`};
+  if (pl.trap) return {cls:'warn', t:`Skip: ${Math.round(pl.trap.extra)} days of extra stock`};
+  return {cls:'plain', t:'Doesn’t help at your quantity'};
 }
 const POS_DATA = [
   {no:'PO-10241', v:'Valley Beer Distributing', lines:'Modelo 12pk ×20 cases · White Claw ×10 cases', total:612.40, st:'Sent', note:'No reply in 2 days'},
@@ -826,6 +843,7 @@ const S = {
   clock:'now', refuse:{why:'Appears intoxicated'},
   refusals:[{t:'Thu 11:42 PM', why:'Appears intoxicated', by:'Dev P.', val:41.97},{t:'Thu 7:15 PM', why:'Under 21 (ID scan)', by:'Maria G.', val:24.99},{t:'Wed 9:03 PM', why:'Buying for someone else', by:'Sam R.', val:54.99}],
   tour:null,
+  dealSheet:null, dealRows:SHEET.rows.map(()=>'review'), dealsAdded:[],
   shelfTab:'dead', swapDone:[], bestBy:'profit', bestPer:'30',
   idPolicy:'u40', idMethod:null, man:{dob:'', reason:"Barcode won't scan", type:'Driver licence', pin:''},
   idLog:[{t:'Fri 9:12 AM', how:'Clearly over 40 (by eye)', by:'Maria G.', ok:'—', k:'visual'},{t:'Thu 8:40 PM', how:'Date of birth typed in · passport', by:'Dev P.', ok:'Alex K.', k:'manual'},{t:'Thu 6:05 PM', how:"Date of birth typed in · barcode won't scan", by:'Dev P.', ok:'Alex K.', k:'manual'}],
@@ -994,7 +1012,12 @@ VIEWS.command = () => {
       </ul>
       <div class="muted" style="font-size:12px;margin-top:10px">412 transactions · avg basket <b class="num" style="color:var(--ink)">$60.24</b> · 38 ID scans declined 2</div>
     </section>
-  </div>`;
+  </div>
+  <section class="card" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap" data-note="Weekly vendor deals summary">
+    <span class="chip ai">${ic('gift')} Vendor deals this week</span>
+    <div style="flex:1;min-width:220px;font-size:13.5px"><b>5 new deals, 2 worth taking, saving about $157.</b> One deal is really a price increase (Meiomi +8.5%).</div>
+    <button class="btn primary sm" data-go="purchasing" data-potab-go="deals">Review deals</button>
+  </section>`;
 };
 
 VIEWS.register = () => {
@@ -1230,7 +1253,7 @@ VIEWS.invoices = () => {
 };
 
 VIEWS.alerts = () => {
-  const F = [['all','All'],['stock','Inventory'],['supplier','Suppliers'],['money','Payments & price'],['damage','Damage']];
+  const F = [['all','All'],['stock','Inventory'],['supplier','Suppliers'],['deal','Vendor deals'],['money','Payments & price'],['damage','Damage']];
   const list = ALERTS.filter(a => S.alertFilter==='all' || a.t===S.alertFilter);
   const col = {crit:['var(--crit-soft)','var(--crit)'],warn:['var(--warn-soft)','var(--warn)'],info:['var(--over-soft)','var(--over)']};
   return `
@@ -1239,7 +1262,7 @@ VIEWS.alerts = () => {
     ${list.map(a=>`<article class="alert ${S.done.has(a.id)?'done':''}">
       <span class="ic" style="background:${col[a.sev][0]};color:${col[a.sev][1]}">${ic(a.ic)}</span>
       <div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><h3>${a.h}</h3><span class="when">${a.when}</span>${S.done.has(a.id)?'<span class="chip ok">Resolved</span>':''}</div><p>${a.p}</p></div>
-      <div class="acts">${S.done.has(a.id)?`<button class="btn sm ghost" data-undo="${a.id}">Reopen</button>`:`<button class="btn sm primary" data-resolve="${a.id}" data-msg="${a.acts[0]}">${a.acts[0]}</button>${a.go?`<button class="btn sm" data-go="${a.go}">${a.acts[1]}</button>`:`<button class="btn sm" data-resolve="${a.id}" data-msg="${a.acts[1]}">${a.acts[1]}</button>`}`}</div>
+      <div class="acts">${S.done.has(a.id)?`<button class="btn sm ghost" data-undo="${a.id}">Reopen</button>`:`<button class="btn sm primary" data-resolve="${a.id}" data-msg="${a.acts[0]}">${a.acts[0]}</button>${a.buygo?`<button class="btn sm" data-buygo="${a.buygo}">${a.acts[1]}</button>`:a.go?`<button class="btn sm" data-go="${a.go}">${a.acts[1]}</button>`:`<button class="btn sm" data-resolve="${a.id}" data-msg="${a.acts[1]}">${a.acts[1]}</button>`}`}</div>
     </article>`).join('')}
   </div>`;
 };
@@ -1436,7 +1459,7 @@ VIEWS.assortment = () => {
       <ul class="why">${d.why.map(w=>`<li>${ic('check')}${w}</li>`).join('')}</ul>
       <div class="act"><div class="gain">+${money(newProfit(d),0)} <small>profit / month</small></div>
         <div class="clear">Clear old stock: ${d.clear}</div>
-        ${done?`<span class="chip ok">${ic('check','style="width:12px;height:12px"')} Clearance live · trial case in draft PO</span><button class="btn sm" data-go="purchasing" data-potab-go="1">Open draft PO</button>`
+        ${done?`<span class="chip ok">${ic('check','style="width:12px;height:12px"')} Clearance live · trial case in draft PO</span><button class="btn sm" data-go="purchasing" data-potab-go="orders">Open draft PO</button>`
               :`<button class="btn primary" data-swapgo="${d.id}">Start swap</button><button class="btn sm ghost" data-toast="Kept. Bevnetic will check again in 30 days">Keep for now</button>`}</div>
     </article>`;}).join('')}
   </div>
@@ -1503,6 +1526,7 @@ VIEWS.purchasing = () => {
         <div class="muted" style="font-size:12.5px;margin-top:4px">Pay for <b style="color:var(--ink)">${pl.q}</b> · receive <b style="color:var(--ink)">${pl.got}</b>${pl.note?` (${pl.note})`:''} · total <b class="num" style="color:var(--ink)">${money(pl.paid)}</b></div>
         ${pl.extra>30?`<div class="trap" style="margin-top:8px">${Math.round(pl.extra)} days of extra stock. Cash sits on the shelf.</div>`:''}
         ${pl.trap?`<div class="trap" style="margin-top:8px">Deal skipped: buying ${pl.trap.q} to get ${pl.trap.got} drops the price to ${money(pl.trap.eff)} a case, but leaves ${pl.trap.got-item.need} extra cases, about ${Math.round(pl.trap.extra)} days of stock.</div>`:''}
+        ${vd.deal&&vd.deal.src?`<div class="muted" style="font-size:11.5px;margin-top:6px">${ic('mail','style="width:12px;height:12px;vertical-align:-2px"')} From ${vd.deal.src} · ends ${vd.deal.ends}</div>`:''}
         ${vd.deal&&vd.deal.k==='free'?'<div class="muted" style="font-size:11.5px;margin-top:6px">Free-goods deal · checked against state rules</div>':''}</div>
       <button class="btn ${isBest?'primary':''}" data-addpo="${i}">Add ${pl.got} cases to PO</button>
     </article>`;}).join('')}
@@ -1522,7 +1546,46 @@ VIEWS.purchasing = () => {
       ${POS_DATA.map(o=>`<div class="rule">${ic('truck')}<div><b>${o.no} · ${esc(o.v)}</b><small>${esc(o.lines)}</small><small>${esc(o.note)}</small></div><div style="text-align:right"><span class="chip ${stc[o.st]}">${o.st}</span><div class="num" style="margin-top:4px">${money(o.total)}</div>${o.st==='Partly received'?'<button class="btn sm" data-go="invoices" style="margin-top:4px">Open invoice</button>':''}</div></div>`).join('')}
     </section>
   </div>`;
-  return `<div class="seg" style="align-self:flex-start"><button class="${S.poTab==='compare'?'on':''}" data-potab="compare">Compare vendors</button><button class="${S.poTab==='orders'?'on':''}" data-potab="orders">Purchase orders ${S.poDraft.length?`(${Object.keys(draftBy).length} draft)`:''}</button></div>` + (S.poTab==='compare'?compare:orders);
+  const toReview = S.dealSheet==='done' ? S.dealRows.filter(x=>x==='review').length : 0;
+  const active = [];
+  BUY.forEach(it=>it.vendors.forEach(vd=>{ if (vd.deal) active.push({v:vd.v, prod:it.n, deal:dealText(vd.deal), src:vd.deal.src, ends:vd.deal.ends, verdict:dealVerdict(it,vd), buy:it.id,
+    fresh: vd.v===SHEET.vendor && S.dealsAdded.some(i=>SHEET.rows[i].buy===it.id)}); }));
+  S.dealsAdded.forEach(i=>{ const r=SHEET.rows[i]; if (r.buy) return; active.unshift({v:SHEET.vendor, prod:r.prod, deal:r.deal, src:'October deal sheet (PDF)', ends:'Oct 31', verdict:{cls:DEAL_V[r.v][0], t:r.vt}, buy:r.buy, fresh:true}); });
+  const reading = S.dealSheet==='reading';
+  const deals = `
+  <section class="card" data-note="Ways deals come in">
+    <div class="cardhead"><h2>Add vendor deals</h2><span class="muted" style="font-size:12px">Deal sheets, rep emails and flyers become deal rules in seconds</span></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr))">
+      <label class="drop" style="cursor:pointer">${ic('upload','style="width:26px;height:26px"')}<span><b style="color:var(--ink)">Drop a deal sheet or snap a flyer</b><br>PDF, Excel or photo</span><input type="file" id="dealfile" accept="image/*,.pdf,.xlsx,.xls,.csv" hidden></label>
+      <div class="drop">${ic('mail','style="width:26px;height:26px"')}<span><b style="color:var(--ink)">Forward rep emails to</b><br><span class="mono" style="color:var(--ink)">deals@oakstreet.bevnetic.com</span></span><button class="btn sm" data-copy="deals@oakstreet.bevnetic.com">Copy</button></div>
+      <div class="drop">${ic('users','style="width:26px;height:26px"')}<span><b style="color:var(--ink)">Vendor portal</b><br>2 reps post deals for your store directly</span></div>
+    </div>
+    ${S.dealSheet==null?`<div style="margin-top:12px"><button class="btn primary" data-act="dealsample">${ic('play','style="width:13px;height:13px"')}Try it with a sample deal sheet</button></div>`:''}
+  </section>
+  ${S.dealSheet ? `<div class="invwrap">
+    <aside style="display:flex;flex-direction:column;gap:10px">
+      <div class="paper"><h4>SUMMIT WINE &amp; SPIRITS</h4><div>OCTOBER 2026 RETAIL PROGRAMS · PAGE 1 OF 2</div><br>
+        ${SHEET.rows.map(r=>`<div class="row" style="grid-template-columns:1fr"><span>${esc(r.raw)}</span></div>`).join('')}
+        ${reading?'<span class="laser"></span>':''}</div>
+      <div class="muted" style="font-size:12px">${esc(SHEET.file)} · ${SHEET.pages} pages</div>
+    </aside>
+    <section class="card dealreview" data-note="AI-read deals · confirm before they count">
+      <div class="cardhead"><h2>${reading?'Reading the deal sheet…':'Review new deals'}</h2>${reading?'':`<span class="chip ${toReview?'warn':'ok'}">${toReview?toReview+' to review':'All reviewed'}</span>`}<span class="spacer"></span>
+        ${!reading&&S.dealRows.some((x,i)=>x==='review'&&SHEET.rows[i].v==='ok')?`<button class="btn sm primary" data-act="dealokall">Confirm the deals worth taking</button>`:''}</div>
+      ${reading ? `<ul class="checks">${['Reading 2 pages','Finding the vendor and dates','Matching 5 lines to your catalog','Checking each deal against your sales'].map(t=>`<li><span class="tick run"></span>${t}</li>`).join('')}</ul>`
+      : `<div class="tablewrap"><table style="min-width:640px"><thead><tr><th>Product · deal</th><th>Match</th><th>Dates</th><th>For your store</th><th></th></tr></thead><tbody>
+        ${SHEET.rows.map((r,i)=>{ const st=S.dealRows[i]; return `<tr class="${st==='ignored'?'rej':''}"><td><b>${esc(r.prod)}</b><div class="muted" style="font-size:12px">${esc(r.deal)}</div></td>
+          <td><span class="conf"><i><b style="width:${r.conf}%"></b></i>${r.conf}%</span></td><td class="num" style="white-space:nowrap">${r.dates}</td>
+          <td><span class="chip ${DEAL_V[r.v][0]}" style="white-space:normal">${esc(r.vt)}</span></td>
+          <td>${st==='review'?`<div class="rowact"><button data-deal="${i}" data-v="ok" aria-label="Confirm">${ic('check')}</button><button data-deal="${i}" data-v="ignored" aria-label="Ignore">${ic('x')}</button></div>`:st==='ok'?'<span class="chip ok">Added</span>':'<span class="chip plain">Ignored</span>'}</td></tr>`;}).join('')}
+      </tbody></table></div>`}
+    </section></div>` : ''}
+  <section class="card" data-note="Active deals · used by Compare vendors">
+    <div class="cardhead"><h2>Active deals</h2><span class="chip plain">${active.length}</span><span class="spacer"></span><span class="muted" style="font-size:12px">Only deals on products you sell. Every one is checked against your sales.</span></div>
+    ${active.map(a=>`<div class="rule" style="flex-wrap:wrap">${ic('gift','style="color:var(--violet)"')}<div style="min-width:200px"><b>${esc(a.v)} · ${esc(a.prod)}</b><small>${esc(a.deal)} · ends ${a.ends} · from ${esc(a.src)}</small></div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:100%">${a.fresh?'<span class="chip ai">New</span>':''}<span class="chip ${a.verdict.cls}" style="white-space:normal">${esc(a.verdict.t)}</span>${a.buy?`<button class="btn sm" data-buygo="${a.buy}">Compare</button>`:''}</div></div>`).join('')}
+  </section>`;
+  return `<div class="seg" style="align-self:flex-start"><button class="${S.poTab==='compare'?'on':''}" data-potab="compare">Compare vendors</button><button class="${S.poTab==='deals'?'on':''}" data-potab="deals">Vendor deals${toReview?` · ${toReview} new`:''}</button><button class="${S.poTab==='orders'?'on':''}" data-potab="orders">Purchase orders ${S.poDraft.length?`(${Object.keys(draftBy).length} draft)`:''}</button></div>` + (S.poTab==='compare'?compare:S.poTab==='deals'?deals:orders);
 };
 
 VIEWS.compliance = () => {
@@ -1728,6 +1791,14 @@ function charge(){
   setTimeout(()=>{ if (!S.online) S.queue.push({no:S.saleNo, amt:Math.round(totals().total*100)/100, t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), card:'Visa ·· 4412'}); payModal('done'); renderRail(); renderTop(); }, payMethod==='cash'?300:1400);
 }
 
+function startDealRead(){ S.dealSheet='reading'; S.dealRows=SHEET.rows.map(()=>'review'); render(); setTimeout(()=>{ S.dealSheet='done'; render(); toast('5 lines read · 2 deals worth taking','spark'); }, 1400); }
+function dealConfirm(i){
+  const r=SHEET.rows[i]; if (r.v==='crit'){ toast('Price increase recorded · shelf price review added'); return; }
+  if (r.v!=='ok' || S.dealsAdded.includes(i)) return;
+  S.dealsAdded.push(i);
+  ALERTS.unshift({id:100+i, t:'deal', sev:'info', ic:'gift', h:'New vendor deal worth taking', p:`${SHEET.vendor}: ${r.deal.toLowerCase()} on ${r.prod}. ${r.vt}. Ends Oct 31.`, when:'Just now', acts:['Mark seen','Compare vendors'], buygo:r.buy||null, go:r.buy?null:'purchasing'});
+}
+
 /* ------------------------------------------------ guided demo */
 function resetSale(){ S.cart=[{id:'casa750',qty:1},{id:'bud12',qty:2}]; S.id=null; S.tdisc=null; S.member=null; S.cat='All'; S.q=''; }
 const TOUR = [
@@ -1736,6 +1807,7 @@ const TOUR = [
   {r:'forecast', set:()=>{S.fc='bud12'}, t:'Predict demand, don’t just track it', say:'Bud Light runs out in 3 days. The forecast reads weekends, the heat wave and Saturday’s home game, then says how much to order and by when.', hl:'.reco'},
   {r:'purchasing', set:()=>{S.buy='tito';S.buyQ=null;S.poTab='compare'}, t:'Every vendor, every deal, one number', say:'Three vendors, three different deals. Bevnetic turns each one into the real cost per case at the quantity you need. Summit’s “buy 10, get 1 free” wins at $131.45 a case.', hl:'.verdict2'},
   {r:'purchasing', set:()=>{S.buy='tonic';S.buyQ=null;S.poTab='compare'}, t:'…and it says no to bad deals', say:'A free case looks cheaper, but it would leave 57 days of tonic on the shelf. Bevnetic skips that deal and keeps the cash in the business.', hl:'.vcard .trap'},
+  {r:'purchasing', set:()=>{S.poTab='deals'; S.dealSheet='done'; S.dealRows=SHEET.rows.map(()=>'review');}, t:'Vendor deals arrive by themselves', say:'Forward the rep’s email or snap the monthly deal sheet. Bevnetic reads it, matches each line to your products and says which deals are worth taking. It even spots a price increase dressed up as a deal.', hl:'.dealreview'},
   {r:'invoices', t:'Photograph the invoice, AI does the rest', say:'The supplier invoice is read in seconds and matched to the catalog. Price rises, short shipments and damaged cases are flagged before anything posts to inventory.', hl:'.invwrap > .card'},
   {r:'register', set:resetSale, t:'A checkout built for liquor', say:'Offers apply themselves: two Bud Light 12-packs for $24. The counter AI suggests limes because most tequila buyers add them. Bottle deposit (CRV) and tax are handled.', hl:'.pairs'},
   {r:'register', set:resetSale, after:()=>swapModal('kim750'), t:'Sold out? Offer the best swap', say:'Kim Crawford is out. Bevnetic suggests the closest match, shows why it fits, and can text the customer when it’s back.', hl:'.swapcard.best'},
@@ -1778,12 +1850,12 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
   if ('scrim' in d || 'close' in d){ closeModal(); if (S.route==='register') render(); return; }
-  if (d.go){ e.preventDefault(); if (el.dataset.potabGo) S.poTab='orders'; go(d.go); return; }
+  if (d.go){ e.preventDefault(); if (el.dataset.potabGo) S.poTab = el.dataset.potabGo==='1' ? 'orders' : el.dataset.potabGo; go(d.go); return; }
   if (d.add && S.clock==='locked' && byId(d.add).r){ toast('Alcohol sales are locked until 6:00 AM','lock'); return; }
   if (d.add){ const l=S.cart.find(x=>x.id===d.add); l?l.qty++:S.cart.push({id:d.add,qty:1}); render(); return; }
   if (d.dec){ const l=S.cart.find(x=>x.id===d.dec); if(l && --l.qty<=0) S.cart=S.cart.filter(x=>x!==l); if(!S.cart.some(x=>byId(x.id).r)) S.id=null; render(); return; }
@@ -1796,6 +1868,8 @@ document.addEventListener('click', e => {
   if (d.resolve){ S.done.add(+d.resolve); toast(d.msg+' · marked resolved'); render(); return; }
   if (d.undo){ S.done.delete(+d.undo); render(); return; }
   if (d.seg){ S.custSeg=+d.seg; render(); return; }
+  if (d.deal){ const i=+d.deal; S.dealRows[i]=d.v; if (d.v==='ok') dealConfirm(i); render(); return; }
+  if (d.copy){ const txt=d.copy; (navigator.clipboard?.writeText(txt) || Promise.reject()).then(()=>toast('Email address copied')).catch(()=>toast('Address: '+txt)); return; }
   if (d.shelf){ S.shelfTab=d.shelf; render(); return; }
   if (d.bestby){ S.bestBy=d.bestby; render(); return; }
   if (d.bestper){ S.bestPer=d.bestper; render(); return; }
@@ -1851,6 +1925,8 @@ document.addEventListener('click', e => {
     case 'refuseok': S.refusals.unshift({t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), why:S.refuse.why, by:'Maria G.', val:Math.round(totals().total*100)/100}); S.cart=[]; S.id=null; S.tdisc=null; closeModal(); render(); toast('Sale refused · saved to compliance log','ban'); break;
     case 'swapok': { const id=el.dataset.v, l=S.cart.find(x=>x.id===id); l?l.qty++:S.cart.push({id,qty:1}); closeModal(); render(); toast('Swapped in '+byId(id).n); break; }
     case 'report': reportModal(); break;
+    case 'dealsample': startDealRead(); break;
+    case 'dealokall': S.dealRows.forEach((x,i)=>{ if (x==='review' && SHEET.rows[i].v==='ok'){ S.dealRows[i]='ok'; dealConfirm(i); } }); render(); toast('2 deals added · alert sent to the owner'); break;
     case 'buyai': S.buyQ=null; render(); break;
     case 'buyman': if (S.buyQ==null) S.buyQ=BUY.find(b=>b.id===S.buy).need; render(); break;
     case 'obmem': S.ob.members=!S.ob.members; render(); break;
@@ -1898,6 +1974,7 @@ document.addEventListener('keydown', e => {
   if (e.key==='Enter' && e.target.id==='q'){ const m = PRODUCTS.find(p=>p.n.toLowerCase().includes(S.q.toLowerCase()) && (S.cat==='All'||p.cat===S.cat)); if (m){ S.q=''; const l=S.cart.find(x=>x.id===m.id); l?l.qty++:S.cart.push({id:m.id,qty:1}); render(); $('#q').focus(); } }
 });
 document.addEventListener('change', e => {
+  if (e.target.id==='dealfile' && e.target.files.length){ SHEET.file = e.target.files[0].name; startDealRead(); return; }
   if (e.target.id==='man-dob'){ S.man.dob=e.target.value; manUpdate(); return; }
   if (e.target.id==='man-type'){ S.man.type=e.target.value; return; }
   if (e.target.id==='dm-target'){ S.dm.target=e.target.value; S.pinOk=false; discModal(); return; }

@@ -8,16 +8,16 @@ All figures are demo data.
 
 | Screen | Deck page | What you can try |
 | --- | --- | --- |
-| Command Center | p.11 | KPI strip, AI "5 things today" list; every item links to the screen that fixes it |
+| Command Center | p.11 | KPI strip, AI "5 things today" list; every item links to the screen that fixes it; weekly vendor deals summary |
 | Register | p.2–5 | Product cards with drawn bottle art, category counts, AI add-on suggestions, sold-out swap to the best alternative, one-tap refuse sale, after-hours lock. Add items, offers applied automatically, line or whole-sale discounts (manager PIN over 15%, blocked over 30% so alcohol never sells below cost), 21+ lock, ID scan (pass and underage demo), no-scan options: approve by eye when the customer is clearly over the store's age (logged) and type the date of birth when an ID won't scan (manager PIN, under-21 always blocked), card / tap / cash / split tender, CRV + tax |
-| Purchasing | New | Compare vendors per product: price, deal (free cases, discounted extra case, volume tiers), delivery, reliability, terms. AI picks the quantity with the lowest cost per case without more than 30 days of extra stock, flags deal traps, and builds one draft PO per vendor. PO tracker |
+| Purchasing | New | Compare vendors per product: price, deal (free cases, discounted extra case, volume tiers), delivery, reliability, terms. AI picks the quantity with the lowest cost per case without more than 30 days of extra stock, flags deal traps, and builds one draft PO per vendor. PO tracker. Vendor deals tab: drop a deal sheet or flyer, forward rep emails, or let reps post in a vendor portal; AI reads each line, matches it to the catalog and says whether it is the best deal, not worth it, a price increase or a product you don't sell; confirmed deals raise alerts and feed Compare vendors |
 | Damaged Goods | p.7 (extended) | Report breakage / expiry / returns with photo, stock adjusts, supplier claims move Draft → Submitted → Credited, damage log, loss pattern |
 | Compliance | New | Legal sale-hours timeline with demo clock (locks the register after 2 AM), rules the register enforces, store ID policy switch (scan everyone / under 40 / under 30), log of sales without an ID scan, cashier scorecard, refusal log, inspection report |
 | Inventory | p.9–10 | Heat map filtered by state, tile detail, AI action list |
 | Forecasting | p.8 | 28-day history + 14-day forecast band, stockout marker, drivers, reorder recommendation |
 | Shelf Optimizer | New (extends p.9–10) | Dead stock: each product with no sale in months gets a clearance plan and a replacement that sells on the same shelf in similar stores, with profit per month; one tap starts the clearance offer and adds a trial case to a draft PO. Best sellers: top 10 by profit, revenue or units over 7 / 30 / 90 days, trend, days of stock left, reorder buttons |
 | Invoices | p.6 | 8-step flow, OCR source view, per-line approve / edit / reject, price and quantity variances |
-| Alerts | p.7 | All 7 alert types with resolving actions and filters |
+| Alerts | p.7 | All 7 alert types plus vendor deal alerts, with resolving actions and filters |
 | Customers | p.2 | Member profile, AI segments, SMS campaign preview |
 | Offers & Discounts | p.2 (extended) | Offer cards with pause/activate (changes the register live), AI-suggested offers, offer builder with state-rule compliance checks and receipt preview |
 | Devices & Offline | p.3–5 | ID provider comparison, lane terminals, offline limits, store-and-forward queue |
@@ -25,14 +25,15 @@ All figures are demo data.
 ## Guided demo
 
 Press **▶ Demo** in the top bar (or open the page with `#demo` at the end of the URL).
-A 14-step tour opens each screen, sets up the example, highlights the feature and shows
+A 15-step tour opens each screen, sets up the example, highlights the feature and shows
 presenter notes under "What to say". Use **Next / Back** or the arrow keys; everything
 stays clickable during the tour. The story runs:
 
 1. Morning briefing → 2. Alerts → 3. Forecast → 4. Vendor deal comparison →
-5. Deal trap skipped → 6. AI invoice → 7. Liquor checkout with offers and add-ons →
-8. Sold-out swap → 9. ID check → 10. Offline payment → 11. Compliance lock →
-12. Damaged goods → 13. Dead stock swaps → 14. Inventory heat map
+5. Deal trap skipped → 6. Vendor deals read from a deal sheet → 7. AI invoice →
+8. Liquor checkout with offers and add-ons → 9. Sold-out swap → 10. ID check →
+11. Offline payment → 12. Compliance lock → 13. Damaged goods → 14. Dead stock swaps →
+15. Inventory heat map
 
 ## Controls in the top bar
 
