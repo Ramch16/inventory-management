@@ -343,13 +343,26 @@ body.notes [data-note]::after{content:attr(data-note);position:absolute;top:-10p
 .lg.crit{color:var(--crit)} .lg.warn{color:var(--warn)} .lg.ok{color:var(--ok)} .lg.over{color:var(--over)}
 .lg .t{color:var(--ink);font-weight:700;display:flex;align-items:center;gap:6px}
 .lg .t i{width:10px;height:10px;border-radius:3px;background:currentColor}
-.heat{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));grid-auto-rows:76px;grid-auto-flow:dense;gap:6px}
+.heat{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));grid-auto-rows:122px;grid-auto-flow:dense;gap:6px}
 .tile{border:0;border-radius:8px;padding:8px 9px;text-align:left;display:flex;flex-direction:column;justify-content:space-between;color:var(--ink);transition:opacity .2s,transform .12s;overflow:hidden}
 .tile:hover{transform:scale(1.02)}
 .tile.big{grid-column:span 2;grid-row:span 2}
 .tile.wide{grid-column:span 2}
 .tile .tn{font-weight:700;font-size:12px;line-height:1.2}
-.tile .tv{font:600 11px/1 var(--mono);opacity:.85}
+.tile .tv{font:600 11px/1.2 var(--mono);opacity:.85}
+.tile .tm{display:flex;flex-direction:column;gap:3px;font:500 11px/1.25 var(--body)}
+.tile .tm span{display:flex;gap:5px;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .tm svg{width:12px;height:12px;flex:none;opacity:.7}
+.tile .tm b{font-family:var(--mono)}
+.tile.big .tm{font-size:12.5px;gap:5px}
+.tile.big .tm svg{width:14px;height:14px}
+.invlist td{font-size:13px;white-space:nowrap}
+.invlist td:first-child{white-space:normal;min-width:150px}
+.invlist tr{cursor:pointer}
+.invlist tr:hover td{background:var(--surface-2)}
+.invlist tr.sel td{background:var(--accent-soft)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px;vertical-align:0}
+.dot.crit{background:var(--crit)} .dot.warn{background:var(--warn)} .dot.ok{background:var(--ok)} .dot.over{background:var(--over)}
 .tile.big .tn{font-size:15px}
 .tile.crit{background:color-mix(in srgb,var(--crit) 26%,var(--surface))} .tile.warn{background:color-mix(in srgb,var(--warn) 26%,var(--surface))}
 .tile.ok{background:color-mix(in srgb,var(--ok) 18%,var(--surface))} .tile.over{background:color-mix(in srgb,var(--over) 22%,var(--surface))}
@@ -661,7 +674,7 @@ const SWAPS = { kim750:{to:'oyster', why:['Same style: New Zealand Sauvignon Bla
 const CATS = ['All','Spirits','Wine','Beer & Seltzer','Mixers & Snacks'];
 
 const HEAT = [
-  ['Bud Light 12pk','crit','3 days cover',1],['Casamigos Blanco','crit','1 day cover',0],['Kim Crawford SB','crit','Stockout 5 days',0],
+  ['Bud Light 12pk','crit','3 days cover',1],['Casamigos Blanco','crit','3 days cover',0],['Kim Crawford SB','crit','Stockout 5 days',0],
   ['Hard seltzer 24pk mix','crit','Expires 18 days',0],['Rosé 2023 closeouts','crit','No sale 94 days',0],['Josh Cabernet','ok','Healthy margin',1],
   ['High Noon 8pk','warn','Below reorder pt',0],['Modelo 12pk','ok','Normal velocity',0],['Tito\'s 1.75 L','warn','Supplier delay 2 d',1],
   ['Meiomi Pinot','warn','Cost +8.5%',0],['Craft IPA 4pk','crit','Expires 21 days',0],['Jameson 750','ok','Healthy',0],
@@ -675,6 +688,49 @@ const HEAT = [
   ['Imported lager','warn','Below reorder pt',0],['Cider 6pk','over','Slow mover',0],['Rum spiced','ok','Healthy',0],
 ];
 
+// per-SKU stock + ordering details, same order as HEAT (demo data)
+// v vendor · oh on hand · u unit · d days of stock left · lo last ordered · lq qty ordered · po open PO · rp reorder point · lt lead time days · c unit cost · r retail · ls last sale
+const INV = [
+  {v:'Valley Beer Distributing', oh:72, u:'12-packs', d:3, lo:'Sep 19', lq:'40 cases', po:'Draft · 57 cases', rp:80, lt:2, c:9.20, r:12.99, ls:'Today'},
+  {v:'Summit Wine & Spirits', oh:6, u:'bottles', d:3, lo:'Sep 12', lq:'1 case', po:'PO-10234 · 6 short', rp:18, lt:3, c:38.90, r:54.99, ls:'Today'},
+  {v:'Golden State Beverage', oh:0, u:'bottles', d:0, lo:'Aug 28', lq:'2 cases', po:'PO-10245 · arrives Tue', rp:12, lt:4, c:11.20, r:16.99, ls:'Sep 20'},
+  {v:'Valley Beer Distributing', oh:24, u:'24-packs', d:34, lo:'Aug 30', lq:'3 cases', po:'', rp:8, lt:2, c:21.50, r:32.99, ls:'Sep 23'},
+  {v:'Golden State Beverage', oh:20, u:'bottles', d:null, lo:'Jun 14', lq:'4 cases', po:'', rp:0, lt:4, c:9.50, r:14.99, ls:'Jun 23'},
+  {v:'Golden State Beverage', oh:48, u:'bottles', d:8, lo:'Sep 18', lq:'4 cases', po:'', rp:30, lt:4, c:9.80, r:14.99, ls:'Today'},
+  {v:'Valley Beer Distributing', oh:12, u:'8-packs', d:5, lo:'Sep 16', lq:'3 cases', po:'', rp:18, lt:2, c:17.90, r:24.99, ls:'Today'},
+  {v:'Valley Beer Distributing', oh:58, u:'12-packs', d:9, lo:'Sep 19', lq:'20 cases', po:'PO-10241 · sent', rp:40, lt:2, c:12.80, r:17.99, ls:'Today'},
+  {v:'Summit Wine & Spirits', oh:22, u:'bottles', d:14, lo:'Sep 5', lq:'6 cases', po:'Delivery 2 days late', rp:24, lt:3, c:24.10, r:34.99, ls:'Today'},
+  {v:'Summit Wine & Spirits', oh:24, u:'bottles', d:12, lo:'Sep 24', lq:'1 case', po:'', rp:12, lt:3, c:13.20, r:21.99, ls:'Yesterday'},
+  {v:'Valley Beer Distributing', oh:30, u:'4-packs', d:38, lo:'Aug 22', lq:'5 cases', po:'', rp:10, lt:2, c:8.40, r:12.99, ls:'Sep 22'},
+  {v:'Summit Wine & Spirits', oh:41, u:'bottles', d:19, lo:'Sep 10', lq:'3 cases', po:'', rp:18, lt:3, c:21.00, r:29.99, ls:'Today'},
+  {v:'Summit Wine & Spirits', oh:18, u:'bottles', d:11, lo:'Sep 24', lq:'1 case', po:'', rp:12, lt:3, c:35.00, r:44.99, ls:'Today'},
+  {v:'Summit Wine & Spirits', oh:27, u:'bottles', d:13, lo:'Sep 10', lq:'2 cases', po:'', rp:15, lt:3, c:23.10, r:32.99, ls:'Today'},
+  {v:'Summit Wine & Spirits', oh:46, u:'bottles', d:142, lo:'May 2', lq:'4 cases', po:'', rp:6, lt:3, c:9.20, r:15.99, ls:'Sep 1'},
+  {v:'Pacific Crest Imports', oh:6, u:'bottles', d:180, lo:'Apr 10', lq:'1 case', po:'', rp:2, lt:5, c:118.00, r:169.99, ls:'Aug 2'},
+  {v:'Summit Wine & Spirits', oh:33, u:'bottles', d:22, lo:'Sep 3', lq:'3 cases', po:'', rp:15, lt:3, c:12.40, r:17.99, ls:'Today'},
+  {v:'Summit Wine & Spirits', oh:36, u:'bottles', d:16, lo:'Sep 24', lq:'2 cases', po:'', rp:18, lt:3, c:9.80, r:15.99, ls:'Today'},
+  {v:'Valley Beer Distributing', oh:40, u:'12-packs', d:8, lo:'Sep 19', lq:'10 cases', po:'PO-10241 · sent', rp:48, lt:2, c:14.20, r:19.99, ls:'Today'},
+  {v:'Valley Beer Distributing', oh:66, u:'6-packs', d:48, lo:'Sep 2', lq:'11 cases', po:'', rp:12, lt:2, c:7.10, r:10.99, ls:'Today'},
+  {v:'Summit Wine & Spirits', oh:240, u:'minis', d:21, lo:'Sep 10', lq:'2 cases', po:'', rp:120, lt:3, c:0.95, r:1.99, ls:'Today'},
+  {v:'Metro Cash & Carry', oh:44, u:'4-packs', d:12, lo:'Sep 20', lq:'4 cases', po:'', rp:24, lt:0, c:6.30, r:9.99, ls:'Today'},
+  {v:'Pacific Crest Imports', oh:14, u:'bottles', d:20, lo:'Sep 8', lq:'1 case', po:'', rp:8, lt:5, c:19.60, r:27.99, ls:'Sep 23'},
+  {v:'Pacific Crest Imports', oh:12, u:'bottles', d:98, lo:'Jun 1', lq:'1 case', po:'', rp:0, lt:5, c:8.50, r:12.99, ls:'Jun 18'},
+  {v:'Golden State Beverage', oh:20, u:'boxes', d:15, lo:'Sep 12', lq:'3 cases', po:'', rp:10, lt:4, c:13.00, r:21.99, ls:'Today'},
+  {v:'Coastal Cigar Co.', oh:160, u:'cigars', d:95, lo:'Jul 20', lq:'2 boxes', po:'', rp:40, lt:7, c:9.50, r:15.99, ls:'Sep 21'},
+  {v:'Metro Cash & Carry', oh:80, u:'bags', d:5, lo:'Sep 24', lq:'80 bags', po:'', rp:60, lt:0, c:1.60, r:3.99, ls:'Today'},
+  {v:'Metro Cash & Carry', oh:60, u:'bags', d:6, lo:'Sep 22', lq:'1 case', po:'', rp:30, lt:0, c:0.55, r:1.49, ls:'Today'},
+  {v:'Summit Wine & Spirits', oh:30, u:'4-packs', d:25, lo:'Sep 3', lq:'3 cases', po:'', rp:15, lt:3, c:4.50, r:6.49, ls:'Today'},
+  {v:'Pacific Crest Imports', oh:8, u:'bottles', d:10, lo:'Aug 30', lq:'1 case', po:'Delayed · now Oct 2', rp:10, lt:5, c:28.00, r:42.99, ls:'Yesterday'},
+  {v:'Summit Wine & Spirits', oh:14, u:'bottles', d:112, lo:'Apr 18', lq:'2 cases', po:'', rp:4, lt:3, c:16.00, r:24.99, ls:'Jun 5'},
+  {v:'Golden State Beverage', oh:30, u:'bottles', d:15, lo:'Sep 12', lq:'2 cases', po:'', rp:15, lt:4, c:7.90, r:12.99, ls:'Today'},
+  {v:'Summit Wine & Spirits', oh:20, u:'bottles', d:17, lo:'Sep 10', lq:'2 cases', po:'', rp:10, lt:3, c:26.00, r:39.99, ls:'Today'},
+  {v:'Valley Beer Distributing', oh:18, u:'6-packs', d:4, lo:'Sep 12', lq:'4 cases', po:'', rp:30, lt:2, c:8.10, r:11.99, ls:'Today'},
+  {v:'Valley Beer Distributing', oh:9, u:'6-packs', d:60, lo:'Jul 8', lq:'2 cases', po:'', rp:6, lt:2, c:7.80, r:11.99, ls:'Sep 9'},
+  {v:'Summit Wine & Spirits', oh:22, u:'bottles', d:20, lo:'Sep 5', lq:'2 cases', po:'', rp:10, lt:3, c:14.30, r:21.99, ls:'Today'},
+];
+const shortV = v => v.replace(/ (Wine & Spirits|Distributing|Beverage|Imports|Cash & Carry|Co\.)$/,'');
+const daysTxt = d => d==null ? 'no recent sales' : d===0 ? 'out of stock' : `${d} day${d===1?'':'s'} left`;
+const REORDER_BUY = {0:'bud', 8:'tito', 28:'tonic'};
 const FC = {
   bud12:{n:'Bud Light 12pk Cans', base:12, wk:1.6, stock:72, lead:2, pack:2, unit:'12pks', supplier:'Valley Beer Distributing'},
   tito175:{n:"Tito's Handmade Vodka 1.75 L", base:1.6, wk:1.8, stock:22, lead:3, pack:6, unit:'bottles', supplier:'Summit Wine & Spirits'},
@@ -707,7 +763,7 @@ const NOTES = {
   register:{deck:'Deck p.2–5 · Checkout, ID scan, payments, offline', purpose:'Fast lane checkout. Any 21+ item locks tender until an ID scan passes, and the sale keeps working when the internet drops.', data:['Catalog with category, size, ABV, CRV deposit, age flag','Cart, tax 8.75%, CRV, loyalty member','ID result: DOB, age, expiry, authenticity checks'], build:['Barcode scanner as keyboard wedge + camera fallback','ID SDK (Scandit / IDScan.net) on-device, store result not image','Terminal SDK (PAX, Verifone, Stripe) · offline store-and-forward queue in IndexedDB']},
   pricing:{deck:'New · cost changes → retail prices', purpose:'When a vendor PO, price sheet or invoice changes a cost, suggest the new shelf price from the category’s target margin, apply rounding and limits, let the owner approve, then update the register and queue shelf tags.', data:['Case cost old → new and cost per unit (case ÷ pack)','Target margin per category, rounding rule, 10% change limit','Current and new margin and markup per product'], build:['Suggested price = unit cost ÷ (1 − target margin), rounded up to the price ending','Checks: never below cost, state minimum-price rules, multi-pack consistency','Approved prices go live now or at opening; tags go to the label printer; price history kept']},
   purchasing:{deck:'New · vendor deals + purchase orders', purpose:'Each brand comes from one distributor in the store’s area. For each product, compare that vendor’s own options (buy just what you need, or take one of its deals) as the real cost per case, then group products into one PO per vendor. Deals arrive by deal sheet, forwarded rep email, vendor portal or state price posting.', data:['Product → its one vendor: case cost, lead time, on-time rate, terms, minimum','Every active deal from that vendor: free cases, discounted extra case, % or $ volume tiers','Forecast need for the next 30 days and daily sales in cases'], build:['Deals don’t stack: each is evaluated on its own against buying at list','Plan search: every quantity from need to need + 15, rejecting plans with more than 30 days of extra stock','State rules flag deal types a distributor may not offer']},
-  inventory:{deck:'Deck p.9–10 · Inventory Heat Map + AI Insight', purpose:'Colour shows the state of every SKU; the AI panel turns it into a ranked to-do list.', data:['Days of cover = on hand ÷ forecast daily demand','Reorder point, expiry date, last-sale date, margin','Capital tied up = on hand × cost for overstock'], build:['Nightly + on-sale recalculation of state','Tile size = inventory value (treemap)','Actions create POs, markdowns or transfers']},
+  inventory:{deck:'Deck p.9–10 · Inventory Heat Map + AI Insight', purpose:'Colour shows the state of every SKU; the AI panel turns it into a ranked to-do list.', data:['Per product: stock left, days left, reorder point, vendor, last order date and quantity, open order','Days of cover = on hand ÷ forecast daily demand','Reorder point, expiry date, last-sale date, margin','Capital tied up = on hand × cost for overstock'], build:['Nightly + on-sale recalculation of state','Tile size = inventory value (treemap)','Actions create POs, markdowns or transfers']},
   assortment:{deck:'New · dead stock + best sellers (extends deck p.9–10)', purpose:'Find products that no longer sell, clear them, and replace them with products that sell in similar stores. Rank best sellers and warn before they run out.', data:['Days since last sale, units on hand, cash tied up, shelf location','Replacement: same shelf and price band, sales in similar stores, margin, vendor','Best sellers by units, revenue or profit for 7 / 30 / 90 days, trend, days of cover'], build:['Dead stock rule: no sale in 60+ days (owner can change it)','Replacement engine: category + price band + local market sales + this store’s basket data','One tap creates a clearance offer and a trial-case draft PO']},
   forecast:{deck:'Deck p.8 · AI Business Forecasting', purpose:'Predict demand per SKU and tell the owner when to order and how much.', data:['28 days history, 14 days forecast with confidence band','Drivers: weekday, holidays, weather, local events, promos','Supplier lead time and case pack'], build:['Model service returns point + P10/P90','Recommendation = demand over lead time + safety stock − on hand','One-click draft PO to supplier']},
   invoices:{deck:'Deck p.6 · AI Invoice Processing (8-step flow)', purpose:'Photograph a supplier invoice; AI reads it, matches lines to the catalog and flags price, quantity and damage issues for owner approval.', data:['OCR fields: supplier, invoice #, date, lines, totals','Match confidence per line against catalog','Variance vs last cost and vs purchase order'], build:['Upload to object storage → OCR / document model','Draft inventory update held until owner approves','Approved lines post to inventory and accounting export']},
@@ -887,6 +943,7 @@ const S = {
   tour:null,
   margins:{sp:28, wi:35, be:22, mx:40}, rounding:'99', priceEdit:{}, priceSel:null, priceDone:{}, tagsQ:[], priceWhen:'now',
   dealSheet:null, dealRows:SHEET.rows.map(()=>'review'), dealsAdded:[],
+  invView:'tiles',
   shelfTab:'dead', swapDone:[], bestBy:'profit', bestPer:'30',
   idPolicy:'u40', idMethod:null, man:{dob:'', reason:"Barcode won't scan", type:'Driver licence', pin:''},
   idLog:[{t:'Fri 9:12 AM', how:'Clearly over 40 (by eye)', by:'Maria G.', ok:'—', k:'visual'},{t:'Thu 8:40 PM', how:'Date of birth typed in · passport', by:'Dev P.', ok:'Alex K.', k:'manual'},{t:'Thu 6:05 PM', how:"Date of birth typed in · barcode won't scan", by:'Dev P.', ok:'Alex K.', k:'manual'}],
@@ -1145,6 +1202,16 @@ function totals(){
   return {sub, crv, offers, off, line, tdisc, disc, tax, total:net+crv+tax, saved:off+line+tdisc+disc};
 }
 
+function invList(){
+  const rank={crit:0,warn:1,over:2,ok:3};
+  const rows = HEAT.map((x,i)=>({x,i,d:INV[i]})).filter(r=>!S.heat||r.x[1]===S.heat).sort((a,b)=>rank[a.x[1]]-rank[b.x[1]] || (a.d.d??999)-(b.d.d??999));
+  return `<div class="tablewrap"><table class="invlist" style="min-width:640px"><thead><tr><th>Product</th><th class="r">Stock left</th><th>Days left</th><th>Vendor</th><th>Last order</th><th>Open order</th></tr></thead><tbody>
+    ${rows.map(({x,i,d})=>`<tr class="${S.tile===i?'sel':''}" data-tile="${i}"><td><span class="dot ${x[1]}"></span><b>${x[0]}</b><div class="muted" style="font-size:11.5px;padding-left:15px">${x[2]}</div></td>
+      <td class="num r"><b>${d.oh}</b> <span class="muted">${d.u}</span><div style="font-size:11px;color:${d.oh<d.rp?'var(--crit)':'var(--muted)'}">reorder at ${d.rp}</div></td>
+      <td><span class="chip ${d.d==null?'plain':d.d<=5?'crit':d.d>60?'over':d.d<=9?'warn':'ok'}">${daysTxt(d.d)}</span></td>
+      <td>${shortV(d.v)}</td><td><b class="num">${d.lo}</b><div class="muted" style="font-size:11.5px">${d.lq}</div></td><td style="white-space:normal">${d.po?`<span class="chip plain" style="white-space:normal">${d.po}</span>`:'<span class="muted">none</span>'}</td></tr>`).join('')}
+  </tbody></table></div>`;
+}
 VIEWS.inventory = () => {
   const L = [['crit','Critical','Stockout risk · expiring · dead stock'],['warn','Attention required','Below reorder · supplier delay · price anomaly'],['ok','Healthy','Optimal stock · normal velocity'],['over','Overstock','Excess · slow-moving · capital tied up']];
   const sel = S.tile!=null ? HEAT[S.tile] : null;
@@ -1157,21 +1224,34 @@ VIEWS.inventory = () => {
   </section>
   <div class="invgrid">
     <section class="card">
-      <div class="cardhead"><h2>All SKUs by state</h2><span class="muted" style="font-size:12px">Tile size = inventory value</span><span class="spacer"></span>${S.heat?`<button class="btn sm" data-heat="${S.heat}">Clear filter</button>`:''}</div>
-      <div class="heat" data-note="Treemap-style heat map · click a tile">${HEAT.map((x,i)=>`<button class="tile ${x[1]} ${x[3]===1?'big':x[3]===2?'wide':''} ${S.heat&&S.heat!==x[1]?'dim':''} ${S.tile===i?'sel':''}" data-tile="${i}"><span class="tn">${x[0]}</span><span class="tv">${x[2]}</span></button>`).join('')}</div>
+      <div class="cardhead"><h2>All SKUs by state</h2><span class="muted" style="font-size:12px">${S.invView==='tiles'?'Tile size = inventory value':'Tap a row for details'}</span><span class="spacer"></span>${S.heat?`<button class="btn sm" data-heat="${S.heat}">Clear filter</button>`:''}
+        <div class="seg" aria-label="View">${[['tiles','Tiles'],['list','List']].map(([v,l])=>`<button class="${S.invView===v?'on':''}" data-invview="${v}">${l}</button>`).join('')}</div></div>
+      ${S.invView==='list' ? invList() : `
+      <div class="heat" data-note="Treemap-style heat map · click a tile">${HEAT.map((x,i)=>`<button class="tile ${x[1]} ${x[3]===1?'big':x[3]===2?'wide':''} ${S.heat&&S.heat!==x[1]?'dim':''} ${S.tile===i?'sel':''}" data-tile="${i}"><span><span class="tn">${x[0]}</span><br><span class="tv">${x[2]}</span></span>
+        <span class="tm"><span>${ic('box')}<b>${INV[i].oh}</b> ${INV[i].u} · ${daysTxt(INV[i].d)}</span><span>${ic('truck')}${shortV(INV[i].v)}</span><span>${ic('clock')}Ordered ${INV[i].lo} · ${INV[i].lq}</span></span></button>`).join('')}</div>`}
     </section>
     <aside style="display:flex;flex-direction:column;gap:16px">
       ${sel ? `<section class="card detail"><div class="cardhead"><h2>${sel[0]}</h2><span class="spacer"></span><span class="chip ${sel[1]}">${L.find(l=>l[0]===sel[1])[1]}</span></div>
         <div class="muted" style="font-size:13px">${sel[2]}</div>
-        <dl><dt>On hand</dt><dd>${[72,6,9,40,31,48][S.tile%6]} units</dd><dt>Forecast daily demand</dt><dd>${[19,4,1.8,3,0.2,6][S.tile%6]}</dd><dt>Reorder point</dt><dd>${[80,10,14,24,6,30][S.tile%6]}</dd><dt>Unit cost / retail</dt><dd>$9.10 / $12.99</dd><dt>Last received</dt><dd>Sep 19</dd></dl>
-        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn primary sm" data-go="forecast">View forecast</button><button class="btn sm" data-go="purchasing">Create PO</button><button class="btn sm" data-toast="Markdown scheduled for tomorrow">Mark down</button></div></section>` : ''}
+        ${(()=>{ const d=INV[S.tile], low=d.oh<d.rp; return `<dl>
+          <dt>Stock left</dt><dd><b>${d.oh}</b> ${d.u}</dd>
+          <dt>Days of stock</dt><dd style="color:${d.d!=null&&d.d<=5?'var(--crit)':'inherit'}">${daysTxt(d.d)}</dd>
+          <dt>Reorder point</dt><dd>${d.rp} ${d.u}${low?' <span class="chip crit" style="margin-left:4px">below</span>':''}</dd>
+          <dt>Vendor</dt><dd>${d.v}</dd>
+          <dt>Delivery time</dt><dd>${d.lt?d.lt+' days':'same day pickup'}</dd>
+          <dt>Last ordered</dt><dd>${d.lo}</dd>
+          <dt>Quantity ordered</dt><dd>${d.lq}</dd>
+          <dt>Open order</dt><dd>${d.po||'none'}</dd>
+          <dt>Unit cost / shelf price</dt><dd>${money(d.c)} / ${money(d.r)} · ${marginOf(d.r,d.c).toFixed(0)}% margin</dd>
+          <dt>Last sale</dt><dd>${d.ls}</dd></dl>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">${low||(d.d!=null&&d.d<=5)?`<button class="btn primary sm" ${REORDER_BUY[S.tile]?`data-buygo="${REORDER_BUY[S.tile]}"`:'data-go="purchasing"'}>Reorder</button>`:''}<button class="btn sm" data-go="forecast">View forecast</button>${d.d==null||d.d>60?`<button class="btn sm" data-go="assortment">Find a replacement</button>`:''}<button class="btn sm" data-toast="Markdown scheduled for tomorrow">Mark down</button></div>`; })()}</section>` : ''}
       <section class="card" data-note="AI action list · prioritized">
         <div class="cardhead"><span class="chip ai">${ic('spark')} AI recommended actions</span></div>
         <div class="actions">
           ${[['crit','box','Reorder Bud Light 12pk: 57 cases','Runs out Monday. Valley Beer delivers in 2 days.','Create PO'],
-             ['crit','box','Reorder Casamigos Blanco: 12 bottles','1 day of cover. Short-shipped on PO #10234.','Create PO'],
+             ['crit','box','Reorder Casamigos Blanco: 12 bottles','3 days of cover. Short-shipped on PO #10234.','Create PO'],
              ['crit','cal','Mark down 24 hard seltzer 24pk 20%','Expires in 18 days at current velocity.','Mark down'],
-             ['warn','tag','Review Meiomi retail price','Cost +8.5%. Margin fell from 44% to 38%.','Reprice'],
+             ['warn','tag','Review Meiomi retail price','Cost +8.5%. Margin fell from 45% to 40%.','Reprice'],
              ['over','dollar','Stop reordering flavored vodka','142 days on hand, $2.9K tied up.','Pause'],
              ['over','store','Move pumpkin ale to endcap','Seasonal surplus. Promo lifts sell-through ~30%.','Plan promo']]
             .map(a=>`<div class="act"><span class="ic ${a[0]}">${ic(a[1])}</span><div><p>${a[2]}</p><small>${a[3]}</small></div>${a[4]==='Pause'?`<button class="btn sm primary" data-go="assortment">Find a replacement</button>`:`<button class="btn sm" data-toast="${a[4]} · done">${a[4]}</button>`}</div>`).join('')}
@@ -1950,7 +2030,7 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -1968,6 +2048,7 @@ document.addEventListener('click', e => {
   if (d.resolve){ S.done.add(+d.resolve); toast(d.msg+' · marked resolved'); render(); return; }
   if (d.undo){ S.done.delete(+d.undo); render(); return; }
   if (d.seg){ S.custSeg=+d.seg; render(); return; }
+  if (d.invview){ S.invView=d.invview; render(); return; }
   if (d.pchk){ S.priceSel[d.pchk] = el.checked; render(); return; }
   if (d.round){ S.rounding=d.round; S.priceEdit={}; render(); return; }
   if (d.when){ S.priceWhen=d.when; render(); return; }
