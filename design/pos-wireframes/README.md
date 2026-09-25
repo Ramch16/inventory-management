@@ -9,6 +9,8 @@ All figures are demo data.
 | Screen | Deck page | What you can try |
 | --- | --- | --- |
 | Reports | New | End of day (Z-report; X-report while the day is open): gross → net sales, tax, CRV, payments by type, cash drawer float / paid outs / safe drops / expected / counted / over-short, activity, ID checks, sales by hour / category / cashier; Date range (day-by-day table + chart + totals); Monthly (12 months vs last year, margin, basket); Yearly; Accounting & tax (QuickBooks / Xero connection, sales tax report for the month ready for the CDTFA return, balanced daily journal entry). Print preview in full page or 80 mm receipt format (simulated in the online preview; prints for real when index.html is opened in a browser); email at close toggle |
+| All Stores | New | Head office view for several stores: store switcher in the top bar (owners switch; managers and cashiers are tied to their store). Overview compares each store live (sales today vs last Friday, margin, staff on shift, over/short, low stock, alerts, online or offline with queued cards) plus a 7-day sales table. Stock & transfers: stock of any product at every store, AI "move stock before you reorder" suggestions, transfers Requested → Picked → In transit → Received that move the stock. Prices & offers: same prices everywhere or per store, price differences highlighted, match all to head office, pick which stores run each offer. Store setup: licence, tax rate (switching store changes the tax on the register), lanes, manager; add a store by copying another's setup. The register's sold-out window shows which store has it |
+| Customer Display | New | The screen facing the customer mirrors the register live: offers while waiting, then each item, savings, CRV, tax, total, "Please have your ID ready" and rewards sign-up; the amount due and tap prompt while paying; then the receipt choice (Text, Email, Print, No receipt; walk-in customers type their number or email). Preview any stage, switch what the customer sees, and see the digital receipt (text or email, return barcode, savings, next-visit offer, rating). A monitor button on the Register shows a small live customer screen over the till, including during payment. Members can get their receipt texted automatically; Sales & Returns shows how each receipt was sent and resends it by text or email |
 | Sign-in and roles | New | Top-bar user button: pick a person and enter a PIN (demo PINs shown). Owner sees everything, manager everything except Store Settings, cashier only Register, Sales & Returns, Shifts, Damaged Goods and Receiving; other screens show "A manager needs to open this" |
 | Shifts & Staff | New | Open the till by counting the float; close it with a blind count (expected cash shown only after submitting, over/short added to history); time clock with weekly hours; who-can-do-what table |
 | Sales & Returns | New | Find any sale by receipt #, card, product or cashier; reprint the receipt; return items to the original payment or store credit, or exchange (credit applied on the Register); reason decides back-on-shelf vs Damaged Goods; manager PIN over $50 for cashiers |
@@ -33,18 +35,19 @@ All figures are demo data.
 ## Guided demo
 
 Press **▶ Demo** in the top bar (or open the page with `#demo` at the end of the URL).
-A 20-step tour opens each screen, sets up the example, highlights the feature and shows
+A 22-step tour opens each screen, sets up the example, highlights the feature and shows
 presenter notes under "What to say". Use **Next / Back** or the arrow keys; everything
 stays clickable during the tour. The story runs:
 
-1. Morning briefing → 2. End of day report → 3. Shifts and blind count → 4. Alerts → 5. Forecast →
-6. Deal check → 7. Deal trap skipped → 8. Vendor deals from a deal sheet → 9. Vendors → 10. AI invoice →
-11. New costs become shelf prices → 12. Liquor checkout → 13. Sold-out swap → 14. ID check →
-15. Offline payment → 16. Returns and exchanges → 17. Compliance lock → 18. Damaged goods →
-19. Dead stock swaps → 20. Inventory details
+1. Morning briefing → 2. End of day report → 3. All stores → 4. Shifts and blind count → 5. Alerts → 6. Forecast →
+7. Deal check → 8. Deal trap skipped → 9. Vendor deals from a deal sheet → 10. Vendors → 11. AI invoice →
+12. New costs become shelf prices → 13. Liquor checkout → 14. Customer display and digital receipt → 15. Sold-out swap → 16. ID check →
+17. Offline payment → 18. Returns and exchanges → 19. Compliance lock → 20. Damaged goods →
+21. Dead stock swaps → 22. Inventory details
 
 ## Controls in the top bar
 
+- **Store pill**: switch between stores (owners) or open the All Stores view.
 - **Online / Offline pill**: simulates an internet outage. The register keeps
   selling, cards are queued (limit $250 per sale), and reconnecting uploads the queue.
 - **Pencil**: wireframe notes mode. Shows the deck reference, data on screen and

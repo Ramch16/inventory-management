@@ -692,6 +692,84 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
   #print .sheet.receipt{max-width:72mm}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* customer display */
+.cdgrid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;align-items:start}
+.cdframe{background:#0B1116;border-radius:22px;padding:14px;box-shadow:var(--shadow)}
+.cdstand{width:22%;height:10px;margin:10px auto 0;background:#26363F;border-radius:6px}
+.cdscreen{container-type:inline-size;aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:radial-gradient(120% 90% at 100% 0%,#3B1D4F 0%,#101A21 58%);color:#EEF3F5;display:flex;flex-direction:column;font-family:var(--body);line-height:1.3}
+.cdscreen .i{width:1.1em;height:1.1em;flex:none}
+.cdhead{display:flex;align-items:center;gap:1.6cqw;padding:2cqw 3cqw;font-size:2.4cqw;border-bottom:1px solid rgba(255,255,255,.08)}
+.cdhead img{width:4cqw;height:4cqw;object-fit:contain}
+.cdhead .spacer{flex:1}
+.cdmem{display:inline-flex;gap:1cqw;align-items:center;background:rgba(255,255,255,.1);padding:.7cqw 1.8cqw;border-radius:99px;font-weight:700;font-size:2.1cqw}
+.cdidle{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 7cqw;gap:1.5cqw}
+.cdidle small{font-size:2.1cqw;letter-spacing:.2em;text-transform:uppercase;color:#FFA350;font-weight:800}
+.cdidle h3{margin:0;font:800 6.2cqw/1.05 var(--display)}
+.cdidle p{margin:0;font-size:2.8cqw;opacity:.8}
+.cdjoin{margin-top:2cqw;align-self:flex-start;background:var(--grad);padding:1.2cqw 2.4cqw;border-radius:99px;font-weight:800;font-size:2.2cqw;display:inline-flex;gap:1cqw;align-items:center}
+.cddots{display:flex;gap:1cqw;margin-top:2cqw}.cddots i{width:1.2cqw;height:1.2cqw;border-radius:50%;background:rgba(255,255,255,.25)}.cddots i.on{background:#FFA350}
+.cdorder{flex:1;display:grid;grid-template-columns:1.35fr 1fr;min-height:0}
+.cdlines{padding:2cqw 3cqw;display:flex;flex-direction:column;gap:1.1cqw;font-size:2.4cqw;overflow:hidden}
+.cdlines>div,.cdtot>div{display:flex;justify-content:space-between;gap:2cqw;align-items:center}
+.cdlines span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cdsave{color:#6EE0A8}
+.cdtot{background:rgba(255,255,255,.05);padding:2cqw 3cqw;display:flex;flex-direction:column;gap:1cqw;font-size:2.3cqw}
+.cdgrand{font:800 4.4cqw/1.1 var(--display);padding-top:1cqw;border-top:1px solid rgba(255,255,255,.15)}
+.cdid{background:#F2B13C;color:#1C1300;border-radius:1.2cqw;padding:1cqw 1.6cqw;font-weight:800;display:flex;gap:1cqw;align-items:center;margin-top:auto}
+.cdbtn{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:inherit;border-radius:1.6cqw;padding:1.2cqw 2cqw;font:700 2.1cqw var(--body);display:inline-flex;gap:1cqw;align-items:center;justify-content:center;cursor:pointer}
+.cdtot .cdbtn{margin-top:auto}
+.cdid + .cdbtn{margin-top:0}
+.cdbtn.hint{border-color:#FFA350;background:rgba(255,163,80,.18)}
+.cdbtn small{opacity:.7;font-size:.85em}
+.cdpay{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.6cqw;padding:3cqw;text-align:center}
+.cdpay small{font-size:2.2cqw;opacity:.7;text-transform:uppercase;letter-spacing:.15em}
+.cdbig{font:800 11cqw/1 var(--display)}
+.cdtap{font-size:2.8cqw;display:flex;gap:1.2cqw;align-items:center;color:#FFA350;font-weight:800}
+.cdpay h3{margin:0;font:800 4.2cqw/1.1 var(--display)}
+.cdpay p{margin:0;font-size:2cqw;max-width:80%}
+.cdok{color:#6EE0A8;font-weight:800;font-size:3cqw;display:flex;gap:1cqw;align-items:center}
+.cdrc{display:grid;grid-template-columns:repeat(4,1fr);gap:1.6cqw;width:100%;margin-top:1cqw}
+.cdrc .cdbtn{flex-direction:column;padding:2.2cqw 1cqw;font-size:2.4cqw}
+.cdrc .i{width:3.6cqw;height:3.6cqw}
+.cdpip{position:fixed;left:252px;bottom:20px;width:340px;z-index:55;background:#0B1116;border-radius:14px;padding:6px 8px 8px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.cdpiphead{display:flex;align-items:center;gap:6px;color:#C9D6DD;font-size:12px;font-weight:700;padding:0 0 6px}
+.cdpiphead .i{width:14px;height:14px}
+.cdpiphead .spacer{flex:1}
+.cdpiphead .iconbtn{width:24px;height:24px;color:#C9D6DD;background:transparent;border-color:#2A3B47}
+.cdfield{font:700 3.6cqw/1 var(--mono);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);border-radius:1.4cqw;padding:1.8cqw 3cqw;display:flex;align-items:center;gap:.4cqw}.cdfield i{width:.3cqw;height:4cqw;background:#FFA350;animation:blink 1s steps(2) infinite}@keyframes blink{50%{opacity:0}}
+.rcpick{display:flex;flex-direction:column;gap:8px;margin-top:12px;align-items:flex-start}
+/* digital receipt */
+.phone{width:260px;max-width:100%;border:8px solid #0B1116;border-radius:30px;background:#F2F5F6;color:#14212A;padding:10px 10px 14px;display:flex;flex-direction:column;gap:8px;font-size:12px}
+.phtop{width:70px;height:6px;border-radius:3px;background:#0B1116;align-self:center}
+.phmsg{align-self:flex-start;max-width:92%;background:#E3E8EB;border-radius:14px 14px 14px 4px;padding:7px 10px;font-size:11.5px;line-height:1.35;overflow-wrap:anywhere}
+.phmsg small{display:block;font-weight:800;color:#5A6B76;font-size:10px}
+.phmsg.mail{align-self:stretch;border-radius:10px;max-width:none}
+.erc{background:#fff;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:4px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.erchead{display:flex;flex-direction:column;align-items:center;text-align:center;gap:1px;margin-bottom:6px}
+.erchead img{width:28px;height:28px;object-fit:contain}
+.erchead small{color:#5A6B76;font-size:10.5px}
+.erl{display:flex;justify-content:space-between;gap:8px;font-size:11.5px}
+.erl span{min-width:0}
+.erl.sub{color:#5A6B76}
+.erl.tot{font-weight:800;font-size:14px;border-top:1px dashed #DCE3E7;padding-top:4px;margin-top:2px}
+.ersave{background:#E6F6EE;color:#1E9360;font-weight:800;border-radius:8px;padding:5px 8px;text-align:center;font-size:11.5px}
+.ercode{text-align:center;margin-top:6px}.ercode small{color:#5A6B76;font-size:10px}
+.eroffer{background:#FFF1E4;color:#B8520A;border-radius:8px;padding:6px 8px;font-weight:700;font-size:11.5px;display:flex;gap:6px;align-items:center}
+.eroffer .i{width:14px;height:14px;flex:none}
+.errate{display:flex;justify-content:space-between;font-size:11.5px;font-weight:700}.errate span{color:#F07A1C;letter-spacing:2px}
+.erfoot{color:#5A6B76;font-size:10px;text-align:center}
+.erwrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:start}
+/* stores */
+.storegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.storecard{display:flex;flex-direction:column;gap:10px;min-width:0}
+.storecard.here{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.storecard .vav{width:36px;height:36px;font-size:12px;flex:none}
+.storekpi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.storekpi b{font:800 20px/1.1 var(--display);display:block}.storekpi small{color:var(--muted);font-size:11.5px}
+.trsteps{display:flex;gap:3px;flex-wrap:wrap}.trsteps span{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:99px;background:var(--surface-2);color:var(--muted)}.trsteps span.on{background:var(--ok-soft);color:var(--ok)}
+.storepill .vav{border-radius:7px;font-size:10px}
+@media (max-width:1100px){.cdgrid{grid-template-columns:1fr}}
+@media (max-width:820px){.cdpip{left:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px));width:min(300px,calc(100% - 24px))}.storepill small{display:none}}
+@media (max-width:640px){.erwrap{grid-template-columns:1fr}.erwrap .phone{justify-self:center}.cdframe{padding:8px;border-radius:14px}}
 </style>
 
 <div class="app">
@@ -747,6 +825,9 @@ const P = {
   users2:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
   game:'<rect x="2" y="6" width="20" height="12" rx="6"/><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"/>',
   cloud:'<path d="M17.5 19H7a5 5 0 1 1 1.1-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/>',
+  msg:'<path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z"/>',
+  monitor:'<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
+  building:'<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-4h6v4M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/>',
   store:'<path d="M3 9l1.5-5h15L21 9M3 9v11h18V9M3 9h18M9 20v-6h6v6"/>',
   edit:'<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/>',
   gift:'<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/>',
@@ -904,6 +985,8 @@ const ALERTS = [
 ];
 
 const NOTES = {
+  stores:{deck:'New · multiple stores', purpose:'Run several stores from one account: compare them live, move stock between stores before reordering, keep prices and offers in sync, and add a new store by copying an existing one.', data:['Per store: sales today vs last week, margin, staff on shift, over/short, low stock, alerts, online status','Stock of any product at every store; transfers and their status','Price differences by store, which stores run each offer, and each store’s licence, tax rate, lanes and manager'], build:['Each store is a location with its own licence, tax rate, sale hours, registers, cash and stock; catalog, vendors, price rules and offers are shared','Transfers take stock out when picked and add it when received, with a transfer record for licence rules','Owners see every store; managers and cashiers are tied to their store; reports filter by store or combine them']},
+  display:{deck:'New · customer display and digital receipts', purpose:'A screen facing the customer mirrors the order live (items, offers, savings, total, ID reminder, tap prompt), then lets them choose a text, email or paper receipt.', data:['Order lines, savings, CRV, tax and total from the register','Member name and points; rewards sign-up','Receipt choice and the digital receipt the customer gets'], build:['Second screen on each lane (HDMI/USB display or the card reader screen), driven by the register over the local network so it works offline','Digital receipts go out by SMS or email with a short link, return barcode, next-visit offer and opt-out','Receipts are saved to the member account and can be resent from Sales & Returns']},
   reports:{deck:'New · EOD, date range, monthly, yearly reports', purpose:'Close the day with a Z-report (sales, payments, cash drawer count, activity) and look back by any date range, month or year. Every report prints on a full page or on the 80 mm receipt printer.', data:['EOD: gross → net sales, tax, CRV, tenders, drawer float / drops / paid outs / counted / over-short, voids, refunds, ID checks, by category / cashier / hour','Date range: one row per day with totals','Monthly and yearly: net sales, gross profit, margin, average basket, vs last year'], build:['Z-report is generated when the manager closes the day; X-report any time before','Print: browser print for full page, ESC/POS for receipt printers; email PDF at close','Reports read from the sales ledger; totals match accounting export']},
   command:{deck:'Deck p.11 · AI Owner Command Center', purpose:'One morning view for the owner: today\'s numbers plus the five things that need attention, each linking to the screen that fixes it.', data:['Sales, margin, inventory value (POS + inventory service)','Priority feed ranked by $ impact and urgency','Hourly sales with an AI projection for the rest of the day'], build:['GET /dashboard/today','GET /ai/priorities?limit=5','Push refresh every 5 min; owner and manager roles only']},
   register:{deck:'Deck p.2–5 · Checkout, ID scan, payments, offline', purpose:'Fast lane checkout. Any 21+ item locks tender until an ID scan passes, and the sale keeps working when the internet drops.', data:['Catalog with category, size, ABV, CRV deposit, age flag','Cart, tax 8.75%, CRV, loyalty member','ID result: DOB, age, expiry, authenticity checks'], build:['Barcode scanner as keyboard wedge + camera fallback','ID SDK (Scandit / IDScan.net) on-device, store result not image','Terminal SDK (PAX, Verifone, Stripe) · offline store-and-forward queue in IndexedDB']},
@@ -1133,8 +1216,8 @@ const USERS = [
   {n:'Dev P.', role:'cashier', pin:'4444', color:'#1E9360'},
   {n:'Sam R.', role:'cashier', pin:'5555', color:'#6A3B18'},
 ];
-const CASHIER_ROUTES = ['register','returns','shifts','damage','receiving'];
-function allowed(r){ const u=USERS.find(x=>x.n===S.user); if (!u) return false; if (u.role==='owner') return true; if (u.role==='manager') return r!=='settings'; return CASHIER_ROUTES.includes(r); }
+const CASHIER_ROUTES = ['register','display','returns','shifts','damage','receiving'];
+function allowed(r){ const u=USERS.find(x=>x.n===S.user); if (!u) return false; if (u.role==='owner') return true; if (u.role==='manager') return r!=='settings' && r!=='stores'; return CASHIER_ROUTES.includes(r); }
 const SHIFTS = [
   {d:'Thu Sep 24', lane:'Lane 1', who:'Maria G.', open:'8:00 AM', close:'4:02 PM', sales:9120, exp:1712.40, cnt:1712.40},
   {d:'Thu Sep 24', lane:'Lane 1', who:'Dev P.', open:'4:00 PM', close:'2:04 AM', sales:11890, exp:2297.80, cnt:2294.05},
@@ -1178,7 +1261,7 @@ const S = {
   rcvTab:'receive', rcv:{po:'PO-10241', lines:[{pid:'modelo12', ord:20, rec:0, dmg:0, pack:2},{pid:'claw12', ord:10, rec:0, dmg:0, pack:2}], done:false},
   cnt:null,
   settings:{name:'Oak Street Liquor #014', addr:'1200 Oak St, Sacramento, CA 95814', phone:'(916) 555-0101', lic:'Type 21 · 21-584120', tax:8.75, crvS:0.05, crvL:0.10, open:'06:00', close:'02:00',
-    rHeader:'Thanks for shopping local!', rFooter:'Returns: unopened items within 30 days with receipt. Please drink responsibly.', rSave:true, rDefault:'Print'},
+    rHeader:'Thanks for shopping local!', rFooter:'Returns: unopened items within 30 days with receipt. Please drink responsibly.', rSave:true, rDefault:'Ask on customer screen', rAutoMember:true},
   user:'Priya N.', signin:null, shift:{open:true, lane:'Lane 1', who:'Maria G.', opened:'8:00 AM', float:300}, den:null, denPhase:null,
   clocked:{'Priya N.':null, 'Alex K.':'8:30 AM', 'Maria G.':'7:52 AM', 'Dev P.':null, 'Sam R.':null},
   saleQ:'', saleSel:1047, ret:null, credit:0,
@@ -1191,6 +1274,8 @@ const S = {
   buy:'tito', buyQ:null, poTab:'compare', poDraft:[],
   ob:{name:'Wine Wednesday', type:'% off', val:15, target:'Wine', start:'2026-10-07', end:'2026-10-28', days:'Wed', members:false},
   dmg:{pid:'josh750', q:1, why:'Broken in store', where:'Sales floor', disp:'Write off', photo:null},
+  store:'014', stTab:'overview', stPid:'casa750', priceMode:'store', ns:null,
+  cd:{rc:null, ask:null, to:''}, cdPhase:null, cdPrev:null, cdPip:false, cdSlide:0, cdset:{save:true, id:true, join:true, slides:true, rc:true}, er:{how:'Text', to:''},
 };
 try{ const r = localStorage.getItem('bev-route'); if(r && NOTES[r]) S.route = r; }catch(e){}
 const h = (location.hash||'').slice(1); if (NOTES[h]) S.route = h;
@@ -1198,7 +1283,9 @@ const h = (location.hash||'').slice(1); if (NOTES[h]) S.route = h;
 const ROUTES = [
   ['command','Command Center','command','Owner'],
   ['reports','Reports','chart','Owner'],
+  ['stores','All Stores','building','Owner'],
   ['register','Register','register','Store'],
+  ['display','Customer Display','monitor','Store'],
   ['returns','Sales & Returns','sync','Store'],
   ['shifts','Shifts & Staff','clock','Store'],
   ['inventory','Inventory','inventory','Store'],
@@ -1218,6 +1305,8 @@ const ROUTES = [
   ['settings','Store Settings','gear','Setup'],
 ];
 const TITLES = {
+  stores:['All Stores','Every store live · transfers · shared prices'],
+  display:['Customer Display','What the customer sees at the counter · digital receipts'],
   reports:['Reports','End of day, date range, monthly and yearly sales · print any report'],
   command:['Good morning','Friday, September 25 · Oak Street Liquor #014'],
   register:['Register · Lane 1','Cashier: Maria G. · Shift opened 8:00 AM'],
@@ -1250,15 +1339,16 @@ function renderRail(){
     const cnt = id==='alerts' ? `<span class="cnt">${openAlerts()}</span>` : id==='devices' && S.queue.length ? `<span class="cnt">${S.queue.length}</span>` : '';
     html += `<a class="nav ${S.route===id?'on':''}" href="#${id}" data-go="${id}">${ic(icon)}<span>${label}</span>${cnt}</a>`;
   }
-  html += `<div class="railfoot"><strong>${esc(S.settings.name)}</strong>Sacramento, CA · 3 lanes<br>POC build · demo data</div>`;
+  html += `<div class="railfoot"><strong>${esc(S.settings.name)}</strong>${esc(curStore().city)}, CA · ${curStore().lanes} lanes · ${STORES.length} stores<br>POC build · demo data</div>`;
   $('#rail').innerHTML = html;
 }
 function renderTop(){
-  const [t,sub] = TITLES[S.route];
+  const [t,sub0] = TITLES[S.route], st=curStore(), sub=sub0.replace('Oak Street Liquor #014', st.n).replace('Lane 1', 'Lane 1 · '+st.short);
   const net = S.online
     ? `<button class="pill" data-act="net" title="Simulate an internet outage">${'<span class="dot"></span>'}Online · synced</button>`
     : `<button class="pill off" data-act="net" title="Restore connection">${'<span class="dot"></span>'}Offline · ${S.queue.length} queued</button>`;
   $('#top').innerHTML = `<div><h1>${t}</h1><div class="sub">${sub}</div></div><span class="spacer"></span>
+    <button class="userpill storepill" data-act="storepick" title="Switch store">${`<span class="vav" style="background:${st.color}">${st.id}</span>`}${esc(st.short)}<small>· ${STORES.length} stores</small></button>
     ${(()=>{ const u=USERS.find(x=>x.n===S.user); return u?`<button class="userpill" data-act="signin" title="Switch user or lock">${`<span class="vav" style="background:${u.color}">${initials(u.n)}</span>`}${u.n}<small>· ${u.role}</small></button>`:''; })()}
     ${net}
     <button class="btn demo sm" data-tour="start" title="Guided product demo">${ic('play','style="width:14px;height:14px"')}<span>${S.tour!=null?'Restart demo':'Demo'}</span></button>
@@ -1417,6 +1507,7 @@ VIEWS.register = () => {
     </section>
     <aside class="ticket" data-note="Customer order · locks tender until ID passes">
       <header><div><div class="h2">Customer order</div><div class="muted" style="font-size:12px">Sale #${S.saleNo} · ${S.member ? `${S.member} · 1,240 pts` : 'Walk-in customer'}</div></div><span class="spacer"></span>
+        <button class="iconbtn" data-act="cdpip" title="${S.cdPip?'Hide':'Show'} customer screen" aria-label="Customer screen" aria-pressed="${S.cdPip}">${ic('monitor')}</button>
         <button class="iconbtn" data-act="member" title="${S.member?'Remove member':'Add member'}" aria-label="${S.member?'Remove member':'Add member'}" ${S.member?'aria-pressed="true"':''}>${ic('users2')}</button>
         <button class="btn sm danger" data-act="refuse" ${S.cart.length?'':'disabled'} title="Refuse sale">${ic('ban')}Refuse</button></header>
       ${idState}
@@ -1444,7 +1535,7 @@ VIEWS.register = () => {
         <button class="btn primary big" data-act="pay" ${S.cart.length?'':'disabled'}>${restricted && S.id!=='ok' ? ic('id')+' Verify ID & pay' : ic('card')+' Payment · '+money(t.total)}</button>
       </div>
     </aside>
-  </div>`;
+  </div>${cdPip()}`;
 };
 function byId(id){ return PRODUCTS.find(p=>p.id===id); }
 function offerOn(id){ return OFFERS.find(o=>o.id===id && o.status==='Active'); }
@@ -2269,8 +2360,8 @@ VIEWS.returns = () => {
       ${list.map(x=>{ const t=saleCalc(x.items); return `<button class="vrow ${sale&&x.no===sale.no?'on':''}" data-salesel="${x.no}" style="grid-template-columns:1fr auto"><span><b>Sale #${x.no}</b><small>${x.t} · ${x.who} · ${esc(x.tender)}</small><small>${x.items.map(([id,q])=>`${q}× ${byId(id).n}`).join(', ')}</small></span><span style="text-align:right"><b class="num">${money(t.total)}</b>${RETURNS.some(r=>r.no===x.no)?'<small style="color:var(--warn)">returned</small>':''}</span></button>`; }).join('') || '<div class="empty">No sale matches.</div>'}
     </aside>
     ${sale?`<section class="card" data-note="Sale detail · reprint, return, exchange">
-      <div class="cardhead"><h2>Sale #${sale.no}</h2><span class="chip plain">${sale.t}</span><span class="spacer"></span><button class="btn sm" data-act="reprint">${ic('printer')}Reprint receipt</button><button class="btn sm primary" data-act="retstart">${ic('sync')}Return or exchange</button></div>
-      <dl class="kv" style="margin-bottom:12px"><dt>Cashier</dt><dd>${sale.who}</dd><dt>Payment</dt><dd>${esc(sale.tender)}</dd><dt>ID check</dt><dd>${sale.idm}</dd><dt>Member</dt><dd>${sale.member||'—'}</dd></dl>
+      <div class="cardhead"><h2>Sale #${sale.no}</h2><span class="chip plain">${sale.t}</span><span class="spacer"></span><button class="btn sm" data-act="reprint">${ic('printer')}Reprint receipt</button><button class="btn sm" data-act="eropen">${ic('msg')}Send receipt</button><button class="btn sm primary" data-act="retstart">${ic('sync')}Return or exchange</button></div>
+      <dl class="kv" style="margin-bottom:12px"><dt>Cashier</dt><dd>${sale.who}</dd><dt>Payment</dt><dd>${esc(sale.tender)}</dd><dt>ID check</dt><dd>${sale.idm}</dd><dt>Member</dt><dd>${sale.member||'—'}</dd><dt>Receipt</dt><dd>${sale.rc?esc(sale.rc.how)+(sale.rc.to?' · '+esc(sale.rc.to):''):'Printed'}</dd></dl>
       ${sale.items.map(([id,q])=>{ const p=byId(id); return `<div class="saleitem" style="grid-template-columns:26px 1fr auto"><span>${bottleSVG(p)}</span><span><b>${esc(p.n)}</b><div class="muted" style="font-size:11.5px">${p.sz} · ${q} × ${money(p.p)}${p.crv?` · CRV ${money(p.crv)}`:''}</div></span><span class="num">${money(p.p*q)}</span></div>`; }).join('')}
       <dl class="kv" style="margin-top:10px"><dt>Subtotal</dt><dd>${money(c.sub)}</dd><dt>CRV</dt><dd>${money(c.crv)}</dd><dt>Sales tax</dt><dd>${money(c.tax)}</dd><dt class="tot">Total</dt><dd class="tot">${money(c.total)}</dd></dl>
       ${rets.map(r=>`<div class="clockban soon" style="margin-top:10px">${ic('sync')} ${r.kind==='exchange'?'Exchanged':'Refunded'} ${money(r.amt)} · ${r.items} · ${r.why} · ${r.dest==='shelf'?'back on shelf':'sent to Damaged Goods'} · ${r.t}</div>`).join('')}
@@ -2344,7 +2435,8 @@ VIEWS.settings = () => {
       <label class="field">Header line<input id="st-rHeader" value="${esc(st.rHeader)}"></label>
       <label class="field">Footer (return policy)<textarea id="st-rFooter">${esc(st.rFooter)}</textarea></label>
       <div class="setrow"><div><b>Show "You saved" on receipts</b></div><button class="toggle" aria-pressed="${st.rSave}" data-act="strsave" aria-label="Show savings"></button></div>
-      <div class="field">Default receipt<div class="quick">${['Print','Text','Email','Ask each time'].map(v=>`<button class="${st.rDefault===v?'on':''}" data-strdef="${v}">${v}</button>`).join('')}</div></div>
+      <div class="field">Default receipt<div class="quick">${['Ask on customer screen','Print','Text','Email'].map(v=>`<button class="${st.rDefault===v?'on':''}" data-strdef="${v}">${v}</button>`).join('')}</div></div>
+      <div class="setrow"><div><b>Text members their receipt automatically</b><div class="muted" style="font-size:12px">Uses the phone number on the member account</div></div><button class="toggle" aria-pressed="${st.rAutoMember}" data-act="strauto" aria-label="Auto text members"></button></div>
       <button class="btn sm" style="align-self:flex-start" data-act="strprev">${ic('printer')}Preview receipt</button></section>
     <section class="card" data-note="Users and roles">
       <div class="cardhead"><h2>Users and roles</h2><span class="spacer"></span><button class="btn sm" data-toast="New user form opens here in the full app">+ Add user</button></div>
@@ -2760,7 +2852,8 @@ function swapModal(id){
       <div class="swapcard best"><span class="chip ai">${ic('spark')} Best match</span><span class="art">${bottleSVG(b)}</span><b>${b.n}</b><span style="color:var(--accent);font-weight:800">${money(b.p)}</span></div>
     </div>
     <ul class="why">${sw.why.map(w=>`<li>${ic('check')}${w}</li>`).join('')}</ul>
-    <div class="comply"><span>${ic('truck','style="width:14px;height:14px"')} ${sw.back}</span></div></div>
+    <div class="comply"><span>${ic('truck','style="width:14px;height:14px"')} ${sw.back}</span></div>
+    ${(()=>{ const o=STORES.filter(x=>x.id!==S.store).map(x=>({x,q:stockAt(id,x.id)})).filter(r=>r.q>0).sort((a,b)=>b.q-a.q)[0]; return o?`<div class="setrow" style="border:0;padding:6px 0 0"><span style="font-size:13px">${ic('building','style="width:14px;height:14px;vertical-align:-2px"')} <b>${esc(o.x.short)}</b> has ${o.q} · hold one for the customer or move some here</span><button class="btn sm" data-trmake="${id}|${o.x.id}|${Math.min(6,o.q)}">Request ${Math.min(6,o.q)}</button></div>`:''; })()}</div>
     <footer><button class="btn" data-toast="Customer will get a text when Kim Crawford is back">Text customer when back</button><button class="btn primary" data-act="swapok" data-v="${b.id}">Add ${b.n}</button></footer></div></div>`;
 }
 function reportModal(){
@@ -2796,7 +2889,7 @@ function discModal(){
 function refocus(id){ const el=document.getElementById(id); if (el){ el.focus(); try{ const v=el.value; el.setSelectionRange(v.length,v.length);}catch(e){} } }
 
 /* ------------------------------------------------ modals: ID + payment */
-function closeModal(){ $('#modal').innerHTML=''; }
+function closeModal(){ $('#modal').innerHTML=''; if (S.cdPhase && S.cdPhase!=='done'){ S.cdPhase=null; setTimeout(cdRefresh,0); } }
 function barcode(){ let s=''; let seed=7; for (let i=0;i<90;i++){ seed=(seed*16807)%2147483647; s+= seed%3 ? '<i></i>' : '<i style="background:transparent"></i>'; } return s; }
 function idContinue(msg){
   toast(msg);
@@ -2876,6 +2969,7 @@ function runId(under){
 }
 let payMethod='card';
 function payModal(phase='choose'){
+  S.cdPhase=phase; setTimeout(cdRefresh,0);
   const t = totals(); const over = !S.online && t.total>250;
   const body = phase==='choose' ? `
       <div class="methods">${[['card','Card','card'],['tap','Tap / wallet','tap'],['cash','Cash','cash'],['split','Split','split']].map(m=>`<button class="${payMethod===m[0]?'on':''}" data-pm="${m[0]}">${ic(m[2])}${m[1]}</button>`).join('')}</div>
@@ -2884,7 +2978,8 @@ function payModal(phase='choose'){
         : `<div class="term"><div class="scr"><span style="font-size:11px;color:#8FA2AD">PAX A920 · Lane 1</span><span class="amt">${money(t.total)}</span><span style="font-size:12px">${S.online?'Insert, tap or swipe':'Offline: insert or tap'}</span></div><span class="nfc">${ic('tap','style="width:26px;height:26px;color:#FFA350"')}</span><span style="font-size:11px;color:#8FA2AD">EMV · NFC · Apple Pay · Google Pay · PIN</span></div>`}
       ${!S.online ? `<div class="offbanner">${ic('wifioff')} ${over?`Offline limit is $250 per sale. Ask for cash or split the payment.`:'You are offline. This card will be stored and uploaded when the connection returns.'}</div>`:''}`
     : phase==='wait' ? `<div class="term"><div class="scr"><span class="amt">${money(t.total)}</span><span style="font-size:12px">Waiting for customer…</span></div><span class="nfc">${ic('tap','style="width:26px;height:26px;color:#FFA350"')}</span></div>`
-    : `<div class="verdict ok" style="justify-content:center">${ic('check','style="width:34px;height:34px"')}<div><div class="agebig" style="font-size:34px">${S.online?'Approved':'Stored offline'}</div><b>Sale #${S.saleNo} · ${money(t.total)}</b><div style="font-size:12px">${S.online?'Visa ·· 4412 · auth 084213':'Will upload automatically when the internet returns'} · receipt ${S.member?'texted to member':'printed'}</div></div></div>`;
+    : `<div class="verdict ok" style="justify-content:center">${ic('check','style="width:34px;height:34px"')}<div><div class="agebig" style="font-size:34px">${S.online?'Approved':'Stored offline'}</div><b>Sale #${S.saleNo} · ${money(t.total)}</b><div style="font-size:12px">${S.online?'Visa ·· 4412 · auth 084213':'Will upload automatically when the internet returns'} </div></div></div>
+      <div class="rcpick"><b>Receipt</b>${S.cd.rc?`<span class="chip ok">${ic('check')} ${RCPT_LBL[S.cd.rc]}${rcTo(S.cd.rc)?' · '+esc(rcTo(S.cd.rc)):''}</span>`:`<span class="muted" style="font-size:12px">${S.cd.ask?`Customer is typing their ${S.cd.ask==='text'?'mobile number':'email'} on the customer screen`:S.cdset.rc?'Customer is choosing on the customer screen, or pick for them:':'Ask the customer:'}</span>`}<div class="quick">${['text','email','print','none'].map(k=>`<button class="${S.cd.rc===k?'on':''}" data-cdrc="${k}">${RCPT_LBL[k]}</button>`).join('')}</div></div>`;
   $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Take payment" style="width:min(560px,100%)">
     <header>${ic('card')}<h2>Take payment</h2><span class="spacer"></span><span class="num" style="font-weight:700;font-size:18px">${money(t.total)}</span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
     <div class="body">${body}</div>
@@ -2893,7 +2988,7 @@ function payModal(phase='choose'){
 }
 function charge(){
   payModal('wait');
-  setTimeout(()=>{ S.cart.forEach(l=>{ const pr=byId(l.id); pr.stock=Math.max(0,pr.stock-l.qty); }); if (!SALES.some(x=>x.no===S.saleNo)) SALES.unshift({no:S.saleNo, t:nowLabel(), who:S.user, items:S.cart.map(l=>[l.id,l.qty]), tender: payMethod==='cash'?'Cash':payMethod==='tap'?'Apple Pay':'Visa ·· 4412', idm: S.cart.some(l=>byId(l.id).r) ? (S.idMethod==='visual'?'Approved by eye':S.idMethod==='manual'?'Date of birth typed':'ID scanned') : 'No 21+ items', member:S.member}); if (!S.online) S.queue.push({no:S.saleNo, amt:Math.round(totals().total*100)/100, t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), card:'Visa ·· 4412'}); payModal('done'); renderRail(); renderTop(); }, payMethod==='cash'?300:1400);
+  setTimeout(()=>{ S.cart.forEach(l=>{ const pr=byId(l.id); pr.stock=Math.max(0,pr.stock-l.qty); }); if (!SALES.some(x=>x.no===S.saleNo)) SALES.unshift({no:S.saleNo, t:nowLabel(), who:S.user, items:S.cart.map(l=>[l.id,l.qty]), tender: payMethod==='cash'?'Cash':payMethod==='tap'?'Apple Pay':'Visa ·· 4412', idm: S.cart.some(l=>byId(l.id).r) ? (S.idMethod==='visual'?'Approved by eye':S.idMethod==='manual'?'Date of birth typed':'ID scanned') : 'No 21+ items', member:S.member}); if (!S.online) S.queue.push({no:S.saleNo, amt:Math.round(totals().total*100)/100, t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), card:'Visa ·· 4412'}); S.cd.rc=null; S.cd.ask=null; S.cd.to=''; { const def=S.settings.rDefault; if (def==='Print' || (def!=='Ask on customer screen' && S.member)) setReceipt(def.toLowerCase()); else if (S.member && S.settings.rAutoMember) setReceipt('text'); } payModal('done'); renderRail(); renderTop(); }, payMethod==='cash'?300:1400);
 }
 
 function startDealRead(){ S.dealSheet='reading'; S.dealRows=SHEET.rows.map(()=>'review'); render(); setTimeout(()=>{ S.dealSheet='done'; render(); toast('5 lines read · 2 deals worth taking','spark'); }, 1400); }
@@ -2904,11 +2999,207 @@ function dealConfirm(i){
   ALERTS.unshift({id:100+i, t:'deal', sev:'info', ic:'gift', h:'New vendor deal worth taking', p:`${SHEET.vendor}: ${r.deal.toLowerCase()} on ${r.prod}. ${r.vt}. Ends Oct 31.`, when:'Just now', acts:['Mark seen','Check the deal'], buygo:r.buy||null, go:r.buy?null:'purchasing'});
 }
 
+/* ------------------------------------------------ multiple stores */
+const STORES = [
+  {id:'014', n:'Oak Street Liquor #014', short:'Oak Street', city:'Sacramento', addr:'1200 Oak St, Sacramento, CA 95814', phone:'(916) 555-0101', lic:'Type 21 · 21-584120', tax:8.75, lanes:3, mgr:'Alex K.', today:4380, lastwk:3960, margin:31.2, alerts:8, online:true, queued:0, onShift:3, os:-3.75, low:6, color:'#F07A1C'},
+  {id:'021', n:'Midtown Liquor #021', short:'Midtown', city:'Sacramento', addr:'2415 J St, Sacramento, CA 95816', phone:'(916) 555-0121', lic:'Type 21 · 21-601877', tax:8.75, lanes:2, mgr:'Rosa T.', today:3120, lastwk:3310, margin:29.8, alerts:3, online:true, queued:0, onShift:2, os:0, low:3, color:'#2C74D6'},
+  {id:'027', n:'Folsom Liquor #027', short:'Folsom', city:'Folsom', addr:'310 E Bidwell St, Folsom, CA 95630', phone:'(916) 555-0127', lic:'Type 21 · 21-622450', tax:7.75, lanes:2, mgr:'Ken W.', today:2640, lastwk:2380, margin:32.4, alerts:5, online:false, queued:4, onShift:2, os:1.25, low:9, color:'#1E9360'},
+];
+const STOCK = {'021':{kim750:14, casa750:22, noon8:20, jerky:24}, '027':{kim750:3, casa750:14, noon8:5, jerky:4}};
+const STORE_PRICE = {'027':{bud12:13.49, tito175:33.99, snickers:2.29}};
+const TRANSFERS = [
+  {no:'TR-2207', pid:'noon8', q:6, from:'021', to:'014', st:2, when:'Sep 24'},
+  {no:'TR-2206', pid:'lamarca', q:6, from:'014', to:'027', st:3, when:'Sep 22'},
+];
+const TR_ST = ['Requested','Picked','In transit','Received'];
+const OFFER_SCOPE = {};
+const curStore = () => STORES.find(s=>s.id===S.store) || STORES[0];
+const storeOf = id => STORES.find(s=>s.id===id);
+function stockAt(pid, sid){
+  if (sid===S.store) return byId(pid).stock;
+  if (!STOCK[sid]) STOCK[sid]={};
+  if (STOCK[sid][pid]==null){ let h=7; for (const ch of pid+sid) h=(h*31+ch.charCodeAt(0))%9973; const b=byId(pid).stock||14; STOCK[sid][pid]=storeOf(sid)?.fresh ? 0 : Math.max(0, Math.round(b*(0.35+(h%110)/100))); }
+  return STOCK[sid][pid];
+}
+function setStockAt(pid, sid, v){ v=Math.max(0,v); if (sid===S.store) byId(pid).stock=v; else { stockAt(pid,sid); STOCK[sid][pid]=v; } }
+const priceAt = (pid, sid) => (S.priceMode==='store' && STORE_PRICE[sid] && STORE_PRICE[sid][pid]) || byId(pid).p;
+function switchStore(id){
+  if (id===S.store) return;
+  STOCK[S.store] = Object.fromEntries(PRODUCTS.map(p=>[p.id,p.stock]));
+  PRODUCTS.forEach(p=>{ p.stock = stockAt(p.id, id); const o=S.priceMode==='store' && STORE_PRICE[S.store] && STORE_PRICE[S.store][p.id]; if (!o || p.base==null) p.base = o ? p.base??p.p : p.p; const n=S.priceMode==='store' && STORE_PRICE[id] && STORE_PRICE[id][p.id]; p.p = n || p.base; });
+  const st=storeOf(id); S.store=id;
+  Object.assign(S.settings, {name:st.n, addr:st.addr, phone:st.phone, lic:st.lic, tax:st.tax}); TAX=st.tax/100;
+  S.cart=[]; S.id=null; S.member=null; S.tdisc=null; S.credit=0; S.cdPhase=null; S.cd.rc=null;
+}
+function transferSuggestions(){
+  const out=[];
+  for (const p of PRODUCTS){ const here=p.stock; if (here>6) continue;
+    const best = STORES.filter(s=>s.id!==S.store).map(s=>({s, q:stockAt(p.id,s.id)})).sort((a,b)=>b.q-a.q)[0];
+    if (best && best.q>=12 && !TRANSFERS.some(t=>t.pid===p.id && t.to===S.store && t.st<3)) out.push({p, from:best.s, have:best.q, q:Math.min(12, Math.floor(best.q/2)), here}); }
+  return out.slice(0,3);
+}
+function storeModal(){
+  const role=USERS.find(u=>u.n===S.user)?.role;
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Switch store" style="width:min(520px,100%)">
+    <header>${ic('store')}<h2>Your stores</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="display:flex;flex-direction:column;gap:8px">
+      ${role!=='owner'?`<div class="clockban soon">${ic('lock')} ${esc(S.user)} is set up for ${esc(curStore().short)} only. An owner can switch stores.</div>`:''}
+      ${STORES.map(s=>`<button class="vrow ${s.id===S.store?'on':''}" data-store="${s.id}" ${role!=='owner'&&s.id!==S.store?'disabled':''} ><span class="vav" style="background:${s.color}">${s.id}</span><span><b>${esc(s.n)}</b><small>${esc(s.addr)}</small></span><span style="text-align:right"><span class="chip ${s.online?'ok':'warn'}">${s.online?'Online':'Offline · '+s.queued+' queued'}</span></span></button>`).join('')}
+    </div>
+    <footer>${role==='owner'?`<button class="btn" data-act="allstores">${ic('chart')}All stores (head office)</button>`:''}<button class="btn primary" data-close>Done</button></footer></div></div>`;
+}
+const pctChg = (a,b) => b ? ((a-b)/b*100) : 0;
+VIEWS.stores = () => {
+  const tab=S.stTab, tot=STORES.reduce((a,s)=>a+s.today,0), last=STORES.reduce((a,s)=>a+s.lastwk,0), off=STORES.filter(s=>!s.online).length;
+  const tabs = `<div class="seg" role="tablist">${[['overview','Overview'],['stock','Stock & transfers'],['prices','Prices & offers'],['setup','Store setup']].map(([k,l])=>`<button class="${tab===k?'on':''}" data-sttab="${k}">${l}</button>`).join('')}</div>`;
+  let body='';
+  if (tab==='overview'){
+    const mx=Math.max(...STORES.map(s=>s.today));
+    body = `<section class="stats">
+      <div><b class="num">${money(tot,0)}</b><small>all stores today (to 10:04 AM)</small></div>
+      <div><b class="num" style="color:${tot>=last?'var(--ok)':'var(--crit)'}">${tot>=last?'+':''}${pctChg(tot,last).toFixed(1)}%</b><small>vs last Friday, same time</small></div>
+      <div><b class="num">${(STORES.reduce((a,s)=>a+s.margin*s.today,0)/tot).toFixed(1)}%</b><small>blended margin</small></div>
+      <div><b class="num" style="color:${off?'var(--warn)':'var(--ok)'}">${STORES.length-off} of ${STORES.length}</b><small>stores online${off?` · ${STORES.filter(s=>!s.online).map(s=>s.short).join(', ')} selling offline`:''}</small></div></section>
+    <div class="storegrid" data-note="One card per store · live from each store's registers">${STORES.map(s=>{ const ch=pctChg(s.today,s.lastwk); return `<article class="card storecard ${s.id===S.store?'here':''}">
+      <div style="display:flex;gap:10px;align-items:center"><span class="vav" style="background:${s.color}">${s.id}</span><div style="min-width:0"><b>${esc(s.n)}</b><div class="muted" style="font-size:12px">${esc(s.city)} · manager ${esc(s.mgr)} · ${s.lanes} lanes</div></div><span class="spacer"></span><span class="chip ${s.online?'ok':'warn'}">${s.online?'Online':'Offline'}</span></div>
+      <div class="storekpi"><div><b class="num">${money(s.today,0)}</b><small>sales today</small></div><div><b class="num" style="color:${ch>=0?'var(--ok)':'var(--crit)'}">${ch>=0?'+':''}${ch.toFixed(1)}%</b><small>vs last Fri</small></div><div><b class="num">${s.margin.toFixed(1)}%</b><small>margin</small></div></div>
+      <span class="meter"><i style="width:${s.today/mx*100}%;background:${s.color}"></i></span>
+      <dl class="kv" style="font-size:12.5px"><dt>Staff on shift</dt><dd>${s.onShift}</dd><dt>Last close over/short</dt><dd style="color:${s.os<0?'var(--crit)':'inherit'}">${s.fresh?'—':money(s.os)}</dd><dt>Low-stock products</dt><dd>${s.low}</dd><dt>Open alerts</dt><dd>${s.alerts}</dd>${s.queued?`<dt>Card sales waiting to upload</dt><dd style="color:var(--warn)">${s.queued}</dd>`:''}</dl>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">${s.id===S.store?'<span class="chip plain">You are here</span>':`<button class="btn sm" data-store="${s.id}" data-then="command">Open this store</button>`}<button class="btn sm ghost" data-sttab="stock">Stock</button></div></article>`; }).join('')}</div>
+    <section class="card" data-note="Combined reporting"><div class="cardhead"><h2>Sales by store, last 7 days</h2><span class="spacer"></span><span class="muted" style="font-size:12px">Reports can be run per store or for all stores combined</span></div>
+      <div class="tablewrap"><table class="invlist" style="min-width:520px"><thead><tr><th>Store</th>${['Sat','Sun','Mon','Tue','Wed','Thu'].map(d=>`<th class="r">${d}</th>`).join('')}<th class="r">Week</th></tr></thead><tbody>
+      ${STORES.map((s,k)=>{ const days=[1.32,1.05,0.78,0.81,0.86,1.12].map((f,i)=>Math.round((s.fresh?0:s.lastwk*2.4)*f*(1+((k+i)%3-1)*0.04))); return `<tr><td><b>${esc(s.short)}</b></td>${days.map(v=>`<td class="r num">${money(v,0)}</td>`).join('')}<td class="r num"><b>${money(days.reduce((a,b)=>a+b,0),0)}</b></td></tr>`; }).join('')}</tbody></table></div></section>`;
+  }
+  if (tab==='stock'){
+    const pid=S.stPid, p=byId(pid), sug=transferSuggestions();
+    body = `<div class="compgrid" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+      <section class="card" data-note="Stock at every store"><div class="cardhead"><h2>Stock at every store</h2><span class="spacer"></span><label class="field" style="min-width:0"><select id="mst-pid">${PRODUCTS.map(x=>`<option value="${x.id}" ${x.id===pid?'selected':''}>${esc(x.n)}</option>`).join('')}</select></label></div>
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><span class="thumb" style="width:30px;height:56px;display:block">${bottleSVG(p)}</span><div><b>${esc(p.n)}</b><div class="muted" style="font-size:12px">${p.sz} · ${esc(VENDOR_OF[pid]||'')}</div></div></div>
+        ${STORES.map(s=>{ const q=stockAt(pid,s.id), d=Math.round(q/Math.max(0.4,(p.stock+q)/30)); return `<div class="setrow"><div><b>${esc(s.short)}</b> ${s.id===S.store?'<span class="chip plain">this store</span>':''}<div class="muted" style="font-size:12px">${q?`about ${d} days left`:'out of stock'}</div></div><span style="display:flex;gap:8px;align-items:center"><b class="num" style="font-size:18px;color:${!q?'var(--crit)':q<=6?'var(--warn)':'inherit'}">${q}</b>${s.id!==S.store&&q>=4?`<button class="btn sm" data-trmake="${pid}|${s.id}|${Math.min(6,Math.floor(q/2))}">Request ${Math.min(6,Math.floor(q/2))}</button>`:''}</span></div>`; }).join('')}</section>
+      <section class="card" data-note="AI · move stock before you reorder"><div class="cardhead"><h2>${ic('spark')} Move stock before you reorder</h2></div>
+        ${sug.length?sug.map(x=>`<div class="setrow"><div style="min-width:0"><b>${esc(x.p.n)}</b><div class="muted" style="font-size:12px">${x.here?`Only ${x.here} left here`:'Sold out here'} · ${esc(x.from.short)} has ${x.have}. Moving ${x.q} is cheaper and faster than a rush order.</div></div><button class="btn sm primary" data-trmake="${x.p.id}|${x.from.id}|${x.q}">Move ${x.q}</button></div>`).join(''):'<div class="empty">Nothing to move right now.</div>'}</section></div>
+    <section class="card" data-note="Transfers · requested → picked → in transit → received"><div class="cardhead"><h2>Transfers between stores</h2><span class="spacer"></span><span class="muted" style="font-size:12px">Stock leaves the sending store when picked and arrives when received</span></div>
+      <div class="tablewrap"><table class="invlist" style="min-width:620px"><thead><tr><th>Transfer</th><th>Product</th><th>From → to</th><th>Status</th><th></th></tr></thead><tbody>
+      ${TRANSFERS.map((t,i)=>`<tr><td><b>${t.no}</b><div class="muted" style="font-size:11.5px">${t.when}</div></td><td>${t.q} × ${esc(byId(t.pid).n)}</td><td>${esc(storeOf(t.from).short)} → ${esc(storeOf(t.to).short)}</td><td><div class="trsteps">${TR_ST.map((l,k)=>`<span class="${k<=t.st?'on':''}">${l}</span>`).join('')}</div></td><td class="r">${t.st<3?`<button class="btn sm" data-trnext="${i}">${['Mark picked','Send','Receive'][t.st]}</button>`:'<span class="chip ok">Done</span>'}</td></tr>`).join('')}</tbody></table></div></section>`;
+  }
+  if (tab==='prices'){
+    const diff = PRODUCTS.filter(p=>STORES.some(s=>STORE_PRICE[s.id]&&STORE_PRICE[s.id][p.id]));
+    body = `<section class="card" style="display:flex;flex-direction:column;gap:10px" data-note="Pricing across stores">
+      <div class="cardhead"><h2>Prices across stores</h2></div>
+      <div class="quick">${[['same','Same prices at every store'],['store','Each store can differ']].map(([k,l])=>`<button class="${S.priceMode===k?'on':''}" data-pmode="${k}">${l}</button>`).join('')}</div>
+      <div class="muted" style="font-size:12px">${S.priceMode==='same'?'Price changes approved in Pricing go to every store’s registers and shelf tags at once.':'Each store keeps its own prices where set below; everything else follows the head office price.'}</div>
+      <div class="tablewrap"><table class="invlist" style="min-width:520px"><thead><tr><th>Product</th>${STORES.map(s=>`<th class="r">${esc(s.short)}</th>`).join('')}</tr></thead><tbody>
+      ${(diff.length?diff:PRODUCTS.slice(0,4)).map(p=>`<tr><td><b>${esc(p.n)}</b></td>${STORES.map(s=>{ const v=(STORE_PRICE[s.id]&&STORE_PRICE[s.id][p.id])||p.p; return `<td class="r num" style="${v!==p.p?'color:var(--warn);font-weight:800':''}">${money(S.priceMode==='same'?p.p:v)}${v!==p.p&&S.priceMode==='store'?' ●':''}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div>
+      ${diff.length?`<button class="btn sm" style="align-self:flex-start" data-act="pricesync">Match every store to head office prices</button>`:'<span class="chip ok" style="align-self:flex-start">All stores match</span>'}</section>
+    <section class="card" data-note="Offers per store"><div class="cardhead"><h2>Where each offer runs</h2><span class="spacer"></span><span class="muted" style="font-size:12px">Tap a store to switch it on or off</span></div>
+      ${OFFERS.slice(0,6).map(o=>{ const sc=OFFER_SCOPE[o.id]||STORES.map(s=>s.id); return `<div class="setrow"><div style="min-width:0"><b>${esc(o.n)}</b><div class="muted" style="font-size:12px">${esc(o.rule)}</div></div><div class="quick">${STORES.map(s=>`<button class="${sc.includes(s.id)?'on':''}" data-ofs="${o.id}|${s.id}" style="padding:4px 9px;font-size:11.5px">${esc(s.short)}</button>`).join('')}</div></div>`; }).join('')}</section>`;
+  }
+  if (tab==='setup'){
+    const N=S.ns;
+    body = `<section class="card" data-note="Store list"><div class="cardhead"><h2>Stores</h2><span class="spacer"></span>${N?'':`<button class="btn sm primary" data-act="nsnew">+ Add store</button>`}</div>
+      <div class="tablewrap"><table class="invlist" style="min-width:680px"><thead><tr><th>Store</th><th>Address</th><th>Licence</th><th class="r">Sales tax</th><th class="r">Lanes</th><th>Manager</th></tr></thead><tbody>
+      ${STORES.map(s=>`<tr><td><span class="vav" style="background:${s.color};display:inline-grid;width:26px;height:26px;font-size:10px;vertical-align:middle;margin-right:6px">${s.id}</span><b>${esc(s.short)}</b></td><td>${esc(s.addr)}</td><td>${esc(s.lic)}</td><td class="r num">${s.tax.toFixed(2)}%</td><td class="r">${s.lanes}</td><td>${esc(s.mgr)}</td></tr>`).join('')}</tbody></table></div>
+      <div class="muted" style="font-size:12px;margin-top:8px">Each store keeps its own licence, tax rate, sale hours, registers, staff, cash and stock. The catalog, vendors, price rules and offers are shared from head office. Owners see every store; managers and cashiers only their own.</div></section>
+    ${N?`<section class="card" style="display:flex;flex-direction:column;gap:10px" data-note="Add store">
+      <h2>Add a store</h2>
+      <div class="frow">${[['n','Store name *','e.g. Elk Grove Liquor #033'],['addr','Address *','Street, city, ZIP']].map(([k,l,ph])=>`<label class="field">${l}<input id="ns-${k}" value="${esc(N[k])}" placeholder="${ph}"></label>`).join('')}</div>
+      <div class="frow3">${[['lic','Liquor licence *','Type 21 · 21-000000'],['tax','Sales tax %','8.75'],['lanes','Registers','2']].map(([k,l,ph])=>`<label class="field">${l}<input id="ns-${k}" value="${esc(N[k])}" placeholder="${ph}"></label>`).join('')}</div>
+      <div class="frow"><label class="field">Manager<select id="ns-mgr">${['Alex K.','Rosa T.','Ken W.','Hire later'].map(m=>`<option ${N.mgr===m?'selected':''}>${m}</option>`).join('')}</select></label><label class="field">Copy setup from<select id="ns-copy">${STORES.map(s=>`<option value="${s.id}" ${N.copy===s.id?'selected':''}>${esc(s.n)}</option>`).join('')}</select></label></div>
+      <div class="muted" style="font-size:12px">Copies the catalog, prices, offers, vendors, receipt text and sale hours. Stock starts at zero until the first delivery or count.</div>
+      <div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" data-act="nscancel">Cancel</button><button class="btn primary" data-act="nssave" ${N.n.trim()&&N.addr.trim()&&N.lic.trim()?'':'disabled'}>Add store</button></div></section>`:''}`;
+  }
+  return `${tabs}${body}`;
+};
+
+/* ------------------------------------------------ customer display + digital receipts */
+const RCPT_LBL = {text:'Text', email:'Email', print:'Print', none:'No receipt'};
+function cdStage(){ if (S.cdPhase==='done') return S.cd.rc ? 'thanks' : 'receipt'; if (S.cdPhase) return 'pay'; return S.cart.length ? 'order' : 'idle'; }
+function rcTo(how){ return how==='text' ? (S.member?'(916) 555-0148':S.cd.to) : how==='email' ? (S.member?'jordan.d@example.com':S.cd.to) : ''; }
+function customerScreen(stage){
+  const st=curStore(), set=S.cdset, t=totals();
+  const head = `<div class="cdhead"><img src="${MARK}" alt=""><b>${esc(st.n)}</b><span class="spacer"></span>${S.member?`<span class="cdmem">${ic('award')} Hi Jordan · 1,240 pts</span>`:''}</div>`;
+  if (stage==='idle'){ const o=OFFERS.filter(x=>x.status==='Active'); const k=o.length?S.cdSlide%o.length:0;
+    return `${head}<div class="cdidle"><small>Welcome in</small><h3>${o.length&&set.slides?esc(o[k].n):'Thanks for shopping local'}</h3><p>${o.length&&set.slides?esc(o[k].rule):esc(S.settings.rHeader)}</p>${set.join?`<div class="cdjoin">${ic('award')} Rewards members save 5% · text JOIN to 55123</div>`:''}${o.length>1&&set.slides?`<div class="cddots">${o.map((x,i)=>`<i class="${i===k?'on':''}"></i>`).join('')}</div>`:''}</div>`; }
+  if (stage==='order') return `${head}<div class="cdorder"><div class="cdlines">${S.cart.map(l=>{ const p=byId(l.id); return `<div><span>${l.qty} × ${esc(p.n)}</span><b>${money(p.p*l.qty*(1-(l.disc||0)/100))}</b></div>`; }).join('')}
+      ${set.save?t.offers.map(o=>`<div class="cdsave"><span>${ic('gift')} ${esc(o.n)}</span><b>${money(-o.amt)}</b></div>`).join(''):''}</div>
+      <div class="cdtot"><div><span>Subtotal</span><b>${money(t.sub)}</b></div>${t.saved>0.005&&set.save?`<div class="cdsave"><span>You save</span><b>${money(-t.saved)}</b></div>`:''}<div><span>CRV</span><b>${money(t.crv)}</b></div><div><span>Tax</span><b>${money(t.tax)}</b></div><div class="cdgrand"><span>Total</span><b>${money(t.total)}</b></div>
+      ${S.cart.some(l=>byId(l.id).r)&&S.id!=='ok'&&set.id?`<div class="cdid">${ic('id')} Please have your ID ready</div>`:''}
+      ${!S.member&&set.join?`<button class="cdbtn" data-act="cdjoin">${ic('award')} Enter phone for rewards</button>`:''}</div></div>`;
+  if (stage==='pay') return `${head}<div class="cdpay"><small>Amount due</small><div class="cdbig">${money(t.total)}</div><div class="cdtap">${ic('tap')} Insert, tap or swipe on the card reader</div>${t.saved>0.005&&set.save?`<div class="cdsave" style="justify-content:center">You saved ${money(t.saved)} today</div>`:''}</div>`;
+  if (stage==='receipt' && S.cd.ask) return `${head}<div class="cdpay"><h3>${S.cd.ask==='text'?'Your mobile number':'Your email address'}</h3><div class="cdfield">${S.cd.ask==='text'?'(916) 555-0172':'sam.lee@example.com'}<i></i></div><small style="text-transform:none;letter-spacing:0">Used only for this receipt unless you join rewards</small><div style="display:flex;gap:1.6cqw"><button class="cdbtn" data-cdback="1">Back</button><button class="cdbtn hint" data-cdsend="1">${ic('check')} Send receipt</button></div></div>`;
+  if (stage==='receipt') return `${head}<div class="cdpay"><div class="cdok">${ic('check')} Approved · ${money(t.total)}</div><h3>How would you like your receipt?</h3>
+      <div class="cdrc">${['text','email','print','none'].map(k=>`<button class="cdbtn ${k==='text'&&S.member?'hint':''}" data-cdrc="${k}">${ic(k==='text'?'msg':k==='email'?'mail':k==='print'?'printer':'x')}${RCPT_LBL[k]}${k==='text'&&S.member?'<small>··0148</small>':''}</button>`).join('')}</div></div>`;
+  return `${head}<div class="cdpay"><div class="cdok">${ic('check')} Thank you!</div><h3>${S.cd.rc==='none'?'No receipt · have a great day':S.cd.rc==='print'?'Your receipt is printing':`Receipt sent to ${esc(rcTo(S.cd.rc))}`}</h3><p style="opacity:.75">${esc(S.settings.rFooter)}</p></div>`;
+}
+function cdRefresh(){ const el=document.getElementById('cdpip-body'); if (el){ el.dataset.stage=cdStage(); el.innerHTML=customerScreen(cdStage()); } if (S.route==='display' && !document.querySelector('#modal .scrim')) render(); }
+function setReceipt(how){
+  S.cd.rc=how; const sale=SALES.find(x=>x.no===S.saleNo); if (sale) sale.rc={how:RCPT_LBL[how], to:rcTo(how)};
+  toast(how==='none'?'No receipt':how==='print'?'Receipt printing':`Digital receipt sent to ${rcTo(how)}`, how==='print'?'printer':'check');
+}
+function barcodeSVG(seed){ let x=seed*7919, bars=''; for (let i=0,px=0;i<44;i++){ x=(x*1103515245+12345)%2147483648; const w=1+(x%3); if (i%2===0) bars+=`<rect x="${px}" y="0" width="${w}" height="34"/>`; px+=w; } return `<svg viewBox="0 0 96 34" aria-hidden="true" style="width:100%;height:34px;fill:#14212A">${bars}</svg>`; }
+function eReceipt(sale){
+  const st=curStore(), c=saleCalc(sale.items), rc=sale.rc||{how:'Text', to:'(916) 555-0148'};
+  const saved = sale.items.some(([id])=>id==='bud12'||id==='limes') ? 1.98 : 0;
+  return `<div class="phone"><div class="phtop"></div>
+    ${rc.how==='Email'?`<div class="phmsg mail"><b>${esc(st.n)}</b><small>Your receipt · ${money(c.total)}</small></div>`:`<div class="phmsg"><small>${esc(st.short)} Liquor</small>Thanks for shopping with us! Your receipt for ${money(c.total)}: bev.link/r/${(sale.no*4241).toString(36).toUpperCase()}</div>`}
+    <div class="erc">
+      <div class="erchead"><img src="${MARK}" alt=""><b>${esc(st.n)}</b><small>${esc(st.addr)}</small><small>Sale #${sale.no} · ${esc(sale.t)} · ${esc(sale.who)}</small></div>
+      ${sale.items.map(([id,q])=>{ const p=byId(id); return `<div class="erl"><span>${q} × ${esc(p.n)}</span><b>${money(p.p*q)}</b></div>`; }).join('')}
+      <div class="erl sub"><span>Subtotal</span><b>${money(c.sub)}</b></div><div class="erl sub"><span>CRV</span><b>${money(c.crv)}</b></div><div class="erl sub"><span>Sales tax</span><b>${money(c.tax)}</b></div>
+      <div class="erl tot"><span>Total</span><b>${money(c.total)}</b></div><div class="erl sub"><span>Paid</span><b>${esc(sale.tender)}</b></div>
+      ${saved&&S.settings.rSave?`<div class="ersave">You saved ${money(saved)} with today’s offers</div>`:''}
+      <div class="ercode">${barcodeSVG(sale.no)}<small>Show this code for returns and exchanges · 30 days</small></div>
+      <div class="eroffer">${ic('gift')} Next visit: $2 off any mixer with this receipt</div>
+      <div class="errate">How did we do? <span>★★★★★</span></div>
+      <small class="erfoot">${esc(S.settings.rFooter)}</small>
+    </div></div>`;
+}
+function erModal(){
+  const sale=SALES.find(x=>x.no===S.saleSel); if (!sale) return; const E=S.er;
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Send digital receipt" style="width:min(720px,100%)">
+    <header>${ic('msg')}<h2>Send receipt · sale #${sale.no}</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body erwrap"><div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+      <div class="quick">${['Text','Email'].map(k=>`<button class="${E.how===k?'on':''}" data-erhow="${k}">${ic(k==='Text'?'msg':'mail')}${k}</button>`).join('')}</div>
+      <label class="field">${E.how==='Text'?'Mobile number':'Email address'}<input id="er-to" value="${esc(E.to)}" placeholder="${E.how==='Text'?'(916) 555-0148':'name@example.com'}" inputmode="${E.how==='Text'?'tel':'email'}"></label>
+      ${sale.member?`<div class="muted" style="font-size:12px">${esc(sale.member)} is a member: receipts are saved to their account too.</div>`:''}
+      ${sale.rc?`<div class="chip plain" style="align-self:flex-start">Last sent: ${esc(sale.rc.how)}${sale.rc.to?' · '+esc(sale.rc.to):''}</div>`:''}
+      <div class="muted" style="font-size:12px">Digital receipts carry a return code, so customers don’t need the paper copy to return or exchange.</div></div>
+      ${eReceipt({...sale, rc:{how:E.how, to:E.to}})}</div>
+    <footer><button class="btn" data-close>Cancel</button><button class="btn primary" data-act="ersend" ${E.to.trim().length>5?'':'disabled'}>${ic('msg')}Send ${E.how==='Text'?'text':'email'}</button></footer></div></div>`;
+}
+VIEWS.display = () => {
+  const live=cdStage(), stage=S.cdPrev||live, set=S.cdset;
+  const keep=S.cart, sample=!S.cart.length && S.cdPrev && S.cdPrev!=='idle';
+  if (sample) S.cart=[{id:'casa750',qty:1},{id:'bud12',qty:2},{id:'limes',qty:1}];
+  const screen=customerScreen(stage); S.cart=keep;
+  const last = SALES[0];
+  return `<div class="cdgrid">
+    <section style="display:flex;flex-direction:column;gap:12px;min-width:0">
+      <div class="cdframe" data-note="Customer-facing screen · mirrors Lane 1 live"><div class="cdscreen" data-stage="${stage}">${screen}</div><div class="cdstand"></div></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="chip ${S.cdPrev?'plain':'ok'}">${S.cdPrev?'Preview':'Live · Lane 1'}</span>
+        <div class="quick">${[['','Live'],['idle','Waiting'],['order','Order'],['pay','Paying'],['receipt','Receipt choice'],['thanks','Thank you']].map(([k,l])=>`<button class="${(S.cdPrev||'')===k?'on':''}" data-cdprev="${k||'live'}" style="padding:4px 10px;font-size:12px">${l}</button>`).join('')}</div></div>
+      <div class="muted" style="font-size:12px">Ring up items on the Register and this screen follows along: every item, offer and saving as it happens, the ID reminder, the total, the tap prompt and then the receipt choice. The customer taps their choice here.</div>
+    </section>
+    <aside style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <section class="card" style="display:flex;flex-direction:column;gap:4px" data-note="What the customer sees">
+        <h2 style="margin-bottom:6px">What the customer sees</h2>
+        ${[['save','Show items and savings as they’re added'],['id','“Please have your ID ready” for 21+ items'],['join','Ask for a phone number for rewards'],['slides','Show current offers while waiting'],['rc','Customer picks their receipt on screen']].map(([k,l])=>`<div class="setrow"><span style="font-size:13px">${l}</span><button class="toggle" aria-pressed="${set[k]}" data-cdset="${k}" aria-label="${l}"></button></div>`).join('')}
+        <div class="muted" style="font-size:12px;margin-top:6px">Hardware: a 10–15" screen facing the customer on each lane, or the card reader’s own screen. Works offline.</div></section>
+      <section class="card" style="display:flex;flex-direction:column;gap:10px;align-items:center" data-note="Digital receipt · what the customer gets">
+        <div class="cardhead" style="align-self:stretch"><h2>Digital receipt</h2><span class="spacer"></span><span class="chip plain">Sale #${last.no}</span></div>
+        ${eReceipt(last)}
+        <div class="muted" style="font-size:12px;align-self:stretch">Texted or emailed in seconds, saved to the member’s account, with a return code and a next-visit offer. Resend any receipt from Sales & Returns.</div></section>
+    </aside></div>`;
+};
+setInterval(()=>{ const els=document.querySelectorAll('.cdscreen[data-stage="idle"]'); if (!els.length) return; S.cdSlide++; els.forEach(el=>el.innerHTML=customerScreen('idle')); }, 4000);
+function cdPip(){ return S.cdPip ? `<div class="cdpip" data-note="Customer screen mirror"><div class="cdpiphead">${ic('monitor')} Customer screen<span class="spacer"></span><button class="iconbtn" data-act="cdpip" aria-label="Hide customer screen">${ic('x')}</button></div><div class="cdscreen" id="cdpip-body" data-stage="${cdStage()}">${customerScreen(cdStage())}</div></div>` : ''; }
+
 /* ------------------------------------------------ guided demo */
 function resetSale(){ S.cart=[{id:'casa750',qty:1},{id:'bud12',qty:2}]; S.id=null; S.tdisc=null; S.member=null; S.cat='All'; S.q=''; }
 const TOUR = [
   {r:'command', set:()=>{S.user='Priya N.';}, t:'Morning briefing', say:'The owner opens Bevnetic and sees yesterday’s numbers plus the 5 things that need attention today, ranked by money at stake. Each one links to the screen that fixes it.', hl:'.assistant'},
   {r:'reports', set:()=>{S.rp.tab='eod'; S.rp.day='2026-09-24';}, t:'Last night’s close, already done', say:'The end-of-day report is built at close: sales, payments, the cash drawer count down to a $3.75 shortage, and who sold what. It prints on a full page or the receipt printer, and it’s emailed to the owner.', hl:'.eodsum'},
+  {r:'stores', set:()=>{S.user='Priya N.'; S.stTab='overview';}, t:'Every store on one screen', say:'Running more than one store? Head office sees each one live: sales, margin, staff, cash and stock problems. Stock moves between stores before anyone reorders, and prices and offers stay in sync.', hl:'.storegrid'},
   {r:'shifts', set:()=>{S.user='Priya N.';}, t:'Every shift, counted', say:'Staff sign in with a PIN and only see what their role allows. Cashiers open the till by counting the float and close it with a blind count: the expected cash appears only after they submit, and any difference goes on the end-of-day report.', hl:'.compgrid > .card'},
   {r:'alerts', t:'Alerts that come with the fix', say:'Seven kinds of AI alerts: stockouts, late deliveries, payments due, damage, expiry and price changes. Every alert carries the button that resolves it.', hl:'.alert'},
   {r:'forecast', set:()=>{S.fc='bud12'}, t:'Predict demand, don’t just track it', say:'Bud Light runs out in 3 days. The forecast reads weekends, the heat wave and Saturday’s home game, then says how much to order and by when.', hl:'.reco'},
@@ -2919,6 +3210,7 @@ const TOUR = [
   {r:'invoices', t:'Photograph the invoice, AI does the rest', say:'The supplier invoice is read in seconds and matched to the catalog. Price rises, short shipments and damaged cases are flagged before anything posts to inventory.', hl:'.invwrap > .card'},
   {r:'pricing', set:()=>{S.priceEdit={}; S.priceSel=null;}, t:'Costs change, prices follow', say:'New costs from the vendor’s invoice or price sheet flow straight in. Every product has a target margin: its own rule, its brand group’s, or the category default. Bevnetic suggests the shelf price that keeps it there, the owner approves in one tap, and shelf tags are queued.', hl:'.pricereview'},
   {r:'register', set:resetSale, t:'A checkout built for liquor', say:'Offers apply themselves: two Bud Light 12-packs for $24. The counter AI suggests limes because most tequila buyers add them. Bottle deposit (CRV) and tax are handled.', hl:'.pairs'},
+  {r:'display', set:()=>{resetSale(); S.cdPrev=null; S.cdPhase=null;}, t:'The customer sees it too', say:'A screen faces the customer: every item, the offers they’re getting and the total, plus an ID reminder. After paying they choose a text, email or paper receipt. The digital receipt has a return code and a next-visit offer.', hl:'.cdframe'},
   {r:'register', set:resetSale, after:()=>swapModal('kim750'), t:'Sold out? Offer the best swap', say:'Kim Crawford is out. Bevnetic suggests the closest match, shows why it fits, and can text the customer when it’s back.', hl:'.swapcard.best'},
   {r:'register', set:resetSale, after:()=>{S.payAfterId=false; runId(false);}, t:'ID check in two seconds', say:'The licence barcode is read on the device: authenticity, expiry and age. Payment stays locked until it passes. If an ID won’t scan, a manager approves a typed birthdate, and customers clearly over 40 can be approved by eye. Every exception is logged.', hl:'.verdict', delay:1700},
   {r:'register', set:()=>{resetSale(); S.id='ok'; S.idAge=34; S.online=false;}, after:()=>{payMethod='card'; payModal();}, t:'The internet drops. Sales don’t.', say:'Offline, cards are stored securely and uploaded when the connection returns, with per-sale limits so the risk stays small.', hl:'.modal .offbanner'},
@@ -2960,7 +3252,7 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-ilink],[data-bcpick],[data-npsh],[data-npcat],[data-npuse],[data-npbc],[data-signwho],[data-pinkey],[data-rcvtab],[data-rcvq],[data-strdef],[data-clockuser],[data-salesel],[data-retchk],[data-retq],[data-retwhy],[data-retdest],[data-retmeth],[data-vsel],[data-nvday],[data-nvvia],[data-nvp]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-ilink],[data-bcpick],[data-npsh],[data-npcat],[data-npuse],[data-npbc],[data-signwho],[data-pinkey],[data-rcvtab],[data-rcvq],[data-strdef],[data-clockuser],[data-salesel],[data-retchk],[data-retq],[data-retwhy],[data-retdest],[data-retmeth],[data-vsel],[data-nvday],[data-nvvia],[data-nvp],[data-store],[data-sttab],[data-trmake],[data-trnext],[data-pmode],[data-ofs],[data-cdrc],[data-cdprev],[data-cdset],[data-erhow],[data-cdback],[data-cdsend]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -2972,6 +3264,19 @@ document.addEventListener('click', e => {
   if (d.cat){ S.cat=d.cat; render(); return; }
   if (d.heat){ S.heat = S.heat===d.heat ? null : d.heat; render(); return; }
   if (d.tile){ S.tile = +d.tile; render(); return; }
+  if (d.store){ const was=S.store, st=storeOf(d.store); switchStore(d.store); closeModal(); if (d.then) go(d.then); else render(); if (was!==d.store) toast(`Now at ${st.n}`,'check'); return; }
+  if (d.sttab){ S.stTab=d.sttab; render(); return; }
+  if (d.trmake){ const [pid,from,q]=d.trmake.split('|'); const no='TR-'+(2208+TRANSFERS.length-2); TRANSFERS.unshift({no, pid, q:+q, from, to:S.store, st:0, when:'Today'}); const inModal=!!document.querySelector('#modal .scrim'); if (inModal) closeModal(); render(); toast(`${no}: ${q} × ${byId(pid).n} requested from ${storeOf(from).short}`,'truck'); return; }
+  if (d.trnext){ const t=TRANSFERS[+d.trnext]; t.st++; if (t.st===1) setStockAt(t.pid, t.from, stockAt(t.pid,t.from)-t.q); if (t.st===3) setStockAt(t.pid, t.to, stockAt(t.pid,t.to)+t.q); render(); toast(`${t.no} · ${TR_ST[t.st].toLowerCase()}${t.st===3?` · ${t.q} added to ${storeOf(t.to).short} stock`:''}`); return; }
+  if (d.pmode){ S.priceMode=d.pmode; PRODUCTS.forEach(p=>{ if (p.base==null) p.base=p.p; const o=STORE_PRICE[S.store]&&STORE_PRICE[S.store][p.id]; p.p = S.priceMode==='store' && o ? o : p.base; }); render(); return; }
+  if (d.ofs){ const [oid,sid]=d.ofs.split('|'); const sc=OFFER_SCOPE[oid]||STORES.map(x=>x.id); OFFER_SCOPE[oid]= sc.includes(sid) ? sc.filter(x=>x!==sid) : [...sc, sid]; render(); return; }
+  if (d.cdback){ S.cd.ask=null; cdRefresh(); return; }
+  if (d.cdsend){ S.cd.to = S.cd.ask==='text' ? '(916) 555-0172' : 'sam.lee@example.com'; const k=S.cd.ask; S.cd.ask=null; setReceipt(k); if (document.querySelector('#modal .scrim') && S.cdPhase==='done') payModal('done'); else cdRefresh(); return; }
+  if (d.cdrc && (d.cdrc==='text'||d.cdrc==='email') && !S.member){ S.cd.ask=d.cdrc; S.cd.rc=null; if (document.querySelector('#modal .scrim') && S.cdPhase==='done') payModal('done'); else cdRefresh(); return; }
+  if (d.cdrc){ setReceipt(d.cdrc); if (document.querySelector('#modal .scrim') && S.cdPhase==='done') payModal('done'); else cdRefresh(); return; }
+  if (d.cdprev){ S.cdPrev = d.cdprev==='live' ? null : d.cdprev; render(); return; }
+  if (d.cdset){ S.cdset[d.cdset]=!S.cdset[d.cdset]; render(); return; }
+  if (d.erhow){ S.er.how=d.erhow; S.er.to=''; erModal(); return; }
   if (d.fc){ S.fc=d.fc; render(); return; }
   if (d.inv){ const i=+d.inv; S.inv[i] = S.inv[i]===d.v ? 'review' : d.v; render(); return; }
   if (d.af){ S.alertFilter=d.af; render(); return; }
@@ -3084,6 +3389,19 @@ document.addEventListener('click', e => {
     case 'cntdone': { const C=S.cnt; let u=0, v=0; C.lines.forEach(l=>{ const p=byId(l.pid), dv=+l.c-l.exp; u+=dv; v+=dv*p.p*0.7; p.stock=+l.c; });
       SHRINK.unshift({d:'Sep 25', area:C.area, units:u, value:Math.round(v*100)/100, by:S.user}); C.done=true; render(); toast(`Stock adjusted · ${u>0?'+':''}${u} units (${money(v)}) recorded`,'box'); break; }
     case 'strsave': S.settings.rSave=!S.settings.rSave; render(); break;
+    case 'storepick': storeModal(); break;
+    case 'allstores': closeModal(); S.stTab='overview'; go('stores'); break;
+    case 'pricesync': for (const k in STORE_PRICE) delete STORE_PRICE[k]; PRODUCTS.forEach(p=>{ if (p.base!=null) p.p=p.base; }); render(); toast('Every store now uses head office prices · shelf tags queued'); break;
+    case 'nsnew': S.ns={n:'', addr:'', lic:'', tax:'8.75', lanes:'2', mgr:'Hire later', copy:S.store}; render(); break;
+    case 'nscancel': S.ns=null; render(); break;
+    case 'nssave': { const N=S.ns, parts=N.addr.split(','), id=String(30+STORES.length*3).padStart(3,'0');
+      STORES.push({id, n:N.n.trim(), short:N.n.trim().replace(/\s*(Liquor)?\s*#?\d*$/,'')||N.n.trim(), city:(parts[1]||parts[0]).trim(), addr:N.addr.trim(), phone:'', lic:N.lic.trim(), tax:+N.tax||8.75, lanes:+N.lanes||2, mgr:N.mgr, today:0, lastwk:0, margin:0, alerts:0, online:true, queued:0, onShift:0, os:0, low:0, color:'#8A3FE0', fresh:true});
+      S.ns=null; render(); toast(`${N.n.trim()} added · setup copied from ${storeOf(N.copy).short} · stock starts at zero`); break; }
+    case 'cdpip': S.cdPip=!S.cdPip; render(); break;
+    case 'cdjoin': S.member='Jordan D.'; render(); cdRefresh(); toast('Member found: Jordan D. · 1,240 points · 5% off applied'); break;
+    case 'eropen': { const sale=SALES.find(x=>x.no===S.saleSel); S.er={how:'Text', to: sale&&sale.member ? '(916) 555-0148' : ''}; erModal(); break; }
+    case 'ersend': { const sale=SALES.find(x=>x.no===S.saleSel); sale.rc={how:S.er.how, to:S.er.to.trim()}; closeModal(); render(); toast(`Receipt ${S.er.how==='Text'?'texted':'emailed'} to ${S.er.to.trim()}`); break; }
+    case 'strauto': S.settings.rAutoMember=!S.settings.rAutoMember; render(); break;
     case 'strprev': sheetModal('Receipt preview', receiptSheet(SALES[0])); break;
     case 'signin': S.signin={who:null, pin:'', err:false}; signinModal(); break;
     case 'tillopen': S.den=DENOMS.map(()=> ''); S.denPhase=null; tillModal('open'); break;
@@ -3158,7 +3476,7 @@ document.addEventListener('click', e => {
     case 'idcontinue': if (S.payAfterId){ payMethod='card'; payModal(); } else { closeModal(); render(); } break;
     case 'declinesale': S.cart=S.cart.filter(x=>!byId(x.id).r); S.id=null; closeModal(); render(); toast('21+ items removed · refusal logged','alert'); break;
     case 'charge': charge(); break;
-    case 'newsale': S.cart=[]; S.id=null; S.member=null; S.tdisc=null; S.credit=0; S.saleNo++; closeModal(); render(); break;
+    case 'newsale': S.cart=[]; S.id=null; S.member=null; S.tdisc=null; S.credit=0; S.saleNo++; closeModal(); S.cdPhase=null; S.cd.rc=null; S.cd.ask=null; S.cd.to=''; render(); break;
     case 'invall': { S.inv = S.inv.map((v,i)=> (INVOICE[i].m || S.invLink[i]) && INVOICE[i].conf>=90 && v==='review' ? 'ok' : v); const left=INVOICE.filter((l,i)=>!l.m && !S.invLink[i]).length; render(); toast(`Matched lines approved${left?` · ${left} line${left>1?'s':''} still need a product`:''}`); break; }
     case 'invpost': S.invStep=8; render(); toast('Inventory and accounting updated'); break;
     case 'offtoggle': S.offlineLimit=!S.offlineLimit; render(); break;
@@ -3166,6 +3484,8 @@ document.addEventListener('click', e => {
   }
 });
 document.addEventListener('input', e => {
+  if (e.target.id && e.target.id.startsWith('ns-') && S.ns){ S.ns[e.target.id.slice(3)]=e.target.value; const b=document.querySelector('[data-act="nssave"]'); if (b) b.disabled=!(S.ns.n.trim()&&S.ns.addr.trim()&&S.ns.lic.trim()); return; }
+  if (e.target.id==='er-to'){ S.er.to=e.target.value; const b=document.querySelector('[data-act="ersend"]'); if (b) b.disabled=S.er.to.trim().length<=5; return; }
   if (e.target.id==='sale-q'){ S.saleQ=e.target.value; render(); refocus('sale-q'); return; }
   if (e.target.id==='ret-pin' && S.ret){ S.ret.pin=e.target.value.replace(/\D/g,''); if (S.ret.pin.length===4){ returnModal(); } return; }
   if (e.target.id && e.target.id.startsWith('den-') && e.target.id!=='den-total' && S.den){ S.den[+e.target.id.slice(4)]=e.target.value; const t=$('#den-total'); if (t) t.textContent=money(denTotal());
@@ -3191,11 +3511,13 @@ document.addEventListener('keydown', e => {
     const m = PRODUCTS.find(p=>p.n.toLowerCase().includes(S.q.toLowerCase()) && (S.cat==='All'||p.cat===S.cat)); if (m){ S.q=''; const l=S.cart.find(x=>x.id===m.id); l?l.qty++:S.cart.push({id:m.id,qty:1}); render(); $('#q').focus(); } }
 });
 document.addEventListener('change', e => {
+  if (e.target.id==='mst-pid'){ S.stPid=e.target.value; render(); return; }
+  if (e.target.id==='ns-mgr' || e.target.id==='ns-copy'){ S.ns[e.target.id.slice(3)]=e.target.value; return; }
   if (e.target.id && e.target.id.startsWith('np-') && S.np){ const k=e.target.id.slice(3); S.np[k]=e.target.value;
     if (k==='price') S.np.priceEdited = e.target.value!=='';
     npRerender(); return; }
   if (e.target.id && e.target.id.startsWith('cnt-') && S.cnt){ S.cnt.lines[+e.target.id.slice(4)].c = e.target.value; render(); return; }
-  if (e.target.id && e.target.id.startsWith('st-')){ const k=e.target.id.slice(3); S.settings[k]=e.target.value;
+  if (e.target.id && e.target.id.startsWith('st-')){ const k=e.target.id.slice(3); S.settings[k]=e.target.value; { const cs=curStore(); if (['name','addr','phone','lic','tax'].includes(k)) cs[k] = k==='tax' ? +e.target.value : e.target.value; }
     if (k==='tax'){ const v=+e.target.value; if (v>=0 && v<=20){ TAX=v/100; toast(`Sales tax set to ${v.toFixed(2)}% · applies to the next sale`); } }
     else toast('Saved'); render(); return; }
   if (e.target.id && e.target.id.startsWith('role-')){ const u=USERS[+e.target.id.slice(5)]; u.role=e.target.value; render(); toast(`${u.n} is now ${u.role}`); return; }
