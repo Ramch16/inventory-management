@@ -617,6 +617,28 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 .sheet.receipt .tot td{border-top:1px dashed #111}
 .sheet.receipt .foot{flex-direction:column;align-items:center;border-top:1px dashed #111}
 .rpgrid>*{min-width:0}
+.who{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.who button{border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:700;font-size:13px}
+.who button.on{border-color:var(--accent);background:var(--accent-soft)}
+.who small{font-weight:600;color:var(--muted);font-size:11px;text-transform:capitalize}
+.pinpad{display:grid;grid-template-columns:repeat(3,72px);gap:8px;justify-content:center}
+.pinpad button{height:52px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font:700 20px var(--mono)}
+.pindots{display:flex;gap:10px;justify-content:center;margin:4px 0}
+.pindots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--muted)}
+.pindots i.on{background:var(--ink);border-color:var(--ink)}
+.userpill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 12px 3px 3px;font-size:12px;font-weight:700}
+.userpill .vav{width:26px;height:26px;border-radius:50%;font-size:11px}
+.userpill small{color:var(--muted);font-weight:600;text-transform:capitalize}
+.dens{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.dens label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface-2)}
+.dens input{border:0;background:transparent;font:700 18px var(--mono);width:100%;color:var(--ink);padding:0}
+.saleitem{display:grid;grid-template-columns:auto 26px 1fr auto auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.saleitem svg{height:32px;width:auto}
+.cntin{width:80px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font:600 13px var(--mono);color:var(--ink)}
+.setgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;align-items:start}
+.setgrid textarea{width:100%;min-height:62px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font:500 13px var(--body);color:var(--ink);resize:vertical}
+.jr td{font-family:var(--mono)} .jr td:first-child{font-family:var(--body)}
+.saleitem input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent)}
 .codes{display:flex;flex-direction:column;gap:4px;margin-top:6px}
 .codes div{display:grid;grid-template-columns:96px 1fr;gap:8px;font-size:12px;align-items:baseline}
 .codes span{color:var(--muted)}
@@ -723,6 +745,7 @@ const P = {
   swap:'<path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>',
   chart:'<path d="M3 3v18h18"/><path d="M8 17v-5M12 17V8M16 17v-8M20 17V5"/>',
   printer:'<path d="M6 9V2h12v7"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v8H6z"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
   play:'<path d="M7 4l13 8-13 8z"/>',
   sync:'<path d="M21 12a9 9 0 0 1-15.5 6.2L3 16M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M3 21v-5h5"/>',
 };
@@ -732,7 +755,7 @@ const money = (n, d=2) => (n<0?'-':'') + '$' + Math.abs(n).toLocaleString('en-US
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 /* ------------------------------------------------ sample data (all fictional demo figures) */
-const TAX = 0.0875;
+let TAX = 0.0875;   // editable in Settings
 const PRODUCTS = [
   {id:'tito175', n:"Tito's Handmade Vodka", sz:'1.75 L', abv:40, cat:'Spirits', p:34.99, stock:22, c:['#E4ECEF','#EDE3CC'], lb:"TITO'S", sh:'vodka', r:1, crv:0},
   {id:'jame750', n:'Jameson Irish Whiskey', sz:'750 ml', abv:40, cat:'Spirits', p:29.99, stock:41, c:['#2F6B3E','#EFE6CF'], lb:'JAMESON', sh:'whiskey', r:1, crv:0},
@@ -857,6 +880,8 @@ const NOTES = {
   pricing:{deck:'New · cost changes → retail prices', purpose:'When a vendor PO, price sheet or invoice changes a cost, suggest the new shelf price from the category’s target margin, apply rounding and limits, let the owner approve, then update the register and queue shelf tags.', data:['Case cost old → new and cost per unit (case ÷ pack)','Margin rules: this product → brand/group → category default','Target margin per category, rounding rule, 10% change limit','Current and new margin and markup per product'], build:['Suggested price = unit cost ÷ (1 − target margin), rounded up to the price ending','Checks: never below cost, state minimum-price rules, multi-pack consistency','Approved prices go live now or at opening; tags go to the label printer; price history kept']},
   vendors:{deck:'New · vendor management', purpose:'Keep every distributor in one place: contact, licence, terms, delivery days, what they supply, what you owe, open orders and deals. Add a new vendor and assign the brands they carry.', data:['Vendor: licence, rep, phone, email, terms, delivery days, minimum order, how POs are sent','Products each vendor supplies (one distributor per brand)','On-time rate from past POs, balance owed, open POs, active deals'], build:['Licence check against the state ABC licence lookup before the first order','Moving a brand to a new vendor takes effect on the next PO; history stays with the old vendor','Vendor record feeds Purchasing, Pricing, Vendor deals and Inventory']},
   purchasing:{deck:'New · vendor deals + purchase orders', purpose:'Each brand comes from one distributor in the store’s area. For each product, compare that vendor’s own options (buy just what you need, or take one of its deals) as the real cost per case, then group products into one PO per vendor. Deals arrive by deal sheet, forwarded rep email, vendor portal or state price posting.', data:['Product → its one vendor: case cost, lead time, on-time rate, terms, minimum','Every active deal from that vendor: free cases, discounted extra case, % or $ volume tiers','Forecast need for the next 30 days and daily sales in cases'], build:['Deals don’t stack: each is evaluated on its own against buying at list','Plan search: every quantity from need to need + 15, rejecting plans with more than 30 days of extra stock','State rules flag deal types a distributor may not offer']},
+  receiving:{deck:'New · receiving and stock counts', purpose:'Check every delivery case by case against its PO, and count shelves with a phone. Differences become supplier claims or a shrink (loss) record, so stock numbers stay right.', data:['PO lines: ordered, received and damaged cases','Count sheet: expected vs counted per product, value of the difference','Shrink history by area'], build:['Scan case barcodes to receive; partial receipts keep the PO open','Damaged or short cases open a supplier claim automatically','Count adjustments need a manager; every change is kept in the audit trail']},
+  settings:{deck:'New · store settings', purpose:'One place for everything the register and reports depend on: store details, tax and CRV rates, legal sale hours, receipt text, users and roles, and printers.', data:['Store name, address, phone, licence','Sales tax %, CRV per container, sale hours','Receipt header and footer, users and roles, printers'], build:['Owner-only; every change is logged','Tax rate changes apply to new sales immediately','Sale hours drive the compliance lock']},
   inventory:{deck:'Deck p.9–10 · Inventory Heat Map + AI Insight', purpose:'Colour shows the state of every SKU; the AI panel turns it into a ranked to-do list.', data:['Per product: stock left, days left, reorder point, vendor, last order date and quantity, open order','Codes: store SKU, barcodes (old and new label, case), vendor item codes; duplicate detection and merge','Days of cover = on hand ÷ forecast daily demand','Reorder point, expiry date, last-sale date, margin','Capital tied up = on hand × cost for overstock'], build:['Nightly + on-sale recalculation of state','Tile size = inventory value (treemap)','Actions create POs, markdowns or transfers']},
   assortment:{deck:'New · dead stock + best sellers (extends deck p.9–10)', purpose:'Find products that no longer sell, clear them, and replace them with products that sell in similar stores. Rank best sellers and warn before they run out.', data:['Days since last sale, units on hand, cash tied up, shelf location','Replacement: same shelf and price band, sales in similar stores, margin, vendor','Best sellers by units, revenue or profit for 7 / 30 / 90 days, trend, days of cover'], build:['Dead stock rule: no sale in 60+ days (owner can change it)','Replacement engine: category + price band + local market sales + this store’s basket data','One tap creates a clearance offer and a trial-case draft PO']},
   forecast:{deck:'Deck p.8 · AI Business Forecasting', purpose:'Predict demand per SKU and tell the owner when to order and how much.', data:['28 days history, 14 days forecast with confidence band','Drivers: weekday, holidays, weather, local events, promos','Supplier lead time and case pack'], build:['Model service returns point + P10/P90','Recommendation = demand over lead time + safety stock − on hand','One-click draft PO to supplier']},
@@ -866,6 +891,8 @@ const NOTES = {
   compliance:{deck:'New · licence protection', purpose:'Keep the store inside the law without relying on memory: sale hours lock the register, refusals are one tap, and an inspection report is always ready.', data:['State rules per licence type (hours, ID policy, pricing)','Store ID policy: scan everyone / under 40 / under 30','Sales approved by eye or typed date of birth, with cashier and manager','ID scans, refusals, overrides per cashier','After-hours attempts blocked by the register'], build:['Rules engine keyed by state + licence type + store time zone','Register polls clock; server clock is the source of truth','Report export: PDF for the liquor board, CSV for owners']},
   offers:{deck:'Deck p.2 · Customer engagement (extended)', purpose:'Create and run offers that the register applies automatically, and see what each one earns and costs.', data:['Offer rules: type, products, value, schedule, limits','Redemptions, discount given, incremental revenue','AI suggestions from overstock and expiry data'], build:['Promotion engine evaluates the cart on every change','State rules: no alcohol below cost, no free alcohol, no volume discounts where banned','Scheduled offers switch on and off by store time zone']},
   damage:{deck:'Deck p.7 · Damage follow-up (extended)', purpose:'Log broken, expired and returned stock in seconds, write it off or claim it back from the supplier, and see where losses happen.', data:['Product, quantity, reason, location, photo, disposition','Cost of loss and supplier credit status','Loss by location and reason'], build:['Posting a report adjusts on-hand stock and the shrink ledger','Received-damaged reports open a supplier claim linked to the invoice','Photos go to object storage and attach to the claim']},
+  returns:{deck:'New · sale lookup, returns and exchanges', purpose:'Find a past sale by receipt number, card, product or date, reprint the receipt, and refund or exchange items back to the original payment.', data:['Sale: items, prices, tax, CRV, payment, cashier, how the ID was checked','Return: items and quantities, reason, back to shelf or Damaged Goods','Refund method, manager approval over $50'], build:['Refund goes to the original card through the terminal (card-present or by reference)','Restocked items return to inventory; damaged ones open a damage report','Store return policy and state rules shown before refunding alcohol']},
+  shifts:{deck:'New · staff sign-in, roles and shifts', purpose:'Everyone signs in with a PIN and sees only what their role allows. Cashiers open the till by counting the float and close it with a blind count; the difference goes on the end-of-day report.', data:['Users and roles: owner, manager, cashier','Shift: lane, cashier, opening float, cash sales, drops, expected vs counted','Time clock and weekly hours'], build:['PIN or badge sign-in, auto-lock after inactivity','Blind count: the expected amount is shown only after the count is submitted','Over/short beyond $5 needs a manager note']},
   devices:{deck:'Deck p.3–5 · ID scan vendors, card devices, offline gateway', purpose:'Configure lane hardware, choose the ID provider and set the risk limits for offline card sales.', data:['Provider evaluation criteria from deck p.3','Terminal status per lane','Offline queue, per-sale and total limits, upload window'], build:['Device registry + heartbeat','Provider adapter interface so vendors can be swapped','Queue auto-uploads on reconnect; declined offline sales create a follow-up alert']},
 };
 
@@ -1033,7 +1060,8 @@ const POLICY = {
 };
 const TODAY = new Date(2026,8,25);
 function ageFrom(dob){ if (!dob) return null; const d=new Date(dob+'T00:00'); if (isNaN(d)) return null; let a=TODAY.getFullYear()-d.getFullYear(); if (TODAY.getMonth()<d.getMonth() || (TODAY.getMonth()===d.getMonth() && TODAY.getDate()<d.getDate())) a--; return a; }
-const nowLabel = () => 'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+let DEMO_MIN = 4; // the demo takes place Friday, Sep 25 from 10:04 AM; each new event moves the clock a minute
+const nowLabel = () => { DEMO_MIN = Math.min(59, DEMO_MIN+1); return `Fri 10:${String(DEMO_MIN).padStart(2,'0')} AM`; };
 /* ---- vendors (fictional demo distributors; 555 phone numbers and .example emails) ---- */
 const VENDORS = [
   {n:'Summit Wine & Spirits', kind:'Spirits & wine distributor', lic:'Type 17 · 17-551203', rep:'Dana Ortiz', ph:'(916) 555-0142', em:'orders@summit.example', terms:'Net 15', days:['Tue','Fri'], min:'$500', via:'Email', ontime:95, owed:12450, due:'Fri, Sep 27', color:'#B8520A', since:'2019', extra:[]},
@@ -1065,6 +1093,42 @@ const fmtCode = v => /^\d{12}$/.test(v) ? `${v[0]} ${v.slice(1,6)} ${v.slice(6,1
 function findByCode(code){ for (const p of PRODUCTS) if (codesFor(p.id).some(c=>c.v===code)) return p; return null; }
 function codesHTML(pid){ return `<div class="codes">${codesFor(pid).map(c=>`<div><span>${c.t}</span><b>${fmtCode(c.v)}${c.fresh?' <span class="chip ai" style="font-family:var(--body)">New</span>':''}<small>${esc(c.n||'')}</small></b></div>`).join('')}</div>`; }
 
+/* ---- staff, roles, shifts (demo) ---- */
+const USERS = [
+  {n:'Priya N.', role:'owner', pin:'1111', color:'#8A3FE0'},
+  {n:'Alex K.', role:'manager', pin:'2222', color:'#2C74D6'},
+  {n:'Maria G.', role:'cashier', pin:'3333', color:'#B8520A'},
+  {n:'Dev P.', role:'cashier', pin:'4444', color:'#1E9360'},
+  {n:'Sam R.', role:'cashier', pin:'5555', color:'#6A3B18'},
+];
+const CASHIER_ROUTES = ['register','returns','shifts','damage','receiving'];
+function allowed(r){ const u=USERS.find(x=>x.n===S.user); if (!u) return false; if (u.role==='owner') return true; if (u.role==='manager') return r!=='settings'; return CASHIER_ROUTES.includes(r); }
+const SHIFTS = [
+  {d:'Thu Sep 24', lane:'Lane 1', who:'Maria G.', open:'8:00 AM', close:'4:02 PM', sales:9120, exp:1712.40, cnt:1712.40},
+  {d:'Thu Sep 24', lane:'Lane 1', who:'Dev P.', open:'4:00 PM', close:'2:04 AM', sales:11890, exp:2297.80, cnt:2294.05},
+  {d:'Thu Sep 24', lane:'Lane 2', who:'Sam R.', open:'5:00 PM', close:'11:30 PM', sales:3810, exp:600.00, cnt:600.00},
+  {d:'Wed Sep 23', lane:'Lane 1', who:'Maria G.', open:'8:00 AM', close:'4:05 PM', sales:7340, exp:1402.10, cnt:1402.10},
+  {d:'Wed Sep 23', lane:'Lane 1', who:'Dev P.', open:'4:00 PM', close:'1:58 AM', sales:8910, exp:1688.25, cnt:1690.75},
+];
+const DENOMS = [['$100',100],['$50',50],['$20',20],['$10',10],['$5',5],['$1',1],['Coins ($)',null]];
+/* ---- recent sales for lookup and returns (demo) ---- */
+const SALES = [
+  {no:1047, t:'Fri 9:58 AM', who:'Maria G.', items:[['bud12',2],['limes',1]], tender:'Visa ·· 4412', idm:'ID scanned', member:null},
+  {no:1046, t:'Fri 9:41 AM', who:'Maria G.', items:[['josh750',2],['meiomi',1]], tender:'Cash', idm:'Approved by eye', member:'Jordan D.'},
+  {no:1045, t:'Fri 9:20 AM', who:'Maria G.', items:[['tito175',1],['tonic4',2]], tender:'Apple Pay', idm:'ID scanned', member:null},
+  {no:1044, t:'Fri 8:47 AM', who:'Maria G.', items:[['redbull4',1],['ice10',2]], tender:'Mastercard ·· 0987', idm:'No 21+ items', member:null},
+  {no:1043, t:'Thu 11:52 PM', who:'Dev P.', items:[['hen750',1],['claw12',1]], tender:'Visa ·· 2210', idm:'ID scanned', member:null},
+  {no:1042, t:'Thu 11:30 PM', who:'Dev P.', items:[['modelo12',2]], tender:'Cash', idm:'Approved by eye', member:null},
+  {no:1041, t:'Thu 10:05 PM', who:'Dev P.', items:[['casa750',1],['limes',2]], tender:'Amex ·· 1005', idm:'ID scanned', member:'Jordan D.'},
+  {no:1038, t:'Thu 7:12 PM', who:'Sam R.', items:[['lamarca',2]], tender:'Visa ·· 7781', idm:'ID scanned', member:null},
+];
+function saleCalc(items){ let sub=0, crv=0; items.forEach(([id,q])=>{ const p=byId(id); sub+=p.p*q; crv+=p.crv*q; }); const tax=sub*TAX; return {sub, crv, tax, total:sub+crv+tax}; }
+const unitRefund = p => p.p*(1+TAX) + p.crv;
+const RETURNS = [];
+
+/* ---- receiving + counts, settings (demo) ---- */
+const SHRINK = [{d:'Sep 12', area:'Aisle 3 · spirits', units:-3, value:-61.20, by:'Alex K.'},{d:'Aug 29', area:'Cooler 1 · beer', units:-5, value:-44.10, by:'Alex K.'}];
+
 const S = {
   route:'command', online:true, notes:false,
   cart:[], cat:'All', q:'', id:null, member:null, saleNo:1048,
@@ -1079,6 +1143,13 @@ const S = {
   margins:{sp:28, wi:35, be:22, mx:40}, itemMargin:{}, groups:[{n:'Premium spirits', pids:['casa750','hen750'], m:30}], rounding:'99', priceEdit:{}, priceSel:null, priceDone:{}, tagsQ:[], priceWhen:'now',
   dealSheet:null, dealRows:SHEET.rows.map(()=>'review'), dealsAdded:[],
   bc:null, dupeDone:false,
+  rcvTab:'receive', rcv:{po:'PO-10241', lines:[{pid:'modelo12', ord:20, rec:0, dmg:0, pack:2},{pid:'claw12', ord:10, rec:0, dmg:0, pack:2}], done:false},
+  cnt:null,
+  settings:{name:'Oak Street Liquor #014', addr:'1200 Oak St, Sacramento, CA 95814', phone:'(916) 555-0101', lic:'Type 21 · 21-584120', tax:8.75, crvS:0.05, crvL:0.10, open:'06:00', close:'02:00',
+    rHeader:'Thanks for shopping local!', rFooter:'Returns: unopened items within 30 days with receipt. Please drink responsibly.', rSave:true, rDefault:'Print'},
+  user:'Priya N.', signin:null, shift:{open:true, lane:'Lane 1', who:'Maria G.', opened:'8:00 AM', float:300}, den:null, denPhase:null,
+  clocked:{'Priya N.':null, 'Alex K.':'8:30 AM', 'Maria G.':'7:52 AM', 'Dev P.':null, 'Sam R.':null},
+  saleQ:'', saleSel:1047, ret:null, credit:0,
   vSel:'Summit Wine & Spirits', vQ:'', nv:null,
   rp:{tab:'eod', day:'2026-09-24', from:'2026-09-01', to:'2026-09-24', year:2026, fmt:'page', email:true},
   invView:'tiles',
@@ -1096,7 +1167,10 @@ const ROUTES = [
   ['command','Command Center','command','Owner'],
   ['reports','Reports','chart','Owner'],
   ['register','Register','register','Store'],
+  ['returns','Sales & Returns','sync','Store'],
+  ['shifts','Shifts & Staff','clock','Store'],
   ['inventory','Inventory','inventory','Store'],
+  ['receiving','Receiving & Counts','box','Store'],
   ['purchasing','Purchasing','truck','Store'],
   ['vendors','Vendors','store','Store'],
   ['pricing','Pricing','tag','Store'],
@@ -1109,6 +1183,7 @@ const ROUTES = [
   ['customers','Customers','users','Growth'],
   ['offers','Offers & Discounts','gift','Growth'],
   ['devices','Devices & Offline','devices','Setup'],
+  ['settings','Store Settings','gear','Setup'],
 ];
 const TITLES = {
   reports:['Reports','End of day, date range, monthly and yearly sales · print any report'],
@@ -1117,6 +1192,8 @@ const TITLES = {
   pricing:['Pricing','New vendor costs → shelf prices at your target margin'],
   vendors:['Vendors','Distributors you buy from · add a new vendor'],
   purchasing:['Purchasing','Check each vendor’s deals, then build one PO per vendor'],
+  receiving:['Receiving & Counts','Check deliveries against the PO and count shelves'],
+  settings:['Store Settings','Store details, taxes, sale hours, receipts, users and printers'],
   inventory:['Inventory Heat Map','1,284 SKUs · $184K on hand'],
   assortment:['Shelf Optimizer','Replace dead stock with what sells, and protect your best sellers'],
   forecast:['Demand Forecast','Next 14 days · updated 5:30 AM'],
@@ -1126,6 +1203,8 @@ const TITLES = {
   compliance:['Compliance Autopilot','California · Type 21 off-sale general license'],
   offers:['Offers & Discounts','Promotions the register applies automatically'],
   damage:['Damaged Goods','Breakage, expiry, returns and supplier claims'],
+  returns:['Sales & Returns','Find any sale, reprint the receipt, refund or exchange'],
+  shifts:['Shifts & Staff','Open and close the till, time clock and who can do what'],
   devices:['Devices & Offline Mode','Lane hardware, ID provider, offline payment limits'],
 };
 
@@ -1134,11 +1213,12 @@ function openAlerts(){ return ALERTS.filter(a=>!S.done.has(a.id)).length; }
 function renderRail(){
   let last='', html = `<div class="brand"><img src="${MARK}" alt=""><div><b>BEVNETIC</b><small>Automated sales systems</small></div></div>`;
   for (const [id,label,icon,grp] of ROUTES){
+    if (!allowed(id)) continue;
     if (grp!==last){ html += `<div class="navlabel">${grp}</div>`; last=grp; }
     const cnt = id==='alerts' ? `<span class="cnt">${openAlerts()}</span>` : id==='devices' && S.queue.length ? `<span class="cnt">${S.queue.length}</span>` : '';
     html += `<a class="nav ${S.route===id?'on':''}" href="#${id}" data-go="${id}">${ic(icon)}<span>${label}</span>${cnt}</a>`;
   }
-  html += `<div class="railfoot"><strong>Oak Street Liquor #014</strong>Sacramento, CA · 3 lanes<br>POC build · demo data</div>`;
+  html += `<div class="railfoot"><strong>${esc(S.settings.name)}</strong>Sacramento, CA · 3 lanes<br>POC build · demo data</div>`;
   $('#rail').innerHTML = html;
 }
 function renderTop(){
@@ -1147,6 +1227,7 @@ function renderTop(){
     ? `<button class="pill" data-act="net" title="Simulate an internet outage">${'<span class="dot"></span>'}Online · synced</button>`
     : `<button class="pill off" data-act="net" title="Restore connection">${'<span class="dot"></span>'}Offline · ${S.queue.length} queued</button>`;
   $('#top').innerHTML = `<div><h1>${t}</h1><div class="sub">${sub}</div></div><span class="spacer"></span>
+    ${(()=>{ const u=USERS.find(x=>x.n===S.user); return u?`<button class="userpill" data-act="signin" title="Switch user or lock">${`<span class="vav" style="background:${u.color}">${initials(u.n)}</span>`}${u.n}<small>· ${u.role}</small></button>`:''; })()}
     ${net}
     <button class="btn demo sm" data-tour="start" title="Guided product demo">${ic('play','style="width:14px;height:14px"')}<span>${S.tour!=null?'Restart demo':'Demo'}</span></button>
     <button class="iconbtn" data-go="alerts" aria-label="Notifications">${ic('bell')}<span class="badge">${openAlerts()}</span></button>
@@ -1164,7 +1245,7 @@ function spec(){
 function render(){
   document.body.classList.toggle('notes', S.notes);
   renderRail(); renderTop();
-  $('#view').innerHTML = spec() + VIEWS[S.route]();
+  $('#view').innerHTML = allowed(S.route) ? spec() + VIEWS[S.route]() : `<section class="card" style="max-width:520px;display:flex;flex-direction:column;gap:12px;align-items:flex-start">${ic('lock','style="width:32px;height:32px;color:var(--warn)"')}<h2 style="font-size:20px">A manager needs to open this</h2><div class="muted">You’re signed in as ${esc(S.user)} (${USERS.find(x=>x.n===S.user)?.role||''}). This screen needs a manager or owner.</div><button class="btn primary" data-act="signin">Switch user</button></section>`;
   if (S.route==='forecast') drawForecast();
   renderTour();
 }
@@ -1313,7 +1394,8 @@ VIEWS.register = () => {
         ${S.tdisc?`<span class="offerrow">Sale discount ${S.tdisc.kind==='%'?S.tdisc.v+'%':''} · ${esc(S.tdisc.reason)}</span><span class="num r offerrow">${money(-t.tdisc)}</span>`:''}
         ${S.member?`<span class="offerrow">Member discount 5%</span><span class="num r offerrow">${money(-t.disc)}</span>`:''}
         <span class="muted">CA redemption value (CRV)</span><span class="num r">${money(t.crv)}</span>
-        <span class="muted">Sales tax 8.75%</span><span class="num r">${money(t.tax)}</span>
+        <span class="muted">Sales tax ${(TAX*100).toFixed(2)}%</span><span class="num r">${money(t.tax)}</span>
+        ${S.credit?`<span class="offerrow">${ic('sync','style="width:13px;height:13px;vertical-align:-2px"')} Exchange credit${t.credit<S.credit-0.005?` · ${money(S.credit-t.credit)} still to use`:''}</span><span class="num r offerrow">${money(-t.credit)}</span>`:''}
         <span class="grand">Total</span><span class="grand num r">${money(t.total)}</span>
         ${t.saved>0.005?`<span class="chip ok saved">Customer saves ${money(t.saved)}</span>`:''}
       </div>
@@ -1342,7 +1424,8 @@ function totals(){
   const offers=offerHits(), off=offers.reduce((a,o)=>a+o.amt,0), after=sub-off-line;
   const tdisc = !S.tdisc ? 0 : S.tdisc.kind==='%' ? after*S.tdisc.v/100 : Math.min(S.tdisc.v, after);
   const disc = S.member ? (after-tdisc)*0.05 : 0, net=after-tdisc-disc, tax=net*TAX;
-  return {sub, crv, offers, off, line, tdisc, disc, tax, total:net+crv+tax, saved:off+line+tdisc+disc};
+  const gross = net+crv+tax, credit = Math.min(S.credit||0, gross);
+  return {sub, crv, offers, off, line, tdisc, disc, tax, credit, total:gross-credit, saved:off+line+tdisc+disc};
 }
 
 function invList(){
@@ -1805,6 +1888,7 @@ function currentSheet(rc){
   if (R.tab==='eod') return sheetEOD(eod(parseYmd(R.day)), rc);
   if (R.tab==='range'){ const a=parseYmd(R.from), b=parseYmd(R.to); return sheetRange(a, b, rangeRows(a,b), rc); }
   if (R.tab==='month') return sheetMonths(R.year, monthAgg(R.year), monthAgg(R.year-1, R.year===RP_LAST.getFullYear()), rc);
+  if (R.tab==='tax'){ const e=eod(parseYmd(R.day)), J=journal(e); return sheetTax(rc).html.replace(sheetFoot(), '') + `<h2>Journal ${e.d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</h2><table><tr><th>Account</th><th>Debit</th><th>Credit</th></tr>${J.map(x=>`<tr><td>${x[0]}</td><td>${x[1]?money(x[1]):''}</td><td>${x[2]?money(x[2]):''}</td></tr>`).join('')}</table>` + sheetFoot(); }
   return sheetYears([2024,2025,2026].map(yearAgg), rc);
 }
 function printModal(){
@@ -1924,11 +2008,229 @@ function vendorModal(){
     <footer><span class="muted" style="font-size:12px;margin-right:auto">${canSave?'Ready to save':'Name and a verified licence are required'}</span><button class="btn" data-close>Cancel</button><button class="btn primary" data-act="nvsave" ${canSave?'':'disabled'}>Save vendor</button></footer></div></div>`;
 }
 
+function signinModal(){
+  const G=S.signin;
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Sign in" style="width:min(560px,100%)">
+    <header>${ic('lock')}<h2>Who’s working?</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="gap:14px">
+      <div class="who">${USERS.map(u=>`<button class="${G.who===u.n?'on':''}" data-signwho="${u.n}"><span class="vav" style="background:${u.color}">${initials(u.n)}</span>${u.n}<small>${u.role}</small></button>`).join('')}</div>
+      ${G.who?`<div style="text-align:center;font-weight:700">Enter PIN for ${G.who}</div><div class="pindots">${[0,1,2,3].map(i=>`<i class="${G.pin.length>i?'on':''}"></i>`).join('')}</div>
+      <div class="pinpad">${['1','2','3','4','5','6','7','8','9','C','0','⌫'].map(k=>`<button data-pinkey="${k}">${k}</button>`).join('')}</div>
+      ${G.err?`<div class="clockban locked" style="justify-content:center">${ic('x')} Wrong PIN. Try again.</div>`:''}`:''}
+      <div class="muted" style="font-size:12px;text-align:center">Demo PINs: ${USERS.map(u=>`${u.n.split(' ')[0]} ${u.pin}`).join(' · ')}. Cashiers see only Register, Returns, Shifts, Damaged Goods and Receiving.</div>
+    </div></div></div>`;
+}
+function denTotal(){ return (S.den||[]).reduce((a,v,i)=>a + (DENOMS[i][1]==null ? (+v||0) : (+v||0)*DENOMS[i][1]), 0); }
+function tillModal(kind){
+  const expected = 300 + eod(RP_TODAY).cash, counted = denTotal(), reveal = S.denPhase==='reveal', os = counted - (kind==='close'?expected:300);
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="${kind==='open'?'Open shift':'Close shift'}" style="width:min(620px,100%)">
+    <header>${ic('cash')}<h2>${kind==='open'?'Open shift · count the float':'Close shift · blind count'}</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="gap:14px">
+      <div class="muted" style="font-size:13px">${kind==='open'?'Count the starting cash in the drawer. It should be $300.00.':'Count the cash in the drawer by bill. The amount the system expects is shown only after you submit, so the count stays honest.'}</div>
+      <div class="dens">${DENOMS.map((d,i)=>`<label>${d[0]}${d[1]==null?' total':' × count'}<input id="den-${i}" type="number" min="0" step="${d[1]==null?'0.01':'1'}" value="${esc(S.den[i]??'')}" ${reveal?'disabled':''}></label>`).join('')}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:15px"><b>Counted</b><b class="num" id="den-total" style="font-size:22px">${money(counted)}</b></div>
+      ${reveal?`<div class="verdict ${Math.abs(os)<0.005?'ok':'bad'}" style="padding:12px 14px">${ic(Math.abs(os)<0.005?'check':'alert','style="width:26px;height:26px"')}<div>
+        <div style="font-size:13px">Expected ${money(kind==='close'?expected:300)} · counted ${money(counted)}</div><b style="font-size:18px">${Math.abs(os)<0.005?'Drawer balances':`${os>0?'Over':'Short'} by ${money(Math.abs(os))}`}</b>
+        ${Math.abs(os)>5?'<div style="font-size:12px">Over $5 needs a manager note.</div>':''}</div></div>`:''}
+    </div>
+    <footer><button class="btn" data-close>Cancel</button>${kind==='open'?`<button class="btn primary" data-act="tillopenok" ${counted>0?'':'disabled'}>Start shift</button>`:reveal?`<button class="btn primary" data-act="tillcloseok">Close shift${Math.abs(os)>5?' with manager note':''}</button>`:`<button class="btn primary" data-act="tillreveal" ${counted>0?'':'disabled'}>Submit count</button>`}</footer></div></div>`;
+}
+VIEWS.shifts = () => {
+  const e = eod(RP_TODAY), me = USERS.find(u=>u.n===S.user), sh=S.shift;
+  const hours = {'Priya N.':12, 'Alex K.':40, 'Maria G.':31.5, 'Dev P.':28, 'Sam R.':22.5};
+  return `
+  <section class="stats">
+    <div><b class="num">${Object.values(S.clocked).filter(Boolean).length}</b><small>staff clocked in now</small></div>
+    <div><b class="num">${sh.open?sh.lane:'—'}</b><small>${sh.open?`open shift · ${sh.who} since ${sh.opened}`:'no shift open'}</small></div>
+    <div><b class="num">${sh.open?money(300+e.cash):'—'}</b><small>cash expected in the drawer now</small></div>
+    <div><b class="num" style="color:var(--crit)">-$3.75</b><small>over / short, last 7 days</small></div>
+  </section>
+  <div class="compgrid">
+    <section class="card" data-note="Current shift · open with float, close with blind count">
+      <div class="cardhead"><h2>Lane 1 till</h2><span class="spacer"></span><span class="chip ${sh.open?'ok':'plain'}">${sh.open?'Shift open':'Closed'}</span></div>
+      ${sh.open?`<dl class="kv"><dt>Cashier</dt><dd>${sh.who}</dd><dt>Opened</dt><dd>${sh.opened}</dd><dt>Opening float</dt><dd>${money(sh.float)}</dd><dt>Cash sales so far</dt><dd>${money(e.cash)}</dd><dt>Sales so far</dt><dd>${e.tx} · ${money(e.net,0)}</dd></dl>
+        <button class="btn primary" style="margin-top:12px" data-act="tillclose">${ic('cash')}Close shift</button>`
+      :`<div class="muted" style="font-size:13px">Count the float to start selling on this lane.</div><button class="btn primary" style="margin-top:12px" data-act="tillopen">${ic('cash')}Open shift</button>`}
+    </section>
+    <section class="card" data-note="Time clock">
+      <div class="cardhead"><h2>Time clock</h2><span class="spacer"></span><span class="muted" style="font-size:12px">Hours this week</span></div>
+      ${USERS.map(u=>`<div class="rule"><span class="vav" style="background:${u.color};width:30px;height:30px;font-size:11px;border-radius:8px">${initials(u.n)}</span><div><b>${u.n}</b><small>${u.role[0].toUpperCase()+u.role.slice(1)} · ${S.clocked[u.n]?`clocked in at ${S.clocked[u.n]}`:'not clocked in'}</small></div><span class="num" style="font-size:12px">${hours[u.n]} h</span>
+        ${(me.role!=='cashier'||u.n===S.user)?`<button class="btn sm ${S.clocked[u.n]?'':'primary'}" data-clockuser="${u.n}">${S.clocked[u.n]?'Clock out':'Clock in'}</button>`:''}</div>`).join('')}
+    </section>
+  </div>
+  <section class="card" data-note="Shift history · feeds end of day">
+    <div class="cardhead"><h2>Recent shifts</h2></div>
+    <div class="tablewrap"><table class="rptable" style="min-width:680px"><thead><tr><th>Date</th><th>Lane</th><th>Cashier</th><th>Open – close</th><th class="r">Sales</th><th class="r">Cash expected</th><th class="r">Counted</th><th class="r">Over / short</th></tr></thead><tbody>
+      ${SHIFTS.map(x=>{ const os=x.cnt-x.exp; return `<tr><td>${x.d}</td><td>${x.lane}</td><td>${x.who}</td><td>${x.open} – ${x.close}</td><td class="r">${money(x.sales,0)}</td><td class="r">${money(x.exp)}</td><td class="r">${money(x.cnt)}</td><td class="r" style="color:${os<0?'var(--crit)':os>0?'var(--warn)':'var(--ok)'}">${Math.abs(os)<0.005?'balanced':money(os)}</td></tr>`; }).join('')}
+    </tbody></table></div>
+  </section>
+  <section class="card" data-note="Roles and permissions">
+    <div class="cardhead"><h2>Who can do what</h2></div>
+    <div class="tablewrap"><table class="rptable" style="min-width:560px"><thead><tr><th>Task</th><th>Cashier</th><th>Manager</th><th>Owner</th></tr></thead><tbody>
+      ${[['Sell, scan IDs, returns under $50',1,1,1],['Discounts over 15%, refunds over $50, typed birthdates',0,1,1],['Receive deliveries, count stock',1,1,1],['Pricing, purchasing, vendors, reports',0,1,1],['Store settings, users, tax rates',0,0,1]].map(r=>`<tr><td>${r[0]}</td>${[1,2,3].map(k=>`<td>${r[k]?ic('check','style="color:var(--ok)"'):'<span class="muted">—</span>'}</td>`).join('')}</tr>`).join('')}
+    </tbody></table></div>
+  </section>`;
+};
+function receiptSheet(sale){
+  const c=saleCalc(sale.items), st=S.settings||{};
+  return `<h1>${esc(st.name||'Oak Street Liquor #014')}</h1><div class="meta"><span>${esc(st.addr||'1200 Oak St, Sacramento, CA 95814')}</span><span>${esc(st.phone||'(916) 555-0101')}</span></div>
+    <div class="meta"><span>Sale #${sale.no} · ${sale.t} · ${sale.who}</span></div>${st.rHeader?`<div class="meta"><span>${esc(st.rHeader)}</span></div>`:''}
+    <h2>Items</h2><table>${sale.items.map(([id,q])=>{ const p=byId(id); return `<tr><td>${esc(p.n)} ${p.sz}<br>${q} × ${money(p.p)}${p.crv?` + CRV ${money(p.crv)}`:''}</td><td>${money(p.p*q)}</td></tr>`; }).join('')}
+    <tr><td>Subtotal</td><td>${money(c.sub)}</td></tr><tr><td>CRV</td><td>${money(c.crv)}</td></tr><tr><td>Sales tax ${(TAX*100).toFixed(2)}%</td><td>${money(c.tax)}</td></tr><tr class="tot"><td>Total</td><td>${money(c.total)}</td></tr><tr><td>Paid · ${esc(sale.tender)}</td><td>${money(c.total)}</td></tr></table>
+    <div class="foot"><span>${esc(st.rFooter||'Returns: unopened items within 30 days with receipt. Please drink responsibly.')}</span><span>Reprint · ${fmtDay(RP_TODAY)}</span></div>`;
+}
+function sheetModal(title, html){
+  S.sheetHTML = html;
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}" style="width:min(560px,100%)">
+    <header>${ic('printer')}<h2>${esc(title)}</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="gap:12px"><div class="printwrap"><div class="sheet receipt">${html}</div></div>
+      <div class="muted" style="font-size:12px">Printing is simulated in the online prototype. Open index.html in a browser to print for real.</div></div>
+    <footer><button class="btn" data-toast="Receipt sent by text to the customer">Text receipt</button><button class="btn" data-close>Cancel</button><button class="btn primary" data-act="sheetprint">${ic('printer')}Print</button></footer></div></div>`;
+}
+function returnModal(){
+  const R=S.ret, sale=SALES.find(x=>x.no===R.no);
+  const lines = sale.items.map(([id,q])=>({p:byId(id), q, take:R.sel[id]||0}));
+  const amt = lines.reduce((a,l)=>a+l.take*unitRefund(l.p),0), needPin = amt>50 && !['owner','manager'].includes(USERS.find(u=>u.n===S.user)?.role);
+  const can = amt>0 && (!needPin || /^\d{4}$/.test(R.pin||''));
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Return items" style="width:min(640px,100%)">
+    <header>${ic('sync')}<h2>Return from sale #${sale.no}</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="gap:14px">
+      <div>${lines.map(l=>`<div class="saleitem"><input type="checkbox" data-retchk="${l.p.id}" ${l.take?'checked':''} aria-label="Return ${esc(l.p.n)}"><span>${bottleSVG(l.p)}</span><span><b>${esc(l.p.n)}</b><div class="muted" style="font-size:11.5px">${l.p.sz} · bought ${l.q}</div></span>
+        ${l.take?`<span class="stepper"><button data-retq="${l.p.id}" data-v="-1" aria-label="Fewer">−</button><span>${l.take}</span><button data-retq="${l.p.id}" data-v="1" aria-label="More">+</button></span>`:'<span></span>'}<span class="num">${money(l.take*unitRefund(l.p))}</span></div>`).join('')}</div>
+      <div class="field">Reason<div class="quick">${['Changed mind (unopened)','Corked or spoiled','Damaged','Wrong item','Expired'].map(r=>`<button class="${R.why===r?'on':''}" data-retwhy="${r}">${r}</button>`).join('')}</div></div>
+      <div class="field">Item goes<div class="quick">${[['shelf','Back on the shelf'],['damage','To Damaged Goods']].map(([v,l])=>`<button class="${R.dest===v?'on':''}" data-retdest="${v}">${l}</button>`).join('')}</div></div>
+      <div class="field">Refund to<div class="quick">${[['orig',`Original payment · ${sale.tender}`],['credit','Store credit']].map(([v,l])=>`<button class="${R.method===v?'on':''}" data-retmeth="${v}">${l}</button>`).join('')}</div></div>
+      <div class="comply"><span>${ic('shield','style="width:14px;height:14px"')} Store policy: unopened within 30 days with a receipt; opened bottles only if faulty. Alcohol return rules vary by state and are checked.</span></div>
+      ${needPin?`<div class="pinbox">${ic('lock')} Refunds over $50 need a manager PIN <input id="ret-pin" inputmode="numeric" maxlength="4" placeholder="••••" value="${esc(R.pin||'')}" aria-label="Manager PIN"><span style="font-weight:500;font-size:12px">Demo: any 4 digits</span></div>`:''}
+    </div>
+    <footer><span style="margin-right:auto;font-weight:800;font-size:16px" class="num">Refund ${money(amt)}</span><button class="btn" data-act="retexch" ${amt>0?'':'disabled'}>Exchange instead</button><button class="btn primary" data-act="retok" ${can?'':'disabled'}>Refund ${money(amt)}</button></footer></div></div>`;
+}
+VIEWS.returns = () => {
+  const q=S.saleQ.toLowerCase().trim();
+  const list = SALES.filter(x=> !q || String(x.no).includes(q) || x.tender.toLowerCase().includes(q) || x.who.toLowerCase().includes(q) || x.items.some(([id])=>byId(id).n.toLowerCase().includes(q)));
+  const sale = SALES.find(x=>x.no===S.saleSel) || list[0];
+  const c = sale ? saleCalc(sale.items) : null, rets = RETURNS.filter(r=>r.no===sale?.no);
+  return `
+  <section class="stats">
+    <div><b class="num">${SALES.length}</b><small>sales in the last 24 hours</small></div>
+    <div><b class="num">${RETURNS.length}</b><small>returns today</small></div>
+    <div><b class="num">${money(RETURNS.reduce((a,r)=>a+r.amt,0))}</b><small>refunded today</small></div>
+    <div><b class="num">30 days</b><small>return window · unopened with receipt</small></div>
+  </section>
+  <div class="vnd">
+    <aside style="display:flex;flex-direction:column;gap:8px" data-note="Find a sale">
+      <label class="scanbar" style="padding:4px 8px 4px 12px">${ic('search')}<input id="sale-q" placeholder="Receipt #, card last 4, product or cashier" value="${esc(S.saleQ)}" autocomplete="off"></label>
+      ${list.map(x=>{ const t=saleCalc(x.items); return `<button class="vrow ${sale&&x.no===sale.no?'on':''}" data-salesel="${x.no}" style="grid-template-columns:1fr auto"><span><b>Sale #${x.no}</b><small>${x.t} · ${x.who} · ${esc(x.tender)}</small><small>${x.items.map(([id,q])=>`${q}× ${byId(id).n}`).join(', ')}</small></span><span style="text-align:right"><b class="num">${money(t.total)}</b>${RETURNS.some(r=>r.no===x.no)?'<small style="color:var(--warn)">returned</small>':''}</span></button>`; }).join('') || '<div class="empty">No sale matches.</div>'}
+    </aside>
+    ${sale?`<section class="card" data-note="Sale detail · reprint, return, exchange">
+      <div class="cardhead"><h2>Sale #${sale.no}</h2><span class="chip plain">${sale.t}</span><span class="spacer"></span><button class="btn sm" data-act="reprint">${ic('printer')}Reprint receipt</button><button class="btn sm primary" data-act="retstart">${ic('sync')}Return or exchange</button></div>
+      <dl class="kv" style="margin-bottom:12px"><dt>Cashier</dt><dd>${sale.who}</dd><dt>Payment</dt><dd>${esc(sale.tender)}</dd><dt>ID check</dt><dd>${sale.idm}</dd><dt>Member</dt><dd>${sale.member||'—'}</dd></dl>
+      ${sale.items.map(([id,q])=>{ const p=byId(id); return `<div class="saleitem" style="grid-template-columns:26px 1fr auto"><span>${bottleSVG(p)}</span><span><b>${esc(p.n)}</b><div class="muted" style="font-size:11.5px">${p.sz} · ${q} × ${money(p.p)}${p.crv?` · CRV ${money(p.crv)}`:''}</div></span><span class="num">${money(p.p*q)}</span></div>`; }).join('')}
+      <dl class="kv" style="margin-top:10px"><dt>Subtotal</dt><dd>${money(c.sub)}</dd><dt>CRV</dt><dd>${money(c.crv)}</dd><dt>Sales tax</dt><dd>${money(c.tax)}</dd><dt class="tot">Total</dt><dd class="tot">${money(c.total)}</dd></dl>
+      ${rets.map(r=>`<div class="clockban soon" style="margin-top:10px">${ic('sync')} ${r.kind==='exchange'?'Exchanged':'Refunded'} ${money(r.amt)} · ${r.items} · ${r.why} · ${r.dest==='shelf'?'back on shelf':'sent to Damaged Goods'} · ${r.t}</div>`).join('')}
+    </section>`:'<div class="empty">Pick a sale.</div>'}
+  </div>`;
+};
+
+VIEWS.receiving = () => {
+  const R=S.rcv, po=POS_DATA.find(o=>o.no===R.po);
+  if (!S.cnt) S.cnt={area:'Cooler 2 · beer & seltzer', lines:['bud12','modelo12','claw12','noon8','redbull4'].map(pid=>({pid, exp:byId(pid).stock, c:''})), done:false};
+  const C=S.cnt, counted=C.lines.filter(l=>l.c!=='').length, varU=C.lines.reduce((a,l)=>a+(l.c===''?0:+l.c-l.exp),0), varV=C.lines.reduce((a,l)=>a+(l.c===''?0:(+l.c-l.exp)*byId(l.pid).p*0.7),0);
+  const role = USERS.find(u=>u.n===S.user)?.role;
+  const tabs = `<div class="seg" style="align-self:flex-start"><button class="${S.rcvTab==='receive'?'on':''}" data-rcvtab="receive">Receive a delivery</button><button class="${S.rcvTab==='count'?'on':''}" data-rcvtab="count">Count stock</button></div>`;
+  const stats = `<section class="stats">
+    <div><b class="num">1</b><small>delivery expected today · Valley Beer</small></div>
+    <div><b class="num">${POS_DATA.filter(o=>o.st==='Partly received').length}</b><small>partly received POs</small></div>
+    <div><b class="num" style="color:var(--crit)">${money(SHRINK.reduce((a,x)=>a+x.value,0))}</b><small>count shrink this month</small></div>
+    <div><b class="num">98.6%</b><small>count accuracy, last 90 days</small></div>
+  </section>`;
+  if (S.rcvTab==='receive'){
+    const ok = R.lines.every(l=>l.rec===l.ord && !l.dmg);
+    return stats + tabs + `
+    <section class="card" data-note="Receive against the PO · scan each case">
+      <div class="cardhead"><h2>${R.po} · Valley Beer Distributing</h2><span class="chip ${R.done?(ok?'ok':'warn'):'over'}">${R.done?po.st:'Arriving today'}</span><span class="spacer"></span>
+        ${R.done?'':`<button class="btn sm" data-act="rcvscan">${ic('scan')}Scan a case</button><button class="btn sm" data-act="rcvall">Received all as ordered</button>`}</div>
+      <div class="tablewrap"><table class="rptable" style="min-width:640px"><thead><tr><th>Product</th><th class="r">Ordered</th><th>Received</th><th>Damaged</th><th>Status</th></tr></thead><tbody>
+        ${R.lines.map((l,i)=>{ const p=byId(l.pid), short=l.ord-l.rec; return `<tr><td><b>${p.n}</b><div class="muted" style="font-size:11.5px">case of ${l.pack} · ${p.sz}</div></td><td class="r">${l.ord} cases</td>
+          <td>${R.done?`${l.rec} cases`:`<span class="stepper"><button data-rcvq="${i}" data-f="rec" data-v="-1" aria-label="Fewer">−</button><span>${l.rec}</span><button data-rcvq="${i}" data-f="rec" data-v="1" aria-label="More">+</button></span>`}</td>
+          <td>${R.done?`${l.dmg}`:`<span class="stepper"><button data-rcvq="${i}" data-f="dmg" data-v="-1" aria-label="Fewer">−</button><span>${l.dmg}</span><button data-rcvq="${i}" data-f="dmg" data-v="1" aria-label="More">+</button></span>`}</td>
+          <td>${l.rec===0&&!R.done?'<span class="chip plain">Not scanned</span>':short>0?`<span class="chip warn">Short ${short}</span>`:''}${l.dmg?`<span class="chip crit">${l.dmg} damaged</span>`:''}${l.rec===l.ord&&!l.dmg?'<span class="chip ok">Matches PO</span>':''}</td></tr>`; }).join('')}
+      </tbody></table></div>
+      ${R.done?`<div class="clockban ${ok?'soon':'soon'}" style="margin-top:12px;background:var(--ok-soft);color:var(--ok)">${ic('check')} Received. Stock updated${R.lines.some(l=>l.dmg)?', supplier claim opened for damaged cases':''}${R.lines.some(l=>l.rec<l.ord)?', PO kept open for the short cases':''}.</div>`
+        :`<div style="display:flex;gap:10px;justify-content:flex-end;align-items:center;margin-top:12px;flex-wrap:wrap"><span class="muted" style="font-size:12px">Short or damaged cases open a supplier claim automatically</span><button class="btn primary" data-act="rcvdone" ${R.lines.some(l=>l.rec>0)?'':'disabled'}>Complete receiving</button></div>`}
+    </section>
+    <section class="card" data-note="Other open POs"><div class="cardhead"><h2>Other open orders</h2></div>
+      ${POS_DATA.filter(o=>o.no!==R.po && o.st!=='Received').map(o=>`<div class="rule">${ic('truck')}<div><b>${o.no} · ${esc(o.v)}</b><small>${esc(o.lines)} · ${esc(o.note)}</small></div><span class="chip warn">${o.st}</span></div>`).join('') || '<div class="muted">None.</div>'}
+    </section>`;
+  }
+  return stats + tabs + `
+    <section class="card" data-note="Count sheet · blind to nobody, variance shown live">
+      <div class="cardhead"><h2>Count: ${C.area}</h2><span class="chip ${C.done?'ok':'plain'}">${C.done?'Adjusted':`${counted} of ${C.lines.length} counted`}</span><span class="spacer"></span>${C.done?'':`<button class="btn sm" data-act="cntfill">Demo: fill sample counts</button>`}</div>
+      <div class="tablewrap"><table class="rptable" style="min-width:600px"><thead><tr><th>Product</th><th class="r">System says</th><th>Counted</th><th class="r">Difference</th><th class="r">Value</th></tr></thead><tbody>
+        ${C.lines.map((l,i)=>{ const p=byId(l.pid), v=l.c===''?null:+l.c-l.exp; return `<tr><td><b>${p.n}</b><div class="muted" style="font-size:11.5px">${p.sz}</div></td><td class="r">${l.exp}</td>
+          <td>${C.done?l.c:`<input class="cntin" id="cnt-${i}" type="number" min="0" value="${esc(l.c)}" aria-label="Counted ${esc(p.n)}">`}</td>
+          <td class="r" style="color:${v==null?'inherit':v<0?'var(--crit)':v>0?'var(--warn)':'var(--ok)'}">${v==null?'—':v===0?'matches':(v>0?'+':'')+v}</td><td class="r">${v?money(v*p.p*0.7):'—'}</td></tr>`; }).join('')}
+      </tbody></table></div>
+      ${C.done?`<div class="clockban soon" style="margin-top:12px;background:var(--ok-soft);color:var(--ok)">${ic('check')} Stock adjusted to the count. Difference recorded as shrink.</div>`
+        :`<div style="display:flex;gap:10px;justify-content:flex-end;align-items:center;margin-top:12px;flex-wrap:wrap"><span class="num" style="font-weight:700;color:${varU<0?'var(--crit)':'inherit'}">${varU>0?'+':''}${varU} units · ${money(varV)}</span>
+          ${role==='cashier'?'<span class="chip warn">A manager approves the adjustment</span>':''}<button class="btn primary" data-act="cntdone" ${counted===C.lines.length && role!=='cashier'?'':'disabled'}>Approve and adjust stock</button></div>`}
+    </section>
+    <section class="card" data-note="Shrink history"><div class="cardhead"><h2>Shrink from counts</h2></div>
+      ${SHRINK.map(x=>`<div class="rule">${ic('box')}<div><b>${x.area}</b><small>${x.d} · approved by ${x.by}</small></div><span class="num" style="color:${x.value<0?'var(--crit)':'inherit'}">${x.units>0?'+':''}${x.units} · ${money(x.value)}</span></div>`).join('')}
+    </section>`;
+};
+VIEWS.settings = () => {
+  const st=S.settings, inp=(k,l,extra='')=>`<label class="field">${l}<input id="st-${k}" value="${esc(st[k])}" ${extra}></label>`;
+  return `
+  <div class="setgrid">
+    <section class="card" style="display:flex;flex-direction:column;gap:10px" data-note="Store details · printed on receipts">
+      <h2>Store</h2>${inp('name','Store name')}${inp('addr','Address')}<div class="frow">${inp('phone','Phone','inputmode="tel"')}${inp('lic','Liquor licence')}</div></section>
+    <section class="card" style="display:flex;flex-direction:column;gap:10px" data-note="Taxes and fees · used by the register">
+      <h2>Taxes and fees</h2>
+      <div class="frow">${inp('tax','Sales tax %','type="number" step="0.01" min="0" max="20"')}<label class="field">Applies to<select disabled><option>All taxable items</option></select></label></div>
+      <div class="frow">${inp('crvS','CRV under 24 oz ($)','type="number" step="0.01" min="0"')}${inp('crvL','CRV 24 oz or more ($)','type="number" step="0.01" min="0"')}</div>
+      <div class="muted" style="font-size:12px">Charged per container on beer, seltzer, mixers and other covered drinks. A new tax rate applies to the next sale.</div></section>
+    <section class="card" style="display:flex;flex-direction:column;gap:10px" data-note="Legal sale hours · drive the compliance lock">
+      <h2>Alcohol sale hours</h2><div class="frow">${inp('open','Sales start','type="time"')}${inp('close','Sales stop','type="time"')}</div>
+      <div class="muted" style="font-size:12px">The register locks 21+ items outside these hours. See Compliance.</div></section>
+    <section class="card" style="display:flex;flex-direction:column;gap:10px" data-note="Receipt · live preview">
+      <h2>Receipt</h2>
+      <label class="field">Header line<input id="st-rHeader" value="${esc(st.rHeader)}"></label>
+      <label class="field">Footer (return policy)<textarea id="st-rFooter">${esc(st.rFooter)}</textarea></label>
+      <div class="setrow"><div><b>Show "You saved" on receipts</b></div><button class="toggle" aria-pressed="${st.rSave}" data-act="strsave" aria-label="Show savings"></button></div>
+      <div class="field">Default receipt<div class="quick">${['Print','Text','Email','Ask each time'].map(v=>`<button class="${st.rDefault===v?'on':''}" data-strdef="${v}">${v}</button>`).join('')}</div></div>
+      <button class="btn sm" style="align-self:flex-start" data-act="strprev">${ic('printer')}Preview receipt</button></section>
+    <section class="card" data-note="Users and roles">
+      <div class="cardhead"><h2>Users and roles</h2><span class="spacer"></span><button class="btn sm" data-toast="New user form opens here in the full app">+ Add user</button></div>
+      ${USERS.map((u,i)=>`<div class="rule"><span class="vav" style="background:${u.color};width:30px;height:30px;font-size:11px;border-radius:8px">${initials(u.n)}</span><div><b>${u.n}</b><small>PIN ••••</small></div>
+        <select id="role-${i}" aria-label="Role for ${u.n}" style="padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface)" ${u.n===S.user?'disabled':''}>${['owner','manager','cashier'].map(r=>`<option value="${r}" ${u.role===r?'selected':''}>${r[0].toUpperCase()+r.slice(1)}</option>`).join('')}</select>
+        <button class="btn sm ghost" data-toast="PIN reset link sent to ${u.n}">Reset PIN</button></div>`).join('')}
+    </section>
+    <section class="card" data-note="Printers">
+      <div class="cardhead"><h2>Printers</h2></div>
+      ${[['Lane 1 receipt printer','80 mm thermal · USB',true],['Lane 2 receipt printer','80 mm thermal · network',true],['Shelf tag printer','Label printer · network',true],['Back office printer','Letter / A4 · network',false]].map(x=>`<div class="rule">${ic('printer')}<div><b>${x[0]}</b><small>${x[1]}</small></div><span class="chip ${x[2]?'ok':'warn'}">${x[2]?'Ready':'Offline'}</span><button class="btn sm" data-toast="Test page sent to ${x[0]}">Test</button></div>`).join('')}
+    </section>
+  </div>`;
+};
+function sheetTax(rc){
+  const R=S.rp, d=parseYmd(R.day), a=new Date(d.getFullYear(), d.getMonth(), 1), b0=new Date(d.getFullYear(), d.getMonth()+1, 0), b=b0>RP_LAST?RP_LAST:b0;
+  const rows=rangeRows(a,b), net=rows.reduce((x,e)=>x+e.net,0), gross=rows.reduce((x,e)=>x+e.gross,0), disc=rows.reduce((x,e)=>x+e.disc,0), crv=rows.reduce((x,e)=>x+e.crv,0);
+  const nontax = net*0.006, taxable = net-nontax, due = taxable*TAX;
+  return {a, b, gross, disc, net, nontax, taxable, due, crv, partial:b0>RP_LAST,
+    html: sheetHead(rc?'SALES TAX':'Sales and use tax report', `${MONTHS[a.getMonth()]} ${a.getFullYear()}${b0>RP_LAST?' (to date)':''}`, 'For your CDTFA return')
+     + `<h2>Sales</h2><table>${row('Gross sales',money(gross))}${row('Discounts and returns',money(-(gross-net)))}${row('Net sales',money(net),'tot')}${row('Non-taxable sales (produce, ice)',money(-nontax))}${row('Taxable sales',money(taxable),'tot')}</table>
+        <h2>Tax</h2><table>${row('Tax rate',(TAX*100).toFixed(2)+'%')}${row('Sales tax due',money(due),'tot')}${row('CRV collected (reported separately)',money(crv))}</table>` + sheetFoot()};
+}
+function journal(e){
+  const cogs = e.net*(1-e.margin/100);
+  return [['Card clearing (card, tap, offline)', e.card+e.tap+e.off, 0],['Cash', e.cash, 0],['Discounts and returns', e.disc+e.ret, 0],['Sales revenue', 0, e.net+e.disc+e.ret],['Sales tax payable', 0, e.tax],['CRV collected', 0, e.crv],['Cost of goods sold', cogs, 0],['Inventory', 0, cogs]];
+}
+
 VIEWS.reports = () => {
-  const R=S.rp, tabs=[['eod','End of day'],['range','Date range'],['month','Monthly'],['year','Yearly']];
+  const R=S.rp, tabs=[['eod','End of day'],['range','Date range'],['month','Monthly'],['year','Yearly'],['tax','Accounting & tax']];
   const head = `<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
     <div class="seg">${tabs.map(([v,l])=>`<button class="${R.tab===v?'on':''}" data-rptab="${v}">${l}</button>`).join('')}</div><span style="flex:1"></span>
-    ${R.tab==='eod'?`<label class="field" style="flex-direction:row;align-items:center;gap:8px">Day<input type="date" id="rp-day" value="${R.day}" min="${ymd(RP_START)}" max="${ymd(RP_TODAY)}" style="width:auto"></label>`:''}
+    ${R.tab==='eod'||R.tab==='tax'?`<label class="field" style="flex-direction:row;align-items:center;gap:8px">Day<input type="date" id="rp-day" value="${R.day}" min="${ymd(RP_START)}" max="${ymd(RP_TODAY)}" style="width:auto"></label>`:''}
     ${R.tab==='range'?`<label class="field" style="flex-direction:row;align-items:center;gap:8px">From<input type="date" id="rp-from" value="${R.from}" min="${ymd(RP_START)}" max="${ymd(RP_TODAY)}" style="width:auto"></label><label class="field" style="flex-direction:row;align-items:center;gap:8px">To<input type="date" id="rp-to" value="${R.to}" min="${ymd(RP_START)}" max="${ymd(RP_TODAY)}" style="width:auto"></label>`:''}
     ${R.tab==='month'?`<div class="seg">${[2026,2025,2024].map(y=>`<button class="${R.year===y?'on':''}" data-rpyear="${y}">${y}</button>`).join('')}</div>`:''}
     <button class="btn primary" data-act="rpopen">${ic('printer')}Print</button></div>`;
@@ -1995,6 +2297,28 @@ VIEWS.reports = () => {
       ${ms.map(m=>{ if (m.none) return `<tr><td>${m.m}</td><td class="r muted" colspan="6">—</td></tr>`; const p=prev[m.i], vs = p && !p.none && p.net ? (m.net-p.net)/p.net*100 : null;
         return `<tr><td>${m.m}${m.partial?' <span class="chip warn">to date</span>':''}</td><td class="r">${m.tx.toLocaleString()}</td><td class="r"><b>${money(m.net,0)}</b></td><td class="r">${money(m.profit,0)}</td><td class="r">${m.margin.toFixed(1)}%</td><td class="r">${money(m.basket)}</td><td class="r" style="color:${vs==null?'inherit':vs>=0?'var(--ok)':'var(--crit)'}">${vs==null?'—':(vs>0?'+':'')+vs.toFixed(1)+'%'}</td></tr>`; }).join('')}
     </tbody></table></div></section>`;
+  }
+  if (R.tab==='tax'){
+    const e=eod(parseYmd(R.day)), J=journal(e), dr=J.reduce((a,x)=>a+x[1],0), cr=J.reduce((a,x)=>a+x[2],0), T=sheetTax(false);
+    return head + `
+    <section class="stats">
+      <div><b class="num">${money(T.taxable,0)}</b><small>taxable sales · ${MONTHS[T.a.getMonth()]}${T.partial?' to date':''}</small></div>
+      <div><b class="num">${money(T.due,0)}</b><small>sales tax due · file by the end of next month</small></div>
+      <div><b class="num">${money(T.crv,0)}</b><small>CRV collected</small></div>
+      <div><b class="num" style="color:var(--ok)">Synced</b><small>QuickBooks · last sync 2:10 AM</small></div>
+    </section>
+    <div class="compgrid">
+      <section class="card" data-note="Accounting connection"><div class="cardhead"><h2>Accounting software</h2></div>
+        <div class="rule"><span class="vav" style="background:#2CA01C;width:34px;height:34px;font-size:12px;border-radius:9px">QB</span><div><b>QuickBooks Online</b><small>Connected · posts one journal per day at close · 412 sales last night</small></div><span class="chip ok">Connected</span><button class="btn sm" data-toast="Sales for ${fmtDay(e.d)} sent to QuickBooks">Sync now</button></div>
+        <div class="rule"><span class="vav" style="background:#13B5EA;width:34px;height:34px;font-size:12px;border-radius:9px">X</span><div><b>Xero</b><small>Not connected</small></div><button class="btn sm" data-toast="Xero sign-in opens here in the full app">Connect</button></div>
+        <div class="muted" style="font-size:12px;margin-top:8px">Alcohol excise taxes are paid by your distributors in California and are already in your costs, so there is no retailer excise filing here.</div></section>
+      <section class="card" data-note="Sales tax report · ready to file"><div class="cardhead"><h2>Sales tax · ${MONTHS[T.a.getMonth()]} ${T.a.getFullYear()}</h2><span class="spacer"></span><button class="btn sm" data-toast="Tax report emailed to your accountant">Email accountant</button></div>
+        <dl class="kv"><dt>Gross sales</dt><dd>${money(T.gross)}</dd><dt>Discounts and returns</dt><dd class="neg">${money(-(T.gross-T.net))}</dd><dt class="tot">Net sales</dt><dd class="tot">${money(T.net)}</dd><dt>Non-taxable (produce, ice)</dt><dd class="neg">${money(-T.nontax)}</dd><dt class="tot">Taxable sales</dt><dd class="tot">${money(T.taxable)}</dd><dt>Tax rate</dt><dd>${(TAX*100).toFixed(2)}%</dd><dt class="tot">Sales tax due</dt><dd class="tot">${money(T.due)}</dd><dt>CRV collected</dt><dd>${money(T.crv)}</dd></dl></section>
+    </div>
+    <section class="card" data-note="Daily journal entry · what gets posted"><div class="cardhead"><h2>Journal entry · ${fmtDay(e.d)}</h2><span class="spacer"></span><span class="chip ${Math.abs(dr-cr)<0.01?'ok':'crit'}">${Math.abs(dr-cr)<0.01?'Balanced':'Out of balance'}</span></div>
+      <div class="tablewrap"><table class="rptable jr" style="min-width:520px"><thead><tr><th>Account</th><th class="r">Debit</th><th class="r">Credit</th></tr></thead><tbody>
+        ${J.map(x=>`<tr><td>${x[0]}</td><td class="r">${x[1]?money(x[1]):''}</td><td class="r">${x[2]?money(x[2]):''}</td></tr>`).join('')}
+      </tbody><tfoot><tr><td>Total</td><td class="r">${money(dr)}</td><td class="r">${money(cr)}</td></tr></tfoot></table></div></section>`;
   }
   const ys=[2024,2025,2026].map(yearAgg), same25 = sumRows(rangeRows(new Date(2025,0,1), new Date(2025,8,24))).net, g26=(ys[2].net-same25)/same25*100;
   return head + `
@@ -2423,7 +2747,7 @@ function payModal(phase='choose'){
 }
 function charge(){
   payModal('wait');
-  setTimeout(()=>{ S.cart.forEach(l=>{ const pr=byId(l.id); pr.stock=Math.max(0,pr.stock-l.qty); }); if (!S.online) S.queue.push({no:S.saleNo, amt:Math.round(totals().total*100)/100, t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), card:'Visa ·· 4412'}); payModal('done'); renderRail(); renderTop(); }, payMethod==='cash'?300:1400);
+  setTimeout(()=>{ S.cart.forEach(l=>{ const pr=byId(l.id); pr.stock=Math.max(0,pr.stock-l.qty); }); if (!SALES.some(x=>x.no===S.saleNo)) SALES.unshift({no:S.saleNo, t:nowLabel(), who:S.user, items:S.cart.map(l=>[l.id,l.qty]), tender: payMethod==='cash'?'Cash':payMethod==='tap'?'Apple Pay':'Visa ·· 4412', idm: S.cart.some(l=>byId(l.id).r) ? (S.idMethod==='visual'?'Approved by eye':S.idMethod==='manual'?'Date of birth typed':'ID scanned') : 'No 21+ items', member:S.member}); if (!S.online) S.queue.push({no:S.saleNo, amt:Math.round(totals().total*100)/100, t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), card:'Visa ·· 4412'}); payModal('done'); renderRail(); renderTop(); }, payMethod==='cash'?300:1400);
 }
 
 function startDealRead(){ S.dealSheet='reading'; S.dealRows=SHEET.rows.map(()=>'review'); render(); setTimeout(()=>{ S.dealSheet='done'; render(); toast('5 lines read · 2 deals worth taking','spark'); }, 1400); }
@@ -2437,8 +2761,9 @@ function dealConfirm(i){
 /* ------------------------------------------------ guided demo */
 function resetSale(){ S.cart=[{id:'casa750',qty:1},{id:'bud12',qty:2}]; S.id=null; S.tdisc=null; S.member=null; S.cat='All'; S.q=''; }
 const TOUR = [
-  {r:'command', t:'Morning briefing', say:'The owner opens Bevnetic and sees yesterday’s numbers plus the 5 things that need attention today, ranked by money at stake. Each one links to the screen that fixes it.', hl:'.assistant'},
+  {r:'command', set:()=>{S.user='Priya N.';}, t:'Morning briefing', say:'The owner opens Bevnetic and sees yesterday’s numbers plus the 5 things that need attention today, ranked by money at stake. Each one links to the screen that fixes it.', hl:'.assistant'},
   {r:'reports', set:()=>{S.rp.tab='eod'; S.rp.day='2026-09-24';}, t:'Last night’s close, already done', say:'The end-of-day report is built at close: sales, payments, the cash drawer count down to a $3.75 shortage, and who sold what. It prints on a full page or the receipt printer, and it’s emailed to the owner.', hl:'.eodsum'},
+  {r:'shifts', set:()=>{S.user='Priya N.';}, t:'Every shift, counted', say:'Staff sign in with a PIN and only see what their role allows. Cashiers open the till by counting the float and close it with a blind count: the expected cash appears only after they submit, and any difference goes on the end-of-day report.', hl:'.compgrid > .card'},
   {r:'alerts', t:'Alerts that come with the fix', say:'Seven kinds of AI alerts: stockouts, late deliveries, payments due, damage, expiry and price changes. Every alert carries the button that resolves it.', hl:'.alert'},
   {r:'forecast', set:()=>{S.fc='bud12'}, t:'Predict demand, don’t just track it', say:'Bud Light runs out in 3 days. The forecast reads weekends, the heat wave and Saturday’s home game, then says how much to order and by when.', hl:'.reco'},
   {r:'purchasing', set:()=>{S.buy='tito';S.buyQ=null;S.poTab='compare'}, t:'Every deal, one number', say:'Each brand comes from one distributor, often with more than one deal. Bevnetic turns every option into the real cost per case: Summit’s “buy 10, get 1 free” beats buying the 8 cases you need at list, and beats their 8%-off-at-15 deal too.', hl:'.verdict2'},
@@ -2451,6 +2776,7 @@ const TOUR = [
   {r:'register', set:resetSale, after:()=>swapModal('kim750'), t:'Sold out? Offer the best swap', say:'Kim Crawford is out. Bevnetic suggests the closest match, shows why it fits, and can text the customer when it’s back.', hl:'.swapcard.best'},
   {r:'register', set:resetSale, after:()=>{S.payAfterId=false; runId(false);}, t:'ID check in two seconds', say:'The licence barcode is read on the device: authenticity, expiry and age. Payment stays locked until it passes. If an ID won’t scan, a manager approves a typed birthdate, and customers clearly over 40 can be approved by eye. Every exception is logged.', hl:'.verdict', delay:1700},
   {r:'register', set:()=>{resetSale(); S.id='ok'; S.idAge=34; S.online=false;}, after:()=>{payMethod='card'; payModal();}, t:'The internet drops. Sales don’t.', say:'Offline, cards are stored securely and uploaded when the connection returns, with per-sale limits so the risk stays small.', hl:'.modal .offbanner'},
+  {r:'returns', set:()=>{S.saleSel=1046; S.saleQ='';}, t:'Returns and exchanges in a few taps', say:'Find any sale by receipt, card or product. Reprint it, or return an item to the original card or as exchange credit. Unopened bottles go back on the shelf; corked ones go straight to Damaged Goods.', hl:'.vnd > section.card'},
   {r:'compliance', set:()=>{S.clock='locked'}, t:'Compliance on autopilot', say:'At 2 AM the register locks alcohol by itself. Refusals take one tap, cashiers get a score, and the inspection report is one button away.', hl:'.hero'},
   {r:'damage', t:'Losses you can claim back', say:'Breakage is logged in seconds with a photo. Stock adjusts, and damaged deliveries become supplier claims tracked until the credit arrives.', hl:'.dmggrid > aside'},
   {r:'assortment', set:()=>{S.shelfTab='dead'; S.swapDone=[];}, t:'Dead stock out, best sellers in', say:'Six products haven’t sold in three months and hold about $1,460 of cash. For each one Bevnetic suggests a replacement that sells in similar stores and a way to clear the old stock: roughly $1,600 more profit a month.', hl:'.verdict2'},
@@ -2488,7 +2814,7 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-ilink],[data-bcpick],[data-vsel],[data-nvday],[data-nvvia],[data-nvp]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-ilink],[data-bcpick],[data-signwho],[data-pinkey],[data-rcvtab],[data-rcvq],[data-strdef],[data-clockuser],[data-salesel],[data-retchk],[data-retq],[data-retwhy],[data-retdest],[data-retmeth],[data-vsel],[data-nvday],[data-nvvia],[data-nvp]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -2506,6 +2832,20 @@ document.addEventListener('click', e => {
   if (d.resolve){ S.done.add(+d.resolve); toast(d.msg+' · marked resolved'); render(); return; }
   if (d.undo){ S.done.delete(+d.undo); render(); return; }
   if (d.seg){ S.custSeg=+d.seg; render(); return; }
+  if (d.rcvtab){ S.rcvTab=d.rcvtab; render(); return; }
+  if (d.rcvq){ const l=S.rcv.lines[+d.rcvq]; const f=d.f, max = f==='rec' ? l.ord+5 : l.rec; l[f]=Math.max(0,Math.min(max,l[f]+ +d.v)); if (l.dmg>l.rec) l.dmg=l.rec; render(); return; }
+  if (d.strdef){ S.settings.rDefault=d.strdef; render(); return; }
+  if (d.signwho){ S.signin={who:d.signwho, pin:'', err:false}; signinModal(); return; }
+  if (d.pinkey){ const G=S.signin; if (!G||!G.who) return; G.err=false; if (d.pinkey==='C') G.pin=''; else if (d.pinkey==='⌫') G.pin=G.pin.slice(0,-1); else if (G.pin.length<4) G.pin+=d.pinkey;
+    if (G.pin.length===4){ const u=USERS.find(x=>x.n===G.who); if (u.pin===G.pin){ S.user=u.n; S.signin=null; closeModal(); if (!allowed(S.route)) S.route = allowed('command') ? 'command' : 'register'; render(); toast(`Signed in as ${u.n} · ${u.role}`); return; } G.pin=''; G.err=true; }
+    signinModal(); return; }
+  if (d.clockuser){ const n=d.clockuser; S.clocked[n] = S.clocked[n] ? null : nowLabel().replace('Fri ',''); render(); toast(`${n} ${S.clocked[n]?'clocked in':'clocked out'}`,'clock'); return; }
+  if (d.salesel){ S.saleSel=+d.salesel; render(); return; }
+  if (d.retchk){ const s0=SALES.find(x=>x.no===S.ret.no), q=s0.items.find(([id])=>id===d.retchk)[1]; S.ret.sel[d.retchk] = el.checked ? q : 0; returnModal(); return; }
+  if (d.retq){ const s0=SALES.find(x=>x.no===S.ret.no), max=s0.items.find(([id])=>id===d.retq)[1]; S.ret.sel[d.retq]=Math.max(1,Math.min(max,(S.ret.sel[d.retq]||0)+ +d.v)); returnModal(); return; }
+  if (d.retwhy){ S.ret.why=d.retwhy; if (/Corked|Damaged|Expired/.test(d.retwhy)) S.ret.dest='damage'; else S.ret.dest='shelf'; returnModal(); return; }
+  if (d.retdest){ S.ret.dest=d.retdest; returnModal(); return; }
+  if (d.retmeth){ S.ret.method=d.retmeth; returnModal(); return; }
   if (d.ilink){ const i=+d.ilink, l=INVOICE[i]; S.invLink[i]=d.v;
     if (d.v==='link'){ const c=codesFor(l.sug); if (!c.some(x=>x.v===l.sku)) c.push({t:'Vendor code', v:l.sku, n:'New label · linked from invoice HB-58812', fresh:true}); toast(`Linked to ${byId(l.sug).n} · code ${l.sku} saved`); }
     else toast('New product created · set its shelf price in Pricing');
@@ -2571,7 +2911,7 @@ document.addEventListener('click', e => {
     case 'notes': S.notes=!S.notes; render(); break;
     case 'theme': document.documentElement.dataset.theme = isDark()?'light':'dark'; render(); if(S.route==='forecast') drawForecast(); break;
     case 'member': S.member = S.member?null:'Jordan D.'; render(); break;
-    case 'clear': S.cart=[]; S.id=null; S.tdisc=null; render(); toast('Sale voided'); break;
+    case 'clear': S.cart=[]; S.id=null; S.tdisc=null; S.credit=0; render(); toast('Sale voided'); break;
     case 'disc': S.dm={target:'sale', kind:'%', v:10, reason:'Manager courtesy'}; S.pinOk=false; discModal(); break;
     case 'discapply': { const D=S.dm; if (D.target==='sale') S.tdisc={kind:D.kind, v:+D.v, reason:D.reason};
       else { const l=S.cart.find(x=>x.id===D.target), base=byId(l.id).p*l.qty; l.disc = D.kind==='%' ? +D.v : Math.round(+D.v/base*1000)/10; l.reason=D.reason; }
@@ -2581,6 +2921,35 @@ document.addEventListener('click', e => {
     case 'refuseok': S.refusals.unshift({t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), why:S.refuse.why, by:'Maria G.', val:Math.round(totals().total*100)/100}); S.cart=[]; S.id=null; S.tdisc=null; closeModal(); render(); toast('Sale refused · saved to compliance log','ban'); break;
     case 'swapok': { const id=el.dataset.v, l=S.cart.find(x=>x.id===id); l?l.qty++:S.cart.push({id,qty:1}); closeModal(); render(); toast('Swapped in '+byId(id).n); break; }
     case 'report': reportModal(); break;
+    case 'rcvscan': { const l=S.rcv.lines.find(x=>x.rec<x.ord); if (l){ l.rec++; render(); toast(`Case scanned · ${byId(l.pid).n} ${l.rec}/${l.ord}`,'scan'); } else toast('Everything on this PO is scanned'); break; }
+    case 'rcvall': S.rcv.lines.forEach(l=>{ l.rec=l.ord; }); render(); break;
+    case 'rcvdone': { const R=S.rcv, po=POS_DATA.find(o=>o.no===R.po); R.lines.forEach(l=>{ byId(l.pid).stock += (l.rec-l.dmg)*l.pack; });
+      const short=R.lines.some(l=>l.rec<l.ord), dmg=R.lines.filter(l=>l.dmg);
+      po.st = short ? 'Partly received' : 'Received'; po.note = short ? 'Short cases still expected' : dmg.length ? 'Received · damaged cases claimed' : 'Received in full';
+      dmg.forEach(l=>{ const p=byId(l.pid); CLAIMS.unshift({no:'CL-'+(2220+CLAIMS.length), sup:'Valley Beer Distributing', item:`${p.n} ×${l.dmg} cases damaged on delivery`, amt:Math.round(l.dmg*l.pack*p.p*0.7*100)/100, st:0}); });
+      R.done=true; render(); toast(`Received · stock updated${dmg.length?' · damage claim opened':''}${short?' · PO kept open':''}`,'truck'); break; }
+    case 'cntfill': { const deltas=[-2,0,-1,0,1]; S.cnt.lines.forEach((l,i)=>{ l.c=String(Math.max(0,l.exp+deltas[i%deltas.length])); }); render(); break; }
+    case 'cntdone': { const C=S.cnt; let u=0, v=0; C.lines.forEach(l=>{ const p=byId(l.pid), dv=+l.c-l.exp; u+=dv; v+=dv*p.p*0.7; p.stock=+l.c; });
+      SHRINK.unshift({d:'Sep 25', area:C.area, units:u, value:Math.round(v*100)/100, by:S.user}); C.done=true; render(); toast(`Stock adjusted · ${u>0?'+':''}${u} units (${money(v)}) recorded`,'box'); break; }
+    case 'strsave': S.settings.rSave=!S.settings.rSave; render(); break;
+    case 'strprev': sheetModal('Receipt preview', receiptSheet(SALES[0])); break;
+    case 'signin': S.signin={who:null, pin:'', err:false}; signinModal(); break;
+    case 'tillopen': S.den=DENOMS.map(()=> ''); S.denPhase=null; tillModal('open'); break;
+    case 'tillclose': S.den=DENOMS.map(()=> ''); S.denPhase=null; tillModal('close'); break;
+    case 'tillreveal': S.denPhase='reveal'; tillModal('close'); break;
+    case 'tillopenok': S.shift={open:true, lane:'Lane 1', who:S.user, opened:nowLabel().replace('Fri ',''), float:denTotal()}; closeModal(); render(); toast(`Shift open · float ${money(denTotal())}`,'cash'); break;
+    case 'tillcloseok': { const e=eod(RP_TODAY), exp=300+e.cash, cnt=denTotal(); SHIFTS.unshift({d:'Fri Sep 25', lane:S.shift.lane, who:S.shift.who, open:S.shift.opened, close:nowLabel().replace('Fri ',''), sales:e.net, exp, cnt}); S.shift={open:false}; S.den=null; S.denPhase=null; closeModal(); render(); toast(`Shift closed · ${Math.abs(cnt-exp)<0.005?'drawer balanced':`${cnt>exp?'over':'short'} ${money(Math.abs(cnt-exp))}`} · added to end of day`,'cash'); break; }
+    case 'reprint': sheetModal(`Receipt · sale #${S.saleSel}`, receiptSheet(SALES.find(x=>x.no===S.saleSel))); break;
+    case 'sheetprint': $('#print').innerHTML = `<div class="sheet receipt">${S.sheetHTML}</div>`; closeModal(); render(); try{ window.print(); }catch(e){} toast('Sent to the receipt printer','printer'); break;
+    case 'retstart': S.ret={no:S.saleSel, sel:{}, why:'Changed mind (unopened)', dest:'shelf', method:'orig', pin:''}; returnModal(); break;
+    case 'retok': case 'retexch': { const R=S.ret, sale=SALES.find(x=>x.no===R.no); const lines=sale.items.filter(([id])=>R.sel[id]).map(([id])=>({p:byId(id), q:R.sel[id]}));
+      const amt=lines.reduce((a,l)=>a+l.q*unitRefund(l.p),0);
+      lines.forEach(l=>{ if (R.dest==='shelf') l.p.stock+=l.q; else DAMAGE.unshift({d:'Sep 25', p:`${l.p.n} ${l.p.sz}`, q:l.q, why:R.why==='Corked or spoiled'?'Customer return':R.why==='Expired'?'Expired':'Customer return', where:'Counter', cost:Math.round(l.p.p*0.66*l.q*100)/100, disp:'Return to supplier', by:S.user}); });
+      RETURNS.unshift({no:R.no, amt, items:lines.map(l=>`${l.q}× ${l.p.n}`).join(', '), why:R.why, dest:R.dest, kind:d.act==='retexch'?'exchange':'refund', t:nowLabel()});
+      S.ret=null; closeModal();
+      if (d.act==='retexch'){ S.credit=(S.credit||0)+Math.round(amt*100)/100; go('register'); toast(`Exchange credit ${money(amt)} applied · add the new items`); }
+      else { render(); toast(`Refunded ${money(amt)} to ${R.method==='orig'?sale.tender:'store credit'}${R.dest==='shelf'?' · back in stock':' · damage report opened'}`); }
+      break; }
     case 'scandemo': S.bc={code:'619947000317', q:'', pick:'tito175'}; barcodeModal(); break;
     case 'bclink': { const B=S.bc, p=byId(B.pick); const c=codesFor(p.id); if (!c.some(x=>x.v===B.code)) c.push({t:'Barcode', v:B.code, n:'Added at the register by Maria G. · manager review', fresh:true});
       if (S.clock==='locked' && p.r){ closeModal(); render(); toast('Barcode saved · alcohol sales are locked until 6:00 AM','lock'); break; }
@@ -2630,7 +2999,7 @@ document.addEventListener('click', e => {
     case 'idcontinue': if (S.payAfterId){ payMethod='card'; payModal(); } else { closeModal(); render(); } break;
     case 'declinesale': S.cart=S.cart.filter(x=>!byId(x.id).r); S.id=null; closeModal(); render(); toast('21+ items removed · refusal logged','alert'); break;
     case 'charge': charge(); break;
-    case 'newsale': S.cart=[]; S.id=null; S.member=null; S.tdisc=null; S.saleNo++; closeModal(); render(); break;
+    case 'newsale': S.cart=[]; S.id=null; S.member=null; S.tdisc=null; S.credit=0; S.saleNo++; closeModal(); render(); break;
     case 'invall': { S.inv = S.inv.map((v,i)=> (INVOICE[i].m || S.invLink[i]) && INVOICE[i].conf>=90 && v==='review' ? 'ok' : v); const left=INVOICE.filter((l,i)=>!l.m && !S.invLink[i]).length; render(); toast(`Matched lines approved${left?` · ${left} line${left>1?'s':''} still need a product`:''}`); break; }
     case 'invpost': S.invStep=8; render(); toast('Inventory and accounting updated'); break;
     case 'offtoggle': S.offlineLimit=!S.offlineLimit; render(); break;
@@ -2638,6 +3007,10 @@ document.addEventListener('click', e => {
   }
 });
 document.addEventListener('input', e => {
+  if (e.target.id==='sale-q'){ S.saleQ=e.target.value; render(); refocus('sale-q'); return; }
+  if (e.target.id==='ret-pin' && S.ret){ S.ret.pin=e.target.value.replace(/\D/g,''); if (S.ret.pin.length===4){ returnModal(); } return; }
+  if (e.target.id && e.target.id.startsWith('den-') && e.target.id!=='den-total' && S.den){ S.den[+e.target.id.slice(4)]=e.target.value; const t=$('#den-total'); if (t) t.textContent=money(denTotal());
+    const b=document.querySelector('[data-act="tillopenok"],[data-act="tillreveal"]'); if (b) b.disabled = !(denTotal()>0); return; }
   if (e.target.id==='bc-q' && S.bc){ S.bc.q=e.target.value; barcodeModal(); refocus('bc-q'); return; }
   if (e.target.id==='v-q'){ S.vQ=e.target.value; render(); refocus('v-q'); return; }
   if (e.target.id && e.target.id.startsWith('nv-') && S.nv){ const k=e.target.id.slice(3); S.nv[k]=e.target.value; if (k==='lic') S.nv.licOk=false;
@@ -2659,6 +3032,11 @@ document.addEventListener('keydown', e => {
     const m = PRODUCTS.find(p=>p.n.toLowerCase().includes(S.q.toLowerCase()) && (S.cat==='All'||p.cat===S.cat)); if (m){ S.q=''; const l=S.cart.find(x=>x.id===m.id); l?l.qty++:S.cart.push({id:m.id,qty:1}); render(); $('#q').focus(); } }
 });
 document.addEventListener('change', e => {
+  if (e.target.id && e.target.id.startsWith('cnt-') && S.cnt){ S.cnt.lines[+e.target.id.slice(4)].c = e.target.value; render(); return; }
+  if (e.target.id && e.target.id.startsWith('st-')){ const k=e.target.id.slice(3); S.settings[k]=e.target.value;
+    if (k==='tax'){ const v=+e.target.value; if (v>=0 && v<=20){ TAX=v/100; toast(`Sales tax set to ${v.toFixed(2)}% · applies to the next sale`); } }
+    else toast('Saved'); render(); return; }
+  if (e.target.id && e.target.id.startsWith('role-')){ const u=USERS[+e.target.id.slice(5)]; u.role=e.target.value; render(); toast(`${u.n} is now ${u.role}`); return; }
   if (e.target.id && e.target.id.startsWith('nv-') && S.nv){ S.nv[e.target.id.slice(3)]=e.target.value; return; }
   if (e.target.id==='rp-day' && e.target.value){ S.rp.day=e.target.value; render(); return; }
   if (e.target.id==='rp-from' && e.target.value){ S.rp.from=e.target.value; render(); return; }

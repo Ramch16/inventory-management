@@ -8,7 +8,12 @@ All figures are demo data.
 
 | Screen | Deck page | What you can try |
 | --- | --- | --- |
-| Reports | New | End of day (Z-report; X-report while the day is open): gross → net sales, tax, CRV, payments by type, cash drawer float / paid outs / safe drops / expected / counted / over-short, activity, ID checks, sales by hour / category / cashier; Date range (day-by-day table + chart + totals); Monthly (12 months vs last year, margin, basket); Yearly. Print preview in full page or 80 mm receipt format (simulated in the online preview; prints for real when index.html is opened in a browser); email at close toggle |
+| Reports | New | End of day (Z-report; X-report while the day is open): gross → net sales, tax, CRV, payments by type, cash drawer float / paid outs / safe drops / expected / counted / over-short, activity, ID checks, sales by hour / category / cashier; Date range (day-by-day table + chart + totals); Monthly (12 months vs last year, margin, basket); Yearly; Accounting & tax (QuickBooks / Xero connection, sales tax report for the month ready for the CDTFA return, balanced daily journal entry). Print preview in full page or 80 mm receipt format (simulated in the online preview; prints for real when index.html is opened in a browser); email at close toggle |
+| Sign-in and roles | New | Top-bar user button: pick a person and enter a PIN (demo PINs shown). Owner sees everything, manager everything except Store Settings, cashier only Register, Sales & Returns, Shifts, Damaged Goods and Receiving; other screens show "A manager needs to open this" |
+| Shifts & Staff | New | Open the till by counting the float; close it with a blind count (expected cash shown only after submitting, over/short added to history); time clock with weekly hours; who-can-do-what table |
+| Sales & Returns | New | Find any sale by receipt #, card, product or cashier; reprint the receipt; return items to the original payment or store credit, or exchange (credit applied on the Register); reason decides back-on-shelf vs Damaged Goods; manager PIN over $50 for cashiers |
+| Receiving & Counts | New | Receive a PO case by case (scan, received, damaged); completing updates stock, keeps short POs open and opens supplier claims for damage. Count stock by area with live differences; a manager approves the adjustment, recorded as shrink |
+| Store Settings | New | Store details (shown on receipts and the menu), sales tax % (used by the next sale), CRV rates, alcohol sale hours, receipt header/footer with preview, users and roles, printers |
 | Command Center | p.11 | KPI strip, AI "5 things today" list; every item links to the screen that fixes it; weekly vendor deals summary |
 | Register | p.2–5 | Product cards with drawn bottle art and quantity left in inventory on every card (green in stock, orange only X left, red out of stock; counts down as items go into the order, can't add more than on hand, stock drops when the sale completes), category counts, AI add-on suggestions, sold-out swap to the best alternative, one-tap refuse sale, after-hours lock. Add items, offers applied automatically, line or whole-sale discounts (manager PIN over 15%, blocked over 30% so alcohol never sells below cost), 21+ lock, scan by barcode (an unknown barcode opens a window to link it to an existing product, suggesting products with the same maker's prefix; try "Demo: new label"), ID scan (pass and underage demo), no-scan options: approve by eye when the customer is clearly over the store's age (logged) and type the date of birth when an ID won't scan (manager PIN, under-21 always blocked), card / tap / cash / split tender, CRV + tax |
 | Purchasing | New | Deal check: each product comes from its one distributor; compare that vendor's options (buy just what you need, or each of its deals: free cases, discounted extra case, volume tiers) as the real cost per case. AI picks the option and quantity with the lowest cost per case without more than 30 days of extra stock, and flags deal traps. Different products from different vendors are grouped into one draft PO per vendor. PO tracker. Vendor deals tab: drop a deal sheet or flyer, forward rep emails, or let reps post in a vendor portal; AI reads each line, matches it to the catalog and says whether it is the best option, not worth it, a price increase or a product you don't sell; confirmed deals raise alerts |
@@ -28,16 +33,15 @@ All figures are demo data.
 ## Guided demo
 
 Press **▶ Demo** in the top bar (or open the page with `#demo` at the end of the URL).
-A 18-step tour opens each screen, sets up the example, highlights the feature and shows
+A 20-step tour opens each screen, sets up the example, highlights the feature and shows
 presenter notes under "What to say". Use **Next / Back** or the arrow keys; everything
 stays clickable during the tour. The story runs:
 
-1. Morning briefing → 2. End of day report → 3. Alerts → 4. Forecast →
-5. Deal check (one vendor, several deals) → 6. Deal trap skipped → 7. Vendor deals read from a deal sheet →
-8. Vendors → 9. AI invoice → 10. New costs become shelf prices (per-product margins) →
-11. Liquor checkout with offers and add-ons → 12. Sold-out swap → 13. ID check (and no-scan options) →
-14. Offline payment → 15. Compliance lock → 16. Damaged goods → 17. Dead stock swaps →
-18. Inventory details
+1. Morning briefing → 2. End of day report → 3. Shifts and blind count → 4. Alerts → 5. Forecast →
+6. Deal check → 7. Deal trap skipped → 8. Vendor deals from a deal sheet → 9. Vendors → 10. AI invoice →
+11. New costs become shelf prices → 12. Liquor checkout → 13. Sold-out swap → 14. ID check →
+15. Offline payment → 16. Returns and exchanges → 17. Compliance lock → 18. Damaged goods →
+19. Dead stock swaps → 20. Inventory details
 
 ## Controls in the top bar
 
