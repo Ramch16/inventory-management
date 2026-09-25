@@ -534,6 +534,8 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 .campaign{display:grid;grid-template-columns:1fr 240px;gap:20px;align-items:center}
 /* ---------- responsive ---------- */
 @media (max-width:1180px){
+  .rpgrid{grid-template-columns:1fr 1fr}
+  .rpgrid .wide{grid-column:1/-1}
   .sw{grid-template-columns:1fr 30px 1fr}
   .sw .why,.sw .act{grid-column:1/-1}
   .sw .act{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:12px}
@@ -560,6 +562,8 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
   .top{padding:10px 16px}
   .kpis{grid-template-columns:repeat(2,1fr)}
   .legend,.insight,.stats,.margins{grid-template-columns:repeat(2,1fr)}
+  .rpgrid{grid-template-columns:1fr}
+  .rpgrid .wide{grid-column:auto}
   .frow{grid-template-columns:1fr}
   .sw{grid-template-columns:1fr 26px 1fr}
   .sw .why,.sw .act{grid-column:1/-1}
@@ -576,6 +580,50 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
   .alert .acts{grid-column:1/-1;justify-content:flex-start}
   .top .sub{display:none}
 }
+/* ---------- reports ---------- */
+.rpgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
+.rpgrid .wide{grid-column:span 2}
+.kv{display:grid;grid-template-columns:1fr auto;gap:6px 12px;font-size:13px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;text-align:right;font-family:var(--mono)}
+.kv .tot{font-weight:800;color:var(--ink);border-top:1px solid var(--line);padding-top:6px}
+.kv .neg{color:var(--crit)}
+.rpbar{display:grid;grid-template-columns:110px 1fr 90px;gap:8px;align-items:center;font-size:13px;padding:4px 0}
+.chartsvg{width:100%;height:auto;display:block}
+.chartsvg text{fill:var(--muted);font:500 10.5px var(--mono)}
+.rptable td,.rptable th{font-size:12.5px}
+.rptable td{font-family:var(--mono);white-space:nowrap}
+.rptable td:first-child{font-family:var(--body)}
+.rptable tfoot td{font-weight:800;border-top:2px solid var(--ink)}
+.printwrap{background:var(--surface-2);border-radius:12px;padding:18px;max-height:60vh;overflow:auto;display:flex;justify-content:center}
+.sheet{background:#fff;color:#111;box-shadow:0 4px 18px rgba(0,0,0,.15);padding:28px 32px;width:100%;max-width:680px;font:12px/1.45 Manrope,Arial,sans-serif}
+.sheet h1{font:800 18px/1.2 Saira,Arial,sans-serif;margin:0}
+.sheet h2{font:800 12px/1 Manrope,Arial,sans-serif;text-transform:uppercase;letter-spacing:.08em;margin:16px 0 6px;border-bottom:1.5px solid #111;padding-bottom:4px}
+.sheet table{width:100%;border-collapse:collapse}
+.sheet td,.sheet th{padding:3px 4px;border-bottom:1px solid #ddd;text-align:right;font-size:11.5px;color:#111}
+.sheet td:first-child,.sheet th:first-child{text-align:left}
+.sheet th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#444;border-bottom:1.5px solid #111}
+.sheet .tot td{font-weight:800;border-top:1.5px solid #111;border-bottom:0}
+.sheet .meta{display:flex;justify-content:space-between;gap:12px;font-size:11px;color:#444;margin-top:4px;flex-wrap:wrap}
+.sheet .foot{margin-top:18px;font-size:10.5px;color:#555;display:flex;justify-content:space-between;border-top:1px solid #ccc;padding-top:6px}
+.sheet.receipt{max-width:302px;padding:16px 14px;font:11px/1.4 "JetBrains Mono",Consolas,monospace}
+.sheet.receipt h1{font:800 14px/1.2 "JetBrains Mono",monospace;text-align:center}
+.sheet.receipt h2{font:800 11px/1 "JetBrains Mono",monospace;border-bottom:1px dashed #111;letter-spacing:0}
+.sheet.receipt .meta{flex-direction:column;align-items:center;gap:0;text-align:center}
+.sheet.receipt td,.sheet.receipt th{font-size:10.5px;border-bottom:0;padding:1px 0}
+.sheet.receipt .tot td{border-top:1px dashed #111}
+.sheet.receipt .foot{flex-direction:column;align-items:center;border-top:1px dashed #111}
+.rpgrid>*{min-width:0}
+@media (max-width:1180px){.rpgrid{grid-template-columns:1fr 1fr}.rpgrid .wide{grid-column:1/-1}}
+@media (max-width:820px){.rpgrid{grid-template-columns:1fr}.rpgrid .wide{grid-column:auto}}
+#print{display:none}
+@media print{
+  @page{margin:12mm}
+  html,body{background:#fff!important}
+  .app,#modal,#toast,#tour{display:none!important}
+  #print{display:block!important}
+  #print .sheet{box-shadow:none;max-width:none;padding:0}
+  #print .sheet.receipt{max-width:72mm}
+}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
@@ -589,6 +637,7 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 <div id="modal"></div>
 <div id="toast" class="toast" hidden></div>
 <div id="tour"></div>
+<div id="print" aria-hidden="true"></div>
 
 <script>
 const MARK = "data:image/jpeg;base64,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";
@@ -641,6 +690,8 @@ const P = {
   ban:'<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>',
   lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
   swap:'<path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>',
+  chart:'<path d="M3 3v18h18"/><path d="M8 17v-5M12 17V8M16 17v-8M20 17V5"/>',
+  printer:'<path d="M6 9V2h12v7"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v8H6z"/>',
   play:'<path d="M7 4l13 8-13 8z"/>',
   sync:'<path d="M21 12a9 9 0 0 1-15.5 6.2L3 16M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M3 21v-5h5"/>',
 };
@@ -768,6 +819,7 @@ const ALERTS = [
 ];
 
 const NOTES = {
+  reports:{deck:'New · EOD, date range, monthly, yearly reports', purpose:'Close the day with a Z-report (sales, payments, cash drawer count, activity) and look back by any date range, month or year. Every report prints on a full page or on the 80 mm receipt printer.', data:['EOD: gross → net sales, tax, CRV, tenders, drawer float / drops / paid outs / counted / over-short, voids, refunds, ID checks, by category / cashier / hour','Date range: one row per day with totals','Monthly and yearly: net sales, gross profit, margin, average basket, vs last year'], build:['Z-report is generated when the manager closes the day; X-report any time before','Print: browser print for full page, ESC/POS for receipt printers; email PDF at close','Reports read from the sales ledger; totals match accounting export']},
   command:{deck:'Deck p.11 · AI Owner Command Center', purpose:'One morning view for the owner: today\'s numbers plus the five things that need attention, each linking to the screen that fixes it.', data:['Sales, margin, inventory value (POS + inventory service)','Priority feed ranked by $ impact and urgency','Hourly sales with an AI projection for the rest of the day'], build:['GET /dashboard/today','GET /ai/priorities?limit=5','Push refresh every 5 min; owner and manager roles only']},
   register:{deck:'Deck p.2–5 · Checkout, ID scan, payments, offline', purpose:'Fast lane checkout. Any 21+ item locks tender until an ID scan passes, and the sale keeps working when the internet drops.', data:['Catalog with category, size, ABV, CRV deposit, age flag','Cart, tax 8.75%, CRV, loyalty member','ID result: DOB, age, expiry, authenticity checks'], build:['Barcode scanner as keyboard wedge + camera fallback','ID SDK (Scandit / IDScan.net) on-device, store result not image','Terminal SDK (PAX, Verifone, Stripe) · offline store-and-forward queue in IndexedDB']},
   pricing:{deck:'New · cost changes → retail prices', purpose:'When a vendor PO, price sheet or invoice changes a cost, suggest the new shelf price from the category’s target margin, apply rounding and limits, let the owner approve, then update the register and queue shelf tags.', data:['Case cost old → new and cost per unit (case ÷ pack)','Margin rules: this product → brand/group → category default','Target margin per category, rounding rule, 10% change limit','Current and new margin and markup per product'], build:['Suggested price = unit cost ÷ (1 − target margin), rounded up to the price ending','Checks: never below cost, state minimum-price rules, multi-pack consistency','Approved prices go live now or at opening; tags go to the label printer; price history kept']},
@@ -962,6 +1014,7 @@ const S = {
   tour:null,
   margins:{sp:28, wi:35, be:22, mx:40}, itemMargin:{}, groups:[{n:'Premium spirits', pids:['casa750','hen750'], m:30}], rounding:'99', priceEdit:{}, priceSel:null, priceDone:{}, tagsQ:[], priceWhen:'now',
   dealSheet:null, dealRows:SHEET.rows.map(()=>'review'), dealsAdded:[],
+  rp:{tab:'eod', day:'2026-09-24', from:'2026-09-01', to:'2026-09-24', year:2026, fmt:'page', email:true},
   invView:'tiles',
   shelfTab:'dead', swapDone:[], bestBy:'profit', bestPer:'30',
   idPolicy:'u40', idMethod:null, man:{dob:'', reason:"Barcode won't scan", type:'Driver licence', pin:''},
@@ -975,6 +1028,7 @@ const h = (location.hash||'').slice(1); if (NOTES[h]) S.route = h;
 
 const ROUTES = [
   ['command','Command Center','command','Owner'],
+  ['reports','Reports','chart','Owner'],
   ['register','Register','register','Store'],
   ['inventory','Inventory','inventory','Store'],
   ['purchasing','Purchasing','truck','Store'],
@@ -990,6 +1044,7 @@ const ROUTES = [
   ['devices','Devices & Offline','devices','Setup'],
 ];
 const TITLES = {
+  reports:['Reports','End of day, date range, monthly and yearly sales · print any report'],
   command:['Good morning','Friday, September 25 · Oak Street Liquor #014'],
   register:['Register · Lane 1','Cashier: Maria G. · Shift opened 8:00 AM'],
   pricing:['Pricing','New vendor costs → shelf prices at your target margin'],
@@ -1101,7 +1156,7 @@ VIEWS.command = () => {
   return `
   <div class="hello">
     <section data-note="KPI strip · 7 tiles from deck p.11">
-      <div class="cardhead"><span class="eyebrow">Today's business</span><span class="spacer"></span><span class="chip plain">Yesterday, full day</span></div>
+      <div class="cardhead"><span class="eyebrow">Today's business</span><span class="spacer"></span><span class="chip plain">Yesterday, full day</span><button class="btn sm" data-go="reports">End of day report</button></div>
       <div class="kpis">
         <div class="kpi wide"><span class="eyebrow">Sales</span><span class="v num">$24,820</span><span class="d up">▲ 11.2% vs last Thu</span>${spark([18,19,17,21,20,23,22,24.8])}</div>
         <div class="kpi"><span class="eyebrow">Gross margin</span><span class="v">28.4%</span><span class="d dn">▼ 0.6 pts</span></div>
@@ -1580,6 +1635,200 @@ VIEWS.damage = () => {
 };
 
 const CLOCKS = {now:{t:'10:04 AM', pos:10+4/60, cls:'ok', big:'Alcohol sales allowed', sub:'Until 2:00 AM tonight · 15 h 56 min left'}, soon:{t:'1:58 AM', pos:1+58/60, cls:'soon', big:'Sales stop in 2 minutes', sub:'The register warns the cashier and finishes open sales'}, locked:{t:'2:05 AM', pos:2+5/60, cls:'locked', big:'Alcohol sales locked', sub:'Until 6:00 AM · non-alcohol items still sell'}};
+/* ---- reports: deterministic demo sales history, Jan 2024 → today ---- */
+const RP_START = new Date(2024,0,1), RP_LAST = new Date(2026,8,24), RP_TODAY = new Date(2026,8,25);
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const ymd = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parseYmd = s => { const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); };
+const fmtDay = d => d.toLocaleDateString('en-US',{weekday:'short', month:'short', day:'numeric', year:'numeric'});
+function hashD(d){ let x = d.getFullYear()*372 + d.getMonth()*31 + d.getDate(); x = (x*9301+49297)%233280; x=(x*9301+49297)%233280; return x/233280; }
+function dayNet(d){
+  const k = ymd(d);
+  if (k==='2026-09-24') return 24820; if (k==='2026-09-17') return 22320; if (k==='2026-09-25') return 910;
+  const wk = [0.95,0.62,0.64,0.70,0.85,1.25,1.35][d.getDay()];
+  const season = [0.82,0.85,0.9,0.92,1.0,1.05,1.12,1.05,1.0,1.02,1.1,1.35][d.getMonth()];
+  const years = (RP_LAST - d)/(365.25*864e5), growth = Math.pow(1/1.075, years);
+  const hol = (d.getMonth()===11 && d.getDate()===31) ? 1.7 : (d.getMonth()===6 && (d.getDate()===3||d.getDate()===4)) ? 1.5 : (d.getMonth()===11 && d.getDate()===24) ? 1.4 : (d.getMonth()===11 && d.getDate()===25) ? 0 : 1;
+  return Math.round(26450 * wk * season * growth * hol * (0.92 + hashD(d)*0.16));
+}
+function dayTx(d){ const k=ymd(d); if (k==='2026-09-24') return 412; if (k==='2026-09-25') return 15; const n=dayNet(d); return Math.round(n / (56 + [2,-2,-2,-1,1,4,5][d.getDay()] + hashD(d)*3)); }
+const dayMargin = d => 27.6 + hashD(d)*1.6;
+function eachDay(a, b, fn){ for (let d=new Date(a); d<=b; d.setDate(d.getDate()+1)) fn(new Date(d)); }
+function eod(d){
+  const open = ymd(d)===ymd(RP_TODAY), net = dayNet(d), tx = dayTx(d), f = net/24820, h = hashD(d), r2 = x => Math.round(x*100)/100;
+  const gross = r2(25910*f), disc = r2(640*f), ret = r2(net ? gross-disc-net : 0), tax = r2(net*TAX), crv = r2(186.60*f), total = r2(net+tax+crv);
+  const card = r2(total*0.71454), tap = r2(total*0.11995), cash = r2(total*0.15491), off = r2(total-card-tap-cash);
+  const pay = open ? 0 : (h<0.4 ? 85 : 0), drops = open ? 0 : Math.max(0, Math.floor((cash+300-pay-600)/500)*500);
+  const expected = r2(300 + cash - pay - drops);
+  const os = ymd(d)==='2026-09-24' ? -3.75 : open ? 0 : [0,0,-2.5,1.25,0,-5,0,3][Math.floor(h*8)];
+  const hw = [.5,.8,1.2,1.6,2.2,2.6,2.9,3.1,3.6,4.8,6.2,7.4,7.8,7.1,6.0,4.6,3.3,1.9], hs = hw.reduce((a,b)=>a+b,0);
+  const hours = open ? [180,420,310,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] : hw.map(w=>Math.round(net*w/hs));
+  return { d, open, net, tx, gross, disc, ret, tax, crv, total, card, tap, cash, off, pay, drops, expected, counted: r2(expected+os), os,
+    items: Math.round(tx*2.51), voids: open?0:3+Math.floor(h*6), voidAmt: open?0:r2(112.40*(0.5+h)), nosale: Math.floor(h*4), refunds: open?0:2+Math.floor(h*4),
+    cats: [['Spirits',.46],['Beer & Seltzer',.31],['Wine',.18],['Mixers & Snacks',.05]].map(([n,w])=>[n, Math.round(net*w)]),
+    cashiers: [['Maria G.',.4517],['Dev P.',.3602],['Sam R.',.1881]].map(([n,w])=>[n, Math.round(net*w), Math.round(tx*w)]),
+    ids: {scan: Math.round(tx*0.092), eye: Math.round(tx*0.512), typed: open?0:Math.floor(h*3), refused: ymd(d)==='2026-09-24'?2:Math.floor(h*3)},
+    hours, z: open ? null : 'Z-' + String(Math.round((d-RP_START)/864e5)+1).padStart(4,'0'), margin: dayMargin(d) };
+}
+function rangeRows(a, b){ const rows=[]; eachDay(a, b, d=>{ const e=eod(d); rows.push(e); }); return rows; }
+function sumRows(rows){ const t={net:0,tx:0,disc:0,tax:0,cash:0,card:0,total:0,profit:0}; rows.forEach(e=>{ t.net+=e.net; t.tx+=e.tx; t.disc+=e.disc; t.tax+=e.tax; t.cash+=e.cash; t.card+=e.card+e.tap+e.off; t.total+=e.total; t.profit+=e.net*e.margin/100; }); t.margin = t.net? t.profit/t.net*100 : 0; t.basket = t.tx? t.net/t.tx : 0; return t; }
+function monthAgg(y, align){ return MONTHS.map((m,i)=>{ const a=new Date(y,i,1), b=new Date(y,i+1,0); if (a>RP_LAST) return {m, i, none:true};
+  let end = b>RP_LAST ? RP_LAST : b; if (align && i===RP_LAST.getMonth()) end = new Date(y, i, RP_LAST.getDate()); const t=sumRows(rangeRows(a,end)); t.m=m; t.i=i; t.partial = b>RP_LAST; return t; }); }
+function yearAgg(y){ const a=new Date(y,0,1), b=new Date(y,11,31), end=b>RP_LAST?RP_LAST:b; const t=sumRows(rangeRows(a,end)); t.y=y; t.partial=b>RP_LAST; return t; }
+function barChart(vals, labels, opt={}){
+  const W=720, H=opt.h||200, L=54, R=10, T=12, B=26, n=vals.length, mx=Math.max(1,...vals, ...(opt.ghost||[]));
+  const pow=Math.pow(10,Math.floor(Math.log10(mx))), step=[1,2,2.5,5,10].map(k=>k*pow).find(s=>mx/s<=5)||pow*10, top=Math.ceil(mx/step)*step;
+  const bw=(W-L-R)/n, y=v=>T+(1-v/top)*(H-T-B);
+  let g=''; for (let v=0; v<=top+1e-9; v+=step) g+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L-6}" y="${y(v)+3.5}" text-anchor="end">${v>=1e6?'$'+(v/1e6).toFixed(v%1e6?1:0)+'M':v>=1000?'$'+(v/1000).toFixed(v%1000?1:0)+'K':'$'+v}</text>`;
+  const bars = vals.map((v,i)=>{ const x=L+i*bw+bw*0.18, w=bw*0.64; const gh = opt.ghost && opt.ghost[i]!=null ? `<rect x="${x-bw*0.08}" y="${y(opt.ghost[i])}" width="${w+bw*0.16}" height="${H-B-y(opt.ghost[i])}" fill="none" stroke="var(--muted)" stroke-dasharray="3 2"/>` : '';
+    return gh + (v==null?'':`<rect x="${x}" y="${y(v)}" width="${w}" height="${Math.max(0,H-B-y(v))}" rx="2" fill="${opt.hi===i?'var(--accent)':'color-mix(in srgb,var(--accent) 45%,var(--surface))'}"><title>${labels[i]}: ${money(v,0)}</title></rect>`); }).join('');
+  const every = Math.ceil(n/12); const xl = labels.map((l,i)=> i%every===0 ? `<text x="${L+i*bw+bw/2}" y="${H-8}" text-anchor="middle">${l}</text>` : '').join('');
+  return `<svg class="chartsvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opt.label||'Sales chart')}">${g}${bars}${xl}</svg>`;
+}
+/* ---- printable sheets (same data as the screen) ---- */
+function sheetHead(title, period, sub){
+  return `<h1>${title}</h1><div class="meta"><span>Oak Street Liquor #014 · 1200 Oak St, Sacramento CA · Licence 21-584120</span><span>${period}</span></div>${sub?`<div class="meta"><span>${sub}</span></div>`:''}`;
+}
+const sheetFoot = () => `<div class="foot"><span>Printed ${fmtDay(RP_TODAY)} 10:04 AM by Maria G.</span><span>Bevnetic POS · Page 1 of 1</span></div>`;
+const row = (a,b,cls='') => `<tr class="${cls}"><td>${a}</td><td>${b}</td></tr>`;
+function sheetEOD(e, rc){
+  const t = e.open ? 'X-report · day still open' : `End of day · ${e.z}`;
+  return sheetHead(rc?'END OF DAY':'End of day report', fmtDay(e.d), t)
+   + `<h2>Sales</h2><table>${row('Gross sales',money(e.gross))}${row('Discounts &amp; offers',money(-e.disc))}${row('Returns',money(-e.ret))}${row('Net sales',money(e.net),'tot')}${row('Sales tax 8.75%',money(e.tax))}${row('CRV collected',money(e.crv))}${row('Total collected',money(e.total),'tot')}</table>`
+   + `<h2>Payments</h2><table>${row('Card (chip / swipe)',money(e.card))}${row('Tap &amp; mobile wallet',money(e.tap))}${row('Cash',money(e.cash))}${row('Offline card (uploaded)',money(e.off))}${row('Total',money(e.total),'tot')}</table>`
+   + `<h2>Cash drawer</h2><table>${row('Opening float',money(300))}${row('Cash sales',money(e.cash))}${row('Paid outs',money(-e.pay))}${row('Safe drops',money(-e.drops))}${row('Expected in drawer',money(e.expected),'tot')}${row('Counted',money(e.counted))}${row('Over / short',money(e.os),'tot')}</table>`
+   + `<h2>Activity</h2><table>${row('Transactions',e.tx)}${row('Items sold',e.items.toLocaleString())}${row('Average basket',money(e.tx?e.net/e.tx:0))}${row('Voids',`${e.voids} · ${money(e.voidAmt)}`)}${row('Refunds',e.refunds)}${row('Drawer opened, no sale',e.nosale)}</table>`
+   + `<h2>By category</h2><table>${e.cats.map(c=>row(c[0],money(c[1],0))).join('')}</table>`
+   + `<h2>By cashier</h2><table>${e.cashiers.map(c=>row(`${c[0]} · ${c[2]} sales`,money(c[1],0))).join('')}</table>`
+   + `<h2>ID checks</h2><table>${row('Scanned',e.ids.scan)}${row('Approved by eye',e.ids.eye)}${row('Date of birth typed (manager)',e.ids.typed)}${row('Sales refused',e.ids.refused)}</table>`
+   + (rc?'':`<p style="margin-top:14px;font-size:11px">Counted by: ____________________ &nbsp;&nbsp; Manager: ____________________</p>`) + sheetFoot();
+}
+function sheetRange(a, b, rows, rc){
+  const t=sumRows(rows);
+  if (rc) return sheetHead('SALES BY DAY', `${fmtDay(a)} – ${fmtDay(b)}`) + `<h2>Days</h2><table>${rows.map(e=>row(e.d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+(e.open?' *':''),money(e.net,0))).join('')}${row('Net sales',money(t.net,0),'tot')}${row('Transactions',t.tx.toLocaleString())}</table>` + sheetFoot();
+  return sheetHead('Sales by day', `${fmtDay(a)} – ${fmtDay(b)}`, `${rows.length} days`) + `<h2>Daily sales</h2><table><tr><th>Date</th><th>Sales</th><th>Net sales</th><th>Discounts</th><th>Tax</th><th>Cash</th><th>Card</th><th>Avg basket</th></tr>
+    ${rows.map(e=>`<tr><td>${e.d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}${e.open?' (open)':''}</td><td>${e.tx}</td><td>${money(e.net,0)}</td><td>${money(e.disc,0)}</td><td>${money(e.tax,0)}</td><td>${money(e.cash,0)}</td><td>${money(e.card+e.tap+e.off,0)}</td><td>${money(e.tx?e.net/e.tx:0)}</td></tr>`).join('')}
+    <tr class="tot"><td>Total</td><td>${t.tx.toLocaleString()}</td><td>${money(t.net,0)}</td><td>${money(t.disc,0)}</td><td>${money(t.tax,0)}</td><td>${money(t.cash,0)}</td><td>${money(t.card,0)}</td><td>${money(t.basket)}</td></tr></table>` + sheetFoot();
+}
+function sheetMonths(y, ms, prev, rc){
+  const done = ms.filter(m=>!m.none), t = {net:done.reduce((a,m)=>a+m.net,0), tx:done.reduce((a,m)=>a+m.tx,0), profit:done.reduce((a,m)=>a+m.profit,0)};
+  if (rc) return sheetHead(`SALES BY MONTH ${y}`, 'Year to date') + `<h2>Months</h2><table>${done.map(m=>row(m.m.slice(0,3)+(m.partial?' *':''),money(m.net,0))).join('')}${row('Total',money(t.net,0),'tot')}</table>` + sheetFoot();
+  return sheetHead(`Sales by month · ${y}`, y===RP_LAST.getFullYear()?'Year to date (through Sep 24)':'Full year') + `<h2>Monthly sales</h2><table><tr><th>Month</th><th>Sales</th><th>Net sales</th><th>Gross profit</th><th>Margin</th><th>Avg basket</th><th>vs ${y-1}</th></tr>
+    ${done.map(m=>{ const p=prev[m.i]; const vs = p && !p.none && p.net ? ((m.net-p.net)/p.net*100) : null; return `<tr><td>${m.m}${m.partial?' (to date)':''}</td><td>${m.tx.toLocaleString()}</td><td>${money(m.net,0)}</td><td>${money(m.profit,0)}</td><td>${m.margin.toFixed(1)}%</td><td>${money(m.basket)}</td><td>${vs==null?'—':(vs>0?'+':'')+vs.toFixed(1)+'%'}</td></tr>`; }).join('')}
+    <tr class="tot"><td>Total</td><td>${t.tx.toLocaleString()}</td><td>${money(t.net,0)}</td><td>${money(t.profit,0)}</td><td>${(t.profit/t.net*100).toFixed(1)}%</td><td>${money(t.net/t.tx)}</td><td></td></tr></table>` + sheetFoot();
+}
+function sheetYears(ys, rc){
+  if (rc) return sheetHead('SALES BY YEAR', '2024 – 2026') + `<h2>Years</h2><table>${ys.map(y=>row(y.y+(y.partial?' YTD':''),money(y.net,0))).join('')}</table>` + sheetFoot();
+  return sheetHead('Sales by year', '2024 – 2026 (2026 through Sep 24)') + `<h2>Yearly sales</h2><table><tr><th>Year</th><th>Sales</th><th>Net sales</th><th>Gross profit</th><th>Margin</th><th>Avg basket</th><th>Growth</th></tr>
+    ${ys.map((y,i)=>{ const p=ys[i-1]; const g = p ? ((y.net-p.net)/p.net*100) : null; return `<tr><td>${y.y}${y.partial?' (to date)':''}</td><td>${y.tx.toLocaleString()}</td><td>${money(y.net,0)}</td><td>${money(y.profit,0)}</td><td>${y.margin.toFixed(1)}%</td><td>${money(y.basket)}</td><td>${g==null||y.partial?'—':(g>0?'+':'')+g.toFixed(1)+'%'}</td></tr>`; }).join('')}</table>` + sheetFoot();
+}
+function currentSheet(rc){
+  const R=S.rp;
+  if (R.tab==='eod') return sheetEOD(eod(parseYmd(R.day)), rc);
+  if (R.tab==='range'){ const a=parseYmd(R.from), b=parseYmd(R.to); return sheetRange(a, b, rangeRows(a,b), rc); }
+  if (R.tab==='month') return sheetMonths(R.year, monthAgg(R.year), monthAgg(R.year-1, R.year===RP_LAST.getFullYear()), rc);
+  return sheetYears([2024,2025,2026].map(yearAgg), rc);
+}
+function printModal(){
+  const rc = S.rp.fmt==='receipt';
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Print report" style="width:min(820px,100%)">
+    <header>${ic('printer')}<h2>Print report</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="gap:14px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <span class="eyebrow">Format</span><div class="seg">${[['page','Full page (Letter / A4)'],['receipt','Receipt printer (80 mm)']].map(([v,l])=>`<button class="${S.rp.fmt===v?'on':''}" data-rpfmt="${v}">${l}</button>`).join('')}</div>
+        <span class="eyebrow">Printer</span><span class="chip plain">${rc?'Lane 1 receipt printer':'Back office printer'}</span></div>
+      <div class="printwrap"><div class="sheet ${rc?'receipt':''}">${currentSheet(rc)}</div></div>
+      <div class="muted" style="font-size:12px">This online prototype can’t open your printer, so printing here is simulated. Open <span class="mono">index.html</span> in a browser, or use the full app, to print for real.</div>
+    </div>
+    <footer><button class="btn" data-close>Cancel</button><button class="btn primary" data-act="rpprint">${ic('printer')}Print</button></footer></div></div>`;
+}
+
+VIEWS.reports = () => {
+  const R=S.rp, tabs=[['eod','End of day'],['range','Date range'],['month','Monthly'],['year','Yearly']];
+  const head = `<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <div class="seg">${tabs.map(([v,l])=>`<button class="${R.tab===v?'on':''}" data-rptab="${v}">${l}</button>`).join('')}</div><span style="flex:1"></span>
+    ${R.tab==='eod'?`<label class="field" style="flex-direction:row;align-items:center;gap:8px">Day<input type="date" id="rp-day" value="${R.day}" min="${ymd(RP_START)}" max="${ymd(RP_TODAY)}" style="width:auto"></label>`:''}
+    ${R.tab==='range'?`<label class="field" style="flex-direction:row;align-items:center;gap:8px">From<input type="date" id="rp-from" value="${R.from}" min="${ymd(RP_START)}" max="${ymd(RP_TODAY)}" style="width:auto"></label><label class="field" style="flex-direction:row;align-items:center;gap:8px">To<input type="date" id="rp-to" value="${R.to}" min="${ymd(RP_START)}" max="${ymd(RP_TODAY)}" style="width:auto"></label>`:''}
+    ${R.tab==='month'?`<div class="seg">${[2026,2025,2024].map(y=>`<button class="${R.year===y?'on':''}" data-rpyear="${y}">${y}</button>`).join('')}</div>`:''}
+    <button class="btn primary" data-act="rpopen">${ic('printer')}Print</button></div>`;
+
+  if (R.tab==='eod'){
+    const e = eod(parseYmd(R.day)), prevWk = new Date(e.d); prevWk.setDate(prevWk.getDate()-7); const pw = dayNet(prevWk), vs = pw ? (e.net-pw)/pw*100 : 0;
+    return head + `
+    <section class="card eodsum" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap" data-note="Day status · Z-report closes the day">
+      <span class="chip ${e.open?'warn':'ok'}">${e.open?'Day still open · X-report (not final)':`Closed at 2:04 AM · ${e.z}`}</span><b>${fmtDay(e.d)}</b><span class="spacer" style="flex:1"></span>
+      <span class="setrow" style="border:0;padding:0;gap:8px"><span style="font-size:13px">Email this report to the owner at close</span><button class="toggle" aria-pressed="${R.email}" data-act="rpemail" aria-label="Email report at close"></button></span></section>
+    <section class="stats">
+      <div><b class="num">${money(e.net,0)}</b><small>net sales · <span style="color:${vs>=0?'var(--ok)':'var(--crit)'}">${vs>=0?'▲':'▼'} ${Math.abs(vs).toFixed(1)}% vs last ${e.d.toLocaleDateString('en-US',{weekday:'short'})}</span></small></div>
+      <div><b class="num">${e.tx}</b><small>transactions · ${money(e.tx?e.net/e.tx:0)} avg basket</small></div>
+      <div><b class="num">${money(e.total,0)}</b><small>total collected incl. tax + CRV</small></div>
+      <div><b class="num" style="color:${e.os<0?'var(--crit)':e.os>0?'var(--warn)':'var(--ok)'}">${e.open?'—':money(e.os)}</b><small>cash over / short</small></div>
+    </section>
+    <div class="rpgrid">
+      <section class="card" data-note="Sales summary"><div class="cardhead"><h2>Sales</h2></div><dl class="kv">
+        <dt>Gross sales</dt><dd>${money(e.gross)}</dd><dt>Discounts &amp; offers</dt><dd class="neg">${money(-e.disc)}</dd><dt>Returns</dt><dd class="neg">${money(-e.ret)}</dd>
+        <dt class="tot">Net sales</dt><dd class="tot">${money(e.net)}</dd><dt>Sales tax 8.75%</dt><dd>${money(e.tax)}</dd><dt>CRV collected</dt><dd>${money(e.crv)}</dd><dt class="tot">Total collected</dt><dd class="tot">${money(e.total)}</dd></dl></section>
+      <section class="card" data-note="Tender breakdown"><div class="cardhead"><h2>Payments</h2></div>
+        ${[['Card',e.card],['Tap / wallet',e.tap],['Cash',e.cash],['Offline card',e.off]].map(([n,v])=>`<div class="rpbar"><span>${n}</span><span class="meter"><i style="width:${e.total?v/e.total*100:0}%"></i></span><span class="num r">${money(v,0)}</span></div>`).join('')}</section>
+      <section class="card" data-note="Cash drawer count"><div class="cardhead"><h2>Cash drawer</h2></div><dl class="kv">
+        <dt>Opening float</dt><dd>${money(300)}</dd><dt>Cash sales</dt><dd>${money(e.cash)}</dd><dt>Paid outs</dt><dd class="neg">${money(-e.pay)}</dd><dt>Safe drops</dt><dd class="neg">${money(-e.drops)}</dd>
+        <dt class="tot">Expected</dt><dd class="tot">${money(e.expected)}</dd><dt>Counted</dt><dd>${e.open?'—':money(e.counted)}</dd><dt class="tot">Over / short</dt><dd class="tot" style="color:${e.os<0?'var(--crit)':'inherit'}">${e.open?'—':money(e.os)}</dd></dl></section>
+      <section class="card wide" data-note="Sales by hour"><div class="cardhead"><h2>Sales by hour</h2></div>${barChart(e.hours, ['8a','9a','10a','11a','12p','1p','2p','3p','4p','5p','6p','7p','8p','9p','10p','11p','12a','1a'], {h:180, hi:e.hours.indexOf(Math.max(...e.hours)), label:'Sales by hour'})}</section>
+      <section class="card" data-note="Activity counts"><div class="cardhead"><h2>Activity</h2></div><dl class="kv">
+        <dt>Items sold</dt><dd>${e.items.toLocaleString()}</dd><dt>Voids</dt><dd>${e.voids} · ${money(e.voidAmt)}</dd><dt>Refunds</dt><dd>${e.refunds}</dd><dt>Drawer opened, no sale</dt><dd>${e.nosale}</dd>
+        <dt>IDs scanned</dt><dd>${e.ids.scan}</dd><dt>Approved by eye</dt><dd>${e.ids.eye}</dd><dt>Sales refused</dt><dd>${e.ids.refused}</dd></dl></section>
+      <section class="card" data-note="By category"><div class="cardhead"><h2>By category</h2></div>${e.cats.map(([n,v])=>`<div class="rpbar"><span>${n}</span><span class="meter"><i style="width:${e.net?v/e.net*100:0}%"></i></span><span class="num r">${money(v,0)}</span></div>`).join('')}</section>
+      <section class="card" data-note="By cashier"><div class="cardhead"><h2>By cashier</h2></div>${e.cashiers.map(([n,v,t])=>`<div class="rpbar"><span>${n}</span><span class="meter"><i style="width:${e.net?v/e.net*100:0}%"></i></span><span class="num r">${money(v,0)}</span></div><div class="muted" style="font-size:11.5px;margin:-2px 0 4px">${t} sales</div>`).join('')}</section>
+    </div>`;
+  }
+  if (R.tab==='range'){
+    let a=parseYmd(R.from), b=parseYmd(R.to); if (b<a) [a,b]=[b,a];
+    const days = Math.round((b-a)/864e5)+1, capped = days>93; if (capped){ a=new Date(b); a.setDate(b.getDate()-92); }
+    const rows = rangeRows(a,b), t = sumRows(rows), best = rows.reduce((x,y)=>y.net>x.net?y:x, rows[0]);
+    return head + `
+    ${capped?`<div class="clockban soon">${ic('clock')} Showing the last 93 days of your range. Use Monthly for longer periods.</div>`:''}
+    <section class="stats">
+      <div><b class="num">${money(t.net,0)}</b><small>net sales · ${rows.length} days</small></div>
+      <div><b class="num">${money(t.net/rows.length,0)}</b><small>average per day</small></div>
+      <div><b class="num">${money(best.net,0)}</b><small>best day · ${best.d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}</small></div>
+      <div><b class="num">${t.tx.toLocaleString()}</b><small>transactions · ${money(t.basket)} avg basket</small></div>
+    </section>
+    <section class="card" data-note="Net sales per day"><div class="cardhead"><h2>Net sales per day</h2><span class="muted" style="font-size:12px">${fmtDay(a)} – ${fmtDay(b)}</span></div>${barChart(rows.map(e=>e.net), rows.map(e=>e.d.toLocaleDateString('en-US',{month:'short',day:'numeric'})), {hi:rows.indexOf(best), label:'Net sales per day'})}</section>
+    <section class="card" data-note="Day-by-day table"><div class="tablewrap"><table class="rptable" style="min-width:760px"><thead><tr><th>Date</th><th class="r">Sales</th><th class="r">Net sales</th><th class="r">Discounts</th><th class="r">Tax</th><th class="r">Cash</th><th class="r">Card</th><th class="r">Avg basket</th><th class="r">Over / short</th></tr></thead><tbody>
+      ${rows.map(e=>`<tr><td>${e.d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}${e.open?' <span class="chip warn">open</span>':''}</td><td class="r">${e.tx}</td><td class="r"><b>${money(e.net,0)}</b></td><td class="r">${money(e.disc,0)}</td><td class="r">${money(e.tax,0)}</td><td class="r">${money(e.cash,0)}</td><td class="r">${money(e.card+e.tap+e.off,0)}</td><td class="r">${money(e.tx?e.net/e.tx:0)}</td><td class="r" style="color:${e.os<0?'var(--crit)':'inherit'}">${e.open?'—':money(e.os)}</td></tr>`).join('')}
+    </tbody><tfoot><tr><td>Total</td><td class="r">${t.tx.toLocaleString()}</td><td class="r">${money(t.net,0)}</td><td class="r">${money(t.disc,0)}</td><td class="r">${money(t.tax,0)}</td><td class="r">${money(t.cash,0)}</td><td class="r">${money(t.card,0)}</td><td class="r">${money(t.basket)}</td><td></td></tr></tfoot></table></div></section>`;
+  }
+  if (R.tab==='month'){
+    const ms=monthAgg(R.year), prev=monthAgg(R.year-1, R.year===RP_LAST.getFullYear()), ghost=monthAgg(R.year-1), done=ms.filter(m=>!m.none);
+    const tot=done.reduce((a,m)=>a+m.net,0), ptot=done.reduce((a,m)=>a+(prev[m.i].none?0:prev[m.i].net),0), best=done.reduce((x,y)=>y.net>x.net?y:x);
+    return head + `
+    <section class="stats">
+      <div><b class="num">${money(tot,0)}</b><small>${R.year===2026?'net sales year to date':'net sales for the year'}</small></div>
+      <div><b class="num" style="color:${tot>=ptot?'var(--ok)':'var(--crit)'}">${ptot?((tot-ptot)/ptot*100>0?'+':'')+((tot-ptot)/ptot*100).toFixed(1)+'%':'—'}</b><small>vs same dates in ${R.year-1}</small></div>
+      <div><b class="num">${best.m}</b><small>best month · ${money(best.net,0)}</small></div>
+      <div><b class="num">${(done.reduce((a,m)=>a+m.profit,0)/tot*100).toFixed(1)}%</b><small>gross margin</small></div>
+    </section>
+    <section class="card" data-note="12 months · dashed outline = last year"><div class="cardhead"><h2>Net sales by month · ${R.year}</h2><span class="spacer"></span><span class="muted" style="font-size:12px">Dashed outline = ${R.year-1}</span></div>
+      ${barChart(ms.map(m=>m.none?null:m.net), MONTHS.map(m=>m.slice(0,3)), {ghost: ghost.map(p=>p.none?null:p.net), hi: ms.indexOf(best), label:'Net sales by month'})}</section>
+    <section class="card"><div class="tablewrap"><table class="rptable" style="min-width:700px"><thead><tr><th>Month</th><th class="r">Sales</th><th class="r">Net sales</th><th class="r">Gross profit</th><th class="r">Margin</th><th class="r">Avg basket</th><th class="r">vs ${R.year-1}</th></tr></thead><tbody>
+      ${ms.map(m=>{ if (m.none) return `<tr><td>${m.m}</td><td class="r muted" colspan="6">—</td></tr>`; const p=prev[m.i], vs = p && !p.none && p.net ? (m.net-p.net)/p.net*100 : null;
+        return `<tr><td>${m.m}${m.partial?' <span class="chip warn">to date</span>':''}</td><td class="r">${m.tx.toLocaleString()}</td><td class="r"><b>${money(m.net,0)}</b></td><td class="r">${money(m.profit,0)}</td><td class="r">${m.margin.toFixed(1)}%</td><td class="r">${money(m.basket)}</td><td class="r" style="color:${vs==null?'inherit':vs>=0?'var(--ok)':'var(--crit)'}">${vs==null?'—':(vs>0?'+':'')+vs.toFixed(1)+'%'}</td></tr>`; }).join('')}
+    </tbody></table></div></section>`;
+  }
+  const ys=[2024,2025,2026].map(yearAgg), same25 = sumRows(rangeRows(new Date(2025,0,1), new Date(2025,8,24))).net, g26=(ys[2].net-same25)/same25*100;
+  return head + `
+    <section class="stats">
+      <div><b class="num">${money(ys[2].net,0)}</b><small>2026 net sales to date</small></div>
+      <div><b class="num" style="color:var(--ok)">${g26>0?'+':''}${g26.toFixed(1)}%</b><small>vs Jan 1 – Sep 24, 2025</small></div>
+      <div><b class="num">${money(ys[1].net,0)}</b><small>2025 full year</small></div>
+      <div><b class="num">${((ys[1].net-ys[0].net)/ys[0].net*100).toFixed(1)}%</b><small>2025 growth vs 2024</small></div>
+    </section>
+    <section class="card" data-note="Year totals"><div class="cardhead"><h2>Net sales by year</h2><span class="spacer"></span><span class="muted" style="font-size:12px">2026 is year to date</span></div>${barChart(ys.map(y=>y.net), ys.map(y=>String(y.y)+(y.partial?' YTD':'')), {h:200, hi:1, label:'Net sales by year'})}</section>
+    <section class="card"><div class="tablewrap"><table class="rptable" style="min-width:680px"><thead><tr><th>Year</th><th class="r">Sales</th><th class="r">Net sales</th><th class="r">Gross profit</th><th class="r">Margin</th><th class="r">Avg basket</th><th class="r">Growth</th></tr></thead><tbody>
+      ${ys.map((y,i)=>{ const p=ys[i-1], g=p&&!y.partial?(y.net-p.net)/p.net*100:null; return `<tr><td>${y.y}${y.partial?' <span class="chip warn">to date</span>':''}</td><td class="r">${y.tx.toLocaleString()}</td><td class="r"><b>${money(y.net,0)}</b></td><td class="r">${money(y.profit,0)}</td><td class="r">${y.margin.toFixed(1)}%</td><td class="r">${money(y.basket)}</td><td class="r">${g==null?'—':(g>0?'+':'')+g.toFixed(1)+'%'}</td></tr>`; }).join('')}
+    </tbody></table></div></section>`;
+};
+
 VIEWS.pricing = () => {
   const rows = COSTS.map(priceRow);
   if (!S.priceSel){ S.priceSel = {}; rows.forEach(r=>{ S.priceSel[r.c.pid] = r.kind==='raise'; }); }
@@ -2008,6 +2257,7 @@ function dealConfirm(i){
 function resetSale(){ S.cart=[{id:'casa750',qty:1},{id:'bud12',qty:2}]; S.id=null; S.tdisc=null; S.member=null; S.cat='All'; S.q=''; }
 const TOUR = [
   {r:'command', t:'Morning briefing', say:'The owner opens Bevnetic and sees yesterday’s numbers plus the 5 things that need attention today, ranked by money at stake. Each one links to the screen that fixes it.', hl:'.assistant'},
+  {r:'reports', set:()=>{S.rp.tab='eod'; S.rp.day='2026-09-24';}, t:'Last night’s close, already done', say:'The end-of-day report is built at close: sales, payments, the cash drawer count down to a $3.75 shortage, and who sold what. It prints on a full page or the receipt printer, and it’s emailed to the owner.', hl:'.eodsum'},
   {r:'alerts', t:'Alerts that come with the fix', say:'Seven kinds of AI alerts: stockouts, late deliveries, payments due, damage, expiry and price changes. Every alert carries the button that resolves it.', hl:'.alert'},
   {r:'forecast', set:()=>{S.fc='bud12'}, t:'Predict demand, don’t just track it', say:'Bud Light runs out in 3 days. The forecast reads weekends, the heat wave and Saturday’s home game, then says how much to order and by when.', hl:'.reco'},
   {r:'purchasing', set:()=>{S.buy='tito';S.buyQ=null;S.poTab='compare'}, t:'Every deal, one number', say:'Each brand comes from one distributor, often with more than one deal. Bevnetic turns every option into the real cost per case: Summit’s “buy 10, get 1 free” beats buying the 8 cases you need at list, and beats their 8%-off-at-15 deal too.', hl:'.verdict2'},
@@ -2056,7 +2306,7 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -2074,6 +2324,9 @@ document.addEventListener('click', e => {
   if (d.resolve){ S.done.add(+d.resolve); toast(d.msg+' · marked resolved'); render(); return; }
   if (d.undo){ S.done.delete(+d.undo); render(); return; }
   if (d.seg){ S.custSeg=+d.seg; render(); return; }
+  if (d.rptab){ S.rp.tab=d.rptab; render(); return; }
+  if (d.rpyear){ S.rp.year=+d.rpyear; render(); return; }
+  if (d.rpfmt){ S.rp.fmt=d.rpfmt; printModal(); return; }
   if (d.tmreset){ delete S.itemMargin[d.tmreset]; delete S.priceEdit[d.tmreset]; S.priceSel=null; render(); toast(`${byId(d.tmreset).n} is back on its ${tgtFor(d.tmreset).label.toLowerCase()} margin`); return; }
   if (d.aimargin){ S.itemMargin[d.aimargin]=+d.v; delete S.priceEdit[d.aimargin]; S.priceSel=null; render(); toast(`${byId(d.aimargin).n} will use ${d.v}% from now on`); return; }
   if (d.invview){ S.invView=d.invview; render(); return; }
@@ -2137,6 +2390,11 @@ document.addEventListener('click', e => {
     case 'refuseok': S.refusals.unshift({t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), why:S.refuse.why, by:'Maria G.', val:Math.round(totals().total*100)/100}); S.cart=[]; S.id=null; S.tdisc=null; closeModal(); render(); toast('Sale refused · saved to compliance log','ban'); break;
     case 'swapok': { const id=el.dataset.v, l=S.cart.find(x=>x.id===id); l?l.qty++:S.cart.push({id,qty:1}); closeModal(); render(); toast('Swapped in '+byId(id).n); break; }
     case 'report': reportModal(); break;
+    case 'rpopen': printModal(); break;
+    case 'rpemail': S.rp.email=!S.rp.email; render(); toast(S.rp.email?'The end of day report will be emailed at close':'Email at close turned off'); break;
+    case 'rpprint': { const rc=S.rp.fmt==='receipt'; $('#print').innerHTML = `<div class="sheet ${rc?'receipt':''}">${currentSheet(rc)}</div>`; closeModal(); render();
+      try { window.print(); } catch(e){}
+      toast(`Sent to the ${rc?'receipt':'back office'} printer`,'printer'); break; }
     case 'priceapply': { const rows=COSTS.map(priceRow).filter(r=>S.priceSel[r.c.pid] && !S.priceDone[r.c.pid]);
       const bad = rows.find(r=>r.below); if (bad){ toast(`${bad.p.n}: that price is below cost`,'alert'); break; }
       rows.forEach(r=>{ if (S.priceWhen==='now') r.p.p = Math.round(r.price*100)/100; S.priceDone[r.c.pid]=r.price; if (!S.tagsQ.includes(r.c.pid)) S.tagsQ.push(r.c.pid); });
@@ -2191,6 +2449,9 @@ document.addEventListener('keydown', e => {
   if (e.key==='Enter' && e.target.id==='q'){ const m = PRODUCTS.find(p=>p.n.toLowerCase().includes(S.q.toLowerCase()) && (S.cat==='All'||p.cat===S.cat)); if (m){ S.q=''; const l=S.cart.find(x=>x.id===m.id); l?l.qty++:S.cart.push({id:m.id,qty:1}); render(); $('#q').focus(); } }
 });
 document.addEventListener('change', e => {
+  if (e.target.id==='rp-day' && e.target.value){ S.rp.day=e.target.value; render(); return; }
+  if (e.target.id==='rp-from' && e.target.value){ S.rp.from=e.target.value; render(); return; }
+  if (e.target.id==='rp-to' && e.target.value){ S.rp.to=e.target.value; render(); return; }
   if (e.target.id && e.target.id.startsWith('tm-')){ const k=e.target.id.slice(3), v=Math.max(5,Math.min(80,+e.target.value||0)); S.itemMargin[k]=v; delete S.priceEdit[k]; S.priceSel=null; render(); toast(`${byId(k).n} will use ${v}% from now on`); return; }
   if (e.target.id && e.target.id.startsWith('tgt-')){ const k=e.target.id.slice(4), v=Math.max(5,Math.min(80,+e.target.value||0)); S.margins[k]=v; S.priceEdit={}; S.priceSel=null; render(); toast(`Target margin set to ${v}% · suggestions updated`); return; }
   if (e.target.id && e.target.id.startsWith('pr-')){ const k=e.target.id.slice(3), v=+e.target.value; if (v>0){ S.priceEdit[k]=Math.round(v*100)/100; S.priceSel[k]=true; } render(); return; }

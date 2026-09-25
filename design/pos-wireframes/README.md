@@ -8,6 +8,7 @@ All figures are demo data.
 
 | Screen | Deck page | What you can try |
 | --- | --- | --- |
+| Reports | New | End of day (Z-report; X-report while the day is open): gross → net sales, tax, CRV, payments by type, cash drawer float / paid outs / safe drops / expected / counted / over-short, activity, ID checks, sales by hour / category / cashier; Date range (day-by-day table + chart + totals); Monthly (12 months vs last year, margin, basket); Yearly. Print preview in full page or 80 mm receipt format (simulated in the online preview; prints for real when index.html is opened in a browser); email at close toggle |
 | Command Center | p.11 | KPI strip, AI "5 things today" list; every item links to the screen that fixes it; weekly vendor deals summary |
 | Register | p.2–5 | Product cards with drawn bottle art, category counts, AI add-on suggestions, sold-out swap to the best alternative, one-tap refuse sale, after-hours lock. Add items, offers applied automatically, line or whole-sale discounts (manager PIN over 15%, blocked over 30% so alcohol never sells below cost), 21+ lock, ID scan (pass and underage demo), no-scan options: approve by eye when the customer is clearly over the store's age (logged) and type the date of birth when an ID won't scan (manager PIN, under-21 always blocked), card / tap / cash / split tender, CRV + tax |
 | Purchasing | New | Deal check: each product comes from its one distributor; compare that vendor's options (buy just what you need, or each of its deals: free cases, discounted extra case, volume tiers) as the real cost per case. AI picks the option and quantity with the lowest cost per case without more than 30 days of extra stock, and flags deal traps. Different products from different vendors are grouped into one draft PO per vendor. PO tracker. Vendor deals tab: drop a deal sheet or flyer, forward rep emails, or let reps post in a vendor portal; AI reads each line, matches it to the catalog and says whether it is the best option, not worth it, a price increase or a product you don't sell; confirmed deals raise alerts |
@@ -26,15 +27,15 @@ All figures are demo data.
 ## Guided demo
 
 Press **▶ Demo** in the top bar (or open the page with `#demo` at the end of the URL).
-A 16-step tour opens each screen, sets up the example, highlights the feature and shows
+A 17-step tour opens each screen, sets up the example, highlights the feature and shows
 presenter notes under "What to say". Use **Next / Back** or the arrow keys; everything
 stays clickable during the tour. The story runs:
 
-1. Morning briefing → 2. Alerts → 3. Forecast → 4. Deal check (one vendor, several deals) →
-5. Deal trap skipped → 6. Vendor deals read from a deal sheet → 7. AI invoice → 8. New costs become shelf prices →
-9. Liquor checkout with offers and add-ons → 10. Sold-out swap → 11. ID check →
-12. Offline payment → 13. Compliance lock → 14. Damaged goods → 15. Dead stock swaps →
-16. Inventory heat map
+1. Morning briefing → 2. End of day report → 3. Alerts → 4. Forecast → 5. Deal check (one vendor, several deals) →
+6. Deal trap skipped → 7. Vendor deals read from a deal sheet → 8. AI invoice → 9. New costs become shelf prices →
+10. Liquor checkout with offers and add-ons → 11. Sold-out swap → 12. ID check →
+13. Offline payment → 14. Compliance lock → 15. Damaged goods → 16. Dead stock swaps →
+17. Inventory heat map
 
 ## Controls in the top bar
 
