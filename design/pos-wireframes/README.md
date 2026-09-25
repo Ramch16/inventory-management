@@ -35,15 +35,15 @@ All figures are demo data.
 ## Guided demo
 
 Press **▶ Demo** in the top bar (or open the page with `#demo` at the end of the URL).
-A 22-step tour opens each screen, sets up the example, highlights the feature and shows
+A 23-step tour opens each screen, sets up the example, highlights the feature and shows
 presenter notes under "What to say". Use **Next / Back** or the arrow keys; everything
 stays clickable during the tour. The story runs:
 
 1. Morning briefing → 2. End of day report → 3. All stores → 4. Shifts and blind count → 5. Alerts → 6. Forecast →
 7. Deal check → 8. Deal trap skipped → 9. Vendor deals from a deal sheet → 10. Vendors → 11. AI invoice →
-12. New costs become shelf prices → 13. Liquor checkout → 14. Customer display and digital receipt → 15. Sold-out swap → 16. ID check →
-17. Offline payment → 18. Returns and exchanges → 19. Compliance lock → 20. Damaged goods →
-21. Dead stock swaps → 22. Inventory details
+12. New costs become shelf prices → 13. Liquor checkout → 14. Bottle returns → 15. Customer display and digital receipt → 16. Sold-out swap →
+17. ID check → 18. Offline payment → 19. Returns and exchanges → 20. Compliance lock → 21. Damaged goods →
+22. Dead stock swaps → 23. Inventory details
 
 ## Controls in the top bar
 
