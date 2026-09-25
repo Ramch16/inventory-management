@@ -470,6 +470,23 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 .sw .gain small{font:600 11.5px var(--body);color:var(--muted)}
 .sw .clear{font-size:12px;border-radius:8px;padding:6px 8px;background:var(--warn-soft);color:var(--warn);font-weight:600}
 .best td{vertical-align:middle}
+.margins{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.margins label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--surface-2)}
+.margins input{width:100%;border:0;background:transparent;font:700 22px/1 var(--display);color:var(--ink);padding:0}
+.margins .pct{display:flex;align-items:baseline;gap:2px}
+.pricetbl td{vertical-align:middle}
+.pricetbl .up{color:var(--crit);font-weight:700} .pricetbl .dn{color:var(--ok);font-weight:700}
+.pricetbl input[type=number]{width:84px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font:600 13px var(--mono);color:var(--ink)}
+.pricetbl input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent)}
+.pricetbl small{display:block;color:var(--muted);font-size:11px}
+.pricetbl tr.applied td{background:var(--ok-soft)}
+.tags{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.tag{border:2px solid #1C2A36;border-radius:6px;padding:8px 10px;background:#FFFFFF;color:#1C2A36;display:flex;flex-direction:column;gap:2px;font-family:var(--body)}
+.tag .tn{font-weight:800;font-size:12px;line-height:1.2}
+.tag .tp{font:800 28px/1 var(--display);color:#C2410C}
+.tag .tu{font-size:10px;color:#5A6B76}
+.tag .tb{height:16px;display:flex;gap:1px;margin-top:4px}
+.tag .tb i{flex:1;background:#111}
 .best .thumb{height:40px;display:inline-flex;width:24px;justify-content:center;vertical-align:middle}
 .best .thumb svg{height:100%;width:auto}
 .best .rank{font:800 italic 18px/1 var(--display);color:var(--muted);width:30px}
@@ -521,7 +538,7 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
   .content{padding:16px 16px 100px}
   .top{padding:10px 16px}
   .kpis{grid-template-columns:repeat(2,1fr)}
-  .legend,.insight,.stats{grid-template-columns:repeat(2,1fr)}
+  .legend,.insight,.stats,.margins{grid-template-columns:repeat(2,1fr)}
   .frow{grid-template-columns:1fr}
   .sw{grid-template-columns:1fr 26px 1fr}
   .sw .why,.sw .act{grid-column:1/-1}
@@ -682,12 +699,13 @@ const ALERTS = [
   {id:5, t:'damage', sev:'crit', ic:'alert', h:'Damage follow-up', p:'7 units were reported damaged. Supplier credit or claim has not been recorded.', when:'Yesterday', acts:['File claim','Open claim'], go:'damage'},
   {id:6, t:'stock', sev:'warn', ic:'cal', h:'Product expiry', p:'32 units will expire within 30 days, mostly hard seltzer and craft IPA.', when:'Yesterday', acts:['Create markdown','View items'], go:'inventory'},
   {id:8, t:'deal', sev:'info', ic:'gift', h:'Vendor deal ending soon', p:'Summit’s “buy 10 cases, get 1 free” on Tito’s 1.75 L ends Oct 31. You reorder within 2 weeks anyway, so ordering now saves $144.60.', when:'8:30 AM', acts:['Mark seen','Compare vendors'], buygo:'tito'},
-  {id:7, t:'money', sev:'info', ic:'tag', h:'Price change', p:'Supplier price for Meiomi Pinot Noir increased 8.5% compared with the previous invoice.', when:'Yesterday', acts:['Update retail price','Keep price'], go:'invoices'},
+  {id:7, t:'money', sev:'info', ic:'tag', h:'Price change', p:'Supplier price for Meiomi Pinot Noir increased 8.5% compared with the previous invoice.', when:'Yesterday', acts:['Keep price','Update retail price'], go:'pricing'},
 ];
 
 const NOTES = {
   command:{deck:'Deck p.11 · AI Owner Command Center', purpose:'One morning view for the owner: today\'s numbers plus the five things that need attention, each linking to the screen that fixes it.', data:['Sales, margin, inventory value (POS + inventory service)','Priority feed ranked by $ impact and urgency','Hourly sales with an AI projection for the rest of the day'], build:['GET /dashboard/today','GET /ai/priorities?limit=5','Push refresh every 5 min; owner and manager roles only']},
   register:{deck:'Deck p.2–5 · Checkout, ID scan, payments, offline', purpose:'Fast lane checkout. Any 21+ item locks tender until an ID scan passes, and the sale keeps working when the internet drops.', data:['Catalog with category, size, ABV, CRV deposit, age flag','Cart, tax 8.75%, CRV, loyalty member','ID result: DOB, age, expiry, authenticity checks'], build:['Barcode scanner as keyboard wedge + camera fallback','ID SDK (Scandit / IDScan.net) on-device, store result not image','Terminal SDK (PAX, Verifone, Stripe) · offline store-and-forward queue in IndexedDB']},
+  pricing:{deck:'New · cost changes → retail prices', purpose:'When a vendor PO, price sheet or invoice changes a cost, suggest the new shelf price from the category’s target margin, apply rounding and limits, let the owner approve, then update the register and queue shelf tags.', data:['Case cost old → new and cost per unit (case ÷ pack)','Target margin per category, rounding rule, 10% change limit','Current and new margin and markup per product'], build:['Suggested price = unit cost ÷ (1 − target margin), rounded up to the price ending','Checks: never below cost, state minimum-price rules, multi-pack consistency','Approved prices go live now or at opening; tags go to the label printer; price history kept']},
   purchasing:{deck:'New · vendor deals + purchase orders', purpose:'Deals arrive by deal-sheet upload, forwarded rep email, vendor portal or state price posting; AI turns each into a rule and says if it’s worth it. For each product, compare every vendor’s price and deal (free cases, discounted extra cases, volume tiers) at the quantity the store actually needs, then group the choices into one PO per vendor.', data:['Vendor price books: case cost, deal rules, minimums, lead time, terms','Forecast need for the next 30 days and daily sales in cases','On-time delivery rate from past POs'], build:['Deal engine: free goods, extra-case %, % tier, $ per case tier','Plan search: every quantity from need to need + 15, rejecting plans with more than 30 days of extra stock','State rules flag deal types that wholesalers may not offer; exclusive-territory brands show one vendor']},
   inventory:{deck:'Deck p.9–10 · Inventory Heat Map + AI Insight', purpose:'Colour shows the state of every SKU; the AI panel turns it into a ranked to-do list.', data:['Days of cover = on hand ÷ forecast daily demand','Reorder point, expiry date, last-sale date, margin','Capital tied up = on hand × cost for overstock'], build:['Nightly + on-sale recalculation of state','Tile size = inventory value (treemap)','Actions create POs, markdowns or transfers']},
   assortment:{deck:'New · dead stock + best sellers (extends deck p.9–10)', purpose:'Find products that no longer sell, clear them, and replace them with products that sell in similar stores. Rank best sellers and warn before they run out.', data:['Days since last sale, units on hand, cash tied up, shelf location','Replacement: same shelf and price band, sales in similar stores, margin, vendor','Best sellers by units, revenue or profit for 7 / 30 / 90 days, trend, days of cover'], build:['Dead stock rule: no sale in 60+ days (owner can change it)','Replacement engine: category + price band + local market sales + this store’s basket data','One tap creates a clearance offer and a trial-case draft PO']},
@@ -784,6 +802,30 @@ function dealVerdict(item, vd){
   if (pl.trap) return {cls:'warn', t:`Skip: ${Math.round(pl.trap.extra)} days of extra stock`};
   return {cls:'plain', t:'Doesn’t help at your quantity'};
 }
+/* ---- pricing: vendor cost changes (demo) ---- */
+const COSTS = [
+  {pid:'tito175',  src:'Summit price sheet · Oct', pack:6,  unit:'bottle', oldCase:144.60, newCase:152.40},
+  {pid:'casa750',  src:'Invoice HB-58812 · Summit', pack:12, unit:'bottle', oldCase:466.80, newCase:490.80},
+  {pid:'hen750',   src:'Invoice HB-58812 · Summit', pack:12, unit:'bottle', oldCase:381.00, newCase:420.00},
+  {pid:'modelo12', src:'Valley Beer price sheet · Oct', pack:2, unit:'12-pack', oldCase:25.60, newCase:28.20},
+  {pid:'meiomi',   src:'Invoice HB-58812 · Summit', pack:12, unit:'bottle', oldCase:146.04, newCase:158.40},
+  {pid:'bud12',    src:'Valley Beer price sheet · Oct', pack:2, unit:'12-pack', oldCase:18.40, newCase:19.10},
+  {pid:'lamarca',  src:'Invoice HB-58812 · Summit', pack:12, unit:'bottle', oldCase:127.20, newCase:117.60},
+];
+const CAT_KEY = {'Spirits':'sp','Wine':'wi','Beer & Seltzer':'be','Mixers & Snacks':'mx'};
+function roundPrice(x, rule){
+  if (rule==='49'){ const f=Math.floor(x); return x<=f+0.49+1e-9 ? f+0.49 : x<=f+0.99+1e-9 ? f+0.99 : f+1.49; }
+  const f=Math.floor(x); return x<=f+0.99+1e-9 ? f+0.99 : f+1.99;
+}
+const marginOf = (price, cost) => (price-cost)/price*100, markupOf = (price, cost) => (price-cost)/cost*100;
+function priceRow(c){
+  const p=byId(c.pid), oldU=c.oldCase/c.pack, newU=c.newCase/c.pack, tgt=S.margins[CAT_KEY[p.cat]];
+  const cur=p.p, curM=marginOf(cur,newU), oldM=marginOf(cur,oldU), target=newU/(1-tgt/100), sug=roundPrice(target, S.rounding);
+  let kind = curM < tgt-0.05 ? 'raise' : (newU<oldU && sug <= cur-0.5) ? 'lower' : 'keep';
+  const price = S.priceEdit[c.pid]!=null ? S.priceEdit[c.pid] : kind==='keep' ? cur : sug;
+  const chg = (price-cur)/cur*100;
+  return {c, p, oldU, newU, tgt, cur, curM, oldM, sug, kind, price, newM:marginOf(price,newU), newMu:markupOf(price,newU), chg, big:Math.abs(chg)>10, below:price<newU};
+}
 const POS_DATA = [
   {no:'PO-10241', v:'Valley Beer Distributing', lines:'Modelo 12pk ×20 cases · White Claw ×10 cases', total:612.40, st:'Sent', note:'No reply in 2 days'},
   {no:'PO-10234', v:'Summit Wine & Spirits', lines:'Casamigos ×12 · Hennessy VS ×12 · 4 more lines', total:1407.20, st:'Partly received', note:'Short 6 Casamigos · invoice HB-58812'},
@@ -843,6 +885,7 @@ const S = {
   clock:'now', refuse:{why:'Appears intoxicated'},
   refusals:[{t:'Thu 11:42 PM', why:'Appears intoxicated', by:'Dev P.', val:41.97},{t:'Thu 7:15 PM', why:'Under 21 (ID scan)', by:'Maria G.', val:24.99},{t:'Wed 9:03 PM', why:'Buying for someone else', by:'Sam R.', val:54.99}],
   tour:null,
+  margins:{sp:28, wi:35, be:22, mx:40}, rounding:'99', priceEdit:{}, priceSel:null, priceDone:{}, tagsQ:[], priceWhen:'now',
   dealSheet:null, dealRows:SHEET.rows.map(()=>'review'), dealsAdded:[],
   shelfTab:'dead', swapDone:[], bestBy:'profit', bestPer:'30',
   idPolicy:'u40', idMethod:null, man:{dob:'', reason:"Barcode won't scan", type:'Driver licence', pin:''},
@@ -859,6 +902,7 @@ const ROUTES = [
   ['register','Register','register','Store'],
   ['inventory','Inventory','inventory','Store'],
   ['purchasing','Purchasing','truck','Store'],
+  ['pricing','Pricing','tag','Store'],
   ['damage','Damaged Goods','broken','Store'],
   ['compliance','Compliance','shield','Store'],
   ['forecast','Forecasting','forecast','Intelligence'],
@@ -872,6 +916,7 @@ const ROUTES = [
 const TITLES = {
   command:['Good morning','Friday, September 25 · Oak Street Liquor #014'],
   register:['Register · Lane 1','Cashier: Maria G. · Shift opened 8:00 AM'],
+  pricing:['Pricing','New vendor costs → shelf prices at your target margin'],
   purchasing:['Purchasing','Compare vendor prices and deals, then build one PO per vendor'],
   inventory:['Inventory Heat Map','1,284 SKUs · $184K on hand'],
   assortment:['Shelf Optimizer','Replace dead stock with what sells, and protect your best sellers'],
@@ -1245,6 +1290,7 @@ VIEWS.invoices = () => {
       <div class="tablewrap"><table style="min-width:680px"><thead><tr><th>Line · matched product</th><th>Match</th><th class="r">Qty</th><th class="r">Unit cost</th><th class="r">vs last</th><th class="r">Ext.</th><th>Action</th></tr></thead><tbody>${lines}</tbody></table></div>
       <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:14px;border-top:1px solid var(--line);padding-top:14px">
         <button class="btn" data-go="damage">${ic('alert')}Open damage claim</button>
+        <button class="btn" data-go="pricing">${ic('tag')}Review price updates</button>
         <button class="btn" data-act="invall">Approve all matched</button>
         <button class="btn primary" data-act="invpost" ${pending?'disabled':''}>Post to inventory &amp; accounting</button>
       </div>
@@ -1434,6 +1480,62 @@ VIEWS.damage = () => {
 };
 
 const CLOCKS = {now:{t:'10:04 AM', pos:10+4/60, cls:'ok', big:'Alcohol sales allowed', sub:'Until 2:00 AM tonight · 15 h 56 min left'}, soon:{t:'1:58 AM', pos:1+58/60, cls:'soon', big:'Sales stop in 2 minutes', sub:'The register warns the cashier and finishes open sales'}, locked:{t:'2:05 AM', pos:2+5/60, cls:'locked', big:'Alcohol sales locked', sub:'Until 6:00 AM · non-alcohol items still sell'}};
+VIEWS.pricing = () => {
+  const rows = COSTS.map(priceRow);
+  if (!S.priceSel){ S.priceSel = {}; rows.forEach(r=>{ S.priceSel[r.c.pid] = r.kind==='raise'; }); }
+  const open = rows.filter(r=>!S.priceDone[r.c.pid]);
+  const selN = open.filter(r=>S.priceSel[r.c.pid]).length;
+  const raiseN = rows.filter(r=>r.kind==='raise' && !S.priceDone[r.c.pid]).length;
+  const kindChip = {raise:['crit','Below target · raise'], keep:['ok','Still above target · keep'], lower:['over','Cost fell · could lower']};
+  const catRow = [['sp','Spirits'],['wi','Wine'],['be','Beer & Seltzer'],['mx','Mixers & Snacks']];
+  return `
+  <section class="stats">
+    <div><b class="num">${COSTS.length}</b><small>cost changes from 3 vendor documents</small></div>
+    <div><b class="num" style="color:var(--crit)">${raiseN}</b><small>products now below target margin</small></div>
+    <div><b class="num">${Object.keys(S.priceDone).length}</b><small>prices updated today</small></div>
+    <div><b class="num" style="color:var(--accent)">${S.tagsQ.length}</b><small>shelf tags waiting to print</small></div>
+  </section>
+  <div class="compgrid">
+    <section class="card" data-note="Where new costs come from">
+      <div class="cardhead"><h2>New costs come from</h2></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${[['invoices','Invoice HB-58812 · Summit Wine & Spirits','5 cost changes · read by AI'],['purchasing','Summit price sheet · October','1 cost change · from Vendor deals'],['purchasing','Valley Beer price sheet · October','2 cost changes · state price posting']].map(x=>`<div class="rule" style="padding:6px 0">${ic('invoices')}<div><b>${x[1]}</b><small>${x[2]}</small></div><button class="btn sm ghost" data-go="${x[0]}">Open</button></div>`).join('')}
+        <label class="drop" style="cursor:pointer">${ic('upload','style="width:22px;height:22px"')}<span><b style="color:var(--ink)">Drop a vendor PO or price sheet</b><br>New costs are read and added here</span><input type="file" id="pricefile" accept="image/*,.pdf,.xlsx,.xls,.csv" hidden></label>
+      </div>
+    </section>
+    <section class="card" data-note="Owner sets target margin per category">
+      <div class="cardhead"><h2>Target margin by category</h2><span class="spacer"></span><span class="muted" style="font-size:12px">Margin = profit ÷ shelf price</span></div>
+      <div class="margins">${catRow.map(([k,l])=>`<label>${l}<span class="pct"><input type="number" id="tgt-${k}" min="5" max="80" step="1" value="${S.margins[k]}" aria-label="${l} target margin">%</span></label>`).join('')}</div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px">
+        <span class="eyebrow">Price endings</span><div class="seg">${[['99','.99'],['49','.49 or .99']].map(([v,l])=>`<button class="${S.rounding===v?'on':''}" data-round="${v}">${l}</button>`).join('')}</div>
+        <span class="chip plain">Changes over 10% need your OK</span><span class="chip plain">Never below cost</span></div>
+    </section>
+  </div>
+  <section class="card pricereview" data-note="Review · approve · go live">
+    <div class="cardhead"><h2>Suggested shelf prices</h2><span class="chip ${raiseN?'crit':'ok'}">${raiseN?raiseN+' below target':'All at target'}</span><span class="spacer"></span>
+      <span class="eyebrow">Goes live</span><div class="seg">${[['now','Now'],['open','Tomorrow 6 AM']].map(([v,l])=>`<button class="${S.priceWhen===v?'on':''}" data-when="${v}">${l}</button>`).join('')}</div>
+      <button class="btn primary" data-act="priceapply" ${selN?'':'disabled'}>Approve ${selN} price${selN===1?'':'s'}</button></div>
+    <div class="tablewrap"><table class="pricetbl" style="min-width:980px"><thead><tr><th></th><th>Product</th><th class="r">Case cost</th><th class="r">Cost per unit</th><th class="r">Shelf price now</th><th>Margin now</th><th>New price</th><th>New margin</th><th>Suggestion</th></tr></thead><tbody>
+      ${rows.map(r=>{ const done=S.priceDone[r.c.pid]; const d=(r.newU-r.oldU)/r.oldU*100; return `<tr class="${done?'applied':''}">
+        <td>${done?ic('check','style="color:var(--ok)"'):`<input type="checkbox" data-pchk="${r.c.pid}" ${S.priceSel[r.c.pid]?'checked':''} aria-label="Approve ${esc(r.p.n)}">`}</td>
+        <td style="min-width:220px"><div style="display:flex;gap:10px;align-items:center"><span style="height:40px;width:22px;display:flex;justify-content:center;flex:none">${bottleSVG(r.p)}</span><div><b>${r.p.n}</b><small>${esc(r.c.src)} · case of ${r.c.pack}</small></div></div></td>
+        <td class="num r">${money(r.c.oldCase)} → <b>${money(r.c.newCase)}</b></td>
+        <td class="num r">${money(r.oldU)} → <b>${money(r.newU)}</b><small class="${d>0?'up':'dn'}">${d>0?'+':''}${d.toFixed(1)}%</small></td>
+        <td class="num r">${money(r.cur)}</td>
+        <td><b class="num" style="color:${r.curM<r.tgt?'var(--crit)':'var(--ok)'}">${r.curM.toFixed(1)}%</b><small>was ${r.oldM.toFixed(1)}% · target ${r.tgt}%</small></td>
+        <td>${done?`<b class="num">${money(r.price)}</b>`:`<input type="number" step="0.01" min="0" id="pr-${r.c.pid}" value="${r.price.toFixed(2)}" aria-label="New price for ${esc(r.p.n)}">`}${!done&&Math.abs(r.chg)>0.005?`<small class="${r.chg>0?'up':'dn'}">${r.chg>0?'+':''}${r.chg.toFixed(1)}%</small>`:''}</td>
+        <td><b class="num" style="color:${r.newM<r.tgt?'var(--crit)':'var(--ok)'}">${r.newM.toFixed(1)}%</b><small>markup ${r.newMu.toFixed(0)}%</small></td>
+        <td>${done?`<span class="chip ok">Updated · tag queued</span>`:`<span class="chip ${kindChip[r.kind][0]}">${kindChip[r.kind][1]}</span>${r.big?'<small style="color:var(--warn);font-weight:700">Over 10% change</small>':''}${r.below?'<small style="color:var(--crit);font-weight:700">Below cost: blocked</small>':''}`}</td></tr>`; }).join('')}
+    </tbody></table></div>
+    <div class="muted" style="font-size:12px;margin-top:10px">Suggested price = cost per unit ÷ (1 − target margin), rounded up to the price ending. Example: Tito’s $25.40 ÷ (1 − 0.28) = $35.28 → $35.99. Each price is also checked against state minimum-price rules.</div>
+  </section>
+  <section class="card" data-note="Shelf tags · print so shelf matches register">
+    <div class="cardhead"><h2>Shelf tags to print</h2><span class="chip plain">${S.tagsQ.length}</span><span class="spacer"></span>${S.tagsQ.length?`<button class="btn sm primary" data-act="tagsprint">Send to label printer</button>`:''}</div>
+    ${S.tagsQ.length ? `<div class="tags">${S.tagsQ.map(t=>{ const p=byId(t); return `<div class="tag"><span class="tn">${esc(p.n)}</span><span class="tu">${p.sz}</span><span class="tp">${money(p.p)}</span><span class="tu">Price from ${S.priceWhen==='now'?'Sep 25':'Sep 26'}</span><span class="tb">${Array.from({length:26},(_,i)=>`<i style="opacity:${(i*7+t.length)%3?1:0}"></i>`).join('')}</span></div>`; }).join('')}</div>`
+      : `<div class="empty">Approved prices create shelf tags here, so the shelf always matches the register.</div>`}
+  </section>`;
+};
+
 VIEWS.assortment = () => {
   const cash = DEAD.reduce((a,d)=>a+deadCash(d),0), gain = DEAD.reduce((a,d)=>a+newProfit(d),0);
   const left = DEAD.filter(d=>!S.swapDone.includes(d.id));
@@ -1809,6 +1911,7 @@ const TOUR = [
   {r:'purchasing', set:()=>{S.buy='tonic';S.buyQ=null;S.poTab='compare'}, t:'…and it says no to bad deals', say:'A free case looks cheaper, but it would leave 57 days of tonic on the shelf. Bevnetic skips that deal and keeps the cash in the business.', hl:'.vcard .trap'},
   {r:'purchasing', set:()=>{S.poTab='deals'; S.dealSheet='done'; S.dealRows=SHEET.rows.map(()=>'review');}, t:'Vendor deals arrive by themselves', say:'Forward the rep’s email or snap the monthly deal sheet. Bevnetic reads it, matches each line to your products and says which deals are worth taking. It even spots a price increase dressed up as a deal.', hl:'.dealreview'},
   {r:'invoices', t:'Photograph the invoice, AI does the rest', say:'The supplier invoice is read in seconds and matched to the catalog. Price rises, short shipments and damaged cases are flagged before anything posts to inventory.', hl:'.invwrap > .card'},
+  {r:'pricing', set:()=>{S.priceEdit={}; S.priceSel=null;}, t:'Costs change, prices follow', say:'New costs from the vendor’s invoice or price sheet flow straight in. Bevnetic suggests the shelf price that keeps each category at its target margin, the owner approves in one tap, and new shelf tags are queued.', hl:'.pricereview'},
   {r:'register', set:resetSale, t:'A checkout built for liquor', say:'Offers apply themselves: two Bud Light 12-packs for $24. The counter AI suggests limes because most tequila buyers add them. Bottle deposit (CRV) and tax are handled.', hl:'.pairs'},
   {r:'register', set:resetSale, after:()=>swapModal('kim750'), t:'Sold out? Offer the best swap', say:'Kim Crawford is out. Bevnetic suggests the closest match, shows why it fits, and can text the customer when it’s back.', hl:'.swapcard.best'},
   {r:'register', set:resetSale, after:()=>{S.payAfterId=false; runId(false);}, t:'ID check in two seconds', say:'The licence barcode is read on the device: authenticity, expiry and age. Payment stays locked until the check passes, and no ID image is stored.', hl:'.verdict', delay:1700},
@@ -1850,7 +1953,7 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -1868,6 +1971,9 @@ document.addEventListener('click', e => {
   if (d.resolve){ S.done.add(+d.resolve); toast(d.msg+' · marked resolved'); render(); return; }
   if (d.undo){ S.done.delete(+d.undo); render(); return; }
   if (d.seg){ S.custSeg=+d.seg; render(); return; }
+  if (d.pchk){ S.priceSel[d.pchk] = el.checked; render(); return; }
+  if (d.round){ S.rounding=d.round; S.priceEdit={}; render(); return; }
+  if (d.when){ S.priceWhen=d.when; render(); return; }
   if (d.deal){ const i=+d.deal; S.dealRows[i]=d.v; if (d.v==='ok') dealConfirm(i); render(); return; }
   if (d.copy){ const txt=d.copy; (navigator.clipboard?.writeText(txt) || Promise.reject()).then(()=>toast('Email address copied')).catch(()=>toast('Address: '+txt)); return; }
   if (d.shelf){ S.shelfTab=d.shelf; render(); return; }
@@ -1925,6 +2031,11 @@ document.addEventListener('click', e => {
     case 'refuseok': S.refusals.unshift({t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), why:S.refuse.why, by:'Maria G.', val:Math.round(totals().total*100)/100}); S.cart=[]; S.id=null; S.tdisc=null; closeModal(); render(); toast('Sale refused · saved to compliance log','ban'); break;
     case 'swapok': { const id=el.dataset.v, l=S.cart.find(x=>x.id===id); l?l.qty++:S.cart.push({id,qty:1}); closeModal(); render(); toast('Swapped in '+byId(id).n); break; }
     case 'report': reportModal(); break;
+    case 'priceapply': { const rows=COSTS.map(priceRow).filter(r=>S.priceSel[r.c.pid] && !S.priceDone[r.c.pid]);
+      const bad = rows.find(r=>r.below); if (bad){ toast(`${bad.p.n}: that price is below cost`,'alert'); break; }
+      rows.forEach(r=>{ if (S.priceWhen==='now') r.p.p = Math.round(r.price*100)/100; S.priceDone[r.c.pid]=r.price; if (!S.tagsQ.includes(r.c.pid)) S.tagsQ.push(r.c.pid); });
+      render(); toast(`${rows.length} prices ${S.priceWhen==='now'?'updated on the register':'scheduled for 6 AM'} · ${rows.length} shelf tags queued`); break; }
+    case 'tagsprint': toast(`${S.tagsQ.length} shelf tags sent to the label printer`); S.tagsQ=[]; render(); break;
     case 'dealsample': startDealRead(); break;
     case 'dealokall': S.dealRows.forEach((x,i)=>{ if (x==='review' && SHEET.rows[i].v==='ok'){ S.dealRows[i]='ok'; dealConfirm(i); } }); render(); toast('2 deals added · alert sent to the owner'); break;
     case 'buyai': S.buyQ=null; render(); break;
@@ -1974,6 +2085,9 @@ document.addEventListener('keydown', e => {
   if (e.key==='Enter' && e.target.id==='q'){ const m = PRODUCTS.find(p=>p.n.toLowerCase().includes(S.q.toLowerCase()) && (S.cat==='All'||p.cat===S.cat)); if (m){ S.q=''; const l=S.cart.find(x=>x.id===m.id); l?l.qty++:S.cart.push({id:m.id,qty:1}); render(); $('#q').focus(); } }
 });
 document.addEventListener('change', e => {
+  if (e.target.id && e.target.id.startsWith('tgt-')){ const k=e.target.id.slice(4), v=Math.max(5,Math.min(80,+e.target.value||0)); S.margins[k]=v; S.priceEdit={}; S.priceSel=null; render(); toast(`Target margin set to ${v}% · suggestions updated`); return; }
+  if (e.target.id && e.target.id.startsWith('pr-')){ const k=e.target.id.slice(3), v=+e.target.value; if (v>0){ S.priceEdit[k]=Math.round(v*100)/100; S.priceSel[k]=true; } render(); return; }
+  if (e.target.id==='pricefile' && e.target.files.length){ toast(`Reading ${e.target.files[0].name}… new costs will appear in the list`,'spark'); return; }
   if (e.target.id==='dealfile' && e.target.files.length){ SHEET.file = e.target.files[0].name; startDealRead(); return; }
   if (e.target.id==='man-dob'){ S.man.dob=e.target.value; manUpdate(); return; }
   if (e.target.id==='man-type'){ S.man.type=e.target.value; return; }

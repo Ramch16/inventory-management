@@ -11,6 +11,7 @@ All figures are demo data.
 | Command Center | p.11 | KPI strip, AI "5 things today" list; every item links to the screen that fixes it; weekly vendor deals summary |
 | Register | p.2–5 | Product cards with drawn bottle art, category counts, AI add-on suggestions, sold-out swap to the best alternative, one-tap refuse sale, after-hours lock. Add items, offers applied automatically, line or whole-sale discounts (manager PIN over 15%, blocked over 30% so alcohol never sells below cost), 21+ lock, ID scan (pass and underage demo), no-scan options: approve by eye when the customer is clearly over the store's age (logged) and type the date of birth when an ID won't scan (manager PIN, under-21 always blocked), card / tap / cash / split tender, CRV + tax |
 | Purchasing | New | Compare vendors per product: price, deal (free cases, discounted extra case, volume tiers), delivery, reliability, terms. AI picks the quantity with the lowest cost per case without more than 30 days of extra stock, flags deal traps, and builds one draft PO per vendor. PO tracker. Vendor deals tab: drop a deal sheet or flyer, forward rep emails, or let reps post in a vendor portal; AI reads each line, matches it to the catalog and says whether it is the best deal, not worth it, a price increase or a product you don't sell; confirmed deals raise alerts and feed Compare vendors |
+| Pricing | New | New costs from vendor POs, price sheets and invoices → cost per unit → suggested shelf price from each category's target margin (editable), .99 or .49 endings, 10% change flag, below-cost block; margin and markup shown; approve now or at 6 AM; register updates and shelf tags are queued for the label printer |
 | Damaged Goods | p.7 (extended) | Report breakage / expiry / returns with photo, stock adjusts, supplier claims move Draft → Submitted → Credited, damage log, loss pattern |
 | Compliance | New | Legal sale-hours timeline with demo clock (locks the register after 2 AM), rules the register enforces, store ID policy switch (scan everyone / under 40 / under 30), log of sales without an ID scan, cashier scorecard, refusal log, inspection report |
 | Inventory | p.9–10 | Heat map filtered by state, tile detail, AI action list |
@@ -25,15 +26,15 @@ All figures are demo data.
 ## Guided demo
 
 Press **▶ Demo** in the top bar (or open the page with `#demo` at the end of the URL).
-A 15-step tour opens each screen, sets up the example, highlights the feature and shows
+A 16-step tour opens each screen, sets up the example, highlights the feature and shows
 presenter notes under "What to say". Use **Next / Back** or the arrow keys; everything
 stays clickable during the tour. The story runs:
 
 1. Morning briefing → 2. Alerts → 3. Forecast → 4. Vendor deal comparison →
-5. Deal trap skipped → 6. Vendor deals read from a deal sheet → 7. AI invoice →
-8. Liquor checkout with offers and add-ons → 9. Sold-out swap → 10. ID check →
-11. Offline payment → 12. Compliance lock → 13. Damaged goods → 14. Dead stock swaps →
-15. Inventory heat map
+5. Deal trap skipped → 6. Vendor deals read from a deal sheet → 7. AI invoice → 8. New costs become shelf prices →
+9. Liquor checkout with offers and add-ons → 10. Sold-out swap → 11. ID check →
+12. Offline payment → 13. Compliance lock → 14. Damaged goods → 15. Dead stock swaps →
+16. Inventory heat map
 
 ## Controls in the top bar
 
