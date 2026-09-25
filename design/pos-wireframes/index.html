@@ -453,6 +453,27 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 .toast[hidden]{display:none}
 .toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--surface);border-radius:10px;padding:11px 16px;font-weight:700;font-size:13px;z-index:60;display:flex;gap:8px;align-items:center;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
 
+/* ---------- shelf optimizer ---------- */
+.sw{display:grid;grid-template-columns:150px 30px 150px 1fr 210px;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px}
+.sw.done{border-color:var(--ok);box-shadow:0 0 0 1px var(--ok)}
+.sw .pk{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;min-width:0}
+.sw .pk .art{height:96px;display:flex;justify-content:center;filter:drop-shadow(0 6px 6px rgba(20,33,42,.16))}
+.sw .pk .art svg{height:100%;width:auto}
+.sw .pk.old .art{filter:grayscale(1) opacity(.5)}
+.sw .pk b{font-size:13px;line-height:1.25}
+.sw .pk small{font-size:11.5px;color:var(--muted);line-height:1.35}
+.sw .pk small.bad{color:var(--crit);font-weight:700}
+.sw .pk small.good{color:var(--ok);font-weight:700}
+.sw .arrow{color:var(--accent);justify-self:center}
+.sw .act{display:flex;flex-direction:column;gap:8px;border-left:1px solid var(--line);padding-left:16px}
+.sw .gain{font:800 22px/1 var(--display);color:var(--ok)}
+.sw .gain small{font:600 11.5px var(--body);color:var(--muted)}
+.sw .clear{font-size:12px;border-radius:8px;padding:6px 8px;background:var(--warn-soft);color:var(--warn);font-weight:600}
+.best td{vertical-align:middle}
+.best .thumb{height:40px;display:inline-flex;width:24px;justify-content:center;vertical-align:middle}
+.best .thumb svg{height:100%;width:auto}
+.best .rank{font:800 italic 18px/1 var(--display);color:var(--muted);width:30px}
+.best tr:nth-child(-n+3) .rank{color:var(--accent)}
 /* ---------- guided demo ---------- */
 .tour{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));width:min(400px,calc(100% - 32px));background:var(--rail);color:#E7EEF2;border-radius:18px;padding:16px 18px;z-index:70;box-shadow:0 24px 60px rgba(0,0,0,.4);display:flex;flex-direction:column;gap:10px;border:1px solid #2A3B47}
 .tour .bar{height:4px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden}
@@ -475,6 +496,9 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 .campaign{display:grid;grid-template-columns:1fr 240px;gap:20px;align-items:center}
 /* ---------- responsive ---------- */
 @media (max-width:1180px){
+  .sw{grid-template-columns:1fr 30px 1fr}
+  .sw .why,.sw .act{grid-column:1/-1}
+  .sw .act{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:12px}
   .reg,.invgrid,.fcgrid,.invwrap,.cust,.offgrid,.dmggrid,.compgrid,.pogrid{grid-template-columns:1fr}
   .verdict2{grid-template-columns:1fr}
   .buyhead{grid-template-columns:56px 1fr}
@@ -499,6 +523,9 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
   .kpis{grid-template-columns:repeat(2,1fr)}
   .legend,.insight,.stats{grid-template-columns:repeat(2,1fr)}
   .frow{grid-template-columns:1fr}
+  .sw{grid-template-columns:1fr 26px 1fr}
+  .sw .why,.sw .act{grid-column:1/-1}
+  .sw .act{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:12px}
   .hero{grid-template-columns:1fr}
   .swap{grid-template-columns:1fr}
   .plu{grid-template-columns:1fr 1fr;gap:40px 10px}
@@ -662,6 +689,7 @@ const NOTES = {
   register:{deck:'Deck p.2–5 · Checkout, ID scan, payments, offline', purpose:'Fast lane checkout. Any 21+ item locks tender until an ID scan passes, and the sale keeps working when the internet drops.', data:['Catalog with category, size, ABV, CRV deposit, age flag','Cart, tax 8.75%, CRV, loyalty member','ID result: DOB, age, expiry, authenticity checks'], build:['Barcode scanner as keyboard wedge + camera fallback','ID SDK (Scandit / IDScan.net) on-device, store result not image','Terminal SDK (PAX, Verifone, Stripe) · offline store-and-forward queue in IndexedDB']},
   purchasing:{deck:'New · vendor deals + purchase orders', purpose:'For each product, compare every vendor’s price and deal (free cases, discounted extra cases, volume tiers) at the quantity the store actually needs, then group the choices into one PO per vendor.', data:['Vendor price books: case cost, deal rules, minimums, lead time, terms','Forecast need for the next 30 days and daily sales in cases','On-time delivery rate from past POs'], build:['Deal engine: free goods, extra-case %, % tier, $ per case tier','Plan search: every quantity from need to need + 15, rejecting plans with more than 30 days of extra stock','State rules flag deal types that wholesalers may not offer; exclusive-territory brands show one vendor']},
   inventory:{deck:'Deck p.9–10 · Inventory Heat Map + AI Insight', purpose:'Colour shows the state of every SKU; the AI panel turns it into a ranked to-do list.', data:['Days of cover = on hand ÷ forecast daily demand','Reorder point, expiry date, last-sale date, margin','Capital tied up = on hand × cost for overstock'], build:['Nightly + on-sale recalculation of state','Tile size = inventory value (treemap)','Actions create POs, markdowns or transfers']},
+  assortment:{deck:'New · dead stock + best sellers (extends deck p.9–10)', purpose:'Find products that no longer sell, clear them, and replace them with products that sell in similar stores. Rank best sellers and warn before they run out.', data:['Days since last sale, units on hand, cash tied up, shelf location','Replacement: same shelf and price band, sales in similar stores, margin, vendor','Best sellers by units, revenue or profit for 7 / 30 / 90 days, trend, days of cover'], build:['Dead stock rule: no sale in 60+ days (owner can change it)','Replacement engine: category + price band + local market sales + this store’s basket data','One tap creates a clearance offer and a trial-case draft PO']},
   forecast:{deck:'Deck p.8 · AI Business Forecasting', purpose:'Predict demand per SKU and tell the owner when to order and how much.', data:['28 days history, 14 days forecast with confidence band','Drivers: weekday, holidays, weather, local events, promos','Supplier lead time and case pack'], build:['Model service returns point + P10/P90','Recommendation = demand over lead time + safety stock − on hand','One-click draft PO to supplier']},
   invoices:{deck:'Deck p.6 · AI Invoice Processing (8-step flow)', purpose:'Photograph a supplier invoice; AI reads it, matches lines to the catalog and flags price, quantity and damage issues for owner approval.', data:['OCR fields: supplier, invoice #, date, lines, totals','Match confidence per line against catalog','Variance vs last cost and vs purchase order'], build:['Upload to object storage → OCR / document model','Draft inventory update held until owner approves','Approved lines post to inventory and accounting export']},
   alerts:{deck:'Deck p.7 · Intelligent AI Notifications', purpose:'Seven alert types, each with the action that resolves it, so nothing needs a second screen.', data:['Stock, supplier, payment, PO, damage, expiry, price change','Severity, created time, resolution state'], build:['Rules + AI engine emits events','Delivery: in-app, SMS, email, push per owner preference','Resolved state feeds audit log']},
@@ -744,6 +772,41 @@ const POS_DATA = [
   {no:'PO-10234', v:'Summit Wine & Spirits', lines:'Casamigos ×12 · Hennessy VS ×12 · 4 more lines', total:1407.20, st:'Partly received', note:'Short 6 Casamigos · invoice HB-58812'},
   {no:'PO-10228', v:'Golden State Beverage', lines:'Josh Cabernet ×4 cases · Meiomi ×2 cases', total:688.00, st:'Received', note:'Matched to invoice, paid'},
 ];
+/* ---- shelf optimizer (demo figures; replacements are ideas, not endorsements) ---- */
+const DEAD = [
+  {id:'pinn', old:{n:'Pinnacle Whipped Vodka', sz:'750 ml', c:['#F3F4F6','#6B3FA0'], lb:'PINNACLE', sh:'vodka'}, days:142, qty:18, cost:9.20, spot:'Aisle 3 · shelf 2', clear:'30% off clearance',
+   neu:{n:'Deep Eddy Ruby Red Vodka', sz:'750 ml', c:['#F6D5D5','#C8102E'], lb:'DEEP EDDY', sh:'vodka', p:19.99, cost:13.40, perWeek:9, vendor:'Summit Wine & Spirits', pack:12},
+   why:['Same shelf: flavored vodka at a similar price','Sells 9 a week in similar stores nearby','Grapefruit flavors are growing this year','33% margin']},
+  {id:'cutty', old:{n:'Cutty Sark Blended Scotch', sz:'750 ml', c:['#2F6B3E','#F2D84B'], lb:'CUTTY SARK', sh:'whiskey'}, days:112, qty:14, cost:16.00, spot:'Aisle 2 · shelf 4', clear:'Bundle with soda water, $2 off',
+   neu:{n:'Monkey Shoulder Blended Malt', sz:'750 ml', c:['#B87333','#1D1D1D'], lb:'MONKEY', sh:'whiskey', p:36.99, cost:25.90, perWeek:6, vendor:'Golden State Beverage', pack:6},
+   why:['Your Scotch buyers are trading up to $30–40 bottles','Sells 6 a week in similar stores','Often bought by your Jameson customers','30% margin']},
+  {id:'sake', old:{n:'Gekkeikan Sake', sz:'720 ml', c:['#EDEFF1','#B22222'], lb:'GEKKEIKAN', sh:'wine'}, days:98, qty:12, cost:8.50, spot:'Aisle 5 · shelf 1', clear:'25% off, move next to the counter',
+   neu:{n:'Jinro Chamisul Soju', sz:'360 ml', c:['#8FD3B6','#FFFFFF'], lb:'JINRO', sh:'vodka', p:5.99, cost:3.60, perWeek:24, vendor:'Pacific Crest Imports', pack:20},
+   why:['Same Asian spirits shelf','Sells 24 a week in similar stores','Customers under 35 are 40% of your weekend traffic','40% margin']},
+  {id:'veuve', old:{n:'Veuve Clicquot Magnum', sz:'1.5 L', c:['#1F3B2D','#F2A900'], lb:'VEUVE', sh:'sparkling'}, days:120, qty:6, cost:118.00, spot:'Locked case', clear:'Keep 2 for the holidays, return 4 if the vendor allows',
+   neu:{n:'Veuve Clicquot Brut', sz:'750 ml', c:['#1F3B2D','#F2A900'], lb:'VEUVE', sh:'sparkling', p:64.99, cost:46.00, perWeek:5, vendor:'Summit Wine & Spirits', pack:6},
+   why:['Same brand, in the size customers actually buy','750 ml outsells the magnum 20 to 1','Gift season starts in 5 weeks','29% margin']},
+  {id:'rose', old:{n:'Rosé 2023 closeouts', sz:'750 ml', c:['#F4B6C2','#FFFFFF'], lb:'ROSÉ', sh:'wine'}, days:94, qty:20, cost:9.50, spot:'Aisle 4 · shelf 3', clear:'40% off end-of-season sale',
+   neu:{n:'Kendall-Jackson Chardonnay', sz:'750 ml', c:['#E8D9A0','#F7F3E8'], lb:'K-J', sh:'wine', p:16.99, cost:10.90, perWeek:11, vendor:'Golden State Beverage', pack:12},
+   why:['Same price range on the same shelf','Sells 11 a week in similar stores','Sells all year, not just in summer','36% margin']},
+  {id:'cider', old:{n:'Angry Orchard Rosé Cider 6pk', sz:'6 × 12 oz', c:['#E8A0B4','#FFFFFF'], lb:'ROSÉ CIDER', sh:'pack'}, days:88, qty:9, cost:7.80, spot:'Cooler 1 · door 6', clear:'Bundle: 2 for $15',
+   neu:{n:'Angry Orchard Crisp Apple 6pk', sz:'6 × 12 oz', c:['#C8102E','#F2D84B'], lb:'CRISP APPLE', sh:'pack', p:10.99, cost:7.60, perWeek:8, vendor:'Valley Beer Distributing', pack:4},
+   why:['Same cooler door, same brand','The core flavor outsells rosé 6 to 1','Cider buyers here are mostly weekend shoppers','31% margin']},
+];
+const deadCash = d => d.qty*d.cost, newProfit = d => d.neu.perWeek*4.3*(d.neu.p-d.neu.cost);
+const BEST = [
+  {pid:'bud12', units:340, rev:4417, m:22, tr:8, cover:3, buy:'bud'},
+  {pid:'tito175', units:118, rev:4129, m:28, tr:3, cover:18, buy:'tito'},
+  {pid:'modelo12', units:205, rev:3688, m:24, tr:12, cover:9},
+  {pid:'claw12', units:160, rev:3198, m:26, tr:-4, cover:8},
+  {pid:'casa750', units:52, rev:2859, m:31, tr:15, cover:3},
+  {pid:'josh750', units:170, rev:2548, m:35, tr:0, cover:8},
+  {pid:'hen750', units:50, rev:2249, m:27, tr:5, cover:11},
+  {pid:'crown750', units:64, rev:2111, m:29, tr:0, cover:13},
+  {pid:'jame750', units:66, rev:1979, m:30, tr:2, cover:19},
+  {pid:'noon8', units:70, rev:1749, m:27, tr:22, cover:5},
+];
+const PERIOD = {'7':0.23, '30':1, '90':3.05};
 const POLICY = {
   all:{short:'Scan everyone', label:'Scan every customer buying 21+ items', sub:'Every 21+ sale needs a scan or a manager-approved date of birth', age:null},
   u40:{short:'Under 40', label:'Scan anyone who looks under 40', sub:'Customers clearly over 40 can be approved by eye. Each one is logged', age:40},
@@ -763,6 +826,7 @@ const S = {
   clock:'now', refuse:{why:'Appears intoxicated'},
   refusals:[{t:'Thu 11:42 PM', why:'Appears intoxicated', by:'Dev P.', val:41.97},{t:'Thu 7:15 PM', why:'Under 21 (ID scan)', by:'Maria G.', val:24.99},{t:'Wed 9:03 PM', why:'Buying for someone else', by:'Sam R.', val:54.99}],
   tour:null,
+  shelfTab:'dead', swapDone:[], bestBy:'profit', bestPer:'30',
   idPolicy:'u40', idMethod:null, man:{dob:'', reason:"Barcode won't scan", type:'Driver licence', pin:''},
   idLog:[{t:'Fri 9:12 AM', how:'Clearly over 40 (by eye)', by:'Maria G.', ok:'—', k:'visual'},{t:'Thu 8:40 PM', how:'Date of birth typed in · passport', by:'Dev P.', ok:'Alex K.', k:'manual'},{t:'Thu 6:05 PM', how:"Date of birth typed in · barcode won't scan", by:'Dev P.', ok:'Alex K.', k:'manual'}],
   buy:'tito', buyQ:null, poTab:'compare', poDraft:[],
@@ -780,6 +844,7 @@ const ROUTES = [
   ['damage','Damaged Goods','broken','Store'],
   ['compliance','Compliance','shield','Store'],
   ['forecast','Forecasting','forecast','Intelligence'],
+  ['assortment','Shelf Optimizer','swap','Intelligence'],
   ['invoices','Invoices','invoices','Intelligence'],
   ['alerts','Alerts','bell','Intelligence'],
   ['customers','Customers','users','Growth'],
@@ -791,6 +856,7 @@ const TITLES = {
   register:['Register · Lane 1','Cashier: Maria G. · Shift opened 8:00 AM'],
   purchasing:['Purchasing','Compare vendor prices and deals, then build one PO per vendor'],
   inventory:['Inventory Heat Map','1,284 SKUs · $184K on hand'],
+  assortment:['Shelf Optimizer','Replace dead stock with what sells, and protect your best sellers'],
   forecast:['Demand Forecast','Next 14 days · updated 5:30 AM'],
   invoices:['AI Invoice Processing','Invoice #HB-58812 · Summit Wine & Spirits'],
   alerts:['Notifications','AI-generated, sorted by urgency'],
@@ -1040,7 +1106,7 @@ VIEWS.inventory = () => {
              ['warn','tag','Review Meiomi retail price','Cost +8.5%. Margin fell from 44% to 38%.','Reprice'],
              ['over','dollar','Stop reordering flavored vodka','142 days on hand, $2.9K tied up.','Pause'],
              ['over','store','Move pumpkin ale to endcap','Seasonal surplus. Promo lifts sell-through ~30%.','Plan promo']]
-            .map(a=>`<div class="act"><span class="ic ${a[0]}">${ic(a[1])}</span><div><p>${a[2]}</p><small>${a[3]}</small></div><button class="btn sm" data-toast="${a[4]} · done">${a[4]}</button></div>`).join('')}
+            .map(a=>`<div class="act"><span class="ic ${a[0]}">${ic(a[1])}</span><div><p>${a[2]}</p><small>${a[3]}</small></div>${a[4]==='Pause'?`<button class="btn sm primary" data-go="assortment">Find a replacement</button>`:`<button class="btn sm" data-toast="${a[4]} · done">${a[4]}</button>`}</div>`).join('')}
         </div>
       </section>
     </aside>
@@ -1345,6 +1411,61 @@ VIEWS.damage = () => {
 };
 
 const CLOCKS = {now:{t:'10:04 AM', pos:10+4/60, cls:'ok', big:'Alcohol sales allowed', sub:'Until 2:00 AM tonight · 15 h 56 min left'}, soon:{t:'1:58 AM', pos:1+58/60, cls:'soon', big:'Sales stop in 2 minutes', sub:'The register warns the cashier and finishes open sales'}, locked:{t:'2:05 AM', pos:2+5/60, cls:'locked', big:'Alcohol sales locked', sub:'Until 6:00 AM · non-alcohol items still sell'}};
+VIEWS.assortment = () => {
+  const cash = DEAD.reduce((a,d)=>a+deadCash(d),0), gain = DEAD.reduce((a,d)=>a+newProfit(d),0);
+  const left = DEAD.filter(d=>!S.swapDone.includes(d.id));
+  const tabs = `<div class="seg" style="align-self:flex-start"><button class="${S.shelfTab==='dead'?'on':''}" data-shelf="dead">Replace dead stock</button><button class="${S.shelfTab==='best'?'on':''}" data-shelf="best">Best sellers</button></div>`;
+  const stats = `<section class="stats">
+    <div><b class="num" style="color:var(--crit)">23</b><small>products with no sale in 60+ days</small></div>
+    <div><b class="num" style="color:var(--crit)">$6,840</b><small>cash tied up in them</small></div>
+    <div><b class="num">10</b><small>best sellers make 38% of sales</small></div>
+    <div><b class="num" style="color:var(--warn)">3</b><small>best sellers under 5 days of stock</small></div>
+  </section>`;
+  if (S.shelfTab==='dead') return stats + tabs + `
+  <section class="verdict2" data-note="Total impact of all swaps">
+    ${ic('spark','style="width:30px;height:30px;color:#FFA350"')}
+    <div><span class="chip ai" style="margin-bottom:6px">AI plan · top 6 swaps</span><b class="big">Free ${money(cash,0)} of cash and earn about ${money(Math.round(gain/50)*50,0)} more profit a month</b>
+      <span style="font-size:13px;color:#B9C8D0">These 6 products haven’t sold in 3 months or more. Each one gets a way to clear the old stock and a replacement that sells in similar stores, on the same shelf.</span></div>
+    ${left.length?`<button class="btn primary" data-swapall="1">Start all ${left.length} swaps</button>`:`<span class="chip ok">All swaps started</span>`}
+  </section>
+  <div style="display:flex;flex-direction:column;gap:12px" data-note="One card per dead product → replacement">
+    ${DEAD.map(d=>{ const done=S.swapDone.includes(d.id); return `<article class="sw ${done?'done':''}">
+      <div class="pk old"><span class="art">${bottleSVG(d.old)}</span><b>${d.old.n}</b><small>${d.old.sz} · ${d.spot}</small><small class="bad">No sale in ${d.days} days</small><small>${d.qty} on hand · ${money(deadCash(d),0)} tied up</small></div>
+      <span class="arrow">${ic('swap','style="width:26px;height:26px"')}</span>
+      <div class="pk"><span class="art">${bottleSVG(d.neu)}</span><b>${d.neu.n}</b><small>${d.neu.sz} · ${money(d.neu.p)}</small><small class="good">About ${d.neu.perWeek} a week</small><small>${d.neu.vendor}</small></div>
+      <ul class="why">${d.why.map(w=>`<li>${ic('check')}${w}</li>`).join('')}</ul>
+      <div class="act"><div class="gain">+${money(newProfit(d),0)} <small>profit / month</small></div>
+        <div class="clear">Clear old stock: ${d.clear}</div>
+        ${done?`<span class="chip ok">${ic('check','style="width:12px;height:12px"')} Clearance live · trial case in draft PO</span><button class="btn sm" data-go="purchasing" data-potab-go="1">Open draft PO</button>`
+              :`<button class="btn primary" data-swapgo="${d.id}">Start swap</button><button class="btn sm ghost" data-toast="Kept. Bevnetic will check again in 30 days">Keep for now</button>`}</div>
+    </article>`;}).join('')}
+  </div>
+  <div class="muted" style="font-size:12px">Replacements come from what sells on the same shelf and at the same price in similar stores nearby, plus what your own customers buy together. Figures are demo data.</div>`;
+
+  const k = PERIOD[S.bestPer], rows = BEST.map(b=>({...b, p:byId(b.pid), u:Math.round(b.units*k), r:b.rev*k, pr:b.rev*k*b.m/100}))
+    .sort((a,b)=> S.bestBy==='units' ? b.u-a.u : S.bestBy==='revenue' ? b.r-a.r : b.pr-a.pr);
+  return stats + tabs + `
+  <section class="card" data-note="Ranking · units / revenue / profit">
+    <div class="cardhead"><h2>Top 10 best sellers</h2><span class="spacer"></span>
+      <div class="seg" aria-label="Rank by">${[['profit','Profit'],['revenue','Revenue'],['units','Units']].map(([v,l])=>`<button class="${S.bestBy===v?'on':''}" data-bestby="${v}">${l}</button>`).join('')}</div>
+      <div class="seg" aria-label="Period">${['7','30','90'].map(v=>`<button class="${S.bestPer===v?'on':''}" data-bestper="${v}">${v} days</button>`).join('')}</div></div>
+    <div class="tablewrap"><table class="best" style="min-width:720px"><thead><tr><th></th><th>Product</th><th class="r">Units</th><th class="r">Revenue</th><th class="r">Profit</th><th class="r">Trend</th><th>Stock left</th><th></th></tr></thead><tbody>
+      ${rows.map((x,i)=>`<tr><td class="rank">${i+1}</td>
+        <td><span class="thumb">${bottleSVG(x.p)}</span> <b style="margin-left:6px">${x.p.n}</b></td>
+        <td class="num r">${x.u.toLocaleString()}</td><td class="num r">${money(x.r,0)}</td><td class="num r" style="font-weight:700">${money(x.pr,0)}</td>
+        <td class="r"><span class="chip ${x.tr>5?'ok':x.tr<0?'crit':'plain'}">${x.tr>0?'▲ '+x.tr+'%':x.tr<0?'▼ '+Math.abs(x.tr)+'%':'steady'}</span></td>
+        <td><span class="chip ${x.cover<=5?'crit':x.cover<=9?'warn':'ok'}">${x.cover} days</span></td>
+        <td>${x.cover<=5?`<button class="btn sm primary" ${x.buy?`data-buygo="${x.buy}"`:'data-go="purchasing"'}>Reorder</button>`:''}</td></tr>`).join('')}
+    </tbody></table></div>
+  </section>
+  <div class="compgrid">
+    <section class="card" style="display:flex;gap:12px;align-items:flex-start" data-note="AI insight · never run out"><span class="chip ai">${ic('spark')} Protect</span>
+      <div style="font-size:13px"><b>Bud Light, Casamigos and High Noon have 5 days of stock or less.</b> Running out of a top-10 product loses the sale and often the customer. Reorder them first.</div></section>
+    <section class="card" style="display:flex;gap:12px;align-items:flex-start" data-note="AI insight · give winners more shelf"><span class="chip ai">${ic('spark')} Grow</span>
+      <div style="font-size:13px"><b>High Noon (+22%) and Casamigos (+15%) are rising fast.</b> Give them the shelf space freed by the dead-stock swaps, at eye level.</div></section>
+  </div>`;
+};
+
 VIEWS.purchasing = () => {
   const item = BUY.find(b=>b.id===S.buy), prod = byId(item.pid);
   const plans = item.vendors.map(vd=>({vd, pl:planFor(item, vd, S.buyQ)}));
@@ -1622,6 +1743,7 @@ const TOUR = [
   {r:'register', set:()=>{resetSale(); S.id='ok'; S.idAge=34; S.online=false;}, after:()=>{payMethod='card'; payModal();}, t:'The internet drops. Sales don’t.', say:'Offline, cards are stored securely and uploaded when the connection returns, with per-sale limits so the risk stays small.', hl:'.modal .offbanner'},
   {r:'compliance', set:()=>{S.clock='locked'}, t:'Compliance on autopilot', say:'At 2 AM the register locks alcohol by itself. Refusals take one tap, cashiers get a score, and the inspection report is one button away.', hl:'.hero'},
   {r:'damage', t:'Losses you can claim back', say:'Breakage is logged in seconds with a photo. Stock adjusts, and damaged deliveries become supplier claims tracked until the credit arrives.', hl:'.dmggrid > aside'},
+  {r:'assortment', set:()=>{S.shelfTab='dead'; S.swapDone=[];}, t:'Dead stock out, best sellers in', say:'Six products haven’t sold in three months and hold about $1,460 of cash. For each one Bevnetic suggests a replacement that sells in similar stores and a way to clear the old stock: roughly $1,600 more profit a month.', hl:'.verdict2'},
   {r:'inventory', t:'Point of sale → point of intelligence', say:'The heat map shows every product’s state, and the AI turns it into a to-do list: 12 products need action, $18,400 sits in slow stock, 5 may run out this week.', hl:'.insight'},
 ];
 function tourStep(i){
@@ -1656,12 +1778,12 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
   if ('scrim' in d || 'close' in d){ closeModal(); if (S.route==='register') render(); return; }
-  if (d.go){ e.preventDefault(); go(d.go); return; }
+  if (d.go){ e.preventDefault(); if (el.dataset.potabGo) S.poTab='orders'; go(d.go); return; }
   if (d.add && S.clock==='locked' && byId(d.add).r){ toast('Alcohol sales are locked until 6:00 AM','lock'); return; }
   if (d.add){ const l=S.cart.find(x=>x.id===d.add); l?l.qty++:S.cart.push({id:d.add,qty:1}); render(); return; }
   if (d.dec){ const l=S.cart.find(x=>x.id===d.dec); if(l && --l.qty<=0) S.cart=S.cart.filter(x=>x!==l); if(!S.cart.some(x=>byId(x.id).r)) S.id=null; render(); return; }
@@ -1674,6 +1796,15 @@ document.addEventListener('click', e => {
   if (d.resolve){ S.done.add(+d.resolve); toast(d.msg+' · marked resolved'); render(); return; }
   if (d.undo){ S.done.delete(+d.undo); render(); return; }
   if (d.seg){ S.custSeg=+d.seg; render(); return; }
+  if (d.shelf){ S.shelfTab=d.shelf; render(); return; }
+  if (d.bestby){ S.bestBy=d.bestby; render(); return; }
+  if (d.bestper){ S.bestPer=d.bestper; render(); return; }
+  if (d.swapgo || d.swapall){
+    const ids = d.swapall ? DEAD.filter(x=>!S.swapDone.includes(x.id)).map(x=>x.id) : [d.swapgo];
+    for (const id of ids){ const x=DEAD.find(y=>y.id===id); S.swapDone.push(id);
+      OFFERS.unshift({id:'clr-'+id, n:'Clear '+x.old.n, type:'Clearance', rule:x.clear, sched:'Started today', status:'Active', red:0, goal:x.qty, disc:0});
+      S.poDraft.push({item:'new-'+id, v:x.neu.vendor, n:`${x.neu.n} ${x.neu.sz}`, q:1, got:1, paid:x.neu.pack*x.neu.cost, note:`trial case of ${x.neu.pack}`, save:0}); }
+    render(); toast(ids.length>1 ? `${ids.length} swaps started · clearance offers live · trial cases in draft POs` : 'Swap started · clearance offer live · trial case added to draft PO'); return; }
   if (d.idpol){ S.idPolicy=d.idpol; render(); toast('ID policy: '+POLICY[d.idpol].label.toLowerCase()); return; }
   if (d.manr){ S.man.reason=d.manr; document.querySelectorAll('[data-manr]').forEach(b=>b.classList.toggle('on', b.dataset.manr===d.manr)); return; }
   if (d.idsim){ runId(d.idsim==='under'); return; }

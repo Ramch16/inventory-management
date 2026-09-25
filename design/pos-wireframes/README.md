@@ -15,6 +15,7 @@ All figures are demo data.
 | Compliance | New | Legal sale-hours timeline with demo clock (locks the register after 2 AM), rules the register enforces, store ID policy switch (scan everyone / under 40 / under 30), log of sales without an ID scan, cashier scorecard, refusal log, inspection report |
 | Inventory | p.9–10 | Heat map filtered by state, tile detail, AI action list |
 | Forecasting | p.8 | 28-day history + 14-day forecast band, stockout marker, drivers, reorder recommendation |
+| Shelf Optimizer | New (extends p.9–10) | Dead stock: each product with no sale in months gets a clearance plan and a replacement that sells on the same shelf in similar stores, with profit per month; one tap starts the clearance offer and adds a trial case to a draft PO. Best sellers: top 10 by profit, revenue or units over 7 / 30 / 90 days, trend, days of stock left, reorder buttons |
 | Invoices | p.6 | 8-step flow, OCR source view, per-line approve / edit / reject, price and quantity variances |
 | Alerts | p.7 | All 7 alert types with resolving actions and filters |
 | Customers | p.2 | Member profile, AI segments, SMS campaign preview |
@@ -24,14 +25,14 @@ All figures are demo data.
 ## Guided demo
 
 Press **▶ Demo** in the top bar (or open the page with `#demo` at the end of the URL).
-A 13-step tour opens each screen, sets up the example, highlights the feature and shows
+A 14-step tour opens each screen, sets up the example, highlights the feature and shows
 presenter notes under "What to say". Use **Next / Back** or the arrow keys; everything
 stays clickable during the tour. The story runs:
 
 1. Morning briefing → 2. Alerts → 3. Forecast → 4. Vendor deal comparison →
 5. Deal trap skipped → 6. AI invoice → 7. Liquor checkout with offers and add-ons →
 8. Sold-out swap → 9. ID check → 10. Offline payment → 11. Compliance lock →
-12. Damaged goods → 13. Inventory heat map
+12. Damaged goods → 13. Dead stock swaps → 14. Inventory heat map
 
 ## Controls in the top bar
 
