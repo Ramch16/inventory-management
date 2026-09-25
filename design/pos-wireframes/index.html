@@ -65,7 +65,7 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .content{padding:22px 24px 40px;display:flex;flex-direction:column;gap:18px;max-width:1440px;width:100%}
 
 /* ---------- primitives ---------- */
-.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
 .card h2,.h2{font:700 16px/1.2 var(--display);margin:0;letter-spacing:.01em}
 .cardhead{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
 .cardhead .spacer{flex:1}
@@ -139,36 +139,64 @@ body.notes [data-note]::after{content:attr(data-note);position:absolute;top:-10p
 
 /* ---------- register ---------- */
 .reg{display:grid;grid-template-columns:1fr 380px;gap:16px;align-items:start}
-.scanbar{display:flex;gap:8px;align-items:center;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:6px 6px 6px 12px}
-.scanbar input{flex:1;border:0;outline:0;background:transparent;padding:6px 0;min-width:0}
-.cats{display:flex;gap:6px;flex-wrap:wrap}
-.cats button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-weight:700;font-size:12.5px}
-.cats button.on{background:var(--ink);border-color:var(--ink);color:var(--surface)}
-.plu{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-.prod{display:flex;flex-direction:column;gap:6px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px;min-height:118px;position:relative;transition:transform .12s,border-color .12s}
-.prod:hover{border-color:var(--accent);transform:translateY(-1px)}
+.scanbar{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 8px 8px 16px;box-shadow:0 1px 2px rgba(20,33,42,.04)}
+.scanbar input{flex:1;border:0;outline:0;background:transparent;padding:6px 0;min-width:0;font-size:15px}
+.cats{display:flex;gap:8px;flex-wrap:wrap}
+.cats button{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:9px 14px;font-weight:700;font-size:13px;display:inline-flex;gap:8px;align-items:center;color:var(--muted)}
+.cats button .n{font:600 11px/1 var(--mono);background:var(--surface-2);color:var(--muted);border-radius:8px;padding:3px 6px}
+.cats button.on{background:var(--rail);border-color:var(--rail);color:#fff}
+.cats button.on .n{background:rgba(255,255,255,.14);color:#FFA350}
+.plu{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:40px 16px;padding-top:30px}
+.prod{display:grid;grid-template-columns:62px 1fr;gap:12px;align-items:end;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:0 14px 14px;min-height:112px;position:relative;transition:transform .15s,box-shadow .15s,border-color .15s}
+.prod:hover{border-color:color-mix(in srgb,var(--accent) 50%,var(--line));box-shadow:0 10px 24px -12px rgba(240,122,28,.45);transform:translateY(-2px)}
 .prod:active{transform:scale(.98)}
-.bottle{height:34px;display:flex;align-items:flex-end;gap:3px}
-.bottle i{display:block;border-radius:3px 3px 2px 2px}
-.prod .nm{font-weight:700;font-size:13px;line-height:1.25}
-.prod .meta{font:500 11px/1.2 var(--mono);color:var(--muted)}
-.prod .pr{margin-top:auto;display:flex;justify-content:space-between;align-items:center}
-.prod .pr b{font:700 15px/1 var(--mono)}
-.prod .low{font-size:10.5px;font-weight:700;color:var(--warn)}
-.ticket{position:sticky;top:76px;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);max-height:calc(100vh - 96px)}
-.ticket header{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.prod .art{margin-top:-34px;height:124px;display:flex;align-items:flex-end;justify-content:center;filter:drop-shadow(0 8px 8px rgba(20,33,42,.18));transition:transform .2s}
+.prod:hover .art{transform:translateY(-4px) rotate(-3deg)}
+.prod .art svg{height:100%;width:auto;overflow:visible}
+.prod .info{display:flex;flex-direction:column;gap:2px;padding-top:12px;min-width:0}
+.prod .nm{font-weight:700;font-size:14.5px;line-height:1.2}
+.prod .meta{font:500 11.5px/1.3 var(--body);color:var(--muted)}
+.prod .price{font:800 23px/1 var(--display);color:var(--accent);margin-top:8px;display:flex;align-items:baseline;gap:8px}
+.prod .price small{font:600 11px/1 var(--body);color:var(--muted)}
+.prod .price small.low{color:var(--warn)}
+.prod .badges{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px;min-height:18px}
+.prod.out .art{filter:grayscale(1) opacity(.45)}
+.prod.out .price{color:var(--muted)}
+.prod.lock{opacity:.5}
+.prod.lock .art{filter:grayscale(.8)}
+.otag{font:700 10px/1 var(--body);background:var(--ok-soft);color:var(--ok);border-radius:6px;padding:4px 6px}
+.atag{font:700 10px/1 var(--body);background:var(--violet-soft);color:var(--violet);border-radius:6px;padding:4px 6px}
+.stag{font:700 10px/1 var(--body);background:var(--crit-soft);color:var(--crit);border-radius:6px;padding:4px 6px}
+.ticket{position:sticky;top:76px;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow);max-height:calc(100vh - 96px)}
+.ticket header{padding:18px 18px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ticket header .h2{white-space:nowrap}
 .ticket header .spacer{flex:1}
-.lines{overflow:auto;flex:1;min-height:120px}
-.line{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 16px;border-bottom:1px dashed var(--line)}
-.line .q{display:flex;align-items:center;gap:6px;font:600 12px/1 var(--mono);color:var(--muted)}
-.line .q button{width:22px;height:22px;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);line-height:1;padding:0}
+.ticket header .h2{font-size:19px}
+.lines{overflow:auto;flex:1;min-height:120px;padding:0 6px}
+.line{display:grid;grid-template-columns:38px 1fr auto;gap:12px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
+.line:last-child{border-bottom:0}
+.line .thumb{height:56px;display:flex;justify-content:center}
+.line .thumb svg{height:100%;width:auto;overflow:visible}
+.line .ln{font-weight:700;font-size:13.5px;line-height:1.25}
+.line .lm{font-size:11.5px;color:var(--muted)}
+.line .lp{font:700 14px/1 var(--mono);color:var(--accent);margin-top:4px}
+.qty{display:flex;align-items:center;gap:8px;font:700 14px var(--mono)}
+.qty button{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:var(--surface);padding:0;line-height:1;font-size:15px;color:var(--muted)}
+.qty button:hover{border-color:var(--accent);color:var(--accent)}
 .empty{padding:34px 20px;text-align:center;color:var(--muted)}
+.pairs{margin:4px 16px 0;padding:10px 12px;border-radius:14px;background:var(--violet-soft);display:flex;flex-direction:column;gap:8px}
+.pair{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;font-size:12.5px}
+.pair .thumb svg{height:34px;width:auto}
+.pair small{display:block;color:var(--muted);font-size:11px}
+.clockban{display:flex;gap:10px;align-items:center;border-radius:12px;padding:11px 14px;font-weight:600;font-size:13px}
+.clockban.soon{background:var(--warn-soft);color:var(--warn)}
+.clockban.locked{background:var(--crit-soft);color:var(--crit)}
 .idgate{margin:10px 16px 0;border-radius:10px;padding:10px 12px;display:flex;gap:10px;align-items:center;font-size:12.5px;font-weight:600}
 .idgate.need{background:var(--warn-soft);color:var(--warn)}
 .idgate.ok{background:var(--ok-soft);color:var(--ok)}
-.totals{padding:12px 16px;display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:13px}
-.totals .grand{font:700 26px/1.1 var(--display);padding-top:6px;border-top:1px solid var(--line);margin-top:4px}
-.paybar{padding:0 16px 16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.totals{padding:14px 18px;display:grid;grid-template-columns:1fr auto;gap:6px 10px;font-size:13px;border-top:1px solid var(--line);background:var(--surface-2)}
+.totals .grand{font:700 26px/1.1 var(--display);padding-top:8px;border-top:1px dashed var(--line);margin-top:4px}
+.paybar{padding:0 18px 18px;background:var(--surface-2);display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .offerrow{color:var(--ok)}
 .saved{grid-column:1/-1;justify-self:start;margin-top:4px}
 .otag{font:700 10px/1 var(--body);background:var(--ok-soft);color:var(--ok);border-radius:4px;padding:3px 5px}
@@ -216,8 +244,43 @@ body.notes [data-note]::after{content:attr(data-note);position:absolute;top:-10p
 .claim .flow{grid-column:1/-1;display:flex;gap:4px}
 .claim .flow i{flex:1;height:4px;border-radius:2px;background:var(--line)}
 .claim .flow i.on{background:var(--ok)}
+.clock{position:relative;height:38px;border-radius:10px;overflow:hidden;display:flex;background:var(--crit-soft)}
+.clock i{display:block;height:100%}
+.clock i.ok{background:color-mix(in srgb,var(--ok) 22%,var(--surface))}
+.clock .now{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--ink);border-radius:2px}
+.clock .now b{position:absolute;top:6px;left:8px;white-space:nowrap;font:700 11px/1 var(--mono);background:var(--ink);color:var(--surface);padding:4px 6px;border-radius:5px}
+.clockax{display:flex;justify-content:space-between;font:500 10.5px/1 var(--mono);color:var(--muted);margin-top:6px}
+.hero{border-radius:18px;padding:20px;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center}
+.hero.ok{background:var(--ok-soft);color:var(--ok)} .hero.soon{background:var(--warn-soft);color:var(--warn)} .hero.locked{background:var(--crit-soft);color:var(--crit)}
+.hero .big{font:800 italic 28px/1.1 var(--display)}
+.hero .sub{color:var(--ink);font-size:13px;margin-top:4px}
+.rule{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+.rule:last-child{border-bottom:0}
+.rule div{flex:1}
+.rule small{display:block;color:var(--muted);font-size:11.5px}
+.compgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.score{font:700 13px/1 var(--mono);padding:4px 8px;border-radius:6px}
+.rels{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.rel{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px;display:grid;grid-template-columns:70px 1fr;gap:16px;position:relative}
+.rel .art{height:140px;display:flex;align-items:flex-end;justify-content:center;filter:drop-shadow(0 8px 8px rgba(20,33,42,.2))}
+.rel .art svg{height:100%;width:auto}
+.rel h3{margin:0;font:700 17px/1.2 var(--display)}
+.rel .body{display:flex;flex-direction:column;gap:8px;min-width:0}
+.rel .row{display:flex;gap:6px;flex-wrap:wrap}
+.rel .foot{grid-column:1/-1;border-top:1px solid var(--line);padding-top:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.rel .foot .spacer{flex:1}
+.winners{grid-column:1/-1;display:flex;flex-direction:column;gap:4px;background:var(--surface-2);border-radius:12px;padding:10px 12px;font-size:12.5px}
+.winners div{display:flex;justify-content:space-between;gap:8px}
+.swap{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center}
+.swapcard{border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.swapcard .art{height:110px}
+.swapcard .art svg{height:100%;width:auto}
+.swapcard.best{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.why{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none;font-size:13px}
+.why li{display:flex;gap:8px;align-items:center}
+.why svg{color:var(--ok)}
 .paybar .btn{padding:12px}
-.paybar .big{grid-column:1/-1;font-size:16px;padding:15px}
+.paybar .big{grid-column:1/-1;font-size:16px;padding:16px;border-radius:14px;background:var(--grad);border:0}
 .offbanner{display:flex;gap:10px;align-items:center;background:var(--crit-soft);color:var(--crit);border:1px solid color-mix(in srgb,var(--crit) 35%,transparent);border-radius:10px;padding:10px 14px;font-weight:600;font-size:13px}
 
 /* ---------- modal ---------- */
@@ -380,7 +443,7 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 
 /* ---------- responsive ---------- */
 @media (max-width:1180px){
-  .reg,.invgrid,.fcgrid,.invwrap,.cust,.offgrid,.dmggrid{grid-template-columns:1fr}
+  .reg,.invgrid,.fcgrid,.invwrap,.cust,.offgrid,.dmggrid,.compgrid{grid-template-columns:1fr}
   .ticket{position:static;max-height:none}
   .hello,.hourly,.devgrid{grid-template-columns:1fr}
 }
@@ -395,6 +458,11 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
   .kpis{grid-template-columns:repeat(2,1fr)}
   .legend,.insight,.stats{grid-template-columns:repeat(2,1fr)}
   .frow{grid-template-columns:1fr}
+  .hero{grid-template-columns:1fr}
+  .swap{grid-template-columns:1fr}
+  .plu{grid-template-columns:1fr 1fr;gap:40px 10px}
+  .prod{grid-template-columns:1fr;padding:0 12px 12px}
+  .prod .art{height:104px}
   .steps{grid-template-columns:repeat(4,1fr);row-gap:10px}
   .idwrap{grid-template-columns:1fr}
   .methods,.cashgrid{grid-template-columns:repeat(2,1fr)}
@@ -461,6 +529,11 @@ const P = {
   gift:'<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/>',
   percent:'<path d="M19 5L5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
   broken:'<path d="M9 2h6v4l2 3v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-3z"/><path d="M7 13l3-2 2 3 2-2 3 2"/>',
+  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>',
+  award:'<circle cx="12" cy="8" r="6"/><path d="M8.2 13.3L7 22l5-3 5 3-1.2-8.7"/>',
+  ban:'<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>',
+  lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  swap:'<path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>',
   sync:'<path d="M21 12a9 9 0 0 1-15.5 6.2L3 16M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M3 21v-5h5"/>',
 };
 const ic = (n, s='') => `<svg class="i" viewBox="0 0 24 24" ${s}>${P[n]||''}</svg>`;
@@ -471,26 +544,42 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
 /* ------------------------------------------------ sample data (all fictional demo figures) */
 const TAX = 0.0875;
 const PRODUCTS = [
-  {id:'tito175', n:"Tito's Handmade Vodka", sz:'1.75 L', abv:40, cat:'Spirits', p:34.99, stock:22, c:['#D9E4E8','#9FB5BE'], r:1, crv:0},
-  {id:'jame750', n:'Jameson Irish Whiskey', sz:'750 ml', abv:40, cat:'Spirits', p:29.99, stock:41, c:['#2F6B3E','#C9A94E'], r:1, crv:0},
-  {id:'casa750', n:'Casamigos Blanco', sz:'750 ml', abv:40, cat:'Spirits', p:54.99, stock:6, c:['#E9ECEF','#3C3C3C'], r:1, crv:0},
-  {id:'hen750', n:'Hennessy VS Cognac', sz:'750 ml', abv:40, cat:'Spirits', p:44.99, stock:18, c:['#6A3B18','#D9A441'], r:1, crv:0},
-  {id:'crown750', n:'Crown Royal', sz:'750 ml', abv:40, cat:'Spirits', p:32.99, stock:27, c:['#4B2A6E','#D4B25C'], r:1, crv:0},
-  {id:'bac1l', n:'Bacardi Superior Rum', sz:'1 L', abv:40, cat:'Spirits', p:17.99, stock:33, c:['#F1F1F1','#C1272D'], r:1, crv:0},
-  {id:'josh750', n:'Josh Cellars Cabernet', sz:'750 ml', abv:13.5, cat:'Wine', p:14.99, stock:48, c:['#4A1320','#1E1E1E'], r:1, crv:0},
-  {id:'lamarca', n:'La Marca Prosecco', sz:'750 ml', abv:11, cat:'Wine', p:15.99, stock:36, c:['#8BB3A0','#E8D9A8'], r:1, crv:0},
-  {id:'kim750', n:'Kim Crawford Sauv Blanc', sz:'750 ml', abv:13, cat:'Wine', p:16.99, stock:9, c:['#DDE8C9','#FFFFFF'], r:1, crv:0},
-  {id:'meiomi', n:'Meiomi Pinot Noir', sz:'750 ml', abv:13.7, cat:'Wine', p:21.99, stock:24, c:['#5B1A2B','#E9E1D0'], r:1, crv:0},
-  {id:'bud12', n:'Bud Light 12pk Cans', sz:'12 × 12 oz', abv:4.2, cat:'Beer & Seltzer', p:12.99, stock:64, c:['#1F4EA3','#FFFFFF'], r:1, crv:0.60},
-  {id:'modelo12', n:'Modelo Especial 12pk', sz:'12 × 12 oz', abv:4.4, cat:'Beer & Seltzer', p:17.99, stock:58, c:['#1B2F5C','#D9B64B'], r:1, crv:0.60},
-  {id:'claw12', n:'White Claw Variety 12pk', sz:'12 × 12 oz', abv:5, cat:'Beer & Seltzer', p:19.99, stock:40, c:['#FFFFFF','#8FB8DE'], r:1, crv:0.60},
-  {id:'noon8', n:'High Noon Variety 8pk', sz:'8 × 12 oz', abv:4.5, cat:'Beer & Seltzer', p:24.99, stock:12, c:['#F6C9B3','#6DBBD8'], r:1, crv:0.40},
-  {id:'tonic4', n:'Fever-Tree Tonic 4pk', sz:'4 × 200 ml', abv:0, cat:'Mixers & Snacks', p:6.49, stock:30, c:['#E4ECEA','#2E6F77'], r:0, crv:0.20},
-  {id:'redbull4', n:'Red Bull 4pk', sz:'4 × 8.4 oz', abv:0, cat:'Mixers & Snacks', p:9.99, stock:44, c:['#2B4FA0','#C8C9CC'], r:0, crv:0.20},
-  {id:'limes', n:'Limes, 3 ct', sz:'produce', abv:0, cat:'Mixers & Snacks', p:1.49, stock:60, c:['#7DB343','#A5D16A'], r:0, crv:0},
-  {id:'ice10', n:'Bagged Ice', sz:'10 lb', abv:0, cat:'Mixers & Snacks', p:3.99, stock:80, c:['#DDEFFA','#B9DDF2'], r:0, crv:0},
+  {id:'tito175', n:"Tito's Handmade Vodka", sz:'1.75 L', abv:40, cat:'Spirits', p:34.99, stock:22, c:['#E4ECEF','#EDE3CC'], lb:"TITO'S", sh:'vodka', r:1, crv:0},
+  {id:'blanton', n:"Blanton's Single Barrel", sz:'750 ml', abv:46.5, cat:'Spirits', p:69.99, stock:6, c:['#9A5520','#1E3A5F'], lb:"BLANTON'S", sh:'bourbon', r:1, crv:0, al:1},
+  {id:'jame750', n:'Jameson Irish Whiskey', sz:'750 ml', abv:40, cat:'Spirits', p:29.99, stock:41, c:['#2F6B3E','#EFE6CF'], lb:'JAMESON', sh:'whiskey', r:1, crv:0},
+  {id:'casa750', n:'Casamigos Blanco', sz:'750 ml', abv:40, cat:'Spirits', p:54.99, stock:6, c:['#E6EBEE','#2B2B2B'], lb:'CASAMIGOS', sh:'tequila', r:1, crv:0},
+  {id:'hen750', n:'Hennessy VS Cognac', sz:'750 ml', abv:40, cat:'Spirits', p:44.99, stock:18, c:['#6A3B18','#D9A441'], lb:'HENNESSY', sh:'cognac', r:1, crv:0},
+  {id:'crown750', n:'Crown Royal', sz:'750 ml', abv:40, cat:'Spirits', p:32.99, stock:27, c:['#B98A45','#4B2A6E'], lb:'CROWN', sh:'whiskey', r:1, crv:0},
+  {id:'bac1l', n:'Bacardi Superior Rum', sz:'1 L', abv:40, cat:'Spirits', p:17.99, stock:33, c:['#EEF2F3','#C1272D'], lb:'BACARDÍ', sh:'vodka', r:1, crv:0},
+  {id:'josh750', n:'Josh Cellars Cabernet', sz:'750 ml', abv:13.5, cat:'Wine', p:14.99, stock:48, c:['#2A0E14','#F1ECE2'], lb:'JOSH', sh:'wine', r:1, crv:0},
+  {id:'lamarca', n:'La Marca Prosecco', sz:'750 ml', abv:11, cat:'Wine', p:15.99, stock:36, c:['#6E9C87','#E8D9A8'], lb:'LA MARCA', sh:'sparkling', r:1, crv:0},
+  {id:'kim750', n:'Kim Crawford Sauv Blanc', sz:'750 ml', abv:13, cat:'Wine', p:16.99, stock:0, c:['#C9DDB0','#FFFFFF'], lb:'KIM CRAWFORD', sh:'wine', r:1, crv:0},
+  {id:'oyster', n:'Oyster Bay Sauv Blanc', sz:'750 ml', abv:13, cat:'Wine', p:13.99, stock:22, c:['#D3E3BE','#F5F7F2'], lb:'OYSTER BAY', sh:'wine', r:1, crv:0},
+  {id:'meiomi', n:'Meiomi Pinot Noir', sz:'750 ml', abv:13.7, cat:'Wine', p:21.99, stock:24, c:['#3E1220','#E9E1D0'], lb:'MEIOMI', sh:'wine', r:1, crv:0},
+  {id:'bud12', n:'Bud Light 12pk Cans', sz:'12 × 12 oz', abv:4.2, cat:'Beer & Seltzer', p:12.99, stock:64, c:['#1F4EA3','#FFFFFF'], lb:'BUD LIGHT', sh:'pack', r:1, crv:0.60},
+  {id:'modelo12', n:'Modelo Especial 12pk', sz:'12 × 12 oz', abv:4.4, cat:'Beer & Seltzer', p:17.99, stock:58, c:['#1B2F5C','#D9B64B'], lb:'MODELO', sh:'pack', r:1, crv:0.60},
+  {id:'claw12', n:'White Claw Variety 12pk', sz:'12 × 12 oz', abv:5, cat:'Beer & Seltzer', p:19.99, stock:40, c:['#F1F4F7','#1D1D1D'], lb:'WHITE CLAW', sh:'pack', r:1, crv:0.60},
+  {id:'noon8', n:'High Noon Variety 8pk', sz:'8 × 12 oz', abv:4.5, cat:'Beer & Seltzer', p:24.99, stock:12, c:['#F6C9B3','#1F6F8B'], lb:'HIGH NOON', sh:'pack', r:1, crv:0.40},
+  {id:'tonic4', n:'Fever-Tree Tonic 4pk', sz:'4 × 200 ml', abv:0, cat:'Mixers & Snacks', p:6.49, stock:30, c:['#DCE8E5','#2E6F77'], lb:'FEVER-TREE', sh:'mixer', r:0, crv:0.20},
+  {id:'redbull4', n:'Red Bull 4pk', sz:'4 × 8.4 oz', abv:0, cat:'Mixers & Snacks', p:9.99, stock:44, c:['#2B4FA0','#C8C9CC'], lb:'RED BULL', sh:'can', r:0, crv:0.20},
+  {id:'limes', n:'Limes, 3 ct', sz:'produce', abv:0, cat:'Mixers & Snacks', p:1.49, stock:60, c:['#6FA83A','#A5D16A'], lb:'', sh:'lime', r:0, crv:0},
+  {id:'ice10', n:'Bagged Ice', sz:'10 lb', abv:0, cat:'Mixers & Snacks', p:3.99, stock:80, c:['#DDEFFA','#2C74D6'], lb:'ICE', sh:'ice', r:0, crv:0},
 ];
+const PAIRS = {
+  casa750:[['limes','68% of tequila buyers add limes']], bac1l:[['limes','Mojito and daiquiri buyers add limes']],
+  tito175:[['tonic4','Top mixer with this vodka'],['redbull4','Popular Fri–Sat nights']], jame750:[['redbull4','Often bought together on weekends']],
+  bud12:[['ice10','Hot day: 3 in 5 beer buyers grab ice']], modelo12:[['limes','Modelo + limes is a top pair'],['ice10','88°F today']],
+  claw12:[['ice10','88°F today']], noon8:[['ice10','88°F today']], hen750:[['redbull4','Often bought together']],
+};
+const SWAPS = { kim750:{to:'oyster', why:['Same style: New Zealand Sauvignon Blanc','$3.00 less for the customer','Your margin is 6 points higher','22 bottles on the shelf'], back:'Kim Crawford is back Tuesday on PO #10241'} };
+const RELEASES = [
+  {id:'blanton', n:"Blanton's Single Barrel", pid:'blanton', qty:6, method:'Raffle', entrants:214, closes:'Closed Sun 8 PM', rules:['Members only','1 allocated bottle per ID every 90 days','3+ visits in the last 90 days'], st:'Ready to draw'},
+  {id:'eht', n:'E.H. Taylor Small Batch', qty:4, method:'Waitlist', entrants:61, closes:'Next 4 on the list', rules:['Members only','Sold in list order','Pick up within 48 h'], st:'Notified', c:['#A8622A','#E9DCC0'], lb:'E.H. TAYLOR', sh:'whiskey'},
+  {id:'weller', n:'Weller Special Reserve', qty:12, method:'First come, with limits', entrants:0, closes:'Arrives Oct 2', rules:['1 per ID per 30 days','ID scan required','No holds'], st:'Arriving', c:['#B8742E','#F2F0EA'], lb:'WELLER', sh:'bourbon'},
+];
+const WINNERS = ['Jordan D.','Priya S.','Marcus T.','Elena R.','Chris W.','Aisha K.'];
 const CATS = ['All','Spirits','Wine','Beer & Seltzer','Mixers & Snacks'];
+const RELEASE_BOTTLE = r => r.pid ? byId(r.pid) : {c:r.c, lb:r.lb, sh:r.sh};
 
 const HEAT = [
   ['Bud Light 12pk','crit','3 days cover',1],['Casamigos Blanco','crit','1 day cover',0],['Kim Crawford SB','crit','Stockout 5 days',0],
@@ -541,6 +630,8 @@ const NOTES = {
   invoices:{deck:'Deck p.6 · AI Invoice Processing (8-step flow)', purpose:'Photograph a supplier invoice; AI reads it, matches lines to the catalog and flags price, quantity and damage issues for owner approval.', data:['OCR fields: supplier, invoice #, date, lines, totals','Match confidence per line against catalog','Variance vs last cost and vs purchase order'], build:['Upload to object storage → OCR / document model','Draft inventory update held until owner approves','Approved lines post to inventory and accounting export']},
   alerts:{deck:'Deck p.7 · Intelligent AI Notifications', purpose:'Seven alert types, each with the action that resolves it, so nothing needs a second screen.', data:['Stock, supplier, payment, PO, damage, expiry, price change','Severity, created time, resolution state'], build:['Rules + AI engine emits events','Delivery: in-app, SMS, email, push per owner preference','Resolved state feeds audit log']},
   customers:{deck:'Deck p.2 · Customer engagement & personalization', purpose:'Know regulars at the counter and send offers that match what they already buy.', data:['Member profile, visit history, category mix','Segments built from purchase patterns','Opt-in status for SMS / email'], build:['Look up by phone at checkout','Segment engine runs nightly','Compliance: no alcohol offers to unverified or opted-out members']},
+  compliance:{deck:'New · licence protection', purpose:'Keep the store inside the law without relying on memory: sale hours lock the register, refusals are one tap, and an inspection report is always ready.', data:['State rules per licence type (hours, ID policy, pricing)','ID scans, refusals, overrides per cashier','After-hours attempts blocked by the register'], build:['Rules engine keyed by state + licence type + store time zone','Register polls clock; server clock is the source of truth','Report export: PDF for the liquor board, CSV for owners']},
+  allocations:{deck:'New · rare bottle releases', purpose:'Sell limited bottles fairly and stop resellers: raffles, waitlists and purchase limits enforced by the ID scan.', data:['Release quantity, method, rules, entrants','Winner list and 48-hour pickup window','Purchase history per ID for limits'], build:['Entry via loyalty app / SMS keyword','Draw is random and auditable (seed stored)','Register checks winner + limit on scan; ID hash, not the ID image']},
   offers:{deck:'Deck p.2 · Customer engagement (extended)', purpose:'Create and run offers that the register applies automatically, and see what each one earns and costs.', data:['Offer rules: type, products, value, schedule, limits','Redemptions, discount given, incremental revenue','AI suggestions from overstock and expiry data'], build:['Promotion engine evaluates the cart on every change','State rules: no alcohol below cost, no free alcohol, no volume discounts where banned','Scheduled offers switch on and off by store time zone']},
   damage:{deck:'Deck p.7 · Damage follow-up (extended)', purpose:'Log broken, expired and returned stock in seconds, write it off or claim it back from the supplier, and see where losses happen.', data:['Product, quantity, reason, location, photo, disposition','Cost of loss and supplier credit status','Loss by location and reason'], build:['Posting a report adjusts on-hand stock and the shrink ledger','Received-damaged reports open a supplier claim linked to the invoice','Photos go to object storage and attach to the claim']},
   devices:{deck:'Deck p.3–5 · ID scan vendors, card devices, offline gateway', purpose:'Configure lane hardware, choose the ID provider and set the risk limits for offline card sales.', data:['Provider evaluation criteria from deck p.3','Terminal status per lane','Offline queue, per-sale and total limits, upload window'], build:['Device registry + heartbeat','Provider adapter interface so vendors can be swapped','Queue auto-uploads on reconnect; declined offline sales create a follow-up alert']},
@@ -583,6 +674,9 @@ const S = {
   inv:INVOICE.map((l,i)=> i===5 ? 'review' : (l.note||l.cost!==l.prev ? 'review' : 'ok')), invStep:7,
   offlineLimit:true, custSeg:null,
   tdisc:null, dm:null, pinOk:false,
+  clock:'now', refuse:{why:'Appears intoxicated'},
+  refusals:[{t:'Thu 11:42 PM', why:'Appears intoxicated', by:'Dev P.', val:41.97},{t:'Thu 7:15 PM', why:'Under 21 (ID scan)', by:'Maria G.', val:24.99},{t:'Wed 9:03 PM', why:'Buying for someone else', by:'Sam R.', val:54.99}],
+  winners:null, allocOk:false,
   ob:{name:'Wine Wednesday', type:'% off', val:15, target:'Wine', start:'2026-10-07', end:'2026-10-28', days:'Wed', members:false},
   dmg:{pid:'josh750', q:1, why:'Broken in store', where:'Sales floor', disp:'Write off', photo:null},
 };
@@ -594,11 +688,13 @@ const ROUTES = [
   ['register','Register','register','Store'],
   ['inventory','Inventory','inventory','Store'],
   ['damage','Damaged Goods','broken','Store'],
+  ['compliance','Compliance','shield','Store'],
   ['forecast','Forecasting','forecast','Intelligence'],
   ['invoices','Invoices','invoices','Intelligence'],
   ['alerts','Alerts','bell','Intelligence'],
   ['customers','Customers','users','Growth'],
   ['offers','Offers & Discounts','gift','Growth'],
+  ['allocations','Allocated Bottles','award','Growth'],
   ['devices','Devices & Offline','devices','Setup'],
 ];
 const TITLES = {
@@ -609,6 +705,8 @@ const TITLES = {
   invoices:['AI Invoice Processing','Invoice #HB-58812 · Summit Wine & Spirits'],
   alerts:['Notifications','AI-generated, sorted by urgency'],
   customers:['Customers','2,418 loyalty members'],
+  compliance:['Compliance Autopilot','California · Type 21 off-sale general license'],
+  allocations:['Allocated Bottles','Rare releases sold fairly: raffles, waitlists and limits'],
   offers:['Offers & Discounts','Promotions the register applies automatically'],
   damage:['Damaged Goods','Breakage, expiry, returns and supplier claims'],
   devices:['Devices & Offline Mode','Lane hardware, ID provider, offline payment limits'],
@@ -661,6 +759,30 @@ function sparkPath(arr,w=160,hgt=34){ const mx=Math.max(...arr), mn=Math.min(...
   return {line, area: line+`L${w} ${hgt}L0 ${hgt}Z`, end:pts[pts.length-1]}; }
 function spark(arr,color='var(--accent)'){ const s=sparkPath(arr);
   return `<svg class="spark" viewBox="0 0 160 34" preserveAspectRatio="none" aria-hidden="true"><path d="${s.area}" fill="${color}" opacity=".12"/><path d="${s.line}" fill="none" stroke="${color}" stroke-width="1.6" vector-effect="non-scaling-stroke"/><circle cx="${s.end[0]}" cy="${s.end[1]}" r="2.6" fill="${color}"/></svg>`; }
+let BID=0;
+function shade(hex,amt){ const n=parseInt(hex.slice(1),16); const f=v=>Math.max(0,Math.min(255,v+amt)); return '#'+[f(n>>16),f((n>>8)&255),f(n&255)].map(v=>v.toString(16).padStart(2,'0')).join(''); }
+function lum(hex){ const n=parseInt(hex.slice(1),16); return (0.299*(n>>16)+0.587*((n>>8)&255)+0.114*(n&255))/255; }
+function bottleSVG(p){
+  const g=p.c[0], l=p.c[1], id='bg'+(++BID), st='stroke="rgba(0,0,0,.18)" stroke-width=".6"';
+  const G=`url(#${id})`, ink = lum(l)>.6 ? '#1C2A36' : '#FFFFFF';
+  const txt=(x,y,w,t,fs=7)=> t ? `<text x="${x}" y="${y}" text-anchor="middle" font-family="Saira,Arial Narrow,sans-serif" font-weight="800" font-size="${Math.min(fs, w*1.75/Math.max(3,t.length))}" fill="${ink}" letter-spacing=".2">${esc(t)}</text>` : '';
+  const gloss=(x,y,h)=>`<rect x="${x}" y="${y}" width="3" height="${h}" rx="1.5" fill="#fff" opacity=".45"/>`;
+  const S = {
+    vodka:`<rect x="24.5" y="3" width="11" height="11" rx="1.5" fill="${l}" ${st}/><rect x="26" y="13" width="8" height="22" fill="${G}" ${st}/><path d="M15 52Q15 37 30 35Q45 37 45 52V112Q45 117 40 117H20Q15 117 15 112Z" fill="${G}" ${st}/><rect x="17" y="64" width="26" height="30" rx="2" fill="${l}"/>${txt(30,82,26,p.lb)}${gloss(18,44,62)}`,
+    whiskey:`<rect x="23.5" y="5" width="13" height="12" rx="2" fill="${l}" ${st}/><rect x="26" y="16" width="8" height="24" fill="${G}" ${st}/><path d="M13 54L20 40H40L47 54V112Q47 117 42 117H18Q13 117 13 112Z" fill="${G}" ${st}/><rect x="16" y="66" width="28" height="30" rx="2" fill="${l}"/>${txt(30,84,28,p.lb)}${gloss(16,56,54)}`,
+    tequila:`<rect x="20" y="24" width="20" height="17" rx="4" fill="${l}" ${st}/><rect x="25" y="40" width="10" height="16" fill="${G}" ${st}/><rect x="11" y="55" width="38" height="62" rx="6" fill="${G}" ${st}/><rect x="14" y="76" width="32" height="22" rx="2" fill="${l}"/>${txt(30,90,32,p.lb,6.5)}${gloss(14,60,52)}`,
+    cognac:`<rect x="24.5" y="18" width="11" height="12" rx="2" fill="${l}" ${st}/><rect x="26" y="29" width="8" height="36" fill="${G}" ${st}/><ellipse cx="30" cy="91" rx="20" ry="26" fill="${G}" ${st}/><rect x="17" y="84" width="26" height="16" rx="2" fill="${l}"/>${txt(30,95,26,p.lb)}${gloss(15,76,26)}`,
+    bourbon:`<circle cx="30" cy="27" r="7" fill="#C9A94E" ${st}/><rect x="27" y="17" width="6" height="6" rx="1" fill="#C9A94E"/><rect x="25" y="33" width="10" height="18" fill="${G}" ${st}/><rect x="12" y="50" width="36" height="67" rx="14" fill="${G}" ${st}/><rect x="15" y="72" width="30" height="24" rx="3" fill="${l}"/>${txt(30,87,30,p.lb,6.5)}${gloss(15,58,50)}`,
+    wine:`<rect x="25" y="5" width="10" height="27" rx="1.5" fill="${l}" ${st}/><path d="M18 58Q18 44 26 40V30H34V40Q42 44 42 58V112Q42 117 37 117H23Q18 117 18 112Z" fill="${G}" ${st}/><rect x="19.5" y="70" width="21" height="28" rx="2" fill="${l}"/>${txt(30,86,21,p.lb,6)}${gloss(20,50,58)}`,
+    sparkling:`<rect x="23.5" y="4" width="13" height="32" rx="2" fill="${l}" ${st}/><path d="M16 72Q17 48 26 36V32H34V36Q43 48 44 72V112Q44 117 39 117H21Q16 117 16 112Z" fill="${G}" ${st}/><rect x="18" y="78" width="24" height="24" rx="2" fill="${l}"/>${txt(30,93,24,p.lb,6)}${gloss(19,60,50)}`,
+    pack:`<rect x="3" y="46" width="54" height="71" rx="5" fill="${G}" ${st}/><rect x="22" y="52" width="16" height="6" rx="3" fill="rgba(0,0,0,.28)"/><rect x="3" y="70" width="54" height="22" fill="${l}"/>${txt(30,85,52,p.lb,8.5)}<rect x="3" y="100" width="54" height="3" fill="${l}" opacity=".6"/>${gloss(6,50,62)}`,
+    can:`<rect x="7" y="50" width="21" height="67" rx="4" fill="${G}" ${st}/><rect x="32" y="50" width="21" height="67" rx="4" fill="${G}" ${st}/><rect x="7" y="72" width="21" height="16" fill="${l}"/><rect x="32" y="72" width="21" height="16" fill="${l}"/>${txt(17.5,83,20,p.lb.split(' ')[0],6)}${txt(42.5,83,20,p.lb.split(' ')[1]||'',6)}${gloss(9,54,58)}`,
+    mixer:`<rect x="10" y="48" width="7" height="10" fill="${l}"/><path d="M8 70Q8 60 13.5 58Q19 60 19 70V114Q19 117 16 117H11Q8 117 8 114Z" fill="${G}" ${st}/><rect x="41" y="48" width="7" height="10" fill="${l}"/><path d="M39 70Q39 60 44.5 58Q50 60 50 70V114Q50 117 47 117H42Q39 117 39 114Z" fill="${G}" ${st}/><rect x="24" y="44" width="8" height="12" fill="${l}"/><path d="M21 68Q21 57 28 55Q35 57 35 68V114Q35 117 32 117H24Q21 117 21 114Z" fill="${G}" ${st}/><rect x="21" y="80" width="14" height="16" fill="${l}"/>${gloss(23,62,44)}`,
+    lime:`<circle cx="19" cy="103" r="13" fill="${G}" ${st}/><circle cx="41" cy="103" r="13" fill="${G}" ${st}/><circle cx="30" cy="84" r="13" fill="${G}" ${st}/><circle cx="26" cy="80" r="3" fill="#fff" opacity=".45"/><circle cx="15" cy="99" r="3" fill="#fff" opacity=".4"/>`,
+    ice:`<path d="M9 56Q30 44 51 56L53 112Q53 117 48 117H12Q7 117 7 112Z" fill="${G}" ${st}/><path d="M24 50L30 42L36 50" fill="none" stroke="${l}" stroke-width="2"/>${txt(30,92,34,p.lb,15)}<circle cx="18" cy="68" r="2" fill="#fff"/><circle cx="42" cy="104" r="2.5" fill="#fff"/>`,
+  };
+  return `<svg viewBox="0 0 60 120" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" x2="1"><stop offset="0" stop-color="${shade(g,-18)}"/><stop offset=".35" stop-color="${shade(g,22)}"/><stop offset="1" stop-color="${shade(g,-30)}"/></linearGradient></defs>${S[p.sh]||S.vodka}</svg>`;
+}
 function bottle(p){ return `<div class="bottle" aria-hidden="true"><i style="width:14px;height:${p.cat==='Beer & Seltzer'?22:34}px;background:${p.c[0]};border:1px solid rgba(0,0,0,.15)"></i><i style="width:8px;height:${p.cat==='Mixers & Snacks'?16:26}px;background:${p.c[1]};border:1px solid rgba(0,0,0,.15)"></i></div>`; }
 
 /* ------------------------------------------------ views */
@@ -722,30 +844,43 @@ VIEWS.register = () => {
   const list = PRODUCTS.filter(p => (S.cat==='All'||p.cat===S.cat) && (!S.q || p.n.toLowerCase().includes(S.q.toLowerCase())));
   const t = totals();
   const restricted = S.cart.some(l => byId(l.id).r);
+  const locked = S.clock==='locked';
   const idState = !restricted ? '' : S.id==='ok'
     ? `<div class="idgate ok">${ic('check')} ID verified · age ${S.idAge} · 21+ items unlocked</div>`
-    : `<div class="idgate need">${ic('id')} 21+ items in cart · scan ID before payment</div>`;
+    : `<div class="idgate need">${ic('id')} 21+ items in order · scan ID before payment</div>`;
+  const inCart = new Set(S.cart.map(l=>l.id)), sugg=[];
+  for (const l of S.cart) for (const [id,why] of (PAIRS[l.id]||[])) if (!inCart.has(id) && !sugg.some(x=>x[0]===id)) sugg.push([id,why]);
+  const count = c => PRODUCTS.filter(p=>c==='All'||p.cat===c).length;
+  const card = p => { const o=offerFor(p), out=!p.stock, lk=locked&&p.r;
+    const act = p.al ? `data-alloc="${p.id}"` : out ? `data-swap="${p.id}"` : `data-add="${p.id}"`;
+    return `<button class="prod ${out?'out':''} ${lk?'lock':''}" ${act}>
+      <span class="art">${bottleSVG(p)}</span>
+      <span class="info"><span class="badges">${p.r?'<span class="chip age">21+</span>':''}${p.al?'<span class="atag">Allocated</span>':''}${o&&!out?`<span class="otag">${o.tag}</span>`:''}${out?'<span class="stag">Sold out · swap</span>':''}${lk?`<span class="stag">${ic('lock','style="width:10px;height:10px"')} After hours</span>`:''}</span>
+      <span class="nm">${p.n}</span><span class="meta">${p.sz}${p.abv?` · ${p.abv}% ABV`:''}</span>
+      <span class="price">${money(p.p)}${out?'<small>0 left</small>':p.stock<=12?`<small class="low">${p.stock} left</small>`:''}</span></span>
+    </button>`; };
   return `
   ${S.online ? '' : `<div class="offbanner">${ic('wifioff')} Internet is down. Sales keep working: cards are stored securely and upload when the connection returns (limit $250 per sale).</div>`}
+  ${S.clock==='soon' ? `<div class="clockban soon">${ic('clock')} Alcohol sales stop at 2:00 AM, in 2 minutes. Finish 21+ sales now.</div>` : ''}
+  ${locked ? `<div class="clockban locked">${ic('lock')} Alcohol sales are locked until 6:00 AM (California law). Mixers, ice and snacks can still be sold.</div>` : ''}
   <div class="reg">
-    <section style="display:flex;flex-direction:column;gap:12px;min-width:0">
-      <label class="scanbar" data-note="Scan / search · barcode wedge">${ic('scan')}<input id="q" placeholder="Scan a barcode or search 1,284 products" value="${esc(S.q)}" autocomplete="off"><span class="chip plain">F2</span></label>
-      <div class="cats" role="tablist">${CATS.map(c=>`<button class="${S.cat===c?'on':''}" data-cat="${c}">${c}</button>`).join('')}</div>
-      <div class="plu" data-note="Quick keys · tap to add">
-        ${list.map(p=>{ const o=offerFor(p); return `<button class="prod" data-add="${p.id}">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px">${bottle(p)}<span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">${p.r?'<span class="chip age">21+</span>':''}${o?`<span class="otag">${o.tag}</span>`:''}</span></div>
-          <span class="nm">${p.n}</span><span class="meta">${p.sz}${p.abv?` · ${p.abv}% ABV`:''}</span>
-          <span class="pr"><b>${money(p.p)}</b>${p.stock<=12?`<span class="low">${p.stock} left</span>`:`<span class="meta">${p.stock} in stock</span>`}</span>
-        </button>`}).join('') || `<div class="empty">No products match “${esc(S.q)}”.</div>`}
+    <section style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <label class="scanbar" data-note="Scan / search · barcode wedge">${ic('search')}<input id="q" placeholder="Scan a barcode or search 1,284 products" value="${esc(S.q)}" autocomplete="off"><span class="iconbtn" title="Camera scan">${ic('scan')}</span></label>
+      <div class="cats" role="tablist">${CATS.map(c=>`<button class="${S.cat===c?'on':''}" data-cat="${c}">${c==='All'?'All products':c}<span class="n">${count(c)}</span></button>`).join('')}</div>
+      <div class="plu" data-note="Product cards · drawn bottle art from catalog data">
+        ${list.map(card).join('') || `<div class="empty">No products match “${esc(S.q)}”.</div>`}
       </div>
     </section>
-    <aside class="ticket" data-note="Sale ticket · locks tender until ID passes">
-      <header><div><div class="h2">Sale #${S.saleNo}</div><div class="muted" style="font-size:12px">${S.member ? `Member: ${S.member} · 1,240 pts` : 'Walk-in customer'}</div></div><span class="spacer"></span>
-        <button class="btn sm" data-act="member">${ic('users2')}${S.member?'Remove':'Add member'}</button></header>
+    <aside class="ticket" data-note="Customer order · locks tender until ID passes">
+      <header><div><div class="h2">Customer order</div><div class="muted" style="font-size:12px">Sale #${S.saleNo} · ${S.member ? `${S.member} · 1,240 pts` : 'Walk-in customer'}</div></div><span class="spacer"></span>
+        <button class="iconbtn" data-act="member" title="${S.member?'Remove member':'Add member'}" aria-label="${S.member?'Remove member':'Add member'}" ${S.member?'aria-pressed="true"':''}>${ic('users2')}</button>
+        <button class="btn sm danger" data-act="refuse" ${S.cart.length?'':'disabled'} title="Refuse sale">${ic('ban')}Refuse</button></header>
       ${idState}
-      <div class="lines">${S.cart.length ? S.cart.map(l=>{const p=byId(l.id); return `<div class="line">
-        <div><div style="font-weight:700;font-size:13px">${p.n} ${p.r?'<span class="chip age">21+</span>':''}</div><div class="q"><button data-dec="${p.id}" aria-label="Remove one">−</button>${l.qty}<button data-add="${p.id}" aria-label="Add one">+</button><span>× ${money(p.p)}${p.crv?` · CRV ${money(p.crv)}`:''}</span></div>${l.disc?`<div class="ldisc">−${l.disc}% · ${esc(l.reason)}</div>`:''}</div>
-        <div class="num" style="font-weight:700;text-align:right">${l.disc?`<s class="muted" style="font-weight:500;font-size:11px">${money(p.p*l.qty)}</s><br>${money(p.p*l.qty*(1-l.disc/100))}`:money(p.p*l.qty)}</div></div>`}).join('') : `<div class="empty">${ic('scan','style="width:30px;height:30px"')}<br>Scan or tap a product to start the sale.</div>`}</div>
+      <div class="lines">${S.cart.length ? S.cart.map(l=>{const p=byId(l.id); const lt=p.p*l.qty*(1-(l.disc||0)/100); return `<div class="line">
+        <span class="thumb">${bottleSVG(p)}</span>
+        <div style="min-width:0"><div class="ln">${p.n}</div><div class="lm">${p.sz}${p.crv?` · CRV ${money(p.crv)}`:''}</div>${l.disc?`<div class="ldisc">−${l.disc}% · ${esc(l.reason)}</div>`:''}<div class="lp">${money(lt)}</div></div>
+        <div class="qty"><button data-dec="${p.id}" aria-label="Remove one">−</button>${l.qty}<button data-add="${p.id}" aria-label="Add one">+</button></div></div>`}).join('') : `<div class="empty">${ic('scan','style="width:30px;height:30px"')}<br>Scan or tap a product to start the order.</div>`}</div>
+      ${sugg.length ? `<div class="pairs" data-note="Counter AI · add-on suggestions"><span class="eyebrow" style="color:var(--violet)">${ic('spark','style="width:12px;height:12px;vertical-align:-2px"')} Suggest to customer</span>${sugg.slice(0,2).map(([id,why])=>{const x=byId(id); return `<div class="pair"><span class="thumb">${bottleSVG(x)}</span><div><b>${x.n}</b> · ${money(x.p)}<small>${why}</small></div><button class="btn sm" data-add="${id}">+ Add</button></div>`;}).join('')}</div>` : ''}
       <div class="totals">
         <span class="muted">Subtotal</span><span class="num r">${money(t.sub)}</span>
         ${t.offers.map(o=>`<span class="offerrow">${ic('gift','style="width:13px;height:13px;vertical-align:-2px"')} ${o.n}</span><span class="num r offerrow">${money(-o.amt)}</span>`).join('')}
@@ -758,10 +893,10 @@ VIEWS.register = () => {
         ${t.saved>0.005?`<span class="chip ok saved">Customer saves ${money(t.saved)}</span>`:''}
       </div>
       <div class="paybar">
-        <button class="btn" data-act="clear" ${S.cart.length?'':'disabled'}>Void sale</button>
+        <button class="btn" data-act="clear" ${S.cart.length?'':'disabled'}>Clear</button>
         <button class="btn" data-act="disc" ${S.cart.length?'':'disabled'}>${ic('percent')}Discount</button>
         <button class="btn" data-act="idscan" ${restricted?'':'disabled'}>${ic('id')}Scan ID</button>
-        <button class="btn primary big" data-act="pay" ${S.cart.length?'':'disabled'}>${restricted && S.id!=='ok' ? ic('id')+' Verify ID & pay' : ic('card')+' Charge '+money(t.total)}</button>
+        <button class="btn primary big" data-act="pay" ${S.cart.length?'':'disabled'}>${restricted && S.id!=='ok' ? ic('id')+' Verify ID & pay' : ic('card')+' Payment · '+money(t.total)}</button>
       </div>
     </aside>
   </div>`;
@@ -1118,6 +1253,113 @@ VIEWS.damage = () => {
   </div>`;
 };
 
+const CLOCKS = {now:{t:'10:04 AM', pos:10+4/60, cls:'ok', big:'Alcohol sales allowed', sub:'Until 2:00 AM tonight · 15 h 56 min left'}, soon:{t:'1:58 AM', pos:1+58/60, cls:'soon', big:'Sales stop in 2 minutes', sub:'The register warns the cashier and finishes open sales'}, locked:{t:'2:05 AM', pos:2+5/60, cls:'locked', big:'Alcohol sales locked', sub:'Until 6:00 AM · non-alcohol items still sell'}};
+VIEWS.compliance = () => {
+  const c = CLOCKS[S.clock];
+  const cashiers = [['Maria G.',212,'100%',0,100],['Sam R.',140,'99%',0,98],['Dev P.',188,'96%',2,91]];
+  return `
+  <section class="hero ${c.cls}" data-note="Live sale-hours status · drives the register lock">
+    ${ic(S.clock==='now'?'shield':S.clock==='soon'?'clock':'lock','style="width:40px;height:40px"')}
+    <div><div class="big">${c.big}</div><div class="sub">${c.sub}</div></div>
+    <div class="seg" aria-label="Demo clock">${[['now','Now'],['soon','Demo 1:58 AM'],['locked','Demo 2:05 AM']].map(([k,l])=>`<button class="${S.clock===k?'on':''}" data-clock="${k}">${l}</button>`).join('')}</div>
+  </section>
+  <section class="card" data-note="24-hour legal window · California 6 AM–2 AM">
+    <div class="cardhead"><h2>Legal sale hours today</h2><span class="spacer"></span><span class="chip ok">Allowed</span><span class="chip crit">Locked</span></div>
+    <div class="clock"><i class="ok" style="width:${2/24*100}%"></i><i style="width:${4/24*100}%"></i><i class="ok" style="flex:1"></i><span class="now" style="left:${c.pos/24*100}%"><b>${c.t}</b></span></div>
+    <div class="clockax"><span>12 AM</span><span>2 AM</span><span>6 AM</span><span>12 PM</span><span>6 PM</span><span>12 AM</span></div>
+  </section>
+  <section class="stats">
+    <div><b class="num">38</b><small>ID scans today</small></div>
+    <div><b class="num" style="color:var(--crit)">${S.refusals.length}</b><small>sales refused this week</small></div>
+    <div><b class="num">3</b><small>fake IDs caught this month</small></div>
+    <div><b class="num" style="color:var(--ok)">97</b><small>store compliance score</small></div>
+  </section>
+  <div class="compgrid">
+    <section class="card" data-note="Rules engine · state + licence type">
+      <div class="cardhead"><h2>Rules the register enforces</h2></div>
+      ${[['Sale hours 6:00 AM – 2:00 AM','Register locks 21+ items outside these hours',true],['ID check for anyone who looks under 40','Store policy, stricter than the law (under 21)',true],['No sales to intoxicated customers','One-tap refusal with reason, logged',true],['No alcohol sold below cost','Discounts over 30% are blocked',true],['CRV charged on beverage containers','Added per container automatically',true],['Manager PIN for manual date-of-birth entry','Used when an ID won’t scan',true]]
+        .map(r=>`<div class="rule">${ic('shield','style="color:var(--ok)"')}<div><b>${r[0]}</b><small>${r[1]}</small></div><span class="chip ok">On</span></div>`).join('')}
+    </section>
+    <section style="display:flex;flex-direction:column;gap:16px">
+      <section class="card" data-note="Cashier scorecard">
+        <div class="cardhead"><h2>Cashier scorecard</h2><span class="muted" style="font-size:12px">This week</span></div>
+        <div class="tablewrap"><table><thead><tr><th>Cashier</th><th class="r">21+ sales</th><th class="r">ID scanned</th><th class="r">Manual DOB</th><th class="r">Score</th></tr></thead><tbody>
+          ${cashiers.map(x=>`<tr><td style="font-weight:700">${x[0]}</td><td class="num r">${x[1]}</td><td class="num r">${x[2]}</td><td class="num r">${x[3]}</td><td class="r"><span class="score" style="background:${x[4]>=95?'var(--ok-soft)':'var(--warn-soft)'};color:${x[4]>=95?'var(--ok)':'var(--warn)'}">${x[4]}</span></td></tr>`).join('')}
+        </tbody></table></div>
+        <div class="muted" style="font-size:12px;margin-top:8px">Dev P. entered 2 birthdates by hand. Refresher training is booked for Monday.</div>
+      </section>
+      <section class="card" data-note="Refusal log · from register">
+        <div class="cardhead"><h2>Refused sales</h2><span class="spacer"></span><button class="btn sm primary" data-act="report">Build inspection report</button></div>
+        ${S.refusals.map(r=>`<div class="rule">${ic('ban','style="color:var(--crit)"')}<div><b>${esc(r.why)}</b><small>${r.t} · ${r.by}</small></div><span class="num">${money(r.val)}</span></div>`).join('')}
+      </section>
+    </section>
+  </div>`;
+};
+VIEWS.allocations = () => `
+  <section class="stats">
+    <div><b class="num">3</b><small>releases this month</small></div>
+    <div><b class="num">275</b><small>entries from members</small></div>
+    <div><b class="num" style="color:var(--crit)">11</b><small>entries blocked as resellers</small></div>
+    <div><b class="num" style="color:var(--ok)">+38</b><small>new loyalty sign-ups from raffles</small></div>
+  </section>
+  <div class="rels" data-note="Release cards · raffle / waitlist / limits">
+    ${RELEASES.map(r=>{ const b=RELEASE_BOTTLE(r); const drawn = r.id==='blanton' && S.winners; return `<article class="rel">
+      <span class="art">${bottleSVG(b)}</span>
+      <div class="body"><div class="row"><span class="chip ${r.st==='Arriving'?'over':drawn||r.st==='Notified'?'ok':'warn'}">${drawn?'Winners drawn':r.st}</span><span class="chip plain">${r.method}</span></div>
+        <h3>${r.n}</h3><div class="muted" style="font-size:12.5px">${r.qty} bottles · ${r.entrants?r.entrants+' entrants · ':''}${r.closes}</div>
+        <div class="row">${r.rules.map(x=>`<span class="chip plain">${x}</span>`).join('')}</div></div>
+      ${drawn?`<div class="winners">${S.winners.map((w,i)=>`<div><span>${i+1}. <b>${w}</b></span><span class="muted">code ${['BLN','BLN','BLN','BLN','BLN','BLN'][i]}-${4471+i*37} · SMS sent</span></div>`).join('')}</div>`:''}
+      <div class="foot">${r.id==='blanton' ? (drawn?`<span class="muted" style="font-size:12px">Winners have 48 hours to buy. Unclaimed bottles go to the next draw.</span>`:`<span class="muted" style="font-size:12px">Draw is random and recorded for audit.</span><span class="spacer"></span><button class="btn primary" data-draw="blanton">${ic('award')}Draw ${r.qty} winners</button>`)
+        : r.st==='Notified' ? `<span class="muted" style="font-size:12px">4 customers notified · 2 picked up</span><span class="spacer"></span><button class="btn sm" data-toast="Reminder sent to 2 customers">Remind</button>`
+        : `<span class="muted" style="font-size:12px">The register enforces the limit at the ID scan</span><span class="spacer"></span><button class="btn sm" data-toast="Release announced to 2,418 members">Announce</button>`}</div>
+    </article>`;}).join('')}
+  </div>
+  <section class="card" style="display:flex;gap:12px;align-items:flex-start" data-note="AI fairness check">
+    <span class="chip ai">${ic('spark')} Fair play</span>
+    <div style="font-size:13px"><b>11 raffle entries were removed.</b> 7 shared a phone number or address with another entrant, and 4 bought an allocated bottle in the last 90 days. The removals are listed in the audit log.</div>
+  </section>`;
+
+function refuseModal(){
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Refuse sale" style="width:min(520px,100%)">
+    <header>${ic('ban')}<h2>Refuse this sale</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="gap:14px"><div class="muted" style="font-size:13px">Refusing protects your licence. The reason, time and cashier are saved to the compliance log.</div>
+      <div class="quick">${['Under 21','No valid ID','Appears intoxicated','Buying for someone else','Suspected fake ID'].map(r=>`<button class="${S.refuse.why===r?'on':''}" data-rf="${r}">${r}</button>`).join('')}</div>
+      <label class="field">Note (optional)<input id="rf-note" placeholder="e.g. slurred speech, unsteady"></label></div>
+    <footer><button class="btn" data-close>Cancel</button><button class="btn primary" data-act="refuseok" style="background:var(--crit);border-color:var(--crit)">Refuse and clear order</button></footer></div></div>`;
+}
+function swapModal(id){
+  const a=byId(id), sw=SWAPS[id], b=byId(sw.to);
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Sold out" style="width:min(640px,100%)">
+    <header>${ic('swap')}<h2>${a.n} is sold out</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body"><div class="swap">
+      <div class="swapcard"><span class="art" style="filter:grayscale(1) opacity(.5)">${bottleSVG(a)}</span><b>${a.n}</b><span class="muted">${money(a.p)} · 0 left</span></div>
+      ${ic('swap','style="width:28px;height:28px;color:var(--accent);justify-self:center"')}
+      <div class="swapcard best"><span class="chip ai">${ic('spark')} Best match</span><span class="art">${bottleSVG(b)}</span><b>${b.n}</b><span style="color:var(--accent);font-weight:800">${money(b.p)}</span></div>
+    </div>
+    <ul class="why">${sw.why.map(w=>`<li>${ic('check')}${w}</li>`).join('')}</ul>
+    <div class="comply"><span>${ic('truck','style="width:14px;height:14px"')} ${sw.back}</span></div></div>
+    <footer><button class="btn" data-toast="Customer will get a text when Kim Crawford is back">Text customer when back</button><button class="btn primary" data-act="swapok" data-v="${b.id}">Add ${b.n}</button></footer></div></div>`;
+}
+function allocModal(){
+  const p=byId('blanton'), win=!!S.winners;
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Allocated bottle" style="width:min(560px,100%)">
+    <header>${ic('award')}<h2>Allocated bottle</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="grid-template-columns:90px 1fr;align-items:center">
+      <span style="height:150px;display:flex">${bottleSVG(p)}</span>
+      <div style="display:flex;flex-direction:column;gap:10px"><b style="font-size:16px">${p.n}</b><span class="muted" style="font-size:13px">Only raffle winners can buy this bottle, 1 per ID every 90 days.</span>
+      ${!win ? `<div class="clockban soon">${ic('clock')} Winners haven't been drawn yet.</div>`
+        : S.allocOk ? `<div class="verdict ok" style="padding:10px">${ic('check','style="width:24px;height:24px"')}<div><b>Jordan D. · winner code BLN-4471</b><div style="font-size:12px">No allocated purchase in the last 90 days · limit OK</div></div></div>`
+        : `<button class="btn" data-act="allocscan">${ic('id')}Scan winner's ID</button>`}</div></div>
+    <footer>${!win?`<button class="btn primary" data-go="allocations">Go to Allocated Bottles</button>`:`<button class="btn" data-close>Cancel</button><button class="btn primary" data-act="allocadd" ${S.allocOk?'':'disabled'}>Add to order · ${money(p.p)}</button>`}</footer></div></div>`;
+}
+function reportModal(){
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Inspection report" style="width:min(620px,100%)">
+    <header>${ic('shield')}<h2>Inspection report</h2><span class="chip plain">Sep 1 – Sep 25, 2026</span><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body"><div class="receipt" style="font-size:12.5px;line-height:1.8">OAK STREET LIQUOR #014 · Licence 21-584120<br>────────────────────────────<br>21+ transactions ........... 9,412<br>ID scanned ................. 9,331 (99.1%)<br>Manual DOB (manager PIN) ...    81<br>Sales refused ..............    ${24+S.refusals.length}<br>Fake IDs detected ..........     3<br>After-hours attempts blocked     7<br>Below-cost discounts blocked     2<br>Staff trained (LEAD) ....... 3 of 3<br>────────────────────────────<br>Every entry links to its time, cashier and lane.</div>
+    <div class="muted" style="font-size:12px">In the full app this report exports as a signed PDF for the liquor board.</div></div>
+    <footer><button class="btn primary" data-close>Done</button></footer></div></div>`;
+}
+
 function discModal(){
   const t = totals(), D = S.dm;
   const base = D.target==='sale' ? t.sub-t.off-t.line : (()=>{ const l=S.cart.find(x=>x.id===D.target); return byId(l.id).p*l.qty; })();
@@ -1202,12 +1444,13 @@ function charge(){
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-alloc],[data-rf],[data-clock],[data-draw]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
   if ('scrim' in d || 'close' in d){ closeModal(); if (S.route==='register') render(); return; }
   if (d.go){ e.preventDefault(); go(d.go); return; }
+  if (d.add && S.clock==='locked' && byId(d.add).r){ toast('Alcohol sales are locked until 6:00 AM','lock'); return; }
   if (d.add){ const l=S.cart.find(x=>x.id===d.add); l?l.qty++:S.cart.push({id:d.add,qty:1}); render(); return; }
   if (d.dec){ const l=S.cart.find(x=>x.id===d.dec); if(l && --l.qty<=0) S.cart=S.cart.filter(x=>x!==l); if(!S.cart.some(x=>byId(x.id).r)) S.id=null; render(); return; }
   if (d.cat){ S.cat=d.cat; render(); return; }
@@ -1233,6 +1476,11 @@ document.addEventListener('click', e => {
   if (d.dw){ S.dmg.why=d.dw; if (d.dw==='Received damaged') S.dmg.disp='Supplier claim'; if (d.dw==='Dented packaging') S.dmg.disp='Sell at 30% off'; render(); return; }
   if (d.dd){ S.dmg.disp=d.dd; render(); return; }
   if (d.claim){ const c=CLAIMS[+d.claim]; c.st++; if (c.st===2) S.done.add(5); render(); toast(c.st===1?`${c.no} sent to ${c.sup}`:`${money(c.amt)} credit recorded`); return; }
+  if (d.swap){ swapModal(d.swap); return; }
+  if (d.alloc){ S.allocOk=false; allocModal(); return; }
+  if (d.rf){ S.refuse.why=d.rf; refuseModal(); return; }
+  if (d.clock){ S.clock=d.clock; render(); toast(d.clock==='locked'?'Register locked 21+ items':d.clock==='soon'?'Cashiers warned: 2 minutes left':'Back to 10:04 AM','clock'); return; }
+  if (d.draw){ toast('Drawing winners…','award'); setTimeout(()=>{ S.winners=WINNERS.slice(); render(); toast('6 winners drawn · texts sent'); }, 900); return; }
   if (d.toast){ toast(d.toast); return; }
   switch (d.act){
     case 'net': S.online=!S.online; if (S.online && S.queue.length){ toast(`Back online · uploading ${S.queue.length} queued sales`,'sync'); setTimeout(()=>{ S.queue=[]; render(); toast('All offline sales uploaded'); }, 2200); } else if(!S.online) toast('Simulating internet outage','wifioff'); render(); break;
@@ -1245,6 +1493,12 @@ document.addEventListener('click', e => {
       else { const l=S.cart.find(x=>x.id===D.target), base=byId(l.id).p*l.qty; l.disc = D.kind==='%' ? +D.v : Math.round(+D.v/base*1000)/10; l.reason=D.reason; }
       closeModal(); render(); toast('Discount applied · logged'); break; }
     case 'discrm': if (S.dm.target==='sale') S.tdisc=null; else { const l=S.cart.find(x=>x.id===S.dm.target); delete l.disc; } closeModal(); render(); toast('Discount removed'); break;
+    case 'refuse': S.refuse={why:'Appears intoxicated'}; refuseModal(); break;
+    case 'refuseok': S.refusals.unshift({t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), why:S.refuse.why, by:'Maria G.', val:Math.round(totals().total*100)/100}); S.cart=[]; S.id=null; S.tdisc=null; closeModal(); render(); toast('Sale refused · saved to compliance log','ban'); break;
+    case 'swapok': { const id=el.dataset.v, l=S.cart.find(x=>x.id===id); l?l.qty++:S.cart.push({id,qty:1}); closeModal(); render(); toast('Swapped in '+byId(id).n); break; }
+    case 'allocscan': S.allocOk=true; allocModal(); break;
+    case 'allocadd': { const l=S.cart.find(x=>x.id==='blanton'); if(!l) S.cart.push({id:'blanton',qty:1}); S.member='Jordan D.'; closeModal(); render(); toast('Allocated bottle added · limit recorded'); break; }
+    case 'report': reportModal(); break;
     case 'obmem': S.ob.members=!S.ob.members; render(); break;
     case 'obsave': OFFERS.unshift({id:'n'+Date.now(), n:S.ob.name||'New offer', type:S.ob.type, rule:`${S.ob.type==='% off'?S.ob.val+'% off':S.ob.type==='$ off'?'$'+S.ob.val+' off':S.ob.type} · ${S.ob.target}${S.ob.members?' · members only':''}`, sched:`${S.ob.days} · ${S.ob.start.slice(5)} to ${S.ob.end.slice(5)}`, status:d.v, red:0, goal:0, disc:0}); render(); toast(d.v==='Draft'?'Offer saved as draft':'Offer scheduled'); break;
     case 'dmgsave': { const f=S.dmg, p=byId(f.pid), cost=Math.round(p.p*0.66*f.q*100)/100;
@@ -1253,7 +1507,7 @@ document.addEventListener('click', e => {
       if (f.disp==='Supplier claim') CLAIMS.unshift({no:'CL-'+(2210+CLAIMS.length), sup:'Summit Wine & Spirits', item:`${p.n} ×${f.q} · ${f.why.toLowerCase()}`, amt:cost, st:0});
       S.dmg={...S.dmg, q:1, photo:null}; render(); toast(f.disp==='Supplier claim'?'Damage posted · draft claim opened':'Damage posted · stock adjusted'); break; }
     case 'idscan': S.payAfterId=false; idModal(); break;
-    case 'pay': if (S.cart.some(x=>byId(x.id).r) && S.id!=='ok'){ S.payAfterId=true; idModal(); } else { payMethod='card'; payModal(); } break;
+    case 'pay': if (S.clock==='locked' && S.cart.some(x=>byId(x.id).r)){ toast('Remove 21+ items: alcohol sales are locked','lock'); break; } if (S.cart.some(x=>byId(x.id).r) && S.id!=='ok'){ S.payAfterId=true; idModal(); } else { payMethod='card'; payModal(); } break;
     case 'idcontinue': if (S.payAfterId){ payMethod='card'; payModal(); } else { closeModal(); render(); } break;
     case 'declinesale': S.cart=S.cart.filter(x=>!byId(x.id).r); S.id=null; closeModal(); render(); toast('21+ items removed · refusal logged','alert'); break;
     case 'charge': charge(); break;
