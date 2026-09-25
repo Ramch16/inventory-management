@@ -168,7 +168,54 @@ body.notes [data-note]::after{content:attr(data-note);position:absolute;top:-10p
 .idgate.ok{background:var(--ok-soft);color:var(--ok)}
 .totals{padding:12px 16px;display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:13px}
 .totals .grand{font:700 26px/1.1 var(--display);padding-top:6px;border-top:1px solid var(--line);margin-top:4px}
-.paybar{padding:0 16px 16px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.paybar{padding:0 16px 16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.offerrow{color:var(--ok)}
+.saved{grid-column:1/-1;justify-self:start;margin-top:4px}
+.otag{font:700 10px/1 var(--body);background:var(--ok-soft);color:var(--ok);border-radius:4px;padding:3px 5px}
+.ldisc{font:600 11px/1 var(--mono);color:var(--ok)}
+.quick{display:flex;gap:6px;flex-wrap:wrap}
+.quick button{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 12px;font-weight:700}
+.quick button.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.field{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:700}
+.field input,.field select{padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-weight:500;font-size:14px;min-width:0;width:100%}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.comply{border-radius:10px;padding:10px 12px;background:var(--surface-2);display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.comply span{display:flex;gap:8px;align-items:center}
+.comply .bad{color:var(--crit);font-weight:700} .comply .good{color:var(--ok)}
+.pinbox{display:flex;gap:10px;align-items:center;background:var(--warn-soft);color:var(--warn);border-radius:10px;padding:10px 12px;font-weight:600;font-size:13px;flex-wrap:wrap}
+.pinbox input{width:110px;letter-spacing:.4em;font-family:var(--mono);text-align:center;padding:7px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.stats div{background:var(--surface);padding:14px 16px}
+.stats b{display:block;font:700 24px/1.15 var(--display)}
+.stats small{color:var(--muted);font-size:12px}
+.offgrid{display:grid;grid-template-columns:1fr 380px;gap:16px;align-items:start}
+.offers{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.offer{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.offer.dim{opacity:.6}
+.offer h3{margin:0;font:700 15px/1.2 var(--display)}
+.offer .rule{font-size:13px}
+.offer .foot{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:8px;border-top:1px solid var(--line);font-size:12px;flex-wrap:wrap}
+.offer .foot .spacer{flex:1}
+.sugg{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.sugg:last-child{border-bottom:0}
+.sugg p{margin:0;font-weight:700;font-size:13px}
+.sugg small{grid-column:1;color:var(--muted);font-size:12px}
+.sugg button{grid-row:1/3;grid-column:2}
+.receipt{font:500 12px/1.6 var(--mono);background:#FBFAF6;color:#2B2B2B;border-radius:6px;padding:12px;border:1px solid #E6E1D3}
+.receipt .g{color:#1E9360}
+.dmggrid{display:grid;grid-template-columns:380px 1fr;gap:16px;align-items:start}
+.photo{border:1.5px dashed var(--line);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:center;color:var(--muted);font-size:12.5px;cursor:pointer}
+.photo img{width:54px;height:54px;object-fit:cover;border-radius:6px}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.stepper button{border:0;background:var(--surface-2);width:34px;height:36px;font-weight:700}
+.stepper span{min-width:40px;text-align:center;font:700 14px var(--mono)}
+.claim{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.claim:last-child{border-bottom:0}
+.dlog td{font-size:13px;padding:8px 10px}
+.dlog td:first-child,.dlog td:nth-child(5),.dlog td:last-child{white-space:nowrap}
+.claim .flow{grid-column:1/-1;display:flex;gap:4px}
+.claim .flow i{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.claim .flow i.on{background:var(--ok)}
 .paybar .btn{padding:12px}
 .paybar .big{grid-column:1/-1;font-size:16px;padding:15px}
 .offbanner{display:flex;gap:10px;align-items:center;background:var(--crit-soft);color:var(--crit);border:1px solid color-mix(in srgb,var(--crit) 35%,transparent);border-radius:10px;padding:10px 14px;font-weight:600;font-size:13px}
@@ -333,7 +380,7 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 
 /* ---------- responsive ---------- */
 @media (max-width:1180px){
-  .reg,.invgrid,.fcgrid,.invwrap,.cust{grid-template-columns:1fr}
+  .reg,.invgrid,.fcgrid,.invwrap,.cust,.offgrid,.dmggrid{grid-template-columns:1fr}
   .ticket{position:static;max-height:none}
   .hello,.hourly,.devgrid{grid-template-columns:1fr}
 }
@@ -346,7 +393,8 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
   .content{padding:16px 16px 100px}
   .top{padding:10px 16px}
   .kpis{grid-template-columns:repeat(2,1fr)}
-  .legend,.insight{grid-template-columns:repeat(2,1fr)}
+  .legend,.insight,.stats{grid-template-columns:repeat(2,1fr)}
+  .frow{grid-template-columns:1fr}
   .steps{grid-template-columns:repeat(4,1fr);row-gap:10px}
   .idwrap{grid-template-columns:1fr}
   .methods,.cashgrid{grid-template-columns:repeat(2,1fr)}
@@ -411,6 +459,8 @@ const P = {
   store:'<path d="M3 9l1.5-5h15L21 9M3 9v11h18V9M3 9h18M9 20v-6h6v6"/>',
   edit:'<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/>',
   gift:'<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/>',
+  percent:'<path d="M19 5L5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+  broken:'<path d="M9 2h6v4l2 3v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-3z"/><path d="M7 13l3-2 2 3 2-2 3 2"/>',
   sync:'<path d="M21 12a9 9 0 0 1-15.5 6.2L3 16M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M3 21v-5h5"/>',
 };
 const ic = (n, s='') => `<svg class="i" viewBox="0 0 24 24" ${s}>${P[n]||''}</svg>`;
@@ -478,7 +528,7 @@ const ALERTS = [
   {id:2, t:'supplier', sev:'warn', ic:'truck', h:'Supplier follow-up', p:'Order #10234 has not been received. Expected delivery was yesterday.', when:'7:15 AM', acts:['Call supplier','Send reminder']},
   {id:3, t:'money', sev:'warn', ic:'dollar', h:'Payment due', p:'$12,450 supplier payment to Summit Wine & Spirits is due in 3 days.', when:'7:30 AM', acts:['Schedule payment','View bill']},
   {id:4, t:'supplier', sev:'warn', ic:'mail', h:'Purchase order follow-up', p:'Valley Beer Distributing has not responded to PO #10241 (sent 2 days ago).', when:'8:00 AM', acts:['Draft follow-up','Mark confirmed']},
-  {id:5, t:'damage', sev:'crit', ic:'alert', h:'Damage follow-up', p:'7 units were reported damaged. Supplier credit or claim has not been recorded.', when:'Yesterday', acts:['File claim','Attach photos'], go:'invoices'},
+  {id:5, t:'damage', sev:'crit', ic:'alert', h:'Damage follow-up', p:'7 units were reported damaged. Supplier credit or claim has not been recorded.', when:'Yesterday', acts:['File claim','Open claim'], go:'damage'},
   {id:6, t:'stock', sev:'warn', ic:'cal', h:'Product expiry', p:'32 units will expire within 30 days, mostly hard seltzer and craft IPA.', when:'Yesterday', acts:['Create markdown','View items'], go:'inventory'},
   {id:7, t:'money', sev:'info', ic:'tag', h:'Price change', p:'Supplier price for Meiomi Pinot Noir increased 8.5% compared with the previous invoice.', when:'Yesterday', acts:['Update retail price','Keep price'], go:'invoices'},
 ];
@@ -491,10 +541,40 @@ const NOTES = {
   invoices:{deck:'Deck p.6 · AI Invoice Processing (8-step flow)', purpose:'Photograph a supplier invoice; AI reads it, matches lines to the catalog and flags price, quantity and damage issues for owner approval.', data:['OCR fields: supplier, invoice #, date, lines, totals','Match confidence per line against catalog','Variance vs last cost and vs purchase order'], build:['Upload to object storage → OCR / document model','Draft inventory update held until owner approves','Approved lines post to inventory and accounting export']},
   alerts:{deck:'Deck p.7 · Intelligent AI Notifications', purpose:'Seven alert types, each with the action that resolves it, so nothing needs a second screen.', data:['Stock, supplier, payment, PO, damage, expiry, price change','Severity, created time, resolution state'], build:['Rules + AI engine emits events','Delivery: in-app, SMS, email, push per owner preference','Resolved state feeds audit log']},
   customers:{deck:'Deck p.2 · Customer engagement & personalization', purpose:'Know regulars at the counter and send offers that match what they already buy.', data:['Member profile, visit history, category mix','Segments built from purchase patterns','Opt-in status for SMS / email'], build:['Look up by phone at checkout','Segment engine runs nightly','Compliance: no alcohol offers to unverified or opted-out members']},
+  offers:{deck:'Deck p.2 · Customer engagement (extended)', purpose:'Create and run offers that the register applies automatically, and see what each one earns and costs.', data:['Offer rules: type, products, value, schedule, limits','Redemptions, discount given, incremental revenue','AI suggestions from overstock and expiry data'], build:['Promotion engine evaluates the cart on every change','State rules: no alcohol below cost, no free alcohol, no volume discounts where banned','Scheduled offers switch on and off by store time zone']},
+  damage:{deck:'Deck p.7 · Damage follow-up (extended)', purpose:'Log broken, expired and returned stock in seconds, write it off or claim it back from the supplier, and see where losses happen.', data:['Product, quantity, reason, location, photo, disposition','Cost of loss and supplier credit status','Loss by location and reason'], build:['Posting a report adjusts on-hand stock and the shrink ledger','Received-damaged reports open a supplier claim linked to the invoice','Photos go to object storage and attach to the claim']},
   devices:{deck:'Deck p.3–5 · ID scan vendors, card devices, offline gateway', purpose:'Configure lane hardware, choose the ID provider and set the risk limits for offline card sales.', data:['Provider evaluation criteria from deck p.3','Terminal status per lane','Offline queue, per-sale and total limits, upload window'], build:['Device registry + heartbeat','Provider adapter interface so vendors can be swapped','Queue auto-uploads on reconnect; declined offline sales create a follow-up alert']},
 };
 
 /* ------------------------------------------------ state */
+const OFFERS = [
+  {id:'wine6', n:'Mix & match 6 wines', type:'Mix & match', rule:'10% off every wine bottle when 6 or more are in one sale', sched:'Always on', status:'Active', red:142, goal:200, disc:612, tag:'Mix 6 · 10% off'},
+  {id:'bud2', n:'Game-day beer', type:'Multi-buy', rule:'Bud Light 12pk cans: 2 for $24.00', sched:'Fri–Sun, all day', status:'Active', red:96, goal:150, disc:190, tag:'2 for $24'},
+  {id:'marg', n:'Margarita bundle', type:'Bundle', rule:'Free limes (3 ct) with any Casamigos Blanco 750 ml', sched:'Sep 1 – Oct 31', status:'Active', red:38, goal:80, disc:57, tag:'Free limes'},
+  {id:'dbl', n:'Double points weekend', type:'Loyalty', rule:'Members earn 2× points on all spirits', sched:'Fri–Sun', status:'Active', red:42, goal:100, disc:0},
+  {id:'hall', n:'Halloween party pack', type:'Bundle', rule:'$5 off any 2 spirits bought with 2 mixers', sched:'Oct 24 – Oct 31', status:'Scheduled', red:0, goal:120, disc:0},
+  {id:'rose', n:'Rosé closeout', type:'Clearance', rule:'25% off 2023 rosé while stock lasts', sched:'Ended Sep 15', status:'Ended', red:64, goal:64, disc:420},
+];
+const SUGGEST = [
+  {n:'Hard seltzer 24pk clearance', why:'24 units expire in 18 days. Clearing now recovers about $310.', rule:'20% off hard seltzer 24pk', type:'Clearance'},
+  {n:'Flavored vodka: buy 2, save $5', why:'142 days on hand, $2.9K of cash tied up.', rule:'$5 off any 2 flavored vodkas 750 ml', type:'Multi-buy'},
+  {n:'Pumpkin ale endcap', why:'Seasonal surplus of 11 cases. Sells out before Nov 1 at 15% off.', rule:'15% off pumpkin ale 6pk', type:'% off'},
+];
+const DAMAGE = [
+  {d:'Sep 24', p:'Hennessy VS Cognac 750 ml', q:7, why:'Received damaged', where:'Receiving', cost:222.25, disp:'Supplier claim', by:'Maria G.'},
+  {d:'Sep 23', p:'Josh Cellars Cabernet 750 ml', q:2, why:'Broken in store', where:'Sales floor', cost:19.80, disp:'Write off', by:'Dev P.'},
+  {d:'Sep 22', p:'Modelo Especial 12pk', q:3, why:'Received damaged', where:'Receiving', cost:35.88, disp:'Supplier claim', by:'Maria G.'},
+  {d:'Sep 21', p:'White Claw Variety 12pk', q:4, why:'Dented packaging', where:'Cooler 2', cost:52.00, disp:'Sell at 30% off', by:'Dev P.'},
+  {d:'Sep 19', p:'La Marca Prosecco 750 ml', q:3, why:'Broken in store', where:'Cooler 2', cost:31.35, disp:'Write off', by:'Sam R.'},
+  {d:'Sep 18', p:'Craft IPA 4pk', q:6, why:'Expired', where:'Cooler 1', cost:47.40, disp:'Write off', by:'Sam R.'},
+  {d:'Sep 17', p:'Crown Royal 750 ml', q:1, why:'Customer return', where:'Counter', cost:23.10, disp:'Return to supplier', by:'Maria G.'},
+];
+const CLAIMS = [
+  {no:'CL-2209', sup:'Summit Wine & Spirits', item:'Hennessy VS ×7 · invoice HB-58812', amt:222.25, st:0},
+  {no:'CL-2204', sup:'Valley Beer Distributing', item:'Modelo 12pk ×3 crushed on delivery', amt:35.88, st:1},
+  {no:'CL-2198', sup:'Summit Wine & Spirits', item:'Meiomi Pinot Noir ×4 broken in transit', amt:48.68, st:2},
+];
+const CLAIM_ST = ['Draft','Submitted','Credit received'];
 const S = {
   route:'command', online:true, notes:false,
   cart:[], cat:'All', q:'', id:null, member:null, saleNo:1048,
@@ -502,6 +582,9 @@ const S = {
   done:new Set(), alertFilter:'all', heat:null, tile:null, fc:'bud12',
   inv:INVOICE.map((l,i)=> i===5 ? 'review' : (l.note||l.cost!==l.prev ? 'review' : 'ok')), invStep:7,
   offlineLimit:true, custSeg:null,
+  tdisc:null, dm:null, pinOk:false,
+  ob:{name:'Wine Wednesday', type:'% off', val:15, target:'Wine', start:'2026-10-07', end:'2026-10-28', days:'Wed', members:false},
+  dmg:{pid:'josh750', q:1, why:'Broken in store', where:'Sales floor', disp:'Write off', photo:null},
 };
 try{ const r = localStorage.getItem('bev-route'); if(r && NOTES[r]) S.route = r; }catch(e){}
 const h = (location.hash||'').slice(1); if (NOTES[h]) S.route = h;
@@ -510,10 +593,12 @@ const ROUTES = [
   ['command','Command Center','command','Owner'],
   ['register','Register','register','Store'],
   ['inventory','Inventory','inventory','Store'],
+  ['damage','Damaged Goods','broken','Store'],
   ['forecast','Forecasting','forecast','Intelligence'],
   ['invoices','Invoices','invoices','Intelligence'],
   ['alerts','Alerts','bell','Intelligence'],
   ['customers','Customers','users','Growth'],
+  ['offers','Offers & Discounts','gift','Growth'],
   ['devices','Devices & Offline','devices','Setup'],
 ];
 const TITLES = {
@@ -524,6 +609,8 @@ const TITLES = {
   invoices:['AI Invoice Processing','Invoice #HB-58812 · Summit Wine & Spirits'],
   alerts:['Notifications','AI-generated, sorted by urgency'],
   customers:['Customers','2,418 loyalty members'],
+  offers:['Offers & Discounts','Promotions the register applies automatically'],
+  damage:['Damaged Goods','Breakage, expiry, returns and supplier claims'],
   devices:['Devices & Offline Mode','Lane hardware, ID provider, offline payment limits'],
 };
 
@@ -645,11 +732,11 @@ VIEWS.register = () => {
       <label class="scanbar" data-note="Scan / search · barcode wedge">${ic('scan')}<input id="q" placeholder="Scan a barcode or search 1,284 products" value="${esc(S.q)}" autocomplete="off"><span class="chip plain">F2</span></label>
       <div class="cats" role="tablist">${CATS.map(c=>`<button class="${S.cat===c?'on':''}" data-cat="${c}">${c}</button>`).join('')}</div>
       <div class="plu" data-note="Quick keys · tap to add">
-        ${list.map(p=>`<button class="prod" data-add="${p.id}">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start">${bottle(p)}${p.r?'<span class="chip age">21+</span>':''}</div>
+        ${list.map(p=>{ const o=offerFor(p); return `<button class="prod" data-add="${p.id}">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px">${bottle(p)}<span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">${p.r?'<span class="chip age">21+</span>':''}${o?`<span class="otag">${o.tag}</span>`:''}</span></div>
           <span class="nm">${p.n}</span><span class="meta">${p.sz}${p.abv?` · ${p.abv}% ABV`:''}</span>
           <span class="pr"><b>${money(p.p)}</b>${p.stock<=12?`<span class="low">${p.stock} left</span>`:`<span class="meta">${p.stock} in stock</span>`}</span>
-        </button>`).join('') || `<div class="empty">No products match “${esc(S.q)}”.</div>`}
+        </button>`}).join('') || `<div class="empty">No products match “${esc(S.q)}”.</div>`}
       </div>
     </section>
     <aside class="ticket" data-note="Sale ticket · locks tender until ID passes">
@@ -657,17 +744,22 @@ VIEWS.register = () => {
         <button class="btn sm" data-act="member">${ic('users2')}${S.member?'Remove':'Add member'}</button></header>
       ${idState}
       <div class="lines">${S.cart.length ? S.cart.map(l=>{const p=byId(l.id); return `<div class="line">
-        <div><div style="font-weight:700;font-size:13px">${p.n} ${p.r?'<span class="chip age">21+</span>':''}</div><div class="q"><button data-dec="${p.id}" aria-label="Remove one">−</button>${l.qty}<button data-add="${p.id}" aria-label="Add one">+</button><span>× ${money(p.p)}${p.crv?` · CRV ${money(p.crv)}`:''}</span></div></div>
-        <div class="num" style="font-weight:700">${money(p.p*l.qty)}</div></div>`}).join('') : `<div class="empty">${ic('scan','style="width:30px;height:30px"')}<br>Scan or tap a product to start the sale.</div>`}</div>
+        <div><div style="font-weight:700;font-size:13px">${p.n} ${p.r?'<span class="chip age">21+</span>':''}</div><div class="q"><button data-dec="${p.id}" aria-label="Remove one">−</button>${l.qty}<button data-add="${p.id}" aria-label="Add one">+</button><span>× ${money(p.p)}${p.crv?` · CRV ${money(p.crv)}`:''}</span></div>${l.disc?`<div class="ldisc">−${l.disc}% · ${esc(l.reason)}</div>`:''}</div>
+        <div class="num" style="font-weight:700;text-align:right">${l.disc?`<s class="muted" style="font-weight:500;font-size:11px">${money(p.p*l.qty)}</s><br>${money(p.p*l.qty*(1-l.disc/100))}`:money(p.p*l.qty)}</div></div>`}).join('') : `<div class="empty">${ic('scan','style="width:30px;height:30px"')}<br>Scan or tap a product to start the sale.</div>`}</div>
       <div class="totals">
         <span class="muted">Subtotal</span><span class="num r">${money(t.sub)}</span>
-        ${S.member?`<span class="muted">Member discount 5%</span><span class="num r" style="color:var(--ok)">${money(-t.disc)}</span>`:''}
+        ${t.offers.map(o=>`<span class="offerrow">${ic('gift','style="width:13px;height:13px;vertical-align:-2px"')} ${o.n}</span><span class="num r offerrow">${money(-o.amt)}</span>`).join('')}
+        ${t.line?`<span class="offerrow">Line discounts</span><span class="num r offerrow">${money(-t.line)}</span>`:''}
+        ${S.tdisc?`<span class="offerrow">Sale discount ${S.tdisc.kind==='%'?S.tdisc.v+'%':''} · ${esc(S.tdisc.reason)}</span><span class="num r offerrow">${money(-t.tdisc)}</span>`:''}
+        ${S.member?`<span class="offerrow">Member discount 5%</span><span class="num r offerrow">${money(-t.disc)}</span>`:''}
         <span class="muted">CA redemption value (CRV)</span><span class="num r">${money(t.crv)}</span>
         <span class="muted">Sales tax 8.75%</span><span class="num r">${money(t.tax)}</span>
         <span class="grand">Total</span><span class="grand num r">${money(t.total)}</span>
+        ${t.saved>0.005?`<span class="chip ok saved">Customer saves ${money(t.saved)}</span>`:''}
       </div>
       <div class="paybar">
         <button class="btn" data-act="clear" ${S.cart.length?'':'disabled'}>Void sale</button>
+        <button class="btn" data-act="disc" ${S.cart.length?'':'disabled'}>${ic('percent')}Discount</button>
         <button class="btn" data-act="idscan" ${restricted?'':'disabled'}>${ic('id')}Scan ID</button>
         <button class="btn primary big" data-act="pay" ${S.cart.length?'':'disabled'}>${restricted && S.id!=='ok' ? ic('id')+' Verify ID & pay' : ic('card')+' Charge '+money(t.total)}</button>
       </div>
@@ -675,10 +767,22 @@ VIEWS.register = () => {
   </div>`;
 };
 function byId(id){ return PRODUCTS.find(p=>p.id===id); }
+function offerOn(id){ return OFFERS.find(o=>o.id===id && o.status==='Active'); }
+function offerFor(p){ return p.cat==='Wine' ? offerOn('wine6') : p.id==='bud12' ? offerOn('bud2') : (p.id==='casa750'||p.id==='limes') ? offerOn('marg') : null; }
+function offerHits(){ // what the promotion engine would apply to the current cart
+  const hits=[], q=id=>S.cart.find(l=>l.id===id)?.qty||0;
+  if (offerOn('wine6')){ const w=S.cart.filter(l=>byId(l.id).cat==='Wine'); if (w.reduce((a,l)=>a+l.qty,0)>=6) hits.push({n:'Mix 6 wines · 10% off', amt:w.reduce((a,l)=>a+byId(l.id).p*l.qty*(1-(l.disc||0)/100),0)*0.10}); }
+  if (offerOn('bud2')){ const k=Math.floor(q('bud12')/2); if (k) hits.push({n:`Bud Light 2 for $24${k>1?' ×'+k:''}`, amt:k*(2*12.99-24)}); }
+  if (offerOn('marg')){ const k=Math.min(q('casa750'),q('limes')); if (k) hits.push({n:'Margarita bundle · free limes', amt:k*1.49}); }
+  return hits;
+}
 function totals(){
-  let sub=0, crv=0; for (const l of S.cart){ const p=byId(l.id); sub+=p.p*l.qty; crv+=p.crv*l.qty; }
-  const disc = S.member ? sub*0.05 : 0; const tax=(sub-disc)*TAX;
-  return {sub, crv, disc, tax, total: sub-disc+crv+tax};
+  let sub=0, crv=0, line=0;
+  for (const l of S.cart){ const p=byId(l.id); sub+=p.p*l.qty; crv+=p.crv*l.qty; if (l.disc) line+=p.p*l.qty*l.disc/100; }
+  const offers=offerHits(), off=offers.reduce((a,o)=>a+o.amt,0), after=sub-off-line;
+  const tdisc = !S.tdisc ? 0 : S.tdisc.kind==='%' ? after*S.tdisc.v/100 : Math.min(S.tdisc.v, after);
+  const disc = S.member ? (after-tdisc)*0.05 : 0, net=after-tdisc-disc, tax=net*TAX;
+  return {sub, crv, offers, off, line, tdisc, disc, tax, total:net+crv+tax, saved:off+line+tdisc+disc};
 }
 
 VIEWS.inventory = () => {
@@ -825,7 +929,7 @@ VIEWS.invoices = () => {
       <div class="cardhead"><h2>Review draft inventory update</h2><span class="chip ${pending?'warn':'ok'}">${pending?pending+' lines need review':'All lines reviewed'}</span><span class="spacer"></span><span class="muted">Invoice total <b class="num" style="color:var(--ink)">${money(total)}</b></span></div>
       <div class="tablewrap"><table style="min-width:680px"><thead><tr><th>Line · matched product</th><th>Match</th><th class="r">Qty</th><th class="r">Unit cost</th><th class="r">vs last</th><th class="r">Ext.</th><th>Action</th></tr></thead><tbody>${lines}</tbody></table></div>
       <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:14px;border-top:1px solid var(--line);padding-top:14px">
-        <button class="btn" data-toast="Claim for 7 damaged Hennessy VS drafted">${ic('alert')}Draft damage claim</button>
+        <button class="btn" data-go="damage">${ic('alert')}Open damage claim</button>
         <button class="btn" data-act="invall">Approve all matched</button>
         <button class="btn primary" data-act="invpost" ${pending?'disabled':''}>Post to inventory &amp; accounting</button>
       </div>
@@ -910,6 +1014,134 @@ VIEWS.devices = () => {
   </div>`;
 };
 
+VIEWS.offers = () => {
+  const live = OFFERS.filter(o=>o.status==='Active');
+  const redeemed = OFFERS.reduce((a,o)=>a+o.red,0), given = OFFERS.reduce((a,o)=>a+o.disc,0);
+  const st = {Active:'ok', Scheduled:'over', Draft:'plain', Paused:'warn', Ended:'plain'};
+  const b = S.ob, pct = b.type==='% off' ? +b.val : b.type==='$ off' ? +b.val/20*100 : 0;
+  const checks = [
+    [pct<=30, pct<=30 ? 'Price stays above cost on every item' : `${pct.toFixed(0)}% off takes some items below cost. Most states ban that.`],
+    [b.type!=='Free item' || b.target==='Mixers & Snacks', b.type==='Free item' && b.target!=='Mixers & Snacks' ? 'Free alcohol is not allowed. Pick a non-alcohol item.' : 'No free alcohol'],
+    [true, 'Applies only after ID check for 21+ items'],
+  ];
+  const ok = checks.every(c=>c[0]);
+  return `
+  <section class="stats" data-note="Offer performance · this month">
+    <div><b>${live.length}</b><small>active offers</small></div>
+    <div><b class="num">${redeemed}</b><small>redemptions this month</small></div>
+    <div><b class="num">${money(given,0)}</b><small>discount given</small></div>
+    <div><b class="num" style="color:var(--ok)">+$6,480</b><small>estimated extra sales</small></div>
+  </section>
+  <div class="offgrid">
+    <section style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <div class="offers" data-note="Offer cards · pause or activate">
+        ${OFFERS.map(o=>`<article class="offer ${o.status==='Ended'||o.status==='Paused'?'dim':''}">
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><span class="chip ${st[o.status]}">${o.status}</span><span class="chip plain">${o.type}</span></div>
+          <h3>${esc(o.n)}</h3><div class="rule">${esc(o.rule)}</div>
+          <div class="muted" style="font-size:12px">${ic('clock','style="width:13px;height:13px;vertical-align:-2px"')} ${esc(o.sched)}</div>
+          ${o.goal?`<div class="meter" title="${o.red} of ${o.goal} target redemptions"><i style="width:${Math.min(100,o.red/o.goal*100)}%"></i></div>`:''}
+          <div class="foot"><span class="num"><b>${o.red}</b> used</span>${o.disc?`<span class="num muted">${money(o.disc,0)} off</span>`:''}<span class="spacer"></span>
+            ${o.status==='Active'?`<button class="btn sm" data-ost="${o.id}" data-v="Paused">Pause</button>`:o.status==='Paused'||o.status==='Draft'?`<button class="btn sm primary" data-ost="${o.id}" data-v="Active">Activate</button>`:''}</div>
+        </article>`).join('')}
+      </div>
+      <section class="card" data-note="AI offer suggestions · from heat map">
+        <div class="cardhead"><span class="chip ai">${ic('spark')} Suggested by AI</span><span class="muted" style="font-size:12px">Based on overstock and expiry</span></div>
+        ${SUGGEST.map((g,i)=>`<div class="sugg"><p>${g.n}</p><button class="btn sm" data-sugg="${i}">Create draft</button><small>${g.why}</small></div>`).join('') || '<div class="muted">No suggestions right now.</div>'}
+      </section>
+    </section>
+    <aside class="card" style="display:flex;flex-direction:column;gap:12px" data-note="Offer builder · checks state rules">
+      <h2>New offer</h2>
+      <label class="field">Name<input id="ob-name" value="${esc(b.name)}"></label>
+      <div class="field">Offer type<div class="quick">${['% off','$ off','Multi-buy','Bundle','Free item'].map(t=>`<button class="${b.type===t?'on':''}" data-obt="${t}">${t}</button>`).join('')}</div></div>
+      <div class="frow">
+        <label class="field">Applies to<select id="ob-target">${['Wine','Spirits','Beer & Seltzer','Mixers & Snacks','Selected products'].map(c=>`<option ${b.target===c?'selected':''}>${c}</option>`).join('')}</select></label>
+        <label class="field">${b.type==='$ off'?'Amount ($)':b.type==='% off'?'Percent off':'Value'}<input id="ob-val" type="number" min="0" value="${esc(b.val)}"></label>
+      </div>
+      <div class="frow">
+        <label class="field">Starts<input id="ob-start" type="date" value="${b.start}"></label>
+        <label class="field">Ends<input id="ob-end" type="date" value="${b.end}"></label>
+      </div>
+      <div class="field">Days<div class="quick">${['Every day','Wed','Fri–Sun'].map(d=>`<button class="${b.days===d?'on':''}" data-obd="${d}">${d}</button>`).join('')}</div></div>
+      <div class="setrow" style="padding:4px 0"><div><b>Members only</b><small>Only loyalty members get this price</small></div><button class="toggle" aria-pressed="${b.members}" data-act="obmem" aria-label="Members only"></button></div>
+      <div class="comply">${checks.map(c=>`<span class="${c[0]?'good':'bad'}">${ic(c[0]?'check':'x','style="width:14px;height:14px"')}${c[1]}</span>`).join('')}</div>
+      <div><div class="eyebrow" style="margin-bottom:6px">Receipt preview</div>
+        <div class="receipt">Josh Cellars Cabernet   14.99<br><span class="g">&nbsp;&nbsp;${esc(b.name)} ${b.type==='% off'?'-'+b.val+'%':b.type==='$ off'?'-$'+b.val:''}${' '.repeat(3)}-${(b.type==='% off'?14.99*b.val/100:b.type==='$ off'?Math.min(+b.val,14.99):0).toFixed(2)}</span></div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-act="obsave" data-v="Draft">Save draft</button><button class="btn primary" data-act="obsave" data-v="Scheduled" ${ok?'':'disabled'}>Schedule offer</button></div>
+    </aside>
+  </div>`;
+};
+
+VIEWS.damage = () => {
+  const f = S.dmg, p = byId(f.pid), unitCost = p.p*0.66;
+  const month = DAMAGE.reduce((a,d)=>a+d.cost,0) + 812;
+  const open = CLAIMS.filter(c=>c.st<2), recovered = CLAIMS.filter(c=>c.st===2).reduce((a,c)=>a+c.amt,0) + 563;
+  const why = {'Broken in store':'crit','Received damaged':'warn','Expired':'warn','Dented packaging':'over','Customer return':'plain','Theft / missing':'crit'};
+  return `
+  <section class="stats" data-note="Loss summary · September">
+    <div><b class="num" style="color:var(--crit)">${money(month,0)}</b><small>lost at cost this month</small></div>
+    <div><b class="num">${DAMAGE.reduce((a,d)=>a+d.q,0)+38}</b><small>units reported</small></div>
+    <div><b class="num" style="color:var(--ok)">${money(recovered,0)}</b><small>credited back by suppliers</small></div>
+    <div><b class="num" style="color:var(--warn)">${money(open.reduce((a,c)=>a+c.amt,0),2)}</b><small>${open.length} claims still open</small></div>
+  </section>
+  <div class="dmggrid">
+    <aside class="card" style="display:flex;flex-direction:column;gap:12px" data-note="Report damage · under 20 seconds">
+      <h2>Report damaged stock</h2>
+      <label class="field">Product<select id="dm-pid">${PRODUCTS.map(x=>`<option value="${x.id}" ${x.id===f.pid?'selected':''}>${esc(x.n)} · ${x.sz}</option>`).join('')}</select></label>
+      <div class="frow">
+        <div class="field">Quantity<div class="stepper"><button data-dq="-1" aria-label="Less">−</button><span>${f.q}</span><button data-dq="1" aria-label="More">+</button></div></div>
+        <label class="field">Where found<select id="dm-where">${['Sales floor','Cooler 1','Cooler 2','Stockroom','Receiving','Counter'].map(w=>`<option ${f.where===w?'selected':''}>${w}</option>`).join('')}</select></label>
+      </div>
+      <div class="field">Reason<div class="quick">${Object.keys(why).map(r=>`<button class="${f.why===r?'on':''}" data-dw="${r}">${r}</button>`).join('')}</div></div>
+      <div class="field">What happens to it<div class="quick">${['Write off','Supplier claim','Sell at 30% off','Return to supplier'].map(r=>`<button class="${f.disp===r?'on':''}" data-dd="${r}">${r}</button>`).join('')}</div></div>
+      <label class="photo">${f.photo?`<img src="${f.photo}" alt="Damage photo">`:ic('camera','style="width:26px;height:26px"')}<span>${f.photo?'Photo attached. Tap to replace.':'<b style="color:var(--ink)">Add a photo</b><br>Suppliers ask for one before they credit a claim'}</span><input type="file" id="dm-photo" accept="image/*" hidden></label>
+      <div class="comply"><span>Stock on hand ${p.stock} → <b>${Math.max(0,p.stock-f.q)}</b></span><span>Loss at cost <b class="num">${money(unitCost*f.q)}</b></span>${f.disp==='Supplier claim'?`<span class="good">${ic('check','style="width:14px;height:14px"')}Opens a draft claim to the supplier</span>`:''}</div>
+      <button class="btn primary" data-act="dmgsave">Post damage report</button>
+    </aside>
+    <section style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <section class="card" data-note="Supplier claims · Draft → Submitted → Credit">
+        <div class="cardhead"><h2>Supplier claims</h2><span class="spacer"></span><span class="muted" style="font-size:12px">Claims older than 30 days are usually refused</span></div>
+        ${CLAIMS.map((c,i)=>`<div class="claim"><div><b>${c.no} · ${esc(c.sup)}</b><div class="muted" style="font-size:12px">${esc(c.item)}</div></div>
+          <div style="display:flex;gap:8px;align-items:center"><span class="num" style="font-weight:700">${money(c.amt)}</span>${c.st<2?`<button class="btn sm ${c.st===0?'primary':''}" data-claim="${i}">${c.st===0?'Submit claim':'Mark credited'}</button>`:`<span class="chip ok">Credited</span>`}</div>
+          <div class="flow">${CLAIM_ST.map((x,k)=>`<i class="${k<=c.st?'on':''}" title="${x}"></i>`).join('')}</div></div>`).join('')}
+      </section>
+      <section class="card" data-note="Damage log · feeds shrink report">
+        <div class="cardhead"><h2>Damage log</h2><span class="chip plain">${DAMAGE.length} reports this week</span><span class="spacer"></span><button class="btn sm" data-toast="Shrink report exported for accounting">Export</button></div>
+        <div class="tablewrap"><table class="dlog" style="min-width:720px"><thead><tr><th>Date</th><th>Product</th><th class="r">Qty</th><th>Reason</th><th>Where</th><th class="r">Cost</th><th>Outcome</th></tr></thead><tbody>
+          ${DAMAGE.map(d=>`<tr><td class="num muted">${d.d}</td><td style="font-weight:700">${esc(d.p)}<div class="muted" style="font-size:11px;font-weight:500">by ${d.by}</div></td><td class="num r">${d.q}</td><td><span class="chip ${why[d.why]||'plain'}">${d.why}</span></td><td>${d.where}</td><td class="num r">${money(d.cost)}</td><td>${d.disp}</td></tr>`).join('')}
+        </tbody></table></div>
+      </section>
+      <section class="card" style="display:flex;gap:12px;align-items:flex-start" data-note="AI loss pattern">
+        <span class="chip ai">${ic('spark')} Pattern</span>
+        <div style="font-size:13px"><b>Cooler 2 is where most bottles break.</b> 7 of 17 in-store breakages this month happened on its top shelf, which has no lip guard. A $40 guard would pay for itself in about 3 weeks.</div>
+      </section>
+    </section>
+  </div>`;
+};
+
+function discModal(){
+  const t = totals(), D = S.dm;
+  const base = D.target==='sale' ? t.sub-t.off-t.line : (()=>{ const l=S.cart.find(x=>x.id===D.target); return byId(l.id).p*l.qty; })();
+  const pct = D.kind==='%' ? +D.v : base ? +D.v/base*100 : 0;
+  const tooMuch = pct>30, needPin = pct>15 && !tooMuch;
+  const can = D.v>0 && !tooMuch && (!needPin || S.pinOk);
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Apply discount" style="width:min(560px,100%)">
+    <header>${ic('percent')}<h2>Discount</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="gap:14px">
+      <label class="field">Apply to<select id="dm-target"><option value="sale" ${D.target==='sale'?'selected':''}>Whole sale</option>${S.cart.map(l=>`<option value="${l.id}" ${D.target===l.id?'selected':''}>${esc(byId(l.id).n)} ×${l.qty}</option>`).join('')}</select></label>
+      <div class="field">Amount<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <div class="seg"><button class="${D.kind==='%'?'on':''}" data-dk="%">%</button><button class="${D.kind==='$'?'on':''}" data-dk="$">$</button></div>
+        <div class="quick">${(D.kind==='%'?[5,10,15,20]:[1,2,5,10]).map(v=>`<button class="${+D.v===v?'on':''}" data-dv="${v}">${D.kind==='$'?'$':''}${v}${D.kind==='%'?'%':''}</button>`).join('')}</div>
+        <input id="dm-v" type="number" min="0" value="${D.v}" style="width:90px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--surface)" aria-label="Custom amount"></div></div>
+      <div class="field">Reason<div class="quick">${['Manager courtesy','Price match','Damaged box','Employee','Loyalty reward'].map(r=>`<button class="${D.reason===r?'on':''}" data-dr="${r}">${r}</button>`).join('')}</div></div>
+      ${needPin?`<div class="pinbox">${ic('id')} Over 15% needs a manager PIN.${S.pinOk?' <span class="chip ok">Approved by Alex K.</span>':`<input id="dm-pin" inputmode="numeric" maxlength="4" placeholder="••••" aria-label="Manager PIN"><span style="font-weight:500;font-size:12px">Demo: any 4 digits</span>`}</div>`:''}
+      ${tooMuch?`<div class="offbanner">${ic('alert')} ${pct.toFixed(0)}% would sell alcohol below cost, which state law does not allow. The limit is 30%.</div>`:''}
+      <div class="comply"><span>Discount <b class="num">${money(D.kind==='%'?base*D.v/100:Math.min(+D.v,base))}</b> (${pct.toFixed(1)}%) · logged with cashier, reason and time</span></div>
+    </div>
+    <footer>${(D.target==='sale'&&S.tdisc)||(D.target!=='sale'&&S.cart.find(x=>x.id===D.target)?.disc)?'<button class="btn danger" data-act="discrm">Remove discount</button>':''}<button class="btn" data-close>Cancel</button><button class="btn primary" data-act="discapply" ${can?'':'disabled'}>Apply discount</button></footer>
+  </div></div>`;
+}
+function refocus(id){ const el=document.getElementById(id); if (el){ el.focus(); try{ const v=el.value; el.setSelectionRange(v.length,v.length);}catch(e){} } }
+
 /* ------------------------------------------------ modals: ID + payment */
 function closeModal(){ $('#modal').innerHTML=''; }
 function barcode(){ let s=''; let seed=7; for (let i=0;i<90;i++){ seed=(seed*16807)%2147483647; s+= seed%3 ? '<i></i>' : '<i style="background:transparent"></i>'; } return s; }
@@ -970,7 +1202,7 @@ function charge(){
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -990,19 +1222,42 @@ document.addEventListener('click', e => {
   if (d.idsim){ runId(d.idsim==='under'); return; }
   if (d.pm){ payMethod=d.pm; payModal(); return; }
   if (d.cash){ const ch = +d.cash - totals().total; toast('Change due '+money(Math.max(0,ch))); charge(); return; }
+  if (d.dk){ S.dm.kind=d.dk; S.dm.v=d.dk==='%'?10:2; S.pinOk=false; discModal(); return; }
+  if (d.dv){ S.dm.v=+d.dv; S.pinOk=false; discModal(); return; }
+  if (d.dr){ S.dm.reason=d.dr; discModal(); return; }
+  if (d.ost){ OFFERS.find(o=>o.id===d.ost).status=d.v; render(); toast(d.v==='Active'?'Offer is live at every register':'Offer paused'); return; }
+  if (d.sugg){ const g=SUGGEST.splice(+d.sugg,1)[0]; OFFERS.unshift({id:'s'+Date.now(), n:g.n, type:g.type, rule:g.rule, sched:'Not scheduled', status:'Draft', red:0, goal:0, disc:0}); render(); toast('Draft offer created'); return; }
+  if (d.obt){ S.ob.type=d.obt; render(); return; }
+  if (d.obd){ S.ob.days=d.obd; render(); return; }
+  if (d.dq){ S.dmg.q=Math.max(1,S.dmg.q+ +d.dq); render(); return; }
+  if (d.dw){ S.dmg.why=d.dw; if (d.dw==='Received damaged') S.dmg.disp='Supplier claim'; if (d.dw==='Dented packaging') S.dmg.disp='Sell at 30% off'; render(); return; }
+  if (d.dd){ S.dmg.disp=d.dd; render(); return; }
+  if (d.claim){ const c=CLAIMS[+d.claim]; c.st++; if (c.st===2) S.done.add(5); render(); toast(c.st===1?`${c.no} sent to ${c.sup}`:`${money(c.amt)} credit recorded`); return; }
   if (d.toast){ toast(d.toast); return; }
   switch (d.act){
     case 'net': S.online=!S.online; if (S.online && S.queue.length){ toast(`Back online · uploading ${S.queue.length} queued sales`,'sync'); setTimeout(()=>{ S.queue=[]; render(); toast('All offline sales uploaded'); }, 2200); } else if(!S.online) toast('Simulating internet outage','wifioff'); render(); break;
     case 'notes': S.notes=!S.notes; render(); break;
     case 'theme': document.documentElement.dataset.theme = isDark()?'light':'dark'; render(); if(S.route==='forecast') drawForecast(); break;
     case 'member': S.member = S.member?null:'Jordan D.'; render(); break;
-    case 'clear': S.cart=[]; S.id=null; render(); toast('Sale voided'); break;
+    case 'clear': S.cart=[]; S.id=null; S.tdisc=null; render(); toast('Sale voided'); break;
+    case 'disc': S.dm={target:'sale', kind:'%', v:10, reason:'Manager courtesy'}; S.pinOk=false; discModal(); break;
+    case 'discapply': { const D=S.dm; if (D.target==='sale') S.tdisc={kind:D.kind, v:+D.v, reason:D.reason};
+      else { const l=S.cart.find(x=>x.id===D.target), base=byId(l.id).p*l.qty; l.disc = D.kind==='%' ? +D.v : Math.round(+D.v/base*1000)/10; l.reason=D.reason; }
+      closeModal(); render(); toast('Discount applied · logged'); break; }
+    case 'discrm': if (S.dm.target==='sale') S.tdisc=null; else { const l=S.cart.find(x=>x.id===S.dm.target); delete l.disc; } closeModal(); render(); toast('Discount removed'); break;
+    case 'obmem': S.ob.members=!S.ob.members; render(); break;
+    case 'obsave': OFFERS.unshift({id:'n'+Date.now(), n:S.ob.name||'New offer', type:S.ob.type, rule:`${S.ob.type==='% off'?S.ob.val+'% off':S.ob.type==='$ off'?'$'+S.ob.val+' off':S.ob.type} · ${S.ob.target}${S.ob.members?' · members only':''}`, sched:`${S.ob.days} · ${S.ob.start.slice(5)} to ${S.ob.end.slice(5)}`, status:d.v, red:0, goal:0, disc:0}); render(); toast(d.v==='Draft'?'Offer saved as draft':'Offer scheduled'); break;
+    case 'dmgsave': { const f=S.dmg, p=byId(f.pid), cost=Math.round(p.p*0.66*f.q*100)/100;
+      DAMAGE.unshift({d:'Sep 25', p:`${p.n} ${p.sz}`, q:f.q, why:f.why, where:f.where, cost, disp:f.disp, by:'Alex K.'});
+      p.stock=Math.max(0,p.stock-f.q);
+      if (f.disp==='Supplier claim') CLAIMS.unshift({no:'CL-'+(2210+CLAIMS.length), sup:'Summit Wine & Spirits', item:`${p.n} ×${f.q} · ${f.why.toLowerCase()}`, amt:cost, st:0});
+      S.dmg={...S.dmg, q:1, photo:null}; render(); toast(f.disp==='Supplier claim'?'Damage posted · draft claim opened':'Damage posted · stock adjusted'); break; }
     case 'idscan': S.payAfterId=false; idModal(); break;
     case 'pay': if (S.cart.some(x=>byId(x.id).r) && S.id!=='ok'){ S.payAfterId=true; idModal(); } else { payMethod='card'; payModal(); } break;
     case 'idcontinue': if (S.payAfterId){ payMethod='card'; payModal(); } else { closeModal(); render(); } break;
     case 'declinesale': S.cart=S.cart.filter(x=>!byId(x.id).r); S.id=null; closeModal(); render(); toast('21+ items removed · refusal logged','alert'); break;
     case 'charge': charge(); break;
-    case 'newsale': S.cart=[]; S.id=null; S.member=null; S.saleNo++; closeModal(); render(); break;
+    case 'newsale': S.cart=[]; S.id=null; S.member=null; S.tdisc=null; S.saleNo++; closeModal(); render(); break;
     case 'invall': S.inv = S.inv.map((v,i)=> INVOICE[i].conf>=90 && v==='review' ? 'ok' : v); render(); toast('Matched lines approved · 1 unmatched line left'); break;
     case 'invpost': S.invStep=8; render(); toast('Inventory and accounting updated'); break;
     case 'offtoggle': S.offlineLimit=!S.offlineLimit; render(); break;
@@ -1010,6 +1265,10 @@ document.addEventListener('click', e => {
   }
 });
 document.addEventListener('input', e => {
+  if (e.target.id==='dm-v'){ S.dm.v=+e.target.value||0; S.pinOk=false; discModal(); refocus('dm-v'); return; }
+  if (e.target.id==='dm-pin'){ if (/^\d{4}$/.test(e.target.value)){ S.pinOk=true; discModal(); } return; }
+  if (e.target.id==='ob-name'){ S.ob.name=e.target.value; return; }
+  if (e.target.id==='ob-val'){ S.ob.val=+e.target.value||0; render(); refocus('ob-val'); return; }
   if (e.target.id==='q'){ S.q=e.target.value; const pos=e.target.selectionStart; render(); const q=$('#q'); q.focus(); q.setSelectionRange(pos,pos); }
 });
 document.addEventListener('keydown', e => {
@@ -1018,6 +1277,13 @@ document.addEventListener('keydown', e => {
   if (e.key==='Enter' && e.target.id==='q'){ const m = PRODUCTS.find(p=>p.n.toLowerCase().includes(S.q.toLowerCase()) && (S.cat==='All'||p.cat===S.cat)); if (m){ S.q=''; const l=S.cart.find(x=>x.id===m.id); l?l.qty++:S.cart.push({id:m.id,qty:1}); render(); $('#q').focus(); } }
 });
 document.addEventListener('change', e => {
+  if (e.target.id==='dm-target'){ S.dm.target=e.target.value; S.pinOk=false; discModal(); return; }
+  if (e.target.id==='ob-target'){ S.ob.target=e.target.value; render(); return; }
+  if (e.target.id==='ob-start'){ S.ob.start=e.target.value; return; }
+  if (e.target.id==='ob-end'){ S.ob.end=e.target.value; return; }
+  if (e.target.id==='dm-pid'){ S.dmg.pid=e.target.value; render(); return; }
+  if (e.target.id==='dm-where'){ S.dmg.where=e.target.value; return; }
+  if (e.target.id==='dm-photo' && e.target.files[0]){ S.dmg.photo=URL.createObjectURL(e.target.files[0]); render(); return; }
   if (e.target.id==='invfile' && e.target.files.length){ S.invStep=2; render(); toast('Reading '+e.target.files[0].name+'…','spark'); let s=2; const t=setInterval(()=>{ s++; S.invStep=s; S.inv=INVOICE.map((l,i)=> l.note||l.cost!==l.prev ? 'review':'ok'); render(); if(s>=7) clearInterval(t); }, 550); }
 });
 window.addEventListener('hashchange', () => { const r=location.hash.slice(1); if (NOTES[r] && r!==S.route) go(r); });
