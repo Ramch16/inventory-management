@@ -666,7 +666,7 @@ const NOTES = {
   invoices:{deck:'Deck p.6 · AI Invoice Processing (8-step flow)', purpose:'Photograph a supplier invoice; AI reads it, matches lines to the catalog and flags price, quantity and damage issues for owner approval.', data:['OCR fields: supplier, invoice #, date, lines, totals','Match confidence per line against catalog','Variance vs last cost and vs purchase order'], build:['Upload to object storage → OCR / document model','Draft inventory update held until owner approves','Approved lines post to inventory and accounting export']},
   alerts:{deck:'Deck p.7 · Intelligent AI Notifications', purpose:'Seven alert types, each with the action that resolves it, so nothing needs a second screen.', data:['Stock, supplier, payment, PO, damage, expiry, price change','Severity, created time, resolution state'], build:['Rules + AI engine emits events','Delivery: in-app, SMS, email, push per owner preference','Resolved state feeds audit log']},
   customers:{deck:'Deck p.2 · Customer engagement & personalization', purpose:'Know regulars at the counter and send offers that match what they already buy.', data:['Member profile, visit history, category mix','Segments built from purchase patterns','Opt-in status for SMS / email'], build:['Look up by phone at checkout','Segment engine runs nightly','Compliance: no alcohol offers to unverified or opted-out members']},
-  compliance:{deck:'New · licence protection', purpose:'Keep the store inside the law without relying on memory: sale hours lock the register, refusals are one tap, and an inspection report is always ready.', data:['State rules per licence type (hours, ID policy, pricing)','ID scans, refusals, overrides per cashier','After-hours attempts blocked by the register'], build:['Rules engine keyed by state + licence type + store time zone','Register polls clock; server clock is the source of truth','Report export: PDF for the liquor board, CSV for owners']},
+  compliance:{deck:'New · licence protection', purpose:'Keep the store inside the law without relying on memory: sale hours lock the register, refusals are one tap, and an inspection report is always ready.', data:['State rules per licence type (hours, ID policy, pricing)','Store ID policy: scan everyone / under 40 / under 30','Sales approved by eye or typed date of birth, with cashier and manager','ID scans, refusals, overrides per cashier','After-hours attempts blocked by the register'], build:['Rules engine keyed by state + licence type + store time zone','Register polls clock; server clock is the source of truth','Report export: PDF for the liquor board, CSV for owners']},
   offers:{deck:'Deck p.2 · Customer engagement (extended)', purpose:'Create and run offers that the register applies automatically, and see what each one earns and costs.', data:['Offer rules: type, products, value, schedule, limits','Redemptions, discount given, incremental revenue','AI suggestions from overstock and expiry data'], build:['Promotion engine evaluates the cart on every change','State rules: no alcohol below cost, no free alcohol, no volume discounts where banned','Scheduled offers switch on and off by store time zone']},
   damage:{deck:'Deck p.7 · Damage follow-up (extended)', purpose:'Log broken, expired and returned stock in seconds, write it off or claim it back from the supplier, and see where losses happen.', data:['Product, quantity, reason, location, photo, disposition','Cost of loss and supplier credit status','Loss by location and reason'], build:['Posting a report adjusts on-hand stock and the shrink ledger','Received-damaged reports open a supplier claim linked to the invoice','Photos go to object storage and attach to the claim']},
   devices:{deck:'Deck p.3–5 · ID scan vendors, card devices, offline gateway', purpose:'Configure lane hardware, choose the ID provider and set the risk limits for offline card sales.', data:['Provider evaluation criteria from deck p.3','Terminal status per lane','Offline queue, per-sale and total limits, upload window'], build:['Device registry + heartbeat','Provider adapter interface so vendors can be swapped','Queue auto-uploads on reconnect; declined offline sales create a follow-up alert']},
@@ -744,6 +744,14 @@ const POS_DATA = [
   {no:'PO-10234', v:'Summit Wine & Spirits', lines:'Casamigos ×12 · Hennessy VS ×12 · 4 more lines', total:1407.20, st:'Partly received', note:'Short 6 Casamigos · invoice HB-58812'},
   {no:'PO-10228', v:'Golden State Beverage', lines:'Josh Cabernet ×4 cases · Meiomi ×2 cases', total:688.00, st:'Received', note:'Matched to invoice, paid'},
 ];
+const POLICY = {
+  all:{short:'Scan everyone', label:'Scan every customer buying 21+ items', sub:'Every 21+ sale needs a scan or a manager-approved date of birth', age:null},
+  u40:{short:'Under 40', label:'Scan anyone who looks under 40', sub:'Customers clearly over 40 can be approved by eye. Each one is logged', age:40},
+  u30:{short:'Under 30', label:'Scan anyone who looks under 30', sub:'Customers clearly over 30 can be approved by eye. Each one is logged', age:30},
+};
+const TODAY = new Date(2026,8,25);
+function ageFrom(dob){ if (!dob) return null; const d=new Date(dob+'T00:00'); if (isNaN(d)) return null; let a=TODAY.getFullYear()-d.getFullYear(); if (TODAY.getMonth()<d.getMonth() || (TODAY.getMonth()===d.getMonth() && TODAY.getDate()<d.getDate())) a--; return a; }
+const nowLabel = () => 'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
 const S = {
   route:'command', online:true, notes:false,
   cart:[], cat:'All', q:'', id:null, member:null, saleNo:1048,
@@ -755,6 +763,8 @@ const S = {
   clock:'now', refuse:{why:'Appears intoxicated'},
   refusals:[{t:'Thu 11:42 PM', why:'Appears intoxicated', by:'Dev P.', val:41.97},{t:'Thu 7:15 PM', why:'Under 21 (ID scan)', by:'Maria G.', val:24.99},{t:'Wed 9:03 PM', why:'Buying for someone else', by:'Sam R.', val:54.99}],
   tour:null,
+  idPolicy:'u40', idMethod:null, man:{dob:'', reason:"Barcode won't scan", type:'Driver licence', pin:''},
+  idLog:[{t:'Fri 9:12 AM', how:'Clearly over 40 (by eye)', by:'Maria G.', ok:'—', k:'visual'},{t:'Thu 8:40 PM', how:'Date of birth typed in · passport', by:'Dev P.', ok:'Alex K.', k:'manual'},{t:'Thu 6:05 PM', how:"Date of birth typed in · barcode won't scan", by:'Dev P.', ok:'Alex K.', k:'manual'}],
   buy:'tito', buyQ:null, poTab:'compare', poDraft:[],
   ob:{name:'Wine Wednesday', type:'% off', val:15, target:'Wine', start:'2026-10-07', end:'2026-10-28', days:'Wed', members:false},
   dmg:{pid:'josh750', q:1, why:'Broken in store', where:'Sales floor', disp:'Write off', photo:null},
@@ -927,7 +937,7 @@ VIEWS.register = () => {
   const restricted = S.cart.some(l => byId(l.id).r);
   const locked = S.clock==='locked';
   const idState = !restricted ? '' : S.id==='ok'
-    ? `<div class="idgate ok">${ic('check')} ID verified · age ${S.idAge} · 21+ items unlocked</div>`
+    ? `<div class="idgate ok">${ic('check')} ${S.idMethod==='visual' ? `Clearly over ${POLICY[S.idPolicy].age||40} · approved by eye · logged` : S.idMethod==='manual' ? `Date of birth typed in · age ${S.idAge} · manager approved` : `ID verified · age ${S.idAge} · 21+ items unlocked`}</div>`
     : `<div class="idgate need">${ic('id')} 21+ items in order · scan ID before payment</div>`;
   const inCart = new Set(S.cart.map(l=>l.id)), sugg=[];
   for (const l of S.cart) for (const [id,why] of (PAIRS[l.id]||[])) if (!inCart.has(id) && !sugg.some(x=>x[0]===id)) sugg.push([id,why]);
@@ -1396,7 +1406,9 @@ VIEWS.purchasing = () => {
 
 VIEWS.compliance = () => {
   const c = CLOCKS[S.clock];
-  const cashiers = [['Maria G.',212,'100%',0,100],['Sam R.',140,'99%',0,98],['Dev P.',188,'96%',2,91]];
+  const mine = k => S.idLog.filter(x=>x.by==='Maria G.' && x.k===k && x.fresh).length;
+  const cashiers = [['Maria G.',212,'100%',31+mine('visual'),0+mine('manual'),100],['Sam R.',140,'99%',18,0,98],['Dev P.',188,'96%',44,2,91]];
+  const pol = POLICY[S.idPolicy];
   return `
   <section class="hero ${c.cls}" data-note="Live sale-hours status · drives the register lock">
     ${ic(S.clock==='now'?'shield':S.clock==='soon'?'clock':'lock','style="width:40px;height:40px"')}
@@ -1417,16 +1429,22 @@ VIEWS.compliance = () => {
   <div class="compgrid">
     <section class="card" data-note="Rules engine · state + licence type">
       <div class="cardhead"><h2>Rules the register enforces</h2></div>
-      ${[['Sale hours 6:00 AM – 2:00 AM','Register locks 21+ items outside these hours',true],['ID check for anyone who looks under 40','Store policy, stricter than the law (under 21)',true],['No sales to intoxicated customers','One-tap refusal with reason, logged',true],['No alcohol sold below cost','Discounts over 30% are blocked',true],['CRV charged on beverage containers','Added per container automatically',true],['Manager PIN for manual date-of-birth entry','Used when an ID won’t scan',true]]
+      ${[['Sale hours 6:00 AM – 2:00 AM','Register locks 21+ items outside these hours',true],['No sales to intoxicated customers','One-tap refusal with reason, logged',true],['No alcohol sold below cost','Discounts over 30% are blocked',true],['CRV charged on beverage containers','Added per container automatically',true],['Manager PIN for manual date-of-birth entry','Used when an ID won’t scan',true]]
         .map(r=>`<div class="rule">${ic('shield','style="color:var(--ok)"')}<div><b>${r[0]}</b><small>${r[1]}</small></div><span class="chip ok">On</span></div>`).join('')}
+      <div class="rule" style="align-items:flex-start" data-note="Store ID policy · owner picks">${ic('id','style="color:var(--ok);margin-top:2px"')}<div><b>${pol.label}</b><small>${pol.sub}</small>
+        <div class="seg" style="margin-top:8px" aria-label="ID policy">${Object.entries(POLICY).map(([k,v])=>`<button class="${S.idPolicy===k?'on':''}" data-idpol="${k}">${v.short}</button>`).join('')}</div></div><span class="chip ok">On</span></div>
     </section>
     <section style="display:flex;flex-direction:column;gap:16px">
       <section class="card" data-note="Cashier scorecard">
         <div class="cardhead"><h2>Cashier scorecard</h2><span class="muted" style="font-size:12px">This week</span></div>
-        <div class="tablewrap"><table><thead><tr><th>Cashier</th><th class="r">21+ sales</th><th class="r">ID scanned</th><th class="r">Manual DOB</th><th class="r">Score</th></tr></thead><tbody>
-          ${cashiers.map(x=>`<tr><td style="font-weight:700">${x[0]}</td><td class="num r">${x[1]}</td><td class="num r">${x[2]}</td><td class="num r">${x[3]}</td><td class="r"><span class="score" style="background:${x[4]>=95?'var(--ok-soft)':'var(--warn-soft)'};color:${x[4]>=95?'var(--ok)':'var(--warn)'}">${x[4]}</span></td></tr>`).join('')}
+        <div class="tablewrap"><table><thead><tr><th>Cashier</th><th class="r">21+ sales</th><th class="r">ID scanned</th><th class="r">By eye</th><th class="r">Typed DOB</th><th class="r">Score</th></tr></thead><tbody>
+          ${cashiers.map(x=>`<tr><td style="font-weight:700">${x[0]}</td><td class="num r">${x[1]}</td><td class="num r">${x[2]}</td><td class="num r">${x[3]}</td><td class="num r">${x[4]}</td><td class="r"><span class="score" style="background:${x[5]>=95?'var(--ok-soft)':'var(--warn-soft)'};color:${x[5]>=95?'var(--ok)':'var(--warn)'}">${x[5]}</span></td></tr>`).join('')}
         </tbody></table></div>
-        <div class="muted" style="font-size:12px;margin-top:8px">Dev P. entered 2 birthdates by hand. Refresher training is booked for Monday.</div>
+        <div class="muted" style="font-size:12px;margin-top:8px">Dev P. approves more customers by eye than anyone else and typed in 2 birthdates. Refresher training is booked for Monday.</div>
+      </section>
+      <section class="card" data-note="Every 21+ sale that passed without a scan">
+        <div class="cardhead"><h2>Sales without an ID scan</h2><span class="chip plain">${S.idLog.length} this week</span></div>
+        ${S.idLog.map(r=>`<div class="rule">${ic(r.k==='visual'?'users2':'edit','style="color:var(--warn)"')}<div><b>${esc(r.how)}</b><small>${r.t} · cashier ${r.by}${r.ok!=='—'?` · approved by ${r.ok}`:''}</small></div>${r.fresh?'<span class="chip ai">Just now</span>':''}</div>`).join('')}
       </section>
       <section class="card" data-note="Refusal log · from register">
         <div class="cardhead"><h2>Refused sales</h2><span class="spacer"></span><button class="btn sm primary" data-act="report">Build inspection report</button></div>
@@ -1459,7 +1477,7 @@ function swapModal(id){
 function reportModal(){
   $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Inspection report" style="width:min(620px,100%)">
     <header>${ic('shield')}<h2>Inspection report</h2><span class="chip plain">Sep 1 – Sep 25, 2026</span><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
-    <div class="body"><div class="receipt" style="font-size:12.5px;line-height:1.8">OAK STREET LIQUOR #014 · Licence 21-584120<br>────────────────────────────<br>21+ transactions ........... 9,412<br>ID scanned ................. 9,331 (99.1%)<br>Manual DOB (manager PIN) ...    81<br>Sales refused ..............    ${24+S.refusals.length}<br>Fake IDs detected ..........     3<br>After-hours attempts blocked     7<br>Below-cost discounts blocked     2<br>Staff trained (LEAD) ....... 3 of 3<br>────────────────────────────<br>Every entry links to its time, cashier and lane.</div>
+    <div class="body"><div class="receipt" style="font-size:12.5px;line-height:1.8">OAK STREET LIQUOR #014 · Licence 21-584120<br>────────────────────────────<br>21+ transactions ........... 9,412<br>ID scanned ................. 9,331 (99.1%)<br>Typed DOB (manager PIN) ....    ${81+S.idLog.filter(x=>x.k==='manual'&&x.fresh).length}<br>Approved by eye (over ${POLICY[S.idPolicy].age||40}) .. ${1204+S.idLog.filter(x=>x.k==='visual'&&x.fresh).length}<br>Sales refused ..............    ${24+S.refusals.length}<br>Fake IDs detected ..........     3<br>After-hours attempts blocked     7<br>Below-cost discounts blocked     2<br>Staff trained (LEAD) ....... 3 of 3<br>────────────────────────────<br>Every entry links to its time, cashier and lane.</div>
     <div class="muted" style="font-size:12px">In the full app this report exports as a signed PDF for the liquor board.</div></div>
     <footer><button class="btn primary" data-close>Done</button></footer></div></div>`;
 }
@@ -1491,6 +1509,49 @@ function refocus(id){ const el=document.getElementById(id); if (el){ el.focus();
 /* ------------------------------------------------ modals: ID + payment */
 function closeModal(){ $('#modal').innerHTML=''; }
 function barcode(){ let s=''; let seed=7; for (let i=0;i<90;i++){ seed=(seed*16807)%2147483647; s+= seed%3 ? '<i></i>' : '<i style="background:transparent"></i>'; } return s; }
+function idContinue(msg){
+  toast(msg);
+  if (S.payAfterId){ payMethod='card'; payModal(); } else { closeModal(); render(); }
+}
+function manVerdict(){
+  const a = ageFrom(S.man.dob);
+  if (a==null) return `<div class="comply"><span>${ic('cal','style="width:14px;height:14px"')} Enter the date of birth exactly as printed on the ID.</span></div>`;
+  return a>=21
+    ? `<div class="verdict ok" style="padding:10px 14px">${ic('check','style="width:24px;height:24px"')}<div><b>Age ${a}. Old enough to buy.</b><div style="font-size:12px">A manager PIN is still needed to approve.</div></div></div>`
+    : `<div class="verdict bad" style="padding:10px 14px">${ic('x','style="width:24px;height:24px"')}<div><b>Age ${a}. Under 21: do not sell 21+ items.</b><div style="font-size:12px">A manager cannot override this.</div></div></div>`;
+}
+function manUpdate(){
+  const v=$('#man-verdict'), b=$('#man-ok'); if (!v||!b) return;
+  v.innerHTML = manVerdict();
+  const a = ageFrom(S.man.dob); b.disabled = !(a!=null && a>=21 && /^\d{4}$/.test(S.man.pin));
+}
+function idManualModal(){
+  const M=S.man;
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Enter date of birth" style="width:min(560px,100%)">
+    <header>${ic('edit')}<h2>Enter date of birth</h2><span class="chip warn">Manager approval</span><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="gap:14px">
+      <div class="muted" style="font-size:13px">Use this only when the ID is real but won't scan. Check the photo, expiry date and security features by hand first.</div>
+      <div class="frow">
+        <label class="field">Date of birth on the ID<input type="date" id="man-dob" value="${M.dob}" max="2026-09-25"></label>
+        <label class="field">ID type<select id="man-type">${['Driver licence','State ID card','Passport','Military ID'].map(x=>`<option ${M.type===x?'selected':''}>${x}</option>`).join('')}</select></label>
+      </div>
+      <div class="field">Why no scan<div class="quick">${["Barcode won't scan",'Scanner not working','Passport or foreign ID','Paper temporary ID'].map(r=>`<button class="${M.reason===r?'on':''}" data-manr="${r}">${r}</button>`).join('')}</div></div>
+      <div id="man-verdict">${manVerdict()}</div>
+      <div class="pinbox">${ic('lock')} Manager PIN <input id="man-pin" inputmode="numeric" maxlength="4" placeholder="••••" value="${esc(M.pin)}" aria-label="Manager PIN"><span style="font-weight:500;font-size:12px">Demo: any 4 digits</span></div>
+    </div>
+    <footer><button class="btn" data-act="idback">Back</button><button class="btn primary" id="man-ok" data-act="idmanok" disabled>Approve and continue</button></footer></div></div>`;
+  manUpdate();
+}
+function idVisualModal(){
+  const age = POLICY[S.idPolicy].age;
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Approve by eye" style="width:min(520px,100%)">
+    <header>${ic('users2')}<h2>Clearly over ${age}?</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="gap:12px">
+      <div style="font-size:14px">Store policy lets you skip the scan when the customer is <b>obviously over ${age}</b>. If you have any doubt, scan the ID.</div>
+      <div class="comply"><span>${ic('shield','style="width:14px;height:14px"')} Your name (Maria G.), the time and this sale are saved to the compliance log.</span><span>${ic('alert','style="width:14px;height:14px"')} Checks by eye count toward your cashier score, so heavy use gets reviewed.</span></div>
+    </div>
+    <footer><button class="btn" data-act="idback">Back</button><button class="btn primary" data-act="idvisualok">Yes, clearly over ${age}</button></footer></div></div>`;
+}
 function idModal(phase='ready', under=false){
   const dob = under ? '2006-03-11' : '1992-02-14', age = under ? 20 : 34;
   const checks = [['PDF417 barcode decoded','AAMVA v10'],['Front text matches barcode','name, DOB, ID #'],['Security features','layout + font + hologram zone'],['Not expired','exp 2029-02-14'],['Age 21 or older',`DOB ${dob}`]];
@@ -1503,7 +1564,7 @@ function idModal(phase='ready', under=false){
     ? `<div class="verdict bad">${ic('x','style="width:30px;height:30px"')}<div><div class="agebig">${age}</div><b>Under 21. Do not sell 21+ items.</b><div style="font-size:12px">Remove restricted items or decline the sale. Logged to audit trail.</div></div></div>`
     : `<div class="verdict ok">${ic('check','style="width:30px;height:30px"')}<div><div class="agebig">${age}</div><b>Verified. OK to sell.</b><div style="font-size:12px">Result stored without the ID image · audit #A-77120</div></div></div>`;
   $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Verify ID">
-    <header>${ic('id')}<h2>Verify customer ID</h2><span class="chip plain">${S.online?'Scandit · on-device':'Offline mode · on-device'}</span><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <header>${ic('id')}<h2>Verify customer ID</h2><span class="chip plain">${S.online?'Scandit · on-device':'Offline mode · on-device'}</span><span class="chip plain">Policy: ${POLICY[S.idPolicy].short}</span><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
     <div class="body idwrap">
       <div>
         <div class="idcard"><span class="st">CALIFORNIA · DRIVER LICENSE</span><span class="ph"></span>
@@ -1515,14 +1576,14 @@ function idModal(phase='ready', under=false){
       <div style="display:flex;flex-direction:column;gap:12px"><ul class="checks">${checks.map(row).join('')}</ul>${verdict}</div>
     </div>
     <footer>
-      ${phase==='ready'?`<button class="btn" data-idsim="under">Demo: scan underage ID</button><button class="btn" data-toast="Manual DOB entry needs manager PIN">Enter DOB manually</button><button class="btn primary" data-idsim="ok">${ic('scan')}Scan ID</button>`:''}
+      ${phase==='ready'?`<button class="btn ghost" data-idsim="under" style="margin-right:auto">Demo: underage ID</button><button class="btn" data-act="idmanual">${ic('edit')}ID won't scan</button>${POLICY[S.idPolicy].age?`<button class="btn" data-act="idvisual">${ic('users2')}Clearly over ${POLICY[S.idPolicy].age}</button>`:''}<button class="btn primary" data-idsim="ok">${ic('scan')}Scan ID</button>`:''}
       ${phase==='done'&&under?`<button class="btn danger" data-act="declinesale">Remove 21+ items</button><button class="btn" data-close>Close</button>`:''}
       ${phase==='done'&&!under?`<button class="btn primary" data-act="idcontinue">${S.payAfterId?'Continue to payment':'Done'}</button>`:''}
     </footer></div></div>`;
 }
 function runId(under){
   idModal('scanning', under);
-  setTimeout(()=>{ S.id = under ? 'bad' : 'ok'; S.idAge = under?20:34; idModal('done', under); }, 1500);
+  setTimeout(()=>{ S.id = under ? 'bad' : 'ok'; S.idAge = under?20:34; S.idMethod='scan'; idModal('done', under); }, 1500);
 }
 let payMethod='card';
 function payModal(phase='choose'){
@@ -1595,7 +1656,7 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -1613,6 +1674,8 @@ document.addEventListener('click', e => {
   if (d.resolve){ S.done.add(+d.resolve); toast(d.msg+' · marked resolved'); render(); return; }
   if (d.undo){ S.done.delete(+d.undo); render(); return; }
   if (d.seg){ S.custSeg=+d.seg; render(); return; }
+  if (d.idpol){ S.idPolicy=d.idpol; render(); toast('ID policy: '+POLICY[d.idpol].label.toLowerCase()); return; }
+  if (d.manr){ S.man.reason=d.manr; document.querySelectorAll('[data-manr]').forEach(b=>b.classList.toggle('on', b.dataset.manr===d.manr)); return; }
   if (d.idsim){ runId(d.idsim==='under'); return; }
   if (d.pm){ payMethod=d.pm; payModal(); return; }
   if (d.cash){ const ch = +d.cash - totals().total; toast('Change due '+money(Math.max(0,ch))); charge(); return; }
@@ -1667,6 +1730,16 @@ document.addEventListener('click', e => {
       if (f.disp==='Supplier claim') CLAIMS.unshift({no:'CL-'+(2210+CLAIMS.length), sup:'Summit Wine & Spirits', item:`${p.n} ×${f.q} · ${f.why.toLowerCase()}`, amt:cost, st:0});
       S.dmg={...S.dmg, q:1, photo:null}; render(); toast(f.disp==='Supplier claim'?'Damage posted · draft claim opened':'Damage posted · stock adjusted'); break; }
     case 'idscan': S.payAfterId=false; idModal(); break;
+    case 'idmanual': S.man={dob:'', reason:"Barcode won't scan", type:'Driver licence', pin:''}; idManualModal(); break;
+    case 'idvisual': idVisualModal(); break;
+    case 'idback': idModal(); break;
+    case 'idmanok': { const a=ageFrom(S.man.dob); if (a==null || a<21 || !/^\d{4}$/.test(S.man.pin)) break;
+      S.id='ok'; S.idAge=a; S.idMethod='manual';
+      S.idLog.unshift({t:nowLabel(), how:`Date of birth typed in · ${S.man.type} · ${S.man.reason}`, by:'Maria G.', ok:'Alex K.', k:'manual', fresh:true});
+      idContinue('Date of birth approved by manager · logged'); break; }
+    case 'idvisualok': S.id='ok'; S.idAge=null; S.idMethod='visual';
+      S.idLog.unshift({t:nowLabel(), how:`Clearly over ${POLICY[S.idPolicy].age} (by eye)`, by:'Maria G.', ok:'—', k:'visual', fresh:true});
+      idContinue('Approved by eye · logged'); break;
     case 'pay': if (S.clock==='locked' && S.cart.some(x=>byId(x.id).r)){ toast('Remove 21+ items: alcohol sales are locked','lock'); break; } if (S.cart.some(x=>byId(x.id).r) && S.id!=='ok'){ S.payAfterId=true; idModal(); } else { payMethod='card'; payModal(); } break;
     case 'idcontinue': if (S.payAfterId){ payMethod='card'; payModal(); } else { closeModal(); render(); } break;
     case 'declinesale': S.cart=S.cart.filter(x=>!byId(x.id).r); S.id=null; closeModal(); render(); toast('21+ items removed · refusal logged','alert'); break;
@@ -1679,6 +1752,8 @@ document.addEventListener('click', e => {
   }
 });
 document.addEventListener('input', e => {
+  if (e.target.id==='man-dob'){ S.man.dob=e.target.value; manUpdate(); return; }
+  if (e.target.id==='man-pin'){ S.man.pin=e.target.value.replace(/\D/g,''); e.target.value=S.man.pin; manUpdate(); return; }
   if (e.target.id==='dm-v'){ S.dm.v=+e.target.value||0; S.pinOk=false; discModal(); refocus('dm-v'); return; }
   if (e.target.id==='dm-pin'){ if (/^\d{4}$/.test(e.target.value)){ S.pinOk=true; discModal(); } return; }
   if (e.target.id==='ob-name'){ S.ob.name=e.target.value; return; }
@@ -1692,6 +1767,8 @@ document.addEventListener('keydown', e => {
   if (e.key==='Enter' && e.target.id==='q'){ const m = PRODUCTS.find(p=>p.n.toLowerCase().includes(S.q.toLowerCase()) && (S.cat==='All'||p.cat===S.cat)); if (m){ S.q=''; const l=S.cart.find(x=>x.id===m.id); l?l.qty++:S.cart.push({id:m.id,qty:1}); render(); $('#q').focus(); } }
 });
 document.addEventListener('change', e => {
+  if (e.target.id==='man-dob'){ S.man.dob=e.target.value; manUpdate(); return; }
+  if (e.target.id==='man-type'){ S.man.type=e.target.value; return; }
   if (e.target.id==='dm-target'){ S.dm.target=e.target.value; S.pinOk=false; discModal(); return; }
   if (e.target.id==='ob-target'){ S.ob.target=e.target.value; render(); return; }
   if (e.target.id==='ob-start'){ S.ob.start=e.target.value; return; }
