@@ -199,7 +199,8 @@ body.notes [data-note]::after{content:attr(data-note);position:absolute;top:-10p
 .idgate.ok{background:var(--ok-soft);color:var(--ok)}
 .totals{padding:14px 18px;display:grid;grid-template-columns:1fr auto;gap:6px 10px;font-size:13px;border-top:1px solid var(--line);background:var(--surface-2)}
 .totals .grand{font:700 26px/1.1 var(--display);padding-top:8px;border-top:1px dashed var(--line);margin-top:4px}
-.paybar{padding:0 18px 18px;background:var(--surface-2);display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.paybar{padding:0 18px 18px;background:var(--surface-2);display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:8px}
+.paybar .btn.on{border-color:var(--ok);color:var(--ok);background:var(--ok-soft)}
 .offerrow{color:var(--ok)}
 .saved{grid-column:1/-1;justify-self:start;margin-top:4px}
 .otag{font:700 10px/1 var(--body);background:var(--ok-soft);color:var(--ok);border-radius:4px;padding:3px 5px}
@@ -742,6 +743,11 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 .cdpiphead .spacer{flex:1}
 .cdpiphead .iconbtn{width:24px;height:24px;color:#C9D6DD;background:transparent;border-color:#2A3B47}
 .cdfield{font:700 3.6cqw/1 var(--mono);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);border-radius:1.4cqw;padding:1.8cqw 3cqw;display:flex;align-items:center;gap:.4cqw}.cdfield i{width:.3cqw;height:4cqw;background:#FFA350;animation:blink 1s steps(2) infinite}@keyframes blink{50%{opacity:0}}
+.rcyrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto 64px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.rcyrow small{display:block;color:var(--muted);font-size:11.5px}
+.rcyrow .qty input{width:44px;text-align:center;border:1px solid var(--line);border-radius:6px;padding:4px;background:var(--surface);color:var(--ink);font:700 14px var(--mono)}
+.rcytot{display:flex;justify-content:space-between;font-weight:800;font-size:16px;padding-top:4px}
+@media (max-width:560px){.rcyrow{grid-template-columns:minmax(0,1fr) auto 60px}.rcyrow .quick{grid-column:1/-1;order:5}}
 .rcpick{display:flex;flex-direction:column;gap:8px;margin-top:12px;align-items:flex-start}
 /* digital receipt */
 .phone{width:260px;max-width:100%;border:8px solid #0B1116;border-radius:30px;background:#F2F5F6;color:#14212A;padding:10px 10px 14px;display:flex;flex-direction:column;gap:8px;font-size:12px}
@@ -830,6 +836,7 @@ const P = {
   users2:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
   game:'<rect x="2" y="6" width="20" height="12" rx="6"/><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"/>',
   cloud:'<path d="M17.5 19H7a5 5 0 1 1 1.1-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/>',
+  recycle:'<path d="M7 19H4.8a1.8 1.8 0 0 1-1.6-2.7L7.5 9"/><path d="M11 19h8.2a1.8 1.8 0 0 0 1.6-2.7L18.5 12"/><path d="M14 16l-3 3 3 3"/><path d="M8.3 5.5l1.2-2a1.8 1.8 0 0 1 3.1 0L16.5 10"/><path d="M5 10.4l2.5-1.4 1.4 2.5"/><path d="M13.6 9.2l2.9.8.8-2.9"/>',
   msg:'<path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z"/>',
   monitor:'<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
   building:'<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-4h6v4M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/>',
@@ -1235,7 +1242,8 @@ const ROLE_ACTIONS = [
     ['Accept a typed date of birth when an ID won’t scan', 'Manager PIN',1,1],
     ['Returns and exchanges up to $50', 1,1,1],
     ['Refunds over $50', 'Manager PIN',1,1],
-    ['Choose or resend a digital receipt', 1,1,1]]],
+    ['Choose or resend a digital receipt', 1,1,1],
+    ['Take bottle and can returns (off the purchase or cash)', 1,1,1]]],
   ['Cash and staff', [
     ['Open and close the till (blind count), clock in and out', 1,1,1],
     ['See expected cash, over/short history and staff hours', 0,1,1]]],
@@ -1292,7 +1300,7 @@ const S = {
   rcvTab:'receive', rcv:{po:'PO-10241', lines:[{pid:'modelo12', ord:20, rec:0, dmg:0, pack:2},{pid:'claw12', ord:10, rec:0, dmg:0, pack:2}], done:false},
   cnt:null,
   settings:{name:'Oak Street Liquor #014', addr:'1200 Oak St, Sacramento, CA 95814', phone:'(916) 555-0101', lic:'Type 21 · 21-584120', tax:8.75, crvS:0.05, crvL:0.10, open:'06:00', close:'02:00',
-    rHeader:'Thanks for shopping local!', rFooter:'Returns: unopened items within 30 days with receipt. Please drink responsibly.', rSave:true, rDefault:'Ask on customer screen', rAutoMember:true},
+    rHeader:'Thanks for shopping local!', rFooter:'Returns: unopened items within 30 days with receipt. Please drink responsibly.', rSave:true, rDefault:'Ask on customer screen', rAutoMember:true, rcyOn:true, rcyCash:true},
   user:'Priya N.', signin:null, shift:{open:true, lane:'Lane 1', who:'Maria G.', opened:'8:00 AM', float:300}, den:null, denPhase:null,
   clocked:{'Priya N.':null, 'Alex K.':'8:30 AM', 'Maria G.':'7:52 AM', 'Dev P.':null, 'Sam R.':null},
   saleQ:'', saleSel:1047, ret:null, credit:0,
@@ -1305,6 +1313,7 @@ const S = {
   buy:'tito', buyQ:null, poTab:'compare', poDraft:[],
   ob:{name:'Wine Wednesday', type:'% off', val:15, target:'Wine', start:'2026-10-07', end:'2026-10-28', days:'Wed', members:false},
   dmg:{pid:'josh750', q:1, why:'Broken in store', where:'Sales floor', disp:'Write off', photo:null},
+  recyc:null, rcy:null, rcyDone:0,
   store:'014', stTab:'overview', stPid:'casa750', priceMode:'store', ns:null,
   cd:{rc:null, ask:null, to:''}, cdPhase:null, cdPrev:null, cdPip:false, cdSlide:0, cdset:{save:true, id:true, join:true, slides:true, rc:true}, er:{how:'Text', to:''},
 };
@@ -1556,6 +1565,7 @@ VIEWS.register = () => {
         <span class="muted">CA redemption value (CRV)</span><span class="num r">${money(t.crv)}</span>
         <span class="muted">Sales tax ${(TAX*100).toFixed(2)}%</span><span class="num r">${money(t.tax)}</span>
         ${S.credit?`<span class="offerrow">${ic('sync','style="width:13px;height:13px;vertical-align:-2px"')} Exchange credit${t.credit<S.credit-0.005?` · ${money(S.credit-t.credit)} still to use`:''}</span><span class="num r offerrow">${money(-t.credit)}</span>`:''}
+        ${S.recyc?`<span class="offerrow">${ic('recycle','style="width:13px;height:13px;vertical-align:-2px"')} Bottle return · ${rcyCount(S.recyc.c)} containers${t.rcyLeft>0.005?` · ${money(t.rcyLeft)} back in cash`:''}</span><span class="num r offerrow">${money(-t.rcy)}</span>`:''}
         <span class="grand">Total</span><span class="grand num r">${money(t.total)}</span>
         ${t.saved>0.005?`<span class="chip ok saved">Customer saves ${money(t.saved)}</span>`:''}
       </div>
@@ -1563,6 +1573,7 @@ VIEWS.register = () => {
         <button class="btn" data-act="clear" ${S.cart.length?'':'disabled'}>Clear</button>
         <button class="btn" data-act="disc" ${S.cart.length?'':'disabled'}>${ic('percent')}Discount</button>
         <button class="btn" data-act="idscan" ${restricted?'':'disabled'}>${ic('id')}Scan ID</button>
+        ${S.settings.rcyOn?`<button class="btn ${S.recyc?'on':''}" data-act="rcyopen" title="Customer is returning empty bottles and cans">${ic('recycle')}Bottles</button>`:''}
         <button class="btn primary big" data-act="pay" ${S.cart.length?'':'disabled'}>${restricted && S.id!=='ok' ? ic('id')+' Verify ID & pay' : ic('card')+' Payment · '+money(t.total)}</button>
       </div>
     </aside>
@@ -1585,7 +1596,9 @@ function totals(){
   const tdisc = !S.tdisc ? 0 : S.tdisc.kind==='%' ? after*S.tdisc.v/100 : Math.min(S.tdisc.v, after);
   const disc = S.member ? (after-tdisc)*0.05 : 0, net=after-tdisc-disc, tax=net*(sub-line>0 ? txb/(sub-line) : 0)*TAX;
   const gross = net+crv+tax, credit = Math.min(S.credit||0, gross);
-  return {sub, crv, offers, off, line, tdisc, disc, tax, credit, total:gross-credit, saved:off+line+tdisc+disc};
+  // bottle-return refund is a payment back to the customer, applied after tax like store credit
+  const rcyAmt = S.recyc ? S.recyc.amt : 0, rcy = Math.min(rcyAmt, gross-credit);
+  return {sub, crv, offers, off, line, tdisc, disc, tax, credit, rcy, rcyLeft:rcyAmt-rcy, total:gross-credit-rcy, saved:off+line+tdisc+disc};
 }
 
 function invList(){
@@ -1986,7 +1999,7 @@ function eod(d){
   const hw = [.5,.8,1.2,1.6,2.2,2.6,2.9,3.1,3.6,4.8,6.2,7.4,7.8,7.1,6.0,4.6,3.3,1.9], hs = hw.reduce((a,b)=>a+b,0);
   const hours = open ? [180,420,310,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] : hw.map(w=>Math.round(net*w/hs));
   return { d, open, net, tx, gross, disc, ret, tax, crv, total, card, tap, cash, off, pay, drops, expected, counted: r2(expected+os), os,
-    items: Math.round(tx*2.51), voids: open?0:3+Math.floor(h*6), voidAmt: open?0:r2(112.40*(0.5+h)), nosale: Math.floor(h*4), refunds: open?0:2+Math.floor(h*4),
+    items: Math.round(tx*2.51), recyc: open ? r2(8.70 + (S.rcyDone||0)) : r2(41.35*f), voids: open?0:3+Math.floor(h*6), voidAmt: open?0:r2(112.40*(0.5+h)), nosale: Math.floor(h*4), refunds: open?0:2+Math.floor(h*4),
     cats: [['Spirits',.46],['Beer & Seltzer',.31],['Wine',.18],['Mixers',.03],['Snacks',.02]].map(([n,w])=>[n, Math.round(net*w)]),
     cashiers: [['Maria G.',.4517],['Dev P.',.3602],['Sam R.',.1881]].map(([n,w])=>[n, Math.round(net*w), Math.round(tx*w)]),
     ids: {scan: Math.round(tx*0.092), eye: Math.round(tx*0.512), typed: open?0:Math.floor(h*3), refused: ymd(d)==='2026-09-24'?2:Math.floor(h*3)},
@@ -2019,7 +2032,7 @@ function sheetEOD(e, rc){
    + `<h2>Sales</h2><table>${row('Gross sales',money(e.gross))}${row('Discounts &amp; offers',money(-e.disc))}${row('Returns',money(-e.ret))}${row('Net sales',money(e.net),'tot')}${row('Sales tax 8.75%',money(e.tax))}${row('CRV collected',money(e.crv))}${row('Total collected',money(e.total),'tot')}</table>`
    + `<h2>Payments</h2><table>${row('Card (chip / swipe)',money(e.card))}${row('Tap &amp; mobile wallet',money(e.tap))}${row('Cash',money(e.cash))}${row('Offline card (uploaded)',money(e.off))}${row('Total',money(e.total),'tot')}</table>`
    + `<h2>Cash drawer</h2><table>${row('Opening float',money(300))}${row('Cash sales',money(e.cash))}${row('Paid outs',money(-e.pay))}${row('Safe drops',money(-e.drops))}${row('Expected in drawer',money(e.expected),'tot')}${row('Counted',money(e.counted))}${row('Over / short',money(e.os),'tot')}</table>`
-   + `<h2>Activity</h2><table>${row('Transactions',e.tx)}${row('Items sold',e.items.toLocaleString())}${row('Average basket',money(e.tx?e.net/e.tx:0))}${row('Voids',`${e.voids} · ${money(e.voidAmt)}`)}${row('Refunds',e.refunds)}${row('Drawer opened, no sale',e.nosale)}</table>`
+   + `<h2>Activity</h2><table>${row('Transactions',e.tx)}${row('Items sold',e.items.toLocaleString())}${row('Average basket',money(e.tx?e.net/e.tx:0))}${row('Voids',`${e.voids} · ${money(e.voidAmt)}`)}${row('Refunds',e.refunds)}${row('Bottle returns (CRV paid back)',money(e.recyc))}${row('Drawer opened, no sale',e.nosale)}</table>`
    + `<h2>By category</h2><table>${e.cats.map(c=>row(c[0],money(c[1],0))).join('')}</table>`
    + `<h2>By cashier</h2><table>${e.cashiers.map(c=>row(`${c[0]} · ${c[2]} sales`,money(c[1],0))).join('')}</table>`
    + `<h2>ID checks</h2><table>${row('Scanned',e.ids.scan)}${row('Approved by eye',e.ids.eye)}${row('Date of birth typed (manager)',e.ids.typed)}${row('Sales refused',e.ids.refused)}</table>`
@@ -2346,12 +2359,13 @@ VIEWS.shifts = () => {
     <div class="muted" style="font-size:12px;margin-top:8px">“Manager PIN” means a cashier can start it and a manager types their PIN to approve. Managers and cashiers work at their own store; owners see every store.</div>
   </section>`;
 };
+function saleTotals(sale){ const c=saleCalc(sale.items); return sale.tot ? {...c, save:sale.tot.save, tax:sale.tot.tax, total:sale.tot.total} : {...c, save:0}; }
 function receiptSheet(sale){
-  const c=saleCalc(sale.items), st=S.settings||{};
+  const c=saleTotals(sale), st=S.settings||{};
   return `<h1>${esc(st.name||'Oak Street Liquor #014')}</h1><div class="meta"><span>${esc(st.addr||'1200 Oak St, Sacramento, CA 95814')}</span><span>${esc(st.phone||'(916) 555-0101')}</span></div>
     <div class="meta"><span>Sale #${sale.no} · ${sale.t} · ${sale.who}</span></div>${st.rHeader?`<div class="meta"><span>${esc(st.rHeader)}</span></div>`:''}
     <h2>Items</h2><table>${sale.items.map(([id,q])=>{ const p=byId(id); return `<tr><td>${esc(p.n)} ${p.sz}<br>${q} × ${money(p.p)}${p.crv?` + CRV ${money(p.crv)}`:''}</td><td>${money(p.p*q)}</td></tr>`; }).join('')}
-    <tr><td>Subtotal</td><td>${money(c.sub)}</td></tr><tr><td>CRV</td><td>${money(c.crv)}</td></tr><tr><td>Sales tax ${(TAX*100).toFixed(2)}%</td><td>${money(c.tax)}</td></tr><tr class="tot"><td>Total</td><td>${money(c.total)}</td></tr><tr><td>Paid · ${esc(sale.tender)}</td><td>${money(c.total)}</td></tr></table>
+    <tr><td>Subtotal</td><td>${money(c.sub)}</td></tr>${c.save>0.005?`<tr><td>Offers and discounts</td><td>${money(-c.save)}</td></tr>`:''}<tr><td>CRV</td><td>${money(c.crv)}</td></tr><tr><td>Sales tax ${(TAX*100).toFixed(2)}%</td><td>${money(c.tax)}</td></tr><tr class="tot"><td>Total</td><td>${money(c.total)}</td></tr>${sale.rcy?`<tr><td>Bottle return · ${sale.rcyN} containers</td><td>${money(-sale.rcy)}</td></tr>`:''}<tr><td>Paid · ${esc(sale.tender)}</td><td>${money(c.total-(sale.rcy||0))}</td></tr></table>
     <div class="foot"><span>${esc(st.rFooter||'Returns: unopened items within 30 days with receipt. Please drink responsibly.')}</span><span>Reprint · ${fmtDay(RP_TODAY)}</span></div>`;
 }
 function sheetModal(title, html){
@@ -2465,6 +2479,10 @@ VIEWS.settings = () => {
       <div class="frow">${inp('tax','Sales tax %','type="number" step="0.01" min="0" max="20"')}<label class="field">Applies to<select disabled><option>All taxable items</option></select></label></div>
       <div class="frow">${inp('crvS','CRV under 24 oz ($)','type="number" step="0.01" min="0"')}${inp('crvL','CRV 24 oz or more ($)','type="number" step="0.01" min="0"')}</div>
       <div class="muted" style="font-size:12px">Charged per container on beer, seltzer, mixers and other covered drinks. A new tax rate applies to the next sale.</div></section>
+    <section class="card" style="display:flex;flex-direction:column;gap:6px" data-note="Bottle and can returns">
+      <h2>Bottle & can returns</h2>
+      <div class="setrow"><div><b>Take empty containers at the register</b><div class="muted" style="font-size:12px">Refunded at the CRV rates above</div></div><button class="toggle" aria-pressed="${st.rcyOn}" data-act="strcy" aria-label="Take bottle returns"></button></div>
+      <div class="setrow"><div><b>Allow cash payouts</b><div class="muted" style="font-size:12px">Off: the refund can only be taken off a purchase</div></div><button class="toggle" aria-pressed="${st.rcyCash}" data-act="strcycash" aria-label="Allow cash payouts"></button></div></section>
     <section class="card" style="display:flex;flex-direction:column;gap:10px" data-note="Legal sale hours · drive the compliance lock">
       <h2>Alcohol sale hours</h2><div class="frow">${inp('open','Sales start','type="time"')}${inp('close','Sales stop','type="time"')}</div>
       <div class="muted" style="font-size:12px">The register locks 21+ items outside these hours. See Compliance.</div></section>
@@ -2534,7 +2552,7 @@ VIEWS.reports = () => {
         <dt class="tot">Expected</dt><dd class="tot">${money(e.expected)}</dd><dt>Counted</dt><dd>${e.open?'—':money(e.counted)}</dd><dt class="tot">Over / short</dt><dd class="tot" style="color:${e.os<0?'var(--crit)':'inherit'}">${e.open?'—':money(e.os)}</dd></dl></section>
       <section class="card wide" data-note="Sales by hour"><div class="cardhead"><h2>Sales by hour</h2></div>${barChart(e.hours, ['8a','9a','10a','11a','12p','1p','2p','3p','4p','5p','6p','7p','8p','9p','10p','11p','12a','1a'], {h:180, hi:e.hours.indexOf(Math.max(...e.hours)), label:'Sales by hour'})}</section>
       <section class="card" data-note="Activity counts"><div class="cardhead"><h2>Activity</h2></div><dl class="kv">
-        <dt>Items sold</dt><dd>${e.items.toLocaleString()}</dd><dt>Voids</dt><dd>${e.voids} · ${money(e.voidAmt)}</dd><dt>Refunds</dt><dd>${e.refunds}</dd><dt>Drawer opened, no sale</dt><dd>${e.nosale}</dd>
+        <dt>Items sold</dt><dd>${e.items.toLocaleString()}</dd><dt>Voids</dt><dd>${e.voids} · ${money(e.voidAmt)}</dd><dt>Refunds</dt><dd>${e.refunds}</dd><dt>Bottle returns (CRV paid back)</dt><dd>${money(e.recyc)}</dd><dt>Drawer opened, no sale</dt><dd>${e.nosale}</dd>
         <dt>IDs scanned</dt><dd>${e.ids.scan}</dd><dt>Approved by eye</dt><dd>${e.ids.eye}</dd><dt>Sales refused</dt><dd>${e.ids.refused}</dd></dl></section>
       <section class="card" data-note="By category"><div class="cardhead"><h2>By category</h2></div>${e.cats.map(([n,v])=>`<div class="rpbar"><span>${n}</span><span class="meter"><i style="width:${e.net?v/e.net*100:0}%"></i></span><span class="num r">${money(v,0)}</span></div>`).join('')}</section>
       <section class="card" data-note="By cashier"><div class="cardhead"><h2>By cashier</h2></div>${e.cashiers.map(([n,v,t])=>`<div class="rpbar"><span>${n}</span><span class="meter"><i style="width:${e.net?v/e.net*100:0}%"></i></span><span class="num r">${money(v,0)}</span></div><div class="muted" style="font-size:11.5px;margin:-2px 0 4px">${t} sales</div>`).join('')}</section>
@@ -3026,7 +3044,7 @@ function payModal(phase='choose'){
 }
 function charge(){
   payModal('wait');
-  setTimeout(()=>{ S.cart.forEach(l=>{ const pr=byId(l.id); pr.stock=Math.max(0,pr.stock-l.qty); }); if (!SALES.some(x=>x.no===S.saleNo)) SALES.unshift({no:S.saleNo, t:nowLabel(), who:S.user, items:S.cart.map(l=>[l.id,l.qty]), tender: payMethod==='cash'?'Cash':payMethod==='tap'?'Apple Pay':'Visa ·· 4412', idm: S.cart.some(l=>byId(l.id).r) ? (S.idMethod==='visual'?'Approved by eye':S.idMethod==='manual'?'Date of birth typed':'ID scanned') : 'No 21+ items', member:S.member}); if (!S.online) S.queue.push({no:S.saleNo, amt:Math.round(totals().total*100)/100, t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), card:'Visa ·· 4412'}); S.cd.rc=null; S.cd.ask=null; S.cd.to=''; { const def=S.settings.rDefault; if (def==='Print' || (def!=='Ask on customer screen' && S.member)) setReceipt(def.toLowerCase()); else if (S.member && S.settings.rAutoMember) setReceipt('text'); } payModal('done'); renderRail(); renderTop(); }, payMethod==='cash'?300:1400);
+  setTimeout(()=>{ S.cart.forEach(l=>{ const pr=byId(l.id); pr.stock=Math.max(0,pr.stock-l.qty); }); if (!SALES.some(x=>x.no===S.saleNo)) SALES.unshift({no:S.saleNo, t:nowLabel(), who:S.user, items:S.cart.map(l=>[l.id,l.qty]), tender: payMethod==='cash'?'Cash':payMethod==='tap'?'Apple Pay':'Visa ·· 4412', idm: S.cart.some(l=>byId(l.id).r) ? (S.idMethod==='visual'?'Approved by eye':S.idMethod==='manual'?'Date of birth typed':'ID scanned') : 'No 21+ items', member:S.member, tot:(t=>({save:Math.round((t.saved)*100)/100, tax:Math.round(t.tax*100)/100, total:Math.round((t.total+t.rcy+t.credit)*100)/100}))(totals()), ...(S.recyc?{rcy:Math.round(totals().rcy*100)/100, rcyCash:Math.round(totals().rcyLeft*100)/100, rcyN:rcyCount(S.recyc.c)}:{})}); if (S.recyc) S.rcyDone+=S.recyc.amt; if (!S.online) S.queue.push({no:S.saleNo, amt:Math.round(totals().total*100)/100, t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), card:'Visa ·· 4412'}); S.cd.rc=null; S.cd.ask=null; S.cd.to=''; { const def=S.settings.rDefault; if (def==='Print' || (def!=='Ask on customer screen' && S.member)) setReceipt(def.toLowerCase()); else if (S.member && S.settings.rAutoMember) setReceipt('text'); } payModal('done'); renderRail(); renderTop(); }, payMethod==='cash'?300:1400);
 }
 
 function startDealRead(){ S.dealSheet='reading'; S.dealRows=SHEET.rows.map(()=>'review'); render(); setTimeout(()=>{ S.dealSheet='done'; render(); toast('5 lines read · 2 deals worth taking','spark'); }, 1400); }
@@ -3067,7 +3085,7 @@ function switchStore(id){
   PRODUCTS.forEach(p=>{ p.stock = stockAt(p.id, id); const o=S.priceMode==='store' && STORE_PRICE[S.store] && STORE_PRICE[S.store][p.id]; if (!o || p.base==null) p.base = o ? p.base??p.p : p.p; const n=S.priceMode==='store' && STORE_PRICE[id] && STORE_PRICE[id][p.id]; p.p = n || p.base; });
   const st=storeOf(id); S.store=id;
   Object.assign(S.settings, {name:st.n, addr:st.addr, phone:st.phone, lic:st.lic, tax:st.tax}); TAX=st.tax/100;
-  S.cart=[]; S.id=null; S.member=null; S.tdisc=null; S.credit=0; S.cdPhase=null; S.cd.rc=null;
+  S.cart=[]; S.id=null; S.member=null; S.tdisc=null; S.credit=0; S.recyc=null; S.cdPhase=null; S.cd.rc=null;
 }
 function transferSuggestions(){
   const out=[];
@@ -3160,7 +3178,7 @@ function customerScreen(stage){
     return `${head}<div class="cdidle"><small>Welcome in</small><h3>${o.length&&set.slides?esc(o[k].n):'Thanks for shopping local'}</h3><p>${o.length&&set.slides?esc(o[k].rule):esc(S.settings.rHeader)}</p>${set.join?`<div class="cdjoin">${ic('award')} Rewards members save 5% · text JOIN to 55123</div>`:''}${o.length>1&&set.slides?`<div class="cddots">${o.map((x,i)=>`<i class="${i===k?'on':''}"></i>`).join('')}</div>`:''}</div>`; }
   if (stage==='order') return `${head}<div class="cdorder"><div class="cdlines">${S.cart.map(l=>{ const p=byId(l.id); return `<div><span>${l.qty} × ${esc(p.n)}</span><b>${money(p.p*l.qty*(1-(l.disc||0)/100))}</b></div>`; }).join('')}
       ${set.save?t.offers.map(o=>`<div class="cdsave"><span>${ic('gift')} ${esc(o.n)}</span><b>${money(-o.amt)}</b></div>`).join(''):''}</div>
-      <div class="cdtot"><div><span>Subtotal</span><b>${money(t.sub)}</b></div>${t.saved>0.005&&set.save?`<div class="cdsave"><span>You save</span><b>${money(-t.saved)}</b></div>`:''}<div><span>CRV</span><b>${money(t.crv)}</b></div><div><span>Tax</span><b>${money(t.tax)}</b></div><div class="cdgrand"><span>Total</span><b>${money(t.total)}</b></div>
+      <div class="cdtot"><div><span>Subtotal</span><b>${money(t.sub)}</b></div>${t.saved>0.005&&set.save?`<div class="cdsave"><span>You save</span><b>${money(-t.saved)}</b></div>`:''}<div><span>CRV</span><b>${money(t.crv)}</b></div><div><span>Tax</span><b>${money(t.tax)}</b></div>${t.rcy?`<div class="cdsave"><span>${ic('recycle')} Bottle return</span><b>${money(-t.rcy)}</b></div>`:''}<div class="cdgrand"><span>Total</span><b>${money(t.total)}</b></div>
       ${S.cart.some(l=>byId(l.id).r)&&S.id!=='ok'&&set.id?`<div class="cdid">${ic('id')} Please have your ID ready</div>`:''}
       ${!S.member&&set.join?`<button class="cdbtn" data-act="cdjoin">${ic('award')} Enter phone for rewards</button>`:''}</div></div>`;
   if (stage==='pay') return `${head}<div class="cdpay"><small>Amount due</small><div class="cdbig">${money(t.total)}</div><div class="cdtap">${ic('tap')} Insert, tap or swipe on the card reader</div>${t.saved>0.005&&set.save?`<div class="cdsave" style="justify-content:center">You saved ${money(t.saved)} today</div>`:''}</div>`;
@@ -3176,15 +3194,15 @@ function setReceipt(how){
 }
 function barcodeSVG(seed){ let x=seed*7919, bars=''; for (let i=0,px=0;i<44;i++){ x=(x*1103515245+12345)%2147483648; const w=1+(x%3); if (i%2===0) bars+=`<rect x="${px}" y="0" width="${w}" height="34"/>`; px+=w; } return `<svg viewBox="0 0 96 34" aria-hidden="true" style="width:100%;height:34px;fill:#14212A">${bars}</svg>`; }
 function eReceipt(sale){
-  const st=curStore(), c=saleCalc(sale.items), rc=sale.rc||{how:'Text', to:'(916) 555-0148'};
-  const saved = sale.items.some(([id])=>id==='bud12'||id==='limes') ? 1.98 : 0;
+  const st=curStore(), c=saleTotals(sale), rc=sale.rc||{how:'Text', to:'(916) 555-0148'};
+  const saved = sale.tot ? c.save : sale.items.some(([id])=>id==='bud12'||id==='limes') ? 1.98 : 0;
   return `<div class="phone"><div class="phtop"></div>
     ${rc.how==='Email'?`<div class="phmsg mail"><b>${esc(st.n)}</b><small>Your receipt · ${money(c.total)}</small></div>`:`<div class="phmsg"><small>${esc(st.short)} Liquor</small>Thanks for shopping with us! Your receipt for ${money(c.total)}: bev.link/r/${(sale.no*4241).toString(36).toUpperCase()}</div>`}
     <div class="erc">
       <div class="erchead"><img src="${MARK}" alt=""><b>${esc(st.n)}</b><small>${esc(st.addr)}</small><small>Sale #${sale.no} · ${esc(sale.t)} · ${esc(sale.who)}</small></div>
       ${sale.items.map(([id,q])=>{ const p=byId(id); return `<div class="erl"><span>${q} × ${esc(p.n)}</span><b>${money(p.p*q)}</b></div>`; }).join('')}
-      <div class="erl sub"><span>Subtotal</span><b>${money(c.sub)}</b></div><div class="erl sub"><span>CRV</span><b>${money(c.crv)}</b></div><div class="erl sub"><span>Sales tax</span><b>${money(c.tax)}</b></div>
-      <div class="erl tot"><span>Total</span><b>${money(c.total)}</b></div><div class="erl sub"><span>Paid</span><b>${esc(sale.tender)}</b></div>
+      <div class="erl sub"><span>Subtotal</span><b>${money(c.sub)}</b></div>${sale.tot&&c.save>0.005?`<div class="erl sub"><span>Offers and discounts</span><b>${money(-c.save)}</b></div>`:''}<div class="erl sub"><span>CRV</span><b>${money(c.crv)}</b></div><div class="erl sub"><span>Sales tax</span><b>${money(c.tax)}</b></div>
+      <div class="erl tot"><span>Total</span><b>${money(c.total)}</b></div>${sale.rcy?`<div class="erl sub"><span>♻ Bottle return · ${sale.rcyN}</span><b>${money(-sale.rcy)}</b></div>`:''}<div class="erl sub"><span>Paid</span><b>${esc(sale.tender)}</b></div>
       ${saved&&S.settings.rSave?`<div class="ersave">You saved ${money(saved)} with today’s offers</div>`:''}
       <div class="ercode">${barcodeSVG(sale.no)}<small>Show this code for returns and exchanges · 30 days</small></div>
       <div class="eroffer">${ic('gift')} Next visit: $2 off any mixer with this receipt</div>
@@ -3232,6 +3250,31 @@ VIEWS.display = () => {
 setInterval(()=>{ const els=document.querySelectorAll('.cdscreen[data-stage="idle"]'); if (!els.length) return; S.cdSlide++; els.forEach(el=>el.innerHTML=customerScreen('idle')); }, 4000);
 function cdPip(){ return S.cdPip ? `<div class="cdpip" data-note="Customer screen mirror"><div class="cdpiphead">${ic('monitor')} Customer screen<span class="spacer"></span><button class="iconbtn" data-act="cdpip" aria-label="Hide customer screen">${ic('x')}</button></div><div class="cdscreen" id="cdpip-body" data-stage="${cdStage()}">${customerScreen(cdStage())}</div></div>` : ''; }
 
+/* ------------------------------------------------ bottle & can returns (CRV redemption) */
+const RCY_TYPES = [['al','Aluminum cans','under 24 oz','crvS'],['pl','Plastic bottles','under 24 oz','crvS'],['gl','Glass bottles','under 24 oz','crvS'],['big','Cans and bottles','24 oz or more','crvL']];
+const rcyCount = c => Object.values(c).reduce((a,b)=>a+(+b||0),0);
+const rcyValue = c => Math.round(RCY_TYPES.reduce((a,[k,,,r])=>a+(+c[k]||0)*(+S.settings[r]),0)*100)/100;
+function recycleModal(){
+  const R=S.rcy, n=rcyCount(R.c), v=rcyValue(R.c), over=RCY_TYPES.filter(([k])=>k!=='big' && (+R.c[k]||0)>50), hasCart=S.cart.length>0;
+  if (!hasCart && R.pay==='credit') R.pay='cash';
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Bottle and can returns" style="width:min(600px,100%)">
+    <header>${ic('recycle')}<h2>Bottle & can returns</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body" style="display:flex;flex-direction:column;gap:10px">
+      <div class="muted" style="font-size:12.5px">Count the empty containers the customer brings back. Each one is refunded at its California redemption value (CRV).</div>
+      ${RCY_TYPES.map(([k,l,sz,r])=>`<div class="rcyrow"><div><b>${l}</b><small>${sz} · ${money(+S.settings[r])} each</small></div>
+        <div class="qty"><button data-rcq="${k}|-1" aria-label="One less">−</button><input id="rcy-${k}" inputmode="numeric" value="${+R.c[k]||0}" aria-label="${l} ${sz}"><button data-rcq="${k}|1" aria-label="One more">+</button></div>
+        <div class="quick">${[6,12,24].map(q=>`<button data-rcq="${k}|${q}" style="padding:4px 8px;font-size:11.5px">+${q}</button>`).join('')}</div>
+        <b class="num r">${money((+R.c[k]||0)*(+S.settings[r]))}</b></div>`).join('')}
+      <div class="rcytot"><span>${n} container${n===1?'':'s'}</span><b class="num">${money(v)}</b></div>
+      ${over.length?`<div class="clockban soon">${ic('alert')} Over 50 ${over.map(o=>o[1].toLowerCase()).join(' and ')}: California lets the store pay by weight instead of by count for the extra.</div>`:''}
+      <div class="chip plain" style="align-self:flex-start;white-space:normal;height:auto;padding:6px 10px">Not refundable: wine and liquor bottles (no CRV), dirty or broken containers.</div>
+      <div class="field">Give the refund as<div class="quick">
+        <button class="${R.pay==='credit'?'on':''}" data-rcpay="credit" ${hasCart?'':'disabled'}>Take off this purchase</button>
+        ${S.settings.rcyCash?`<button class="${R.pay==='cash'?'on':''}" data-rcpay="cash">Cash from the drawer</button>`:''}</div></div>
+      <div class="muted" style="font-size:12px">${R.pay==='credit'?'Taken off the total after tax. The refund is money back to the customer, not a price discount, so sales tax doesn’t change. Anything more than the total is paid in cash.':'Paid from the drawer now and logged on the end-of-day report as a recycling payout.'}</div>
+    </div>
+    <footer>${S.recyc?`<button class="btn ghost" data-act="rcyremove" style="margin-right:auto">Remove</button>`:''}<button class="btn" data-close>Cancel</button><button class="btn primary" data-act="rcyapply" ${n?'':'disabled'}>${R.pay==='credit'?`Apply ${money(v)} to purchase`:`Pay ${money(v)} cash`}</button></footer></div></div>`;
+}
 /* ------------------------------------------------ guided demo */
 function resetSale(){ S.cart=[{id:'casa750',qty:1},{id:'bud12',qty:2}]; S.id=null; S.tdisc=null; S.member=null; S.cat='All'; S.q=''; }
 const TOUR = [
@@ -3290,7 +3333,7 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-ilink],[data-bcpick],[data-npsh],[data-npcat],[data-npuse],[data-npbc],[data-signwho],[data-pinkey],[data-rcvtab],[data-rcvq],[data-strdef],[data-clockuser],[data-salesel],[data-retchk],[data-retq],[data-retwhy],[data-retdest],[data-retmeth],[data-vsel],[data-nvday],[data-nvvia],[data-nvp],[data-store],[data-sttab],[data-trmake],[data-trnext],[data-pmode],[data-ofs],[data-cdrc],[data-cdprev],[data-cdset],[data-erhow],[data-cdback],[data-cdsend]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-ilink],[data-bcpick],[data-npsh],[data-npcat],[data-npuse],[data-npbc],[data-signwho],[data-pinkey],[data-rcvtab],[data-rcvq],[data-strdef],[data-clockuser],[data-salesel],[data-retchk],[data-retq],[data-retwhy],[data-retdest],[data-retmeth],[data-vsel],[data-nvday],[data-nvvia],[data-nvp],[data-store],[data-sttab],[data-trmake],[data-trnext],[data-pmode],[data-ofs],[data-cdrc],[data-cdprev],[data-cdset],[data-erhow],[data-cdback],[data-cdsend],[data-rcq],[data-rcpay]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -3308,6 +3351,8 @@ document.addEventListener('click', e => {
   if (d.trnext){ const t=TRANSFERS[+d.trnext]; t.st++; if (t.st===1) setStockAt(t.pid, t.from, stockAt(t.pid,t.from)-t.q); if (t.st===3) setStockAt(t.pid, t.to, stockAt(t.pid,t.to)+t.q); render(); toast(`${t.no} · ${TR_ST[t.st].toLowerCase()}${t.st===3?` · ${t.q} added to ${storeOf(t.to).short} stock`:''}`); return; }
   if (d.pmode){ S.priceMode=d.pmode; PRODUCTS.forEach(p=>{ if (p.base==null) p.base=p.p; const o=STORE_PRICE[S.store]&&STORE_PRICE[S.store][p.id]; p.p = S.priceMode==='store' && o ? o : p.base; }); render(); return; }
   if (d.ofs){ const [oid,sid]=d.ofs.split('|'); const sc=OFFER_SCOPE[oid]||STORES.map(x=>x.id); OFFER_SCOPE[oid]= sc.includes(sid) ? sc.filter(x=>x!==sid) : [...sc, sid]; render(); return; }
+  if (d.rcq){ const [k,q]=d.rcq.split('|'); S.rcy.c[k]=Math.max(0,(+S.rcy.c[k]||0)+(+q)); recycleModal(); return; }
+  if (d.rcpay){ S.rcy.pay=d.rcpay; recycleModal(); return; }
   if (d.cdback){ S.cd.ask=null; cdRefresh(); return; }
   if (d.cdsend){ S.cd.to = S.cd.ask==='text' ? '(916) 555-0172' : 'sam.lee@example.com'; const k=S.cd.ask; S.cd.ask=null; setReceipt(k); if (document.querySelector('#modal .scrim') && S.cdPhase==='done') payModal('done'); else cdRefresh(); return; }
   if (d.cdrc && (d.cdrc==='text'||d.cdrc==='email') && !S.member){ S.cd.ask=d.cdrc; S.cd.rc=null; if (document.querySelector('#modal .scrim') && S.cdPhase==='done') payModal('done'); else cdRefresh(); return; }
@@ -3406,7 +3451,7 @@ document.addEventListener('click', e => {
     case 'notes': S.notes=!S.notes; render(); break;
     case 'theme': document.documentElement.dataset.theme = isDark()?'light':'dark'; render(); if(S.route==='forecast') drawForecast(); break;
     case 'member': S.member = S.member?null:'Jordan D.'; render(); break;
-    case 'clear': S.cart=[]; S.id=null; S.tdisc=null; S.credit=0; render(); toast('Sale voided'); break;
+    case 'clear': S.cart=[]; S.id=null; S.tdisc=null; S.credit=0; S.recyc=null; render(); toast('Sale voided'); break;
     case 'disc': S.dm={target:'sale', kind:'%', v:10, reason:'Manager courtesy'}; S.pinOk=false; discModal(); break;
     case 'discapply': { const D=S.dm; if (D.target==='sale') S.tdisc={kind:D.kind, v:+D.v, reason:D.reason};
       else { const l=S.cart.find(x=>x.id===D.target), base=byId(l.id).p*l.qty; l.disc = D.kind==='%' ? +D.v : Math.round(+D.v/base*1000)/10; l.reason=D.reason; }
@@ -3427,6 +3472,11 @@ document.addEventListener('click', e => {
     case 'cntdone': { const C=S.cnt; let u=0, v=0; C.lines.forEach(l=>{ const p=byId(l.pid), dv=+l.c-l.exp; u+=dv; v+=dv*p.p*0.7; p.stock=+l.c; });
       SHRINK.unshift({d:'Sep 25', area:C.area, units:u, value:Math.round(v*100)/100, by:S.user}); C.done=true; render(); toast(`Stock adjusted · ${u>0?'+':''}${u} units (${money(v)}) recorded`,'box'); break; }
     case 'strsave': S.settings.rSave=!S.settings.rSave; render(); break;
+    case 'rcyopen': S.rcy = {c: S.recyc ? {...S.recyc.c} : {al:0, pl:0, gl:0, big:0}, pay: S.cart.length ? 'credit' : 'cash'}; recycleModal(); break;
+    case 'rcyremove': S.recyc=null; closeModal(); render(); toast('Bottle return removed'); break;
+    case 'rcyapply': { const v=rcyValue(S.rcy.c), n=rcyCount(S.rcy.c); if (!n) break;
+      if (S.rcy.pay==='cash'){ S.rcyDone+=v; closeModal(); render(); toast(`Paid ${money(v)} cash for ${n} containers · logged as a recycling payout`,'recycle'); }
+      else { S.recyc={c:{...S.rcy.c}, amt:v}; closeModal(); render(); toast(`${money(v)} bottle return taken off this purchase`,'recycle'); } break; }
     case 'storepick': storeModal(); break;
     case 'allstores': closeModal(); S.stTab='overview'; go('stores'); break;
     case 'pricesync': for (const k in STORE_PRICE) delete STORE_PRICE[k]; PRODUCTS.forEach(p=>{ if (p.base!=null) p.p=p.base; }); render(); toast('Every store now uses head office prices · shelf tags queued'); break;
@@ -3439,6 +3489,8 @@ document.addEventListener('click', e => {
     case 'cdjoin': S.member='Jordan D.'; render(); cdRefresh(); toast('Member found: Jordan D. · 1,240 points · 5% off applied'); break;
     case 'eropen': { const sale=SALES.find(x=>x.no===S.saleSel); S.er={how:'Text', to: sale&&sale.member ? '(916) 555-0148' : ''}; erModal(); break; }
     case 'ersend': { const sale=SALES.find(x=>x.no===S.saleSel); sale.rc={how:S.er.how, to:S.er.to.trim()}; closeModal(); render(); toast(`Receipt ${S.er.how==='Text'?'texted':'emailed'} to ${S.er.to.trim()}`); break; }
+    case 'strcy': S.settings.rcyOn=!S.settings.rcyOn; render(); break;
+    case 'strcycash': S.settings.rcyCash=!S.settings.rcyCash; render(); break;
     case 'strauto': S.settings.rAutoMember=!S.settings.rAutoMember; render(); break;
     case 'strprev': sheetModal('Receipt preview', receiptSheet(SALES[0])); break;
     case 'signin': S.signin={who:null, pin:'', err:false}; signinModal(); break;
@@ -3514,7 +3566,7 @@ document.addEventListener('click', e => {
     case 'idcontinue': if (S.payAfterId){ payMethod='card'; payModal(); } else { closeModal(); render(); } break;
     case 'declinesale': S.cart=S.cart.filter(x=>!byId(x.id).r); S.id=null; closeModal(); render(); toast('21+ items removed · refusal logged','alert'); break;
     case 'charge': charge(); break;
-    case 'newsale': S.cart=[]; S.id=null; S.member=null; S.tdisc=null; S.credit=0; S.saleNo++; closeModal(); S.cdPhase=null; S.cd.rc=null; S.cd.ask=null; S.cd.to=''; render(); break;
+    case 'newsale': S.cart=[]; S.id=null; S.member=null; S.tdisc=null; S.credit=0; S.recyc=null; S.saleNo++; closeModal(); S.cdPhase=null; S.cd.rc=null; S.cd.ask=null; S.cd.to=''; render(); break;
     case 'invall': { S.inv = S.inv.map((v,i)=> (INVOICE[i].m || S.invLink[i]) && INVOICE[i].conf>=90 && v==='review' ? 'ok' : v); const left=INVOICE.filter((l,i)=>!l.m && !S.invLink[i]).length; render(); toast(`Matched lines approved${left?` · ${left} line${left>1?'s':''} still need a product`:''}`); break; }
     case 'invpost': S.invStep=8; render(); toast('Inventory and accounting updated'); break;
     case 'offtoggle': S.offlineLimit=!S.offlineLimit; render(); break;
@@ -3549,6 +3601,7 @@ document.addEventListener('keydown', e => {
     const m = PRODUCTS.find(p=>p.n.toLowerCase().includes(S.q.toLowerCase()) && (S.cat==='All'||p.cat===S.cat)); if (m){ S.q=''; const l=S.cart.find(x=>x.id===m.id); l?l.qty++:S.cart.push({id:m.id,qty:1}); render(); $('#q').focus(); } }
 });
 document.addEventListener('change', e => {
+  if (e.target.id && e.target.id.startsWith('rcy-') && S.rcy){ S.rcy.c[e.target.id.slice(4)]=Math.max(0, Math.floor(+e.target.value||0)); setTimeout(()=>{ if (S.rcy && document.getElementById(e.target.id)) recycleModal(); },0); return; }
   if (e.target.id==='mst-pid'){ S.stPid=e.target.value; render(); return; }
   if (e.target.id==='ns-mgr' || e.target.id==='ns-copy'){ S.ns[e.target.id.slice(3)]=e.target.value; return; }
   if (e.target.id && e.target.id.startsWith('np-') && S.np){ const k=e.target.id.slice(3); S.np[k]=e.target.value;
