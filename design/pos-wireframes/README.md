@@ -54,6 +54,10 @@ stays clickable during the tour. The story runs:
   build notes for each screen, and outlines each component with its label.
 - **Moon / sun**: light and dark theme.
 
+## Screen guide (PDF)
+
+`Bevnetic-POS-Screen-Guide.pdf` is a 29-page landscape booklet: a screenshot of every screen with what it's for, what you can do on it and who uses it, plus roles, top-bar controls and phone layouts.
+
 ## Moving to the real application
 
 The notes mode on each screen lists the API calls and integrations that screen
