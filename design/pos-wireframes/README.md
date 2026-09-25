@@ -9,7 +9,7 @@ All figures are demo data.
 | Screen | Deck page | What you can try |
 | --- | --- | --- |
 | Command Center | p.11 | KPI strip, AI "5 things today" list; every item links to the screen that fixes it |
-| Register | p.2–5 | Product cards with drawn bottle art, category counts, AI add-on suggestions, sold-out swap to the best alternative, allocated-bottle winner check, one-tap refuse sale, after-hours lock. Add items, offers applied automatically, line or whole-sale discounts (manager PIN over 15%, blocked over 30% so alcohol never sells below cost), 21+ lock, ID scan (pass and underage demo), card / tap / cash / split tender, CRV + tax |
+| Register | p.2–5 | Product cards with drawn bottle art, category counts, AI add-on suggestions, sold-out swap to the best alternative, one-tap refuse sale, after-hours lock. Add items, offers applied automatically, line or whole-sale discounts (manager PIN over 15%, blocked over 30% so alcohol never sells below cost), 21+ lock, ID scan (pass and underage demo), card / tap / cash / split tender, CRV + tax |
 | Purchasing | New | Compare vendors per product: price, deal (free cases, discounted extra case, volume tiers), delivery, reliability, terms. AI picks the quantity with the lowest cost per case without more than 30 days of extra stock, flags deal traps, and builds one draft PO per vendor. PO tracker |
 | Damaged Goods | p.7 (extended) | Report breakage / expiry / returns with photo, stock adjusts, supplier claims move Draft → Submitted → Credited, damage log, loss pattern |
 | Compliance | New | Legal sale-hours timeline with demo clock (locks the register after 2 AM), rules the register enforces, cashier scorecard, refusal log, inspection report |
@@ -19,20 +19,19 @@ All figures are demo data.
 | Alerts | p.7 | All 7 alert types with resolving actions and filters |
 | Customers | p.2 | Member profile, AI segments, SMS campaign preview |
 | Offers & Discounts | p.2 (extended) | Offer cards with pause/activate (changes the register live), AI-suggested offers, offer builder with state-rule compliance checks and receipt preview |
-| Allocated Bottles | New | Rare-release raffles and waitlists, draw winners, per-ID purchase limits, reseller filtering |
 | Devices & Offline | p.3–5 | ID provider comparison, lane terminals, offline limits, store-and-forward queue |
 
 ## Guided demo
 
 Press **▶ Demo** in the top bar (or open the page with `#demo` at the end of the URL).
-A 14-step tour opens each screen, sets up the example, highlights the feature and shows
+A 13-step tour opens each screen, sets up the example, highlights the feature and shows
 presenter notes under "What to say". Use **Next / Back** or the arrow keys; everything
 stays clickable during the tour. The story runs:
 
 1. Morning briefing → 2. Alerts → 3. Forecast → 4. Vendor deal comparison →
 5. Deal trap skipped → 6. AI invoice → 7. Liquor checkout with offers and add-ons →
 8. Sold-out swap → 9. ID check → 10. Offline payment → 11. Compliance lock →
-12. Allocated bottles → 13. Damaged goods → 14. Inventory heat map
+12. Damaged goods → 13. Inventory heat map
 
 ## Controls in the top bar
 
