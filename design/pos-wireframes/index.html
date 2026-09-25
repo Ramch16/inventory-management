@@ -492,6 +492,14 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 .pricetbl input[type=number]{width:84px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font:600 13px var(--mono);color:var(--ink)}
 .pricetbl input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent)}
 .pricetbl small{display:block;color:var(--muted);font-size:11px}
+.pricetbl .tgt{display:flex;align-items:center;gap:4px;font:600 13px var(--mono)}
+.pricetbl .tgt input{width:58px}
+.pricetbl .src{display:inline-block;margin-top:3px;font:700 10px/1 var(--body);padding:3px 6px;border-radius:5px}
+.src.product{background:var(--violet-soft);color:var(--violet)} .src.group{background:var(--over-soft);color:var(--over)} .src.category{background:var(--surface-2);color:var(--muted)}
+.mrule{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:13px}
+.mrule div{flex:1;min-width:0}
+.mrule small{display:block;color:var(--muted);font-size:11.5px}
+.mrule .pct{font:700 15px var(--mono)}
 .pricetbl tr.applied td{background:var(--ok-soft)}
 .tags{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
 .tag{border:2px solid #1C2A36;border-radius:6px;padding:8px 10px;background:#FFFFFF;color:#1C2A36;display:flex;flex-direction:column;gap:2px;font-family:var(--body)}
@@ -731,6 +739,7 @@ const INV = [
 const shortV = v => v.replace(/ (Wine & Spirits|Distributing|Beverage|Imports|Cash & Carry|Co\.)$/,'');
 const daysTxt = d => d==null ? 'no recent sales' : d===0 ? 'out of stock' : `${d} day${d===1?'':'s'} left`;
 const REORDER_BUY = {0:'bud', 8:'tito', 28:'tonic'};
+const HEAT_PID = {0:'bud12',1:'casa750',2:'kim750',5:'josh750',6:'noon8',7:'modelo12',8:'tito175',9:'meiomi',11:'jame750',12:'hen750',13:'crown750',16:'bac1l',17:'lamarca',18:'claw12',21:'redbull4',26:'ice10',27:'limes',28:'tonic4'};
 const FC = {
   bud12:{n:'Bud Light 12pk Cans', base:12, wk:1.6, stock:72, lead:2, pack:2, unit:'12pks', supplier:'Valley Beer Distributing'},
   tito175:{n:"Tito's Handmade Vodka 1.75 L", base:1.6, wk:1.8, stock:22, lead:3, pack:6, unit:'bottles', supplier:'Summit Wine & Spirits'},
@@ -761,7 +770,7 @@ const ALERTS = [
 const NOTES = {
   command:{deck:'Deck p.11 · AI Owner Command Center', purpose:'One morning view for the owner: today\'s numbers plus the five things that need attention, each linking to the screen that fixes it.', data:['Sales, margin, inventory value (POS + inventory service)','Priority feed ranked by $ impact and urgency','Hourly sales with an AI projection for the rest of the day'], build:['GET /dashboard/today','GET /ai/priorities?limit=5','Push refresh every 5 min; owner and manager roles only']},
   register:{deck:'Deck p.2–5 · Checkout, ID scan, payments, offline', purpose:'Fast lane checkout. Any 21+ item locks tender until an ID scan passes, and the sale keeps working when the internet drops.', data:['Catalog with category, size, ABV, CRV deposit, age flag','Cart, tax 8.75%, CRV, loyalty member','ID result: DOB, age, expiry, authenticity checks'], build:['Barcode scanner as keyboard wedge + camera fallback','ID SDK (Scandit / IDScan.net) on-device, store result not image','Terminal SDK (PAX, Verifone, Stripe) · offline store-and-forward queue in IndexedDB']},
-  pricing:{deck:'New · cost changes → retail prices', purpose:'When a vendor PO, price sheet or invoice changes a cost, suggest the new shelf price from the category’s target margin, apply rounding and limits, let the owner approve, then update the register and queue shelf tags.', data:['Case cost old → new and cost per unit (case ÷ pack)','Target margin per category, rounding rule, 10% change limit','Current and new margin and markup per product'], build:['Suggested price = unit cost ÷ (1 − target margin), rounded up to the price ending','Checks: never below cost, state minimum-price rules, multi-pack consistency','Approved prices go live now or at opening; tags go to the label printer; price history kept']},
+  pricing:{deck:'New · cost changes → retail prices', purpose:'When a vendor PO, price sheet or invoice changes a cost, suggest the new shelf price from the category’s target margin, apply rounding and limits, let the owner approve, then update the register and queue shelf tags.', data:['Case cost old → new and cost per unit (case ÷ pack)','Margin rules: this product → brand/group → category default','Target margin per category, rounding rule, 10% change limit','Current and new margin and markup per product'], build:['Suggested price = unit cost ÷ (1 − target margin), rounded up to the price ending','Checks: never below cost, state minimum-price rules, multi-pack consistency','Approved prices go live now or at opening; tags go to the label printer; price history kept']},
   purchasing:{deck:'New · vendor deals + purchase orders', purpose:'Each brand comes from one distributor in the store’s area. For each product, compare that vendor’s own options (buy just what you need, or take one of its deals) as the real cost per case, then group products into one PO per vendor. Deals arrive by deal sheet, forwarded rep email, vendor portal or state price posting.', data:['Product → its one vendor: case cost, lead time, on-time rate, terms, minimum','Every active deal from that vendor: free cases, discounted extra case, % or $ volume tiers','Forecast need for the next 30 days and daily sales in cases'], build:['Deals don’t stack: each is evaluated on its own against buying at list','Plan search: every quantity from need to need + 15, rejecting plans with more than 30 days of extra stock','State rules flag deal types a distributor may not offer']},
   inventory:{deck:'Deck p.9–10 · Inventory Heat Map + AI Insight', purpose:'Colour shows the state of every SKU; the AI panel turns it into a ranked to-do list.', data:['Per product: stock left, days left, reorder point, vendor, last order date and quantity, open order','Days of cover = on hand ÷ forecast daily demand','Reorder point, expiry date, last-sale date, margin','Capital tied up = on hand × cost for overstock'], build:['Nightly + on-sale recalculation of state','Tile size = inventory value (treemap)','Actions create POs, markdowns or transfers']},
   assortment:{deck:'New · dead stock + best sellers (extends deck p.9–10)', purpose:'Find products that no longer sell, clear them, and replace them with products that sell in similar stores. Rank best sellers and warn before they run out.', data:['Days since last sale, units on hand, cash tied up, shelf location','Replacement: same shelf and price band, sales in similar stores, margin, vendor','Best sellers by units, revenue or profit for 7 / 30 / 90 days, trend, days of cover'], build:['Dead stock rule: no sale in 60+ days (owner can change it)','Replacement engine: category + price band + local market sales + this store’s basket data','One tap creates a clearance offer and a trial-case draft PO']},
@@ -874,13 +883,23 @@ function roundPrice(x, rule){
   const f=Math.floor(x); return x<=f+0.99+1e-9 ? f+0.99 : f+1.99;
 }
 const marginOf = (price, cost) => (price-cost)/price*100, markupOf = (price, cost) => (price-cost)/cost*100;
+const AI_MARGIN = [
+  {pid:'tito175', m:24, why:'Sells 3× faster than your other vodkas and customers know its price. A lower margin keeps you competitive.'},
+  {pid:'meiomi', m:40, why:'Wine shoppers here rarely compare prices, and it sold steadily at 44% for 6 months.'},
+];
+// most specific rule wins: this product → brand/group → category default
+function tgtFor(pid){
+  if (S.itemMargin[pid]!=null) return {m:S.itemMargin[pid], src:'product', label:'This product'};
+  const g = S.groups.find(x=>x.pids.includes(pid)); if (g) return {m:g.m, src:'group', label:g.n};
+  const p = byId(pid); return {m:S.margins[CAT_KEY[p.cat]], src:'category', label:p.cat+' default'};
+}
 function priceRow(c){
-  const p=byId(c.pid), oldU=c.oldCase/c.pack, newU=c.newCase/c.pack, tgt=S.margins[CAT_KEY[p.cat]];
+  const p=byId(c.pid), oldU=c.oldCase/c.pack, newU=c.newCase/c.pack, rule=tgtFor(c.pid), tgt=rule.m;
   const cur=p.p, curM=marginOf(cur,newU), oldM=marginOf(cur,oldU), target=newU/(1-tgt/100), sug=roundPrice(target, S.rounding);
   let kind = curM < tgt-0.05 ? 'raise' : (newU<oldU && sug <= cur-0.5) ? 'lower' : 'keep';
   const price = S.priceEdit[c.pid]!=null ? S.priceEdit[c.pid] : kind==='keep' ? cur : sug;
   const chg = (price-cur)/cur*100;
-  return {c, p, oldU, newU, tgt, cur, curM, oldM, sug, kind, price, newM:marginOf(price,newU), newMu:markupOf(price,newU), chg, big:Math.abs(chg)>10, below:price<newU};
+  return {c, p, rule, oldU, newU, tgt, cur, curM, oldM, sug, kind, price, newM:marginOf(price,newU), newMu:markupOf(price,newU), chg, big:Math.abs(chg)>10, below:price<newU};
 }
 const POS_DATA = [
   {no:'PO-10241', v:'Valley Beer Distributing', lines:'Modelo 12pk ×20 cases · White Claw ×10 cases', total:612.40, st:'Sent', note:'No reply in 2 days'},
@@ -941,7 +960,7 @@ const S = {
   clock:'now', refuse:{why:'Appears intoxicated'},
   refusals:[{t:'Thu 11:42 PM', why:'Appears intoxicated', by:'Dev P.', val:41.97},{t:'Thu 7:15 PM', why:'Under 21 (ID scan)', by:'Maria G.', val:24.99},{t:'Wed 9:03 PM', why:'Buying for someone else', by:'Sam R.', val:54.99}],
   tour:null,
-  margins:{sp:28, wi:35, be:22, mx:40}, rounding:'99', priceEdit:{}, priceSel:null, priceDone:{}, tagsQ:[], priceWhen:'now',
+  margins:{sp:28, wi:35, be:22, mx:40}, itemMargin:{}, groups:[{n:'Premium spirits', pids:['casa750','hen750'], m:30}], rounding:'99', priceEdit:{}, priceSel:null, priceDone:{}, tagsQ:[], priceWhen:'now',
   dealSheet:null, dealRows:SHEET.rows.map(()=>'review'), dealsAdded:[],
   invView:'tiles',
   shelfTab:'dead', swapDone:[], bestBy:'profit', bestPer:'30',
@@ -1243,6 +1262,7 @@ VIEWS.inventory = () => {
           <dt>Quantity ordered</dt><dd>${d.lq}</dd>
           <dt>Open order</dt><dd>${d.po||'none'}</dd>
           <dt>Unit cost / shelf price</dt><dd>${money(d.c)} / ${money(d.r)} · ${marginOf(d.r,d.c).toFixed(0)}% margin</dd>
+          ${HEAT_PID[S.tile] ? (()=>{ const t=tgtFor(HEAT_PID[S.tile]), cm=marginOf(d.r,d.c); return `<dt>Target margin</dt><dd>${t.m}% · ${esc(t.label)}${cm<t.m-0.5?' <span class="chip crit" style="margin-left:4px">below</span>':''}</dd>`; })() : ''}
           <dt>Last sale</dt><dd>${d.ls}</dd></dl>
         <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">${low||(d.d!=null&&d.d<=5)?`<button class="btn primary sm" ${REORDER_BUY[S.tile]?`data-buygo="${REORDER_BUY[S.tile]}"`:'data-go="purchasing"'}>Reorder</button>`:''}<button class="btn sm" data-go="forecast">View forecast</button>${d.d==null||d.d>60?`<button class="btn sm" data-go="assortment">Find a replacement</button>`:''}<button class="btn sm" data-toast="Markdown scheduled for tomorrow">Mark down</button></div>`; })()}</section>` : ''}
       <section class="card" data-note="AI action list · prioritized">
@@ -1584,30 +1604,36 @@ VIEWS.pricing = () => {
       </div>
     </section>
     <section class="card" data-note="Owner sets target margin per category">
-      <div class="cardhead"><h2>Target margin by category</h2><span class="spacer"></span><span class="muted" style="font-size:12px">Margin = profit ÷ shelf price</span></div>
+      <div class="cardhead"><h2>Margin rules</h2><span class="spacer"></span><span class="muted" style="font-size:12px">Margin = profit ÷ shelf price · the most specific rule wins</span></div>
+      <div class="eyebrow" style="margin-bottom:6px">Category defaults <span style="text-transform:none;letter-spacing:0;font-weight:500">(used when no other rule applies)</span></div>
       <div class="margins">${catRow.map(([k,l])=>`<label>${l}<span class="pct"><input type="number" id="tgt-${k}" min="5" max="80" step="1" value="${S.margins[k]}" aria-label="${l} target margin">%</span></label>`).join('')}</div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px">
         <span class="eyebrow">Price endings</span><div class="seg">${[['99','.99'],['49','.49 or .99']].map(([v,l])=>`<button class="${S.rounding===v?'on':''}" data-round="${v}">${l}</button>`).join('')}</div>
         <span class="chip plain">Changes over 10% need your OK</span><span class="chip plain">Never below cost</span></div>
+      <div class="eyebrow" style="margin:14px 0 2px">Brand and group rules <span style="text-transform:none;letter-spacing:0;font-weight:500">(beat the category default)</span></div>
+      ${S.groups.map((g,gi)=>`<div class="mrule"><span class="src group">Group</span><div><b>${esc(g.n)}</b><small>${g.pids.map(x=>byId(x).n).join(', ')}</small></div><span class="pct">${g.m}%</span></div>`).join('')}
+      <div class="eyebrow" style="margin:14px 0 2px">Product rules <span style="text-transform:none;letter-spacing:0;font-weight:500">(beat everything else)</span></div>
+      ${Object.keys(S.itemMargin).length ? Object.entries(S.itemMargin).map(([k,v])=>`<div class="mrule"><span class="src product">Product</span><div><b>${byId(k).n}</b><small>Used for every future cost change</small></div><span class="pct">${v}%</span><button class="btn sm ghost" data-tmreset="${k}">Remove</button></div>`).join('')
+        : `<div class="mrule"><div><small>None yet. Type a margin on any row below to set one.</small></div></div>`}
+      ${AI_MARGIN.filter(a=>S.itemMargin[a.pid]==null).map(a=>`<div class="mrule"><span class="chip ai">${ic('spark')} Suggest</span><div><b>${byId(a.pid).n}: ${a.m}%</b><small>${a.why}</small></div><button class="btn sm" data-aimargin="${a.pid}" data-v="${a.m}">Apply</button></div>`).join('')}
     </section>
   </div>
   <section class="card pricereview" data-note="Review · approve · go live">
     <div class="cardhead"><h2>Suggested shelf prices</h2><span class="chip ${raiseN?'crit':'ok'}">${raiseN?raiseN+' below target':'All at target'}</span><span class="spacer"></span>
       <span class="eyebrow">Goes live</span><div class="seg">${[['now','Now'],['open','Tomorrow 6 AM']].map(([v,l])=>`<button class="${S.priceWhen===v?'on':''}" data-when="${v}">${l}</button>`).join('')}</div>
       <button class="btn primary" data-act="priceapply" ${selN?'':'disabled'}>Approve ${selN} price${selN===1?'':'s'}</button></div>
-    <div class="tablewrap"><table class="pricetbl" style="min-width:980px"><thead><tr><th></th><th>Product</th><th class="r">Case cost</th><th class="r">Cost per unit</th><th class="r">Shelf price now</th><th>Margin now</th><th>New price</th><th>New margin</th><th>Suggestion</th></tr></thead><tbody>
+    <div class="tablewrap"><table class="pricetbl" style="min-width:940px"><thead><tr><th></th><th>Product</th><th class="r">Cost per unit</th><th class="r">Shelf price now</th><th>Target margin</th><th>New price</th><th>New margin</th><th>Suggestion</th></tr></thead><tbody>
       ${rows.map(r=>{ const done=S.priceDone[r.c.pid]; const d=(r.newU-r.oldU)/r.oldU*100; return `<tr class="${done?'applied':''}">
         <td>${done?ic('check','style="color:var(--ok)"'):`<input type="checkbox" data-pchk="${r.c.pid}" ${S.priceSel[r.c.pid]?'checked':''} aria-label="Approve ${esc(r.p.n)}">`}</td>
         <td style="min-width:220px"><div style="display:flex;gap:10px;align-items:center"><span style="height:40px;width:22px;display:flex;justify-content:center;flex:none">${bottleSVG(r.p)}</span><div><b>${r.p.n}</b><small>${esc(r.c.src)} · case of ${r.c.pack}</small></div></div></td>
-        <td class="num r">${money(r.c.oldCase)} → <b>${money(r.c.newCase)}</b></td>
-        <td class="num r">${money(r.oldU)} → <b>${money(r.newU)}</b><small class="${d>0?'up':'dn'}">${d>0?'+':''}${d.toFixed(1)}%</small></td>
-        <td class="num r">${money(r.cur)}</td>
-        <td><b class="num" style="color:${r.curM<r.tgt?'var(--crit)':'var(--ok)'}">${r.curM.toFixed(1)}%</b><small>was ${r.oldM.toFixed(1)}% · target ${r.tgt}%</small></td>
+        <td class="num r">${money(r.oldU)} → <b>${money(r.newU)}</b> <span class="${d>0?'up':'dn'}" style="font-size:11px">${d>0?'+':''}${d.toFixed(1)}%</span><small>case ${money(r.c.oldCase)} → ${money(r.c.newCase)}</small></td>
+        <td class="num r"><b>${money(r.cur)}</b><small><b style="color:${r.curM<r.tgt?'var(--crit)':'var(--ok)'}">${r.curM.toFixed(1)}% margin</b> · was ${r.oldM.toFixed(1)}%</small></td>
+        <td>${done?`<b class="num">${r.tgt}%</b>`:`<span class="tgt"><input type="number" id="tm-${r.c.pid}" min="5" max="80" step="1" value="${r.tgt}" aria-label="Target margin for ${esc(r.p.n)}">%</span>`}<span class="src ${r.rule.src}">${esc(r.rule.label)}</span>${r.rule.src==='product'&&!done?` <button class="btn sm ghost" style="padding:2px 6px;font-size:11px" data-tmreset="${r.c.pid}">reset</button>`:''}</td>
         <td>${done?`<b class="num">${money(r.price)}</b>`:`<input type="number" step="0.01" min="0" id="pr-${r.c.pid}" value="${r.price.toFixed(2)}" aria-label="New price for ${esc(r.p.n)}">`}${!done&&Math.abs(r.chg)>0.005?`<small class="${r.chg>0?'up':'dn'}">${r.chg>0?'+':''}${r.chg.toFixed(1)}%</small>`:''}</td>
         <td><b class="num" style="color:${r.newM<r.tgt?'var(--crit)':'var(--ok)'}">${r.newM.toFixed(1)}%</b><small>markup ${r.newMu.toFixed(0)}%</small></td>
         <td>${done?`<span class="chip ok">Updated · tag queued</span>`:`<span class="chip ${kindChip[r.kind][0]}">${kindChip[r.kind][1]}</span>${r.big?'<small style="color:var(--warn);font-weight:700">Over 10% change</small>':''}${r.below?'<small style="color:var(--crit);font-weight:700">Below cost: blocked</small>':''}`}</td></tr>`; }).join('')}
     </tbody></table></div>
-    <div class="muted" style="font-size:12px;margin-top:10px">Suggested price = cost per unit ÷ (1 − target margin), rounded up to the price ending. Example: Tito’s $25.40 ÷ (1 − 0.28) = $35.28 → $35.99. Each price is also checked against state minimum-price rules.</div>
+    <div class="muted" style="font-size:12px;margin-top:10px">Suggested price = cost per unit ÷ (1 − target margin), rounded up to the price ending.${(()=>{ const x=rows.find(r=>r.kind==='raise'); return x?` Example: ${x.p.n.split(' ')[0]} ${money(x.newU)} ÷ (1 − ${(x.tgt/100).toFixed(2)}) = ${money(x.newU/(1-x.tgt/100))} → ${money(x.sug)} (${x.rule.label.toLowerCase()} ${x.tgt}%).`:''; })()} Each product uses its own rule if it has one, then its group’s, then its category’s. Prices are also checked against state minimum-price rules.</div>
   </section>
   <section class="card" data-note="Shelf tags · print so shelf matches register">
     <div class="cardhead"><h2>Shelf tags to print</h2><span class="chip plain">${S.tagsQ.length}</span><span class="spacer"></span>${S.tagsQ.length?`<button class="btn sm primary" data-act="tagsprint">Send to label printer</button>`:''}</div>
@@ -2030,7 +2056,7 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -2048,6 +2074,8 @@ document.addEventListener('click', e => {
   if (d.resolve){ S.done.add(+d.resolve); toast(d.msg+' · marked resolved'); render(); return; }
   if (d.undo){ S.done.delete(+d.undo); render(); return; }
   if (d.seg){ S.custSeg=+d.seg; render(); return; }
+  if (d.tmreset){ delete S.itemMargin[d.tmreset]; delete S.priceEdit[d.tmreset]; S.priceSel=null; render(); toast(`${byId(d.tmreset).n} is back on its ${tgtFor(d.tmreset).label.toLowerCase()} margin`); return; }
+  if (d.aimargin){ S.itemMargin[d.aimargin]=+d.v; delete S.priceEdit[d.aimargin]; S.priceSel=null; render(); toast(`${byId(d.aimargin).n} will use ${d.v}% from now on`); return; }
   if (d.invview){ S.invView=d.invview; render(); return; }
   if (d.pchk){ S.priceSel[d.pchk] = el.checked; render(); return; }
   if (d.round){ S.rounding=d.round; S.priceEdit={}; render(); return; }
@@ -2163,6 +2191,7 @@ document.addEventListener('keydown', e => {
   if (e.key==='Enter' && e.target.id==='q'){ const m = PRODUCTS.find(p=>p.n.toLowerCase().includes(S.q.toLowerCase()) && (S.cat==='All'||p.cat===S.cat)); if (m){ S.q=''; const l=S.cart.find(x=>x.id===m.id); l?l.qty++:S.cart.push({id:m.id,qty:1}); render(); $('#q').focus(); } }
 });
 document.addEventListener('change', e => {
+  if (e.target.id && e.target.id.startsWith('tm-')){ const k=e.target.id.slice(3), v=Math.max(5,Math.min(80,+e.target.value||0)); S.itemMargin[k]=v; delete S.priceEdit[k]; S.priceSel=null; render(); toast(`${byId(k).n} will use ${v}% from now on`); return; }
   if (e.target.id && e.target.id.startsWith('tgt-')){ const k=e.target.id.slice(4), v=Math.max(5,Math.min(80,+e.target.value||0)); S.margins[k]=v; S.priceEdit={}; S.priceSel=null; render(); toast(`Target margin set to ${v}% · suggestions updated`); return; }
   if (e.target.id && e.target.id.startsWith('pr-')){ const k=e.target.id.slice(3), v=+e.target.value; if (v>0){ S.priceEdit[k]=Math.round(v*100)/100; S.priceSel[k]=true; } render(); return; }
   if (e.target.id==='pricefile' && e.target.files.length){ toast(`Reading ${e.target.files[0].name}… new costs will appear in the list`,'spark'); return; }
