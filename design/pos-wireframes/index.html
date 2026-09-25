@@ -638,6 +638,17 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 .setgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;align-items:start}
 .setgrid textarea{width:100%;min-height:62px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font:500 13px var(--body);color:var(--ink);resize:vertical}
 .jr td{font-family:var(--mono)} .jr td:first-child{font-family:var(--body)}
+.npwrap{display:grid;grid-template-columns:1fr 250px;gap:18px;align-items:start}
+.npwrap>*{min-width:0}
+.npsec{display:flex;flex-direction:column;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.npsec:last-child{border-bottom:0}
+.npsec h4{margin:0;font:800 11px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.frow3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.nprev{position:sticky;top:0;display:flex;flex-direction:column;gap:12px}
+.nprev .prod{min-height:0;pointer-events:none;margin-top:30px}
+.colorrow{display:flex;gap:10px;align-items:center;font-size:12px;font-weight:700}
+.colorrow input[type=color]{width:38px;height:30px;border:1px solid var(--line);border-radius:6px;padding:2px;background:var(--surface)}
+@media (max-width:820px){.npwrap{grid-template-columns:1fr}.frow3{grid-template-columns:1fr 1fr}.nprev{position:static}}
 .saleitem input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent)}
 .codes{display:flex;flex-direction:column;gap:4px;margin-top:6px}
 .codes div{display:grid;grid-template-columns:96px 1fr;gap:8px;font-size:12px;align-items:baseline}
@@ -882,7 +893,7 @@ const NOTES = {
   purchasing:{deck:'New · vendor deals + purchase orders', purpose:'Each brand comes from one distributor in the store’s area. For each product, compare that vendor’s own options (buy just what you need, or take one of its deals) as the real cost per case, then group products into one PO per vendor. Deals arrive by deal sheet, forwarded rep email, vendor portal or state price posting.', data:['Product → its one vendor: case cost, lead time, on-time rate, terms, minimum','Every active deal from that vendor: free cases, discounted extra case, % or $ volume tiers','Forecast need for the next 30 days and daily sales in cases'], build:['Deals don’t stack: each is evaluated on its own against buying at list','Plan search: every quantity from need to need + 15, rejecting plans with more than 30 days of extra stock','State rules flag deal types a distributor may not offer']},
   receiving:{deck:'New · receiving and stock counts', purpose:'Check every delivery case by case against its PO, and count shelves with a phone. Differences become supplier claims or a shrink (loss) record, so stock numbers stay right.', data:['PO lines: ordered, received and damaged cases','Count sheet: expected vs counted per product, value of the difference','Shrink history by area'], build:['Scan case barcodes to receive; partial receipts keep the PO open','Damaged or short cases open a supplier claim automatically','Count adjustments need a manager; every change is kept in the audit trail']},
   settings:{deck:'New · store settings', purpose:'One place for everything the register and reports depend on: store details, tax and CRV rates, legal sale hours, receipt text, users and roles, and printers.', data:['Store name, address, phone, licence','Sales tax %, CRV per container, sale hours','Receipt header and footer, users and roles, printers'], build:['Owner-only; every change is logged','Tax rate changes apply to new sales immediately','Sale hours drive the compliance lock']},
-  inventory:{deck:'Deck p.9–10 · Inventory Heat Map + AI Insight', purpose:'Colour shows the state of every SKU; the AI panel turns it into a ranked to-do list.', data:['Per product: stock left, days left, reorder point, vendor, last order date and quantity, open order','Codes: store SKU, barcodes (old and new label, case), vendor item codes; duplicate detection and merge','Days of cover = on hand ÷ forecast daily demand','Reorder point, expiry date, last-sale date, margin','Capital tied up = on hand × cost for overstock'], build:['Nightly + on-sale recalculation of state','Tile size = inventory value (treemap)','Actions create POs, markdowns or transfers']},
+  inventory:{deck:'Deck p.9–10 · Inventory Heat Map + AI Insight', purpose:'Colour shows the state of every SKU; the AI panel turns it into a ranked to-do list.', data:['Add product form: basics, 21+ and CRV rules, codes, vendor and case cost, suggested price from target margin, starting stock, bottle look; duplicate and one-distributor checks','Per product: stock left, days left, reorder point, vendor, last order date and quantity, open order','Codes: store SKU, barcodes (old and new label, case), vendor item codes; duplicate detection and merge','Days of cover = on hand ÷ forecast daily demand','Reorder point, expiry date, last-sale date, margin','Capital tied up = on hand × cost for overstock'], build:['Nightly + on-sale recalculation of state','Tile size = inventory value (treemap)','Actions create POs, markdowns or transfers']},
   assortment:{deck:'New · dead stock + best sellers (extends deck p.9–10)', purpose:'Find products that no longer sell, clear them, and replace them with products that sell in similar stores. Rank best sellers and warn before they run out.', data:['Days since last sale, units on hand, cash tied up, shelf location','Replacement: same shelf and price band, sales in similar stores, margin, vendor','Best sellers by units, revenue or profit for 7 / 30 / 90 days, trend, days of cover'], build:['Dead stock rule: no sale in 60+ days (owner can change it)','Replacement engine: category + price band + local market sales + this store’s basket data','One tap creates a clearance offer and a trial-case draft PO']},
   forecast:{deck:'Deck p.8 · AI Business Forecasting', purpose:'Predict demand per SKU and tell the owner when to order and how much.', data:['28 days history, 14 days forecast with confidence band','Drivers: weekday, holidays, weather, local events, promos','Supplier lead time and case pack'], build:['Model service returns point + P10/P90','Recommendation = demand over lead time + safety stock − on hand','One-click draft PO to supplier']},
   invoices:{deck:'Deck p.6 · AI Invoice Processing (8-step flow)', purpose:'Photograph a supplier invoice; AI reads it, matches lines to the catalog and flags price, quantity and damage issues for owner approval.', data:['OCR fields: supplier, invoice #, date, lines, totals','Match confidence per line against catalog','Variance vs last cost and vs purchase order'], build:['Upload to object storage → OCR / document model','Draft inventory update held until owner approves','Approved lines post to inventory and accounting export']},
@@ -1142,7 +1153,7 @@ const S = {
   tour:null,
   margins:{sp:28, wi:35, be:22, mx:40}, itemMargin:{}, groups:[{n:'Premium spirits', pids:['casa750','hen750'], m:30}], rounding:'99', priceEdit:{}, priceSel:null, priceDone:{}, tagsQ:[], priceWhen:'now',
   dealSheet:null, dealRows:SHEET.rows.map(()=>'review'), dealsAdded:[],
-  bc:null, dupeDone:false,
+  bc:null, dupeDone:false, np:null, pendingNew:[],
   rcvTab:'receive', rcv:{po:'PO-10241', lines:[{pid:'modelo12', ord:20, rec:0, dmg:0, pack:2},{pid:'claw12', ord:10, rec:0, dmg:0, pack:2}], done:false},
   cnt:null,
   settings:{name:'Oak Street Liquor #014', addr:'1200 Oak St, Sacramento, CA 95814', phone:'(916) 555-0101', lic:'Type 21 · 21-584120', tax:8.75, crvS:0.05, crvL:0.10, open:'06:00', close:'02:00',
@@ -1451,7 +1462,8 @@ VIEWS.inventory = () => {
   <div class="invgrid">
     <section class="card">
       <div class="cardhead"><h2>All SKUs by state</h2><span class="muted" style="font-size:12px">${S.invView==='tiles'?'Tile size = inventory value':'Tap a row for details'}</span><span class="spacer"></span>${S.heat?`<button class="btn sm" data-heat="${S.heat}">Clear filter</button>`:''}
-        <div class="seg" aria-label="View">${[['tiles','Tiles'],['list','List']].map(([v,l])=>`<button class="${S.invView===v?'on':''}" data-invview="${v}">${l}</button>`).join('')}</div></div>
+        <div class="seg" aria-label="View">${[['tiles','Tiles'],['list','List']].map(([v,l])=>`<button class="${S.invView===v?'on':''}" data-invview="${v}">${l}</button>`).join('')}</div><button class="btn primary sm" data-act="npnew">+ Add product</button></div>
+      ${(S.pendingNew||[]).map(b=>`<div class="clockban soon" style="margin-bottom:10px">${ic('scan')} A cashier scanned a new barcode ${fmtCode(b)} · set up the product <button class="btn sm primary" style="margin-left:auto" data-npbc="${b}">Set up</button></div>`).join('')}
       ${S.invView==='list' ? invList() : `
       <div class="heat" data-note="Treemap-style heat map · click a tile">${HEAT.map((x,i)=>`<button class="tile ${x[1]} ${x[3]===1?'big':x[3]===2?'wide':''} ${S.heat&&S.heat!==x[1]?'dim':''} ${S.tile===i?'sel':''}" data-tile="${i}"><span><span class="tn">${x[0]}</span><br><span class="tv">${x[2]}</span></span>
         <span class="tm"><span>${ic('box')}<b>${INV[i].oh}</b> ${INV[i].u} · ${daysTxt(INV[i].d)}</span><span>${ic('truck')}${shortV(INV[i].v)}</span><span>${ic('clock')}Ordered ${INV[i].lo} · ${INV[i].lq}</span></span></button>`).join('')}</div>`}
@@ -1571,7 +1583,7 @@ VIEWS.invoices = () => {
       <td>${(()=>{ const lk=S.invLink[i];
         if (l.m) return `<div style="font-weight:700">${esc(l.m)}</div><div class="mono muted" style="font-size:11px">“${esc(l.d)}”</div>${l.note?`<span class="chip ${l.conf<60?'crit':'warn'}" style="margin-top:4px">${l.note}</span>`:''}`;
         if (lk==='link'){ const p=byId(l.sug); return `<div style="font-weight:700">${esc(p.n)} · ${p.sz}</div><div class="mono muted" style="font-size:11px">“${esc(l.d)}”</div><span class="chip ok" style="margin-top:4px">Linked · code ${l.sku} saved to this product</span>`; }
-        if (lk==='new') return `<div style="font-weight:700">New product: ${esc(l.d)}</div><span class="chip over" style="margin-top:4px">Created · set a shelf price in Pricing</span>`;
+        if (lk==='new') return `<div style="font-weight:700">${esc(l.m||l.d)}</div><div class="mono muted" style="font-size:11px">“${esc(l.d)}”</div><span class="chip ok" style="margin-top:4px">New product created and linked</span>`;
         if (l.sug){ const p=byId(l.sug); return `<div style="font-weight:700;color:var(--warn)">Unknown item code ${l.sku}</div><div class="mono muted" style="font-size:11px">“${esc(l.d)}”</div>
           <div class="suggest"><span>${ic('spark','style="width:12px;height:12px;vertical-align:-2px;color:var(--violet)"')} Looks like <b>${esc(p.n)} · ${p.sz}</b> (${l.conf}%): ${l.sugWhy}.</span>
           <span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm primary" data-ilink="${i}" data-v="link">Link to existing product</button><button class="btn sm" data-ilink="${i}" data-v="new">It’s a new product</button></span></div>`; }
@@ -1967,8 +1979,92 @@ function barcodeModal(){
       <div class="bclist">${list.map(p=>`<button class="${B.pick===p.id?'on':''}" data-bcpick="${p.id}">${bottleSVG(p)}<span><b>${esc(p.n)}</b><div class="muted" style="font-size:11.5px">${p.sz} · ${money(p.p)}</div></span>${likely.includes(p)?'<span class="chip ai">Likely</span>':''}</button>`).join('')||'<div class="empty">No product matches.</div>'}</div>
       <div class="muted" style="font-size:12px">The link is saved for next time and a manager reviews it. A different size or pack is a different product.</div>
     </div>
-    <footer><button class="btn" data-toast="Sent to a manager to create the new product">It’s a new product</button><button class="btn primary" data-act="bclink" ${B.pick?'':'disabled'}>Link barcode and add to sale</button></footer></div></div>`;
+    <footer><button class="btn" data-act="bcnew">It’s a new product</button><button class="btn primary" data-act="bclink" ${B.pick?'':'disabled'}>Link barcode and add to sale</button></footer></div></div>`;
 }
+/* ---- add a new product ---- */
+const SHAPES = [['vodka','Tall bottle'],['whiskey','Square bottle'],['tequila','Squat bottle'],['wine','Wine'],['sparkling','Sparkling'],['pack','Box pack'],['can','Cans'],['mixer','Small bottles']];
+const containers = sz => { const m=String(sz).match(/^(\d+)\s*[×x]/); return m ? +m[1] : 1; };
+function containerMl(sz){ const t=String(sz).toLowerCase(), per=t.split(/[×x]/).pop(); const n=parseFloat(per)||0; return /l\b/.test(per)&&!/ml/.test(per) ? n*1000 : /oz/.test(per) ? n*29.57 : n; }
+function crvFor(d){ if (d.cat==='Wine' || d.cat==='Spirits') return 0; const ml=containerMl(d.sz); if (!ml) return 0; const st=S.settings; return Math.round(containers(d.sz)*(ml>=710 ? +st.crvL : +st.crvS)*100)/100; }
+function blankProduct(pre={}){ return Object.assign({n:'', brand:'', cat:'Spirits', sz:'750 ml', abv:'40', r:true, taxable:true, bc:'', casebc:'', vcode:'', vendor:'Summit Wine & Spirits', pack:'12', caseCost:'', price:'', priceEdited:false, qty:'0', rp:'6', loc:'', sh:'vodka', c0:'#E4ECEF', c1:'#F2A541', from:null}, pre); }
+function npDerived(d){
+  const unit = (+d.caseCost>0 && +d.pack>0) ? +d.caseCost/ +d.pack : 0, tgt = S.margins[CAT_KEY[d.cat]] || 30;
+  const sug = unit ? roundPrice(unit/(1-tgt/100), S.rounding) : 0, price = d.priceEdited && +d.price>0 ? +d.price : sug;
+  const q = d.n.toLowerCase(), brand=(d.brand||d.n.split(' ')[0]||'').toLowerCase();
+  const dup = q.length>2 ? PRODUCTS.find(p=> brand && p.n.toLowerCase().includes(brand) && String(p.sz).replace(/\s/g,'').toLowerCase()===String(d.sz).replace(/\s/g,'').toLowerCase()) : null;
+  const other = VENDOR_OF_BRAND(d.brand||d.n.split(' ')[0], d.vendor);
+  return {unit, tgt, sug, price, margin: price&&unit ? (price-unit)/price*100 : 0, crv: crvFor(d), dup, other,
+    ok: d.n.trim() && d.sz.trim() && price>0 && (!unit || price>unit)};
+}
+function VENDOR_OF_BRAND(brand, vendor){ if (!brand) return null; const b=brand.toLowerCase(); const hit=Object.entries(VENDOR_OF).find(([k,v])=>byId(k)&&byId(k).n.toLowerCase().startsWith(b)&&v!==vendor); return hit?hit[1]:null; }
+function npRerender(){ clearTimeout(npRerender.t); npRerender.t=setTimeout(()=>{ if (!S.np) return; productModal(); if (S.npFocus && document.getElementById(S.npFocus)) refocus(S.npFocus); }, 0); }
+function productModal(){
+  const d=S.np, x=npDerived(d), role=USERS.find(u=>u.n===S.user)?.role;
+  const f=(k,l,extra='',w='')=>`<label class="field" ${w}>${l}<input id="np-${k}" value="${esc(d[k])}" ${extra}></label>`;
+  const preview = {id:'__np', n:d.n||'New product', sz:d.sz, abv:+d.abv||0, cat:d.cat, p:x.price, stock:+d.qty||0, c:[d.c0,d.c1], lb:(d.lb||d.brand||d.n.split(' ')[0]||'NEW').toUpperCase().slice(0,12), sh:d.sh, r:d.r, crv:x.crv};
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Add product" style="width:min(900px,100%)">
+    <header>${ic('box')}<h2>Add a product</h2>${d.from!=null?`<span class="chip plain">From invoice line: “${esc(INVOICE[d.from].d)}”</span>`:(d.fromReg||d.fromPending)?`<span class="chip plain">From scanned barcode ${fmtCode(d.bc)}</span>`:''}<span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body npwrap">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn sm" data-act="npai">${ic('spark')}Fill in with AI</button><span class="muted" style="font-size:12px">Reads the name, invoice line or barcode and fills in what it can. Check everything before saving.</span></div>
+        ${x.dup?`<div class="clockban soon">${ic('swap')} Looks like <b>&nbsp;${esc(x.dup.n)} · ${x.dup.sz}&nbsp;</b> already exists. <button class="btn sm" style="margin-left:auto" data-npuse="${x.dup.id}">Use existing instead</button></div>`:''}
+        <div class="npsec"><h4>Basics</h4>
+          <div class="frow">${f('n','Product name *','placeholder="e.g. Aperol Spritz Ready-to-Drink 4pk"')}${f('brand','Brand','placeholder="e.g. Aperol"')}</div>
+          <div class="frow3"><label class="field">Category *<select id="np-cat">${CATS.filter(c=>c!=='All').map(c=>`<option ${d.cat===c?'selected':''}>${c}</option>`).join('')}</select></label>${f('sz','Size *','placeholder="750 ml · 1.75 L · 12 × 12 oz"')}${f('abv','ABV %','type="number" step="0.1" min="0" max="80"')}</div>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <div class="setrow" style="border:0;padding:0;gap:8px"><button class="toggle" aria-pressed="${d.r}" data-act="npr" aria-label="21+ only"></button><span style="font-size:13px"><b>21+ only</b> (ID check at the register)</span></div>
+            <div class="setrow" style="border:0;padding:0;gap:8px"><button class="toggle" aria-pressed="${d.taxable}" data-act="nptax" aria-label="Taxable"></button><span style="font-size:13px"><b>Taxable</b></span></div>
+            <span class="chip plain">CRV ${money(x.crv)} per unit ${x.crv?`(${containers(d.sz)} container${containers(d.sz)>1?'s':''})`:'(not charged on wine and spirits)'}</span></div></div>
+        <div class="npsec"><h4>Codes</h4>
+          <div class="frow3">${f('bc','Barcode (UPC)','inputmode="numeric" placeholder="Scan or type"')}${f('casebc','Case barcode','inputmode="numeric"')}${f('vcode','Vendor item code','placeholder="e.g. SW-61220"')}</div>
+          <div class="muted" style="font-size:12px">Store SKU is created automatically.</div></div>
+        <div class="npsec"><h4>Buying</h4>
+          <div class="frow3"><label class="field">Vendor<select id="np-vendor">${VENDORS.map(v=>`<option ${d.vendor===v.n?'selected':''}>${esc(v.n)}</option>`).join('')}</select></label>${f('pack','Units per case','type="number" min="1"')}${f('caseCost','Cost per case ($)','type="number" step="0.01" min="0"')}</div>
+          ${x.other?`<div class="clockban soon">${ic('truck')} ${esc(x.other)} already supplies this brand. Each brand usually has one distributor in your area.</div>`:''}
+          <div class="muted" style="font-size:12px">Cost per unit: <b class="num" style="color:var(--ink)">${x.unit?money(x.unit):'—'}</b></div></div>
+        <div class="npsec"><h4>Pricing</h4>
+          <div class="frow3"><div class="field">Target margin<span class="num" style="font-size:18px;font-weight:800;padding:6px 0">${x.tgt}% <small class="muted" style="font-size:11px">${esc(d.cat)} default</small></span></div>
+            ${f('price','Shelf price ($) *',`type="number" step="0.01" min="0" placeholder="${x.sug?x.sug.toFixed(2):''}"`)}
+            <div class="field">Margin<span class="num" style="font-size:18px;font-weight:800;padding:6px 0;color:${x.margin && x.margin<x.tgt-0.5?'var(--warn)':'var(--ok)'}">${x.margin?x.margin.toFixed(1)+'%':'—'}</span></div></div>
+          <div class="muted" style="font-size:12px">${x.sug?`Suggested ${money(x.sug)} = ${money(x.unit)} ÷ (1 − ${(x.tgt/100).toFixed(2)}), rounded up.${d.priceEdited?' <button class="btn sm ghost" style="padding:1px 6px" data-act="npsug">Use suggested</button>':''}`:'Enter the case cost to get a suggested price.'}</div>
+          ${x.unit && x.price && x.price<=x.unit?`<div class="clockban locked">${ic('alert')} The shelf price is below cost.</div>`:''}</div>
+        <div class="npsec"><h4>Stock</h4>
+          <div class="frow3">${f('qty','Starting quantity','type="number" min="0"')}${f('rp','Reorder point','type="number" min="0"')}${f('loc','Shelf location','placeholder="e.g. Cooler 2 · door 3"')}</div></div>
+      </div>
+      <aside class="nprev">
+        <div class="eyebrow">Register card preview</div>
+        <div class="prod"><span class="art">${bottleSVG(preview)}</span><span class="info"><span class="badges">${d.r?'<span class="chip age">21+</span>':''}<span class="chip ai">New</span></span><span class="nm">${esc(preview.n)}</span><span class="meta">${esc(d.sz)}${+d.abv?` · ${d.abv}% ABV`:''}</span><span class="price">${x.price?money(x.price):'$—'}</span><span class="stockpill ${+d.qty?'ok':'out'}">${ic('box')}${+d.qty?`<b>${+d.qty}</b> in stock`:'No stock yet'}</span></span></div>
+        <div class="field">Bottle shape<div class="quick">${SHAPES.map(([k,l])=>`<button class="${d.sh===k?'on':''}" data-npsh="${k}" style="padding:5px 9px;font-size:11.5px">${l}</button>`).join('')}</div></div>
+        <div class="colorrow"><label style="display:flex;gap:6px;align-items:center">Glass <input type="color" id="np-c0" value="${d.c0}"></label><label style="display:flex;gap:6px;align-items:center">Label <input type="color" id="np-c1" value="${d.c1}"></label></div>
+      </aside>
+    </div>
+    <footer><span class="muted" style="font-size:12px;margin-right:auto">${x.ok?'Ready: appears on the Register, Inventory, Pricing and the vendor’s list':'Name, size and a shelf price above cost are required'}</span><button class="btn" data-close>Cancel</button><button class="btn primary" data-act="npsave" ${x.ok?'':'disabled'}>Save product</button></footer></div></div>`;
+}
+function saveProduct(){
+  const d=S.np, x=npDerived(d); let base=(d.brand||d.n).toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,8)||'item', id=base, k=2; while (byId(id)) id=base+(k++);
+  const p = {id, n:d.n.trim(), sz:d.sz.trim(), abv:+d.abv||0, cat:d.cat, p:Math.round(x.price*100)/100, stock:+d.qty||0, c:[d.c0,d.c1], lb:(d.brand||d.n.split(' ')[0]).toUpperCase().slice(0,12), sh:d.sh, r:d.r, crv:x.crv, isNew:true};
+  PRODUCTS.push(p); VENDOR_OF[id]=d.vendor;
+  CODES[id]=[{t:'Store SKU', v:id.toUpperCase()+'-'+String(Math.round(containerMl(d.sz))||1)}, ...(d.bc?[{t:'Barcode', v:d.bc.replace(/\s/g,''), n:'Bottle / pack', fresh:true}]:[]), ...(d.casebc?[{t:'Case barcode', v:d.casebc.replace(/\s/g,''), n:`Case of ${d.pack}`}]:[]), ...(d.vcode?[{t:'Vendor code', v:d.vcode, n:d.vendor}]:[])];
+  HEAT.push([p.n, 'ok', 'New product', 0]); INV.push({v:d.vendor, oh:p.stock, u:containers(d.sz)>1?'packs':'bottles', d:null, lo:d.from!=null?'Sep 25':'—', lq:d.from!=null?`${INVOICE[d.from].q} units`:'—', po:'', rp:+d.rp||0, lt:3, c:x.unit, r:p.p, ls:'Not sold yet'}); HEAT_PID[HEAT.length-1]=id;
+  if (!S.tagsQ.includes(id)) S.tagsQ.push(id);
+  if (d.from!=null){ INVOICE[d.from].m = `${p.n} · ${p.sz}`; S.invLink[d.from]='new'; }
+  S.pendingNew = (S.pendingNew||[]).filter(b=>b!==d.bc);
+  const toRegister = d.bc && d.fromReg; S.np=null; closeModal();
+  if (toRegister && !(S.clock==='locked'&&p.r)) S.cart.push({id, qty:1});
+  render(); toast(`${p.n} added · on the Register, in Inventory and Pricing · shelf tag queued`);
+}
+function aiFillProduct(){
+  const d=S.np, src=(d.from!=null ? INVOICE[d.from].d : d.n || '').toUpperCase();
+  if (/APEROL/.test(src)) Object.assign(d, {n:'Aperol Spritz Ready-to-Drink 4pk', brand:'Aperol', cat:'Beer & Seltzer', sz:'4 × 200 ml', abv:'8', r:true, pack:'6', caseCost:(INVOICE[d.from]?INVOICE[d.from].cost*6:70.80).toFixed(2), vendor:'Summit Wine & Spirits', sh:'can', c0:'#F26B21', c1:'#FFFFFF', vcode:d.vcode||'SW-61220', loc:'Cooler 2 · door 4', rp:'6', qty:String(INVOICE[d.from]?INVOICE[d.from].q:0)});
+  else if (d.bc && d.bc.startsWith('619947')) Object.assign(d, {n:d.n||"Tito's Handmade Vodka 750 ml", brand:"Tito's", cat:'Spirits', sz:'750 ml', abv:'40', pack:'12', caseCost:'189.60', vendor:'Summit Wine & Spirits', sh:'vodka', c0:'#E4ECEF', c1:'#EDE3CC'});
+  else { if (!d.n && src) d.n = src.toLowerCase().replace(/\b(new lbl|new label)\b/g,'').replace(/\s+/g,' ').trim().replace(/\b\w/g,ch=>ch.toUpperCase()).replace(/\b(\d+)(ml|l)\b/gi,'$1 $2');
+    const mz=src.match(/(\d+(?:\.\d+)?)\s?(ML|L)\b|\b(750|1\.75|375|200)\b/); if (mz && (!d.sz||d.sz==='750 ml')) d.sz = mz[1] ? `${mz[1]} ${mz[2]==='L'?'L':'ml'}` : (mz[3]==='1.75'?'1.75 L':`${mz[3]} ml`);
+    const cat = /WINE|CAB|PINOT|CHARD|SAUV|ROS[EÉ]|PROSEC/.test(src)?'Wine':/IPA|LAGER|BEER|SELTZER|12PK|6PK|CAN/.test(src)?'Beer & Seltzer':/TONIC|SODA|ICE|MIX/.test(src)?'Mixers & Snacks':'Spirits';
+    Object.assign(d, {cat, sz:d.sz||'750 ml', abv:cat==='Mixers & Snacks'?'0':cat==='Beer & Seltzer'?'5':cat==='Wine'?'13':'40', r:cat!=='Mixers & Snacks', sh:cat==='Wine'?'wine':cat==='Beer & Seltzer'?'pack':cat==='Mixers & Snacks'?'mixer':'vodka', pack:cat==='Beer & Seltzer'?'2':'12'}); }
+  if (!d.brand && d.n) d.brand = d.n.split(' ')[0];
+  d.priceEdited=false; productModal(); toast('Filled in by AI · check the details','spark');
+}
+function openProduct(pre){ const role=USERS.find(u=>u.n===S.user)?.role; if (role==='cashier'){ if (pre.bc){ S.pendingNew=[...new Set([...(S.pendingNew||[]), pre.bc])]; } closeModal(); render(); toast('Sent to a manager to set up the new product'); return; } S.np=blankProduct(pre); productModal(); }
 function dupeModal(){
   const a=byId('tito175');
   const card = (t, sku, oh, sold, created, codes) => `<div class="swapcard" style="align-items:stretch;text-align:left"><span class="art" style="align-self:center">${bottleSVG(a)}</span><b>${t}</b><dl class="kv" style="font-size:12px"><dt>Store SKU</dt><dd>${sku}</dd><dt>On hand</dt><dd>${oh}</dd><dt>Sold, 30 days</dt><dd>${sold}</dd><dt>Shelf price</dt><dd>${money(a.p)}</dd><dt>Created</dt><dd>${created}</dd></dl><div class="muted" style="font-size:11.5px">Barcode ${codes}</div></div>`;
@@ -2814,7 +2910,7 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-ilink],[data-bcpick],[data-signwho],[data-pinkey],[data-rcvtab],[data-rcvq],[data-strdef],[data-clockuser],[data-salesel],[data-retchk],[data-retq],[data-retwhy],[data-retdest],[data-retmeth],[data-vsel],[data-nvday],[data-nvvia],[data-nvp]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-ilink],[data-bcpick],[data-npsh],[data-npuse],[data-npbc],[data-signwho],[data-pinkey],[data-rcvtab],[data-rcvq],[data-strdef],[data-clockuser],[data-salesel],[data-retchk],[data-retq],[data-retwhy],[data-retdest],[data-retmeth],[data-vsel],[data-nvday],[data-nvvia],[data-nvp]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -2846,10 +2942,15 @@ document.addEventListener('click', e => {
   if (d.retwhy){ S.ret.why=d.retwhy; if (/Corked|Damaged|Expired/.test(d.retwhy)) S.ret.dest='damage'; else S.ret.dest='shelf'; returnModal(); return; }
   if (d.retdest){ S.ret.dest=d.retdest; returnModal(); return; }
   if (d.retmeth){ S.ret.method=d.retmeth; returnModal(); return; }
+  if (d.ilink && d.v==='new'){ const i=+d.ilink, l=INVOICE[i]; openProduct({from:i, n:'', vcode:l.sku!=='???'?l.sku:'', caseCost:'', qty:String(l.q)}); if (S.np) aiFillProduct(); return; }
   if (d.ilink){ const i=+d.ilink, l=INVOICE[i]; S.invLink[i]=d.v;
     if (d.v==='link'){ const c=codesFor(l.sug); if (!c.some(x=>x.v===l.sku)) c.push({t:'Vendor code', v:l.sku, n:'New label · linked from invoice HB-58812', fresh:true}); toast(`Linked to ${byId(l.sug).n} · code ${l.sku} saved`); }
     else toast('New product created · set its shelf price in Pricing');
     render(); return; }
+  if (d.npsh){ S.np.sh=d.npsh; productModal(); return; }
+  if (d.npuse){ const P=byId(d.npuse), N=S.np; if (N.bc){ const c=codesFor(P.id); if (!c.some(x=>x.v===N.bc)) c.push({t:'Barcode', v:N.bc, n:'Linked instead of creating a duplicate', fresh:true}); }
+    if (N.from!=null){ INVOICE[N.from].m=`${P.n} · ${P.sz}`; S.invLink[N.from]='link'; INVOICE[N.from].sug=P.id; } S.np=null; closeModal(); render(); toast(`Linked to ${P.n} · no duplicate created`); return; }
+  if (d.npbc){ S.np=blankProduct({bc:d.npbc, fromPending:true}); aiFillProduct(); return; }
   if (d.bcpick){ S.bc.pick=d.bcpick; barcodeModal(); return; }
   if (d.vsel){ S.vSel=d.vsel; if (d.vgo) go('vendors'); else render(); return; }
   if (d.nvday){ const a=S.nv.days; S.nv.days = a.includes(d.nvday) ? a.filter(x=>x!==d.nvday) : [...a, d.nvday].sort((x,y)=>WEEKDAYS.indexOf(x)-WEEKDAYS.indexOf(y)); vendorModal(); return; }
@@ -2950,6 +3051,13 @@ document.addEventListener('click', e => {
       if (d.act==='retexch'){ S.credit=(S.credit||0)+Math.round(amt*100)/100; go('register'); toast(`Exchange credit ${money(amt)} applied · add the new items`); }
       else { render(); toast(`Refunded ${money(amt)} to ${R.method==='orig'?sale.tender:'store credit'}${R.dest==='shelf'?' · back in stock':' · damage report opened'}`); }
       break; }
+    case 'npnew': S.np=blankProduct(); productModal(); break;
+    case 'bcnew': openProduct({bc:S.bc.code, fromReg:true}); if (S.np) aiFillProduct(); break;
+    case 'npai': aiFillProduct(); break;
+    case 'npr': S.np.r=!S.np.r; productModal(); break;
+    case 'nptax': S.np.taxable=!S.np.taxable; productModal(); break;
+    case 'npsug': S.np.priceEdited=false; S.np.price=''; productModal(); break;
+    case 'npsave': if (npDerived(S.np).ok) saveProduct(); break;
     case 'scandemo': S.bc={code:'619947000317', q:'', pick:'tito175'}; barcodeModal(); break;
     case 'bclink': { const B=S.bc, p=byId(B.pick); const c=codesFor(p.id); if (!c.some(x=>x.v===B.code)) c.push({t:'Barcode', v:B.code, n:'Added at the register by Maria G. · manager review', fresh:true});
       if (S.clock==='locked' && p.r){ closeModal(); render(); toast('Barcode saved · alcohol sales are locked until 6:00 AM','lock'); break; }
@@ -3032,6 +3140,10 @@ document.addEventListener('keydown', e => {
     const m = PRODUCTS.find(p=>p.n.toLowerCase().includes(S.q.toLowerCase()) && (S.cat==='All'||p.cat===S.cat)); if (m){ S.q=''; const l=S.cart.find(x=>x.id===m.id); l?l.qty++:S.cart.push({id:m.id,qty:1}); render(); $('#q').focus(); } }
 });
 document.addEventListener('change', e => {
+  if (e.target.id && e.target.id.startsWith('np-') && S.np){ const k=e.target.id.slice(3); S.np[k]=e.target.value;
+    if (k==='price') S.np.priceEdited = e.target.value!=='';
+    if (k==='cat'){ S.np.r = e.target.value!=='Mixers & Snacks'; }
+    npRerender(); return; }
   if (e.target.id && e.target.id.startsWith('cnt-') && S.cnt){ S.cnt.lines[+e.target.id.slice(4)].c = e.target.value; render(); return; }
   if (e.target.id && e.target.id.startsWith('st-')){ const k=e.target.id.slice(3); S.settings[k]=e.target.value;
     if (k==='tax'){ const v=+e.target.value; if (v>=0 && v<=20){ TAX=v/100; toast(`Sales tax set to ${v.toFixed(2)}% · applies to the next sale`); } }
@@ -3057,6 +3169,7 @@ document.addEventListener('change', e => {
   if (e.target.id==='dm-photo' && e.target.files[0]){ S.dmg.photo=URL.createObjectURL(e.target.files[0]); render(); return; }
   if (e.target.id==='invfile' && e.target.files.length){ S.invStep=2; render(); toast('Reading '+e.target.files[0].name+'…','spark'); let s=2; const t=setInterval(()=>{ s++; S.invStep=s; S.inv=INVOICE.map(l=> (l.note||!l.m||l.cost!==l.prev) ? 'review':'ok'); render(); if(s>=7) clearInterval(t); }, 550); }
 });
+document.addEventListener('focusin', e => { if (e.target.id && e.target.id.startsWith('np-')) S.npFocus = e.target.id; });
 window.addEventListener('hashchange', () => { const r=location.hash.slice(1); if (NOTES[r] && r!==S.route) go(r); });
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
 
