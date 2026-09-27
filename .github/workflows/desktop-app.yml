@@ -51,6 +51,8 @@ jobs:
       - if: runner.os == 'macOS'
         run: |
           cd dist
+          # ad-hoc signature so macOS runs the app (it is not notarized yet)
+          for d in "Bevnetic POS-darwin-arm64" "Bevnetic POS-darwin-x64"; do codesign --force --deep --sign - "$d/Bevnetic POS.app" && codesign --verify --deep "$d/Bevnetic POS.app"; done
           for d in "Bevnetic POS-darwin-arm64" "Bevnetic POS-darwin-x64"; do ditto -c -k --keepParent "$d" "${d// /-}.zip"; done
       - if: runner.os == 'Linux'
         run: cd dist && zip -qry "Bevnetic-POS-linux-x64.zip" "Bevnetic POS-linux-x64"
