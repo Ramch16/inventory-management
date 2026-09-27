@@ -1,0 +1,23 @@
+{
+  "name": "bevnetic-pos",
+  "productName": "Bevnetic POS",
+  "version": "0.1.0",
+  "description": "Bevnetic POS prototype as a standalone desktop app (Windows, macOS, Linux)",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "sync": "node scripts/sync.js",
+    "start": "npm run sync && electron .",
+    "kiosk": "npm run sync && electron . --kiosk",
+    "build:win": "npm run sync && electron-packager . \"Bevnetic POS\" --platform=win32 --arch=x64 --out=dist --overwrite --prune=true --ignore=\"^/dist\" --ignore=\"^/scripts\" --ignore=\"^/node_modules\" --ignore=\"^/README.md\"",
+    "build:mac": "npm run sync && electron-packager . \"Bevnetic POS\" --platform=darwin --arch=arm64,x64 --out=dist --overwrite --prune=true --ignore=\"^/dist\" --ignore=\"^/scripts\" --ignore=\"^/node_modules\" --ignore=\"^/README.md\"",
+    "build:linux": "npm run sync && electron-packager . \"Bevnetic POS\" --platform=linux --arch=x64 --out=dist --overwrite --prune=true --ignore=\"^/dist\" --ignore=\"^/scripts\" --ignore=\"^/node_modules\" --ignore=\"^/README.md\""
+  },
+  "devDependencies": {
+    "@electron/packager": "^18.3.6",
+    "@fontsource/jetbrains-mono": "^5.1.1",
+    "@fontsource/manrope": "^5.1.1",
+    "@fontsource/saira": "^5.1.1",
+    "electron": "^38.2.0"
+  }
+}

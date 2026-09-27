@@ -54,6 +54,10 @@ stays clickable during the tour. The story runs:
   build notes for each screen, and outlines each component with its label.
 - **Moon / sun**: light and dark theme.
 
+## Standalone desktop app
+
+The same POS also runs as its own desktop application for Windows, macOS and Linux, fully offline, with real printing and a kiosk mode for register lanes. See [`desktop/README.md`](../../desktop/README.md).
+
 ## Screen guide (PDF)
 
 `Bevnetic-POS-Screen-Guide.pdf` is a 36-page landscape booklet: a "By role" section (signing in, the full who-can-do-what table, and what the owner, manager and cashier each see, with screenshots taken as each person), then a screenshot of every screen with what it's for, what you can do on it and who uses it, plus phone layouts.
