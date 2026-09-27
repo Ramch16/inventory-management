@@ -1,0 +1,62 @@
+# Builds the Bevnetic POS desktop app on real Windows, macOS and Linux machines.
+# Download the results from the run's "Artifacts" section.
+name: Desktop app
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'desktop/**'
+      - 'design/pos-wireframes/index.html'
+      - '.github/workflows/desktop-app.yml'
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            script: build:win:icon
+            artifact: Bevnetic-POS-Windows-x64
+          - os: macos-latest
+            script: build:mac
+            artifact: Bevnetic-POS-Mac
+          - os: ubuntu-latest
+            script: build:linux
+            artifact: Bevnetic-POS-Linux-x64
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+      - run: npm ci
+      - run: npm run ${{ matrix.script }}
+
+      # Windows: upload the app folder as is (GitHub zips it for download)
+      - if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: desktop/dist/Bevnetic POS-win32-x64/
+          retention-days: 30
+
+      # macOS and Linux: zip first so app bundles, links and run permissions survive
+      - if: runner.os == 'macOS'
+        run: |
+          cd dist
+          for d in "Bevnetic POS-darwin-arm64" "Bevnetic POS-darwin-x64"; do ditto -c -k --keepParent "$d" "${d// /-}.zip"; done
+      - if: runner.os == 'Linux'
+        run: cd dist && zip -qry "Bevnetic-POS-linux-x64.zip" "Bevnetic POS-linux-x64"
+      - if: runner.os != 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: desktop/dist/*.zip
+          retention-days: 30

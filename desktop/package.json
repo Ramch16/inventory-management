@@ -11,7 +11,8 @@
     "kiosk": "npm run sync && electron . --kiosk",
     "build:win": "npm run sync && electron-packager . \"Bevnetic POS\" --platform=win32 --arch=x64 --out=dist --overwrite --prune=true --ignore=\"^/dist\" --ignore=\"^/scripts\" --ignore=\"^/node_modules\" --ignore=\"^/README.md\"",
     "build:mac": "npm run sync && electron-packager . \"Bevnetic POS\" --platform=darwin --arch=arm64,x64 --out=dist --overwrite --prune=true --ignore=\"^/dist\" --ignore=\"^/scripts\" --ignore=\"^/node_modules\" --ignore=\"^/README.md\"",
-    "build:linux": "npm run sync && electron-packager . \"Bevnetic POS\" --platform=linux --arch=x64 --out=dist --overwrite --prune=true --ignore=\"^/dist\" --ignore=\"^/scripts\" --ignore=\"^/node_modules\" --ignore=\"^/README.md\""
+    "build:linux": "npm run sync && electron-packager . \"Bevnetic POS\" --platform=linux --arch=x64 --out=dist --overwrite --prune=true --ignore=\"^/dist\" --ignore=\"^/scripts\" --ignore=\"^/node_modules\" --ignore=\"^/README.md\"",
+    "build:win:icon": "npm run sync && electron-packager . \"Bevnetic POS\" --platform=win32 --arch=x64 --out=dist --overwrite --prune=true --ignore=\"^/dist\" --ignore=\"^/scripts\" --ignore=\"^/node_modules\" --ignore=\"^/README.md\" --icon=build/icon.ico"
   },
   "devDependencies": {
     "@electron/packager": "^18.3.6",
