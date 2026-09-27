@@ -61,7 +61,7 @@ The same POS also runs as its own desktop application for Windows, macOS and Lin
 
 ## Screen guide (PDF)
 
-`Bevnetic-POS-Screen-Guide.pdf` is a 36-page landscape booklet: a "By role" section (signing in, the full who-can-do-what table, and what the owner, manager and cashier each see, with screenshots taken as each person), then a screenshot of every screen with what it's for, what you can do on it and who uses it, plus phone layouts.
+`Bevnetic-POS-Screen-Guide.pdf` is a 37-page landscape booklet: a "By role" section (signing in, the full who-can-do-what table, and what the owner, manager and cashier each see, with screenshots taken as each person), then a screenshot of every screen with what it's for, what you can do on it and who uses it, plus phone layouts.
 
 ## Moving to the real application
 
