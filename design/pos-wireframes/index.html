@@ -698,6 +698,41 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 @media (max-width:1180px){.vnd{grid-template-columns:1fr}}
 @media (max-width:1180px){.rpgrid{grid-template-columns:1fr 1fr}.rpgrid .wide{grid-column:1/-1}}
 @media (max-width:820px){.rpgrid{grid-template-columns:1fr}.rpgrid .wide{grid-column:auto}}
+/* shelf labels */
+.lbgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:16px;align-items:start}
+.lbpick{display:flex;flex-direction:column;gap:6px;max-height:560px;overflow:auto;padding-right:2px}
+.lbrow{display:grid;grid-template-columns:22px minmax(0,1fr) auto 26px;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:10px;padding:6px 10px;background:var(--surface);color:var(--ink)}
+.lbrow .thumb{width:22px;height:40px;display:block}.lbrow .thumb svg{width:100%;height:100%}
+.lbrow small{display:block;color:var(--muted);font-size:11.5px}
+.lbrow.on{border-color:var(--ok);background:var(--ok-soft)}
+.lbchk{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-weight:800;color:var(--muted);background:var(--surface)}
+.lbrow.on .lbchk{background:var(--ok);border-color:var(--ok);color:#fff}.lbchk .i{width:14px;height:14px}
+.lbline{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.lbline small{display:block;color:var(--muted);font-size:11.5px}
+.lbprev{display:flex;flex-wrap:wrap;gap:10px;padding:14px;background:repeating-linear-gradient(45deg,var(--surface-2) 0 8px,var(--bg) 8px 16px);border-radius:12px;overflow:auto}
+.plabel{position:relative;background:#fff;color:#111;font-family:var(--body);display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box;flex:none}
+.lbprev .plabel{box-shadow:0 1px 3px rgba(0,0,0,.25);border-radius:3px}
+.plabel.std{width:2.25in;height:1.25in;padding:.07in .09in}
+.plabel.lg{width:4in;height:2in;padding:.14in .18in}
+.plabel.sheet{width:2.625in;height:1in;padding:.06in .1in}
+.pl-name{font-weight:800;line-height:1.12;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;padding-right:.5in}
+.std .pl-name{font-size:10px}.lg .pl-name{font-size:18px}.sheet .pl-name{font-size:9px;-webkit-line-clamp:1}
+.pl-meta{color:#333;margin-top:1px}.std .pl-meta{font-size:7.5px}.lg .pl-meta{font-size:12px}.sheet .pl-meta{font-size:7px}
+.pl-bottom{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:6px}
+.pl-left{display:flex;flex-direction:column;gap:1px;min-width:0}
+.pl-unit{font-weight:700}.std .pl-unit{font-size:7px}.lg .pl-unit{font-size:11px}.sheet .pl-unit{font-size:6.5px}
+.pl-store{color:#555}.std .pl-store{font-size:6px}.lg .pl-store{font-size:9px}.sheet .pl-store{font-size:5.5px}
+.pl-bc{display:flex;flex-direction:column}.pl-bc svg{fill:#111;display:block}.pl-bc span{font:600 5.5px/1 var(--mono);letter-spacing:.5px}
+.std .pl-bc svg{width:.95in;height:.2in}.lg .pl-bc svg{width:1.6in;height:.36in}.lg .pl-bc span{font-size:8px}
+.pl-price{font:800 1px/0.9 var(--display);white-space:nowrap;letter-spacing:-.5px}
+.pl-price sup{font-size:.5em;vertical-align:top;position:relative;top:.12em;margin:0 1px}
+.std .pl-price{font-size:30px}.lg .pl-price{font-size:58px}.sheet .pl-price{font-size:22px}
+.pl-off{position:absolute;top:0;right:0;background:#111;color:#fff;font-weight:800;border-bottom-left-radius:4px;max-width:55%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.std .pl-off{font-size:6.5px;padding:2px 5px}.lg .pl-off{font-size:11px;padding:4px 9px}.sheet .pl-off{font-size:6px;padding:1px 4px}
+.lbprint.std .plabel,.lbprint.lg .plabel{page-break-after:always;break-after:page}
+.lbprint.sheet{display:grid;grid-template-columns:repeat(3,2.625in);column-gap:.125in;row-gap:0}
+.lbprint.sheet .plabel{break-inside:avoid}
+@media (max-width:1180px){.lbgrid{grid-template-columns:1fr}}
 #print{display:none}
 @media print{
   @page{margin:12mm}
@@ -847,6 +882,7 @@ const P = {
   game:'<rect x="2" y="6" width="20" height="12" rx="6"/><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"/>',
   cloud:'<path d="M17.5 19H7a5 5 0 1 1 1.1-9.9A6 6 0 0 1 19.5 11 4 4 0 0 1 17.5 19z"/>',
   recycle:'<path d="M7 19H4.8a1.8 1.8 0 0 1-1.6-2.7L7.5 9"/><path d="M11 19h8.2a1.8 1.8 0 0 0 1.6-2.7L18.5 12"/><path d="M14 16l-3 3 3 3"/><path d="M8.3 5.5l1.2-2a1.8 1.8 0 0 1 3.1 0L16.5 10"/><path d="M5 10.4l2.5-1.4 1.4 2.5"/><path d="M13.6 9.2l2.9.8.8-2.9"/>',
+  label:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h6M7 14h3M16 10v4"/>',
   msg:'<path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z"/>',
   monitor:'<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
   building:'<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-4h6v4M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/>',
@@ -1007,6 +1043,7 @@ const ALERTS = [
 ];
 
 const NOTES = {
+  labels:{deck:'New · shelf labels', purpose:'Print shelf labels (name, size, price, unit price, CRV, barcode, current offer) for any products, on a thermal label printer or a sheet of labels. Price changes and new products are waiting here automatically.', data:['Print list with copies per product','Label size: 2.25 × 1.25 in shelf edge, 4 × 2 in large, or a letter sheet of 30','What each label shows'], build:['Thermal printers (Zebra, Brother, DYMO) print one label per page at the label size; sheet labels print 30 to a letter page','Prices come from the same catalog as the register, so a label always matches the checkout price','Printing clears the matching items from the price-change queue']},
   stores:{deck:'New · multiple stores', purpose:'Run several stores from one account: compare them live, move stock between stores before reordering, keep prices and offers in sync, and add a new store by copying an existing one.', data:['Per store: sales today vs last week, margin, staff on shift, over/short, low stock, alerts, online status','Stock of any product at every store; transfers and their status','Price differences by store, which stores run each offer, and each store’s licence, tax rate, lanes and manager'], build:['Each store is a location with its own licence, tax rate, sale hours, registers, cash and stock; catalog, vendors, price rules and offers are shared','Transfers take stock out when picked and add it when received, with a transfer record for licence rules','Owners see every store; managers and cashiers are tied to their store; reports filter by store or combine them']},
   display:{deck:'New · customer display and digital receipts', purpose:'A screen facing the customer mirrors the order live (items, offers, savings, total, ID reminder, tap prompt), then lets them choose a text, email or paper receipt.', data:['Order lines, savings, CRV, tax and total from the register','Member name and points; rewards sign-up','Receipt choice and the digital receipt the customer gets'], build:['Second screen on each lane (HDMI/USB display or the card reader screen), driven by the register over the local network so it works offline','Digital receipts go out by SMS or email with a short link, return barcode, next-visit offer and opt-out','Receipts are saved to the member account and can be resent from Sales & Returns']},
   reports:{deck:'New · EOD, date range, monthly, yearly reports', purpose:'Close the day with a Z-report (sales, payments, cash drawer count, activity) and look back by any date range, month or year. Every report prints on a full page or on the 80 mm receipt printer.', data:['EOD: gross → net sales, tax, CRV, tenders, drawer float / drops / paid outs / counted / over-short, voids, refunds, ID checks, by category / cashier / hour','Date range: one row per day with totals','Monthly and yearly: net sales, gross profit, margin, average basket, vs last year'], build:['Z-report is generated when the manager closes the day; X-report any time before','Print: browser print for full page, ESC/POS for receipt printers; email PDF at close','Reports read from the sales ledger; totals match accounting export']},
@@ -1238,7 +1275,7 @@ const USERS = [
   {n:'Dev P.', role:'cashier', pin:'4444', color:'#1E9360'},
   {n:'Sam R.', role:'cashier', pin:'5555', color:'#6A3B18'},
 ];
-const CASHIER_ROUTES = ['register','display','returns','shifts','damage','receiving'];
+const CASHIER_ROUTES = ['register','display','returns','shifts','damage','receiving','labels'];
 const OWNER_ROUTES = ['settings','stores'];
 function roleAllows(role, r){ return role==='owner' || (role==='manager' && !OWNER_ROUTES.includes(r)) || (role==='cashier' && CASHIER_ROUTES.includes(r)); }
 function allowed(r){ const u=USERS.find(x=>x.n===S.user); return !!u && roleAllows(u.role, r); }
@@ -1259,6 +1296,7 @@ const ROLE_ACTIONS = [
     ['See expected cash, over/short history and staff hours', 0,1,1]]],
   ['Stock', [
     ['Receive deliveries, report damage', 1,1,1],
+    ['Print shelf labels', 1,1,1],
     ['Count shelves', 1,1,1],
     ['Approve count adjustments (shrink)', 0,1,1],
     ['Add a new product', 'Sends to a manager',1,1],
@@ -1324,6 +1362,7 @@ const S = {
   ob:{name:'Wine Wednesday', type:'% off', val:15, target:'Wine', start:'2026-10-07', end:'2026-10-28', days:'Wed', members:false},
   dmg:{pid:'josh750', q:1, why:'Broken in store', where:'Sales floor', disp:'Write off', photo:null},
   recyc:null, rcy:null, rcyDone:0,
+  lb:{list:[], size:'std', q:'', cat:'All', opt:{unit:true, barcode:true, crv:true, offer:true, store:true}},
   store:'014', stTab:'overview', stPid:'casa750', priceMode:'store', ns:null,
   cd:{rc:null, ask:null, to:''}, cdPhase:null, cdPrev:null, cdPip:false, cdSlide:0, cdset:{save:true, id:true, join:true, slides:true, rc:true}, er:{how:'Text', to:''},
 };
@@ -1343,6 +1382,7 @@ const ROUTES = [
   ['purchasing','Purchasing','truck','Store'],
   ['vendors','Vendors','store','Store'],
   ['pricing','Pricing','tag','Store'],
+  ['labels','Shelf Labels','label','Store'],
   ['damage','Damaged Goods','broken','Store'],
   ['compliance','Compliance','shield','Store'],
   ['forecast','Forecasting','forecast','Intelligence'],
@@ -1355,6 +1395,7 @@ const ROUTES = [
   ['settings','Store Settings','gear','Setup'],
 ];
 const TITLES = {
+  labels:['Shelf Labels','Name and price labels that match the register'],
   stores:['All Stores','Every store live · transfers · shared prices'],
   display:['Customer Display','What the customer sees at the counter · digital receipts'],
   reports:['Reports','End of day, date range, monthly and yearly sales · print any report'],
@@ -1659,7 +1700,7 @@ VIEWS.inventory = () => {
           ${HEAT_PID[S.tile] ? `<dt style="grid-column:1/-1;margin-top:6px;font-weight:700;color:var(--ink)">Codes for this product</dt><dd style="grid-column:1/-1;text-align:left">${codesHTML(HEAT_PID[S.tile])}</dd>` : ''}
           ${HEAT_PID[S.tile] ? (()=>{ const t=tgtFor(HEAT_PID[S.tile]), cm=marginOf(d.r,d.c); return `<dt>Target margin</dt><dd>${t.m}% · ${esc(t.label)}${cm<t.m-0.5?' <span class="chip crit" style="margin-left:4px">below</span>':''}</dd>`; })() : ''}
           <dt>Last sale</dt><dd>${d.ls}</dd></dl>
-        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">${low||(d.d!=null&&d.d<=5)?`<button class="btn primary sm" ${REORDER_BUY[S.tile]?`data-buygo="${REORDER_BUY[S.tile]}"`:'data-go="purchasing"'}>Reorder</button>`:''}<button class="btn sm" data-go="forecast">View forecast</button>${d.d==null||d.d>60?`<button class="btn sm" data-go="assortment">Find a replacement</button>`:''}<button class="btn sm" data-toast="Markdown scheduled for tomorrow">Mark down</button></div>`; })()}</section>` : ''}
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">${low||(d.d!=null&&d.d<=5)?`<button class="btn primary sm" ${REORDER_BUY[S.tile]?`data-buygo="${REORDER_BUY[S.tile]}"`:'data-go="purchasing"'}>Reorder</button>`:''}<button class="btn sm" data-go="forecast">View forecast</button>${HEAT_PID[S.tile]?`<button class="btn sm" data-lbgo="${HEAT_PID[S.tile]}">${ic('label')}Print shelf label</button>`:''}${d.d==null||d.d>60?`<button class="btn sm" data-go="assortment">Find a replacement</button>`:''}<button class="btn sm" data-toast="Markdown scheduled for tomorrow">Mark down</button></div>`; })()}</section>` : ''}
       <section class="card" data-note="AI action list · prioritized">
         <div class="cardhead"><span class="chip ai">${ic('spark')} AI recommended actions</span></div>
         <div class="actions">
@@ -2697,7 +2738,7 @@ VIEWS.pricing = () => {
     <div class="muted" style="font-size:12px;margin-top:10px">Suggested price = cost per unit ÷ (1 − target margin), rounded up to the price ending.${(()=>{ const x=rows.find(r=>r.kind==='raise'); return x?` Example: ${x.p.n.split(' ')[0]} ${money(x.newU)} ÷ (1 − ${(x.tgt/100).toFixed(2)}) = ${money(x.newU/(1-x.tgt/100))} → ${money(x.sug)} (${x.rule.label.toLowerCase()} ${x.tgt}%).`:''; })()} Each product uses its own rule if it has one, then its group’s, then its category’s. Prices are also checked against state minimum-price rules.</div>
   </section>
   <section class="card" data-note="Shelf tags · print so shelf matches register">
-    <div class="cardhead"><h2>Shelf tags to print</h2><span class="chip plain">${S.tagsQ.length}</span><span class="spacer"></span>${S.tagsQ.length?`<button class="btn sm primary" data-act="tagsprint">Send to label printer</button>`:''}</div>
+    <div class="cardhead"><h2>Shelf tags to print</h2><span class="chip plain">${S.tagsQ.length}</span><span class="spacer"></span>${S.tagsQ.length?`<button class="btn sm primary" data-act="tagsprint">${ic('printer')}Print shelf labels</button>`:''}</div>
     ${S.tagsQ.length ? `<div class="tags">${S.tagsQ.map(t=>{ const p=byId(t); return `<div class="tag"><span class="tn">${esc(p.n)}</span><span class="tu">${p.sz}</span><span class="tp">${money(p.p)}</span><span class="tu">Price from ${S.priceWhen==='now'?'Sep 25':'Sep 26'}</span><span class="tb">${Array.from({length:26},(_,i)=>`<i style="opacity:${(i*7+t.length)%3?1:0}"></i>`).join('')}</span></div>`; }).join('')}</div>`
       : `<div class="empty">Approved prices create shelf tags here, so the shelf always matches the register.</div>`}
   </section>`;
@@ -3263,6 +3304,84 @@ VIEWS.display = () => {
 setInterval(()=>{ const els=document.querySelectorAll('.cdscreen[data-stage="idle"]'); if (!els.length) return; S.cdSlide++; els.forEach(el=>el.innerHTML=customerScreen('idle')); }, 4000);
 function cdPip(){ return S.cdPip ? `<div class="cdpip" data-note="Customer screen mirror"><div class="cdpiphead">${ic('monitor')} Customer screen<span class="spacer"></span><button class="iconbtn" data-act="cdpip" aria-label="Hide customer screen">${ic('x')}</button></div><div class="cdscreen" id="cdpip-body" data-stage="${cdStage()}">${customerScreen(cdStage())}</div></div>` : ''; }
 
+/* ------------------------------------------------ shelf labels */
+const LB_SIZES = {std:['Shelf edge','2.25 × 1.25 in · thermal label printer'], lg:['Large','4 × 2 in · endcaps and featured'], sheet:['Letter sheet','30 labels, 2.625 × 1 in (Avery 5160)']};
+const LB_OPTS = [['unit','Unit price'],['crv','CRV note'],['offer','Current offer'],['barcode','Barcode'],['store','Store and date']];
+function unitPrice(p){
+  const sz=String(p.sz).toLowerCase(), per=sz.split(/[×x]/).pop().trim(), v=parseFloat(per), n=containers(p.sz);
+  if (!v) return null;
+  if (/ct\b/.test(per)) return {u:'each', v:p.p/(v*n)};
+  if (/lb/.test(per)) return {u:'lb', v:p.p/(v*n)};
+  const oz = /ml/.test(per) ? v/29.5735 : /\bl\b|l$/.test(per) ? v*1000/29.5735 : /oz/.test(per) ? v : 0;
+  if (!oz) return null;
+  return {u: p.cat==='Snacks' ? 'oz' : 'fl oz', v:p.p/(oz*n)};
+}
+function labelBars(code){ let x=4, bars=''; const digits=String(code||'0').replace(/\D/g,'')||'0';
+  for (const ch of ('101'+digits+'01010'+digits.split('').reverse().join('')+'101')){ const d=+ch; const w=1+(d%3); if ((d+x)%2===0) bars+=`<rect x="${x}" y="0" width="${w}" height="30"/>`; x+=w+1; }
+  return `<svg viewBox="0 0 ${x+4} 30" preserveAspectRatio="none" aria-hidden="true">${bars}</svg>`; }
+function shelfLabel(pid, size){
+  const p=byId(pid), o=S.lb.opt, up=o.unit?unitPrice(p):null, off=o.offer?offerFor(p):null, bc=(codesFor(pid).find(c=>/^Barcode/.test(c.t))||{}).v;
+  const [d,c]=money(p.p).replace('$','').split('.');
+  return `<div class="plabel ${size}">
+    ${off?`<span class="pl-off">${esc(off.tag)}</span>`:''}
+    <div class="pl-name">${esc(p.n)}</div>
+    <div class="pl-meta">${esc(p.sz)}${o.crv&&p.crv?` · + CRV ${money(p.crv)}`:''}</div>
+    <div class="pl-bottom">
+      <div class="pl-left">${up?`<div class="pl-unit">${up.v<1?(up.v*100).toFixed(1)+'¢':money(up.v)} per ${up.u}</div>`:''}${o.barcode&&bc&&size!=='sheet'?`<div class="pl-bc">${labelBars(bc)}<span>${fmtCode(bc)}</span></div>`:''}${o.store?`<div class="pl-store">${esc(curStore().short)} · 09/26</div>`:''}</div>
+      <div class="pl-price"><sup>$</sup>${d}<sup>${c}</sup></div>
+    </div></div>`;
+}
+function lbAdd(ids){ let k=0; for (const id of ids){ if (!byId(id)) continue; if (!S.lb.list.some(x=>x.pid===id)){ S.lb.list.push({pid:id, n:1}); k++; } } return k; }
+VIEWS.labels = () => {
+  const L=S.lb, q=L.q.trim().toLowerCase();
+  const list = PRODUCTS.filter(p=>(L.cat==='All'||p.cat===L.cat) && (!q || p.n.toLowerCase().includes(q)));
+  const total = L.list.reduce((a,x)=>a+x.n,0), inList=new Set(L.list.map(x=>x.pid));
+  const waiting = S.tagsQ.filter(id=>!inList.has(id)).length;
+  const offersIds = PRODUCTS.filter(p=>offerFor(p)).map(p=>p.id), newIds = PRODUCTS.filter(p=>p.isNew).map(p=>p.id);
+  return `<section class="stats">
+    <div><b class="num" style="color:var(--accent)">${S.tagsQ.length}</b><small>price changes waiting for a label</small></div>
+    <div><b class="num">${total}</b><small>label${total===1?'':'s'} in the print list</small></div>
+    <div><b class="num" style="font-size:18px">${LB_SIZES[L.size][0]}</b><small>${LB_SIZES[L.size][1]}</small></div>
+    <div><b class="num" style="font-size:18px">${L.size==='sheet'?'Office printer':'Zebra ZD421'}</b><small>${L.size==='sheet'?'letter paper, label sheets':'label printer · ready'}</small></div></section>
+  <div class="lbgrid">
+    <section class="card" style="display:flex;flex-direction:column;gap:10px;min-width:0" data-note="Pick products">
+      <div class="cardhead"><h2>Add products</h2></div>
+      <div class="quick">
+        <button data-lbq="changed" ${waiting?'':'disabled'}>${ic('tag')}Price changes (${waiting})</button>
+        <button data-lbq="offers">${ic('gift')}On offer (${offersIds.length})</button>
+        ${newIds.length?`<button data-lbq="new">New products (${newIds.length})</button>`:''}
+        <button data-lbq="shown">Everything shown (${list.length})</button></div>
+      <label class="scanbar" style="padding:4px 8px 4px 12px">${ic('search')}<input id="lb-q" placeholder="Search or scan a product" value="${esc(L.q)}" autocomplete="off"></label>
+      <div class="quick">${CATS.map(c=>`<button class="${L.cat===c?'on':''}" data-lbcat="${c}" style="padding:4px 9px;font-size:11.5px">${c==='All'?'All':c}</button>`).join('')}</div>
+      <div class="lbpick">${list.map(p=>`<button class="lbrow ${inList.has(p.id)?'on':''}" data-lbadd="${p.id}"><span class="thumb">${bottleSVG(p)}</span><span style="min-width:0"><b>${esc(p.n)}</b><small>${esc(p.sz)}${S.tagsQ.includes(p.id)?' · <span style="color:var(--accent)">price changed</span>':''}</small></span><span class="num">${money(p.p)}</span><span class="lbchk">${inList.has(p.id)?ic('check'):'+'}</span></button>`).join('') || '<div class="empty">No product matches.</div>'}</div>
+    </section>
+    <section style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <section class="card" style="display:flex;flex-direction:column;gap:10px" data-note="Label size and content">
+        <div class="field">Label size<div class="quick">${Object.entries(LB_SIZES).map(([k,[l]])=>`<button class="${L.size===k?'on':''}" data-lbsize="${k}">${l}</button>`).join('')}</div></div>
+        <div class="field">On the label<div class="quick"><button class="on" disabled>Name</button><button class="on" disabled>Price</button><button class="on" disabled>Size</button>${LB_OPTS.map(([k,l])=>`<button class="${L.opt[k]?'on':''}" data-lbopt="${k}">${L.opt[k]?'✓ ':''}${l}</button>`).join('')}</div></div>
+        <div class="lbprev ${L.size}" data-note="Actual size preview">${(L.list.length?L.list:[{pid:'tito175'},{pid:'bud12'}]).slice(0,L.size==='sheet'?6:4).map(x=>shelfLabel(x.pid, L.size)).join('')}</div>
+        ${L.list.length?'':'<div class="muted" style="font-size:12px">Sample labels. Add products to see yours.</div>'}
+      </section>
+      <section class="card" data-note="Print list">
+        <div class="cardhead"><h2>Print list</h2><span class="chip plain">${total} label${total===1?'':'s'}</span><span class="spacer"></span>${L.list.length?`<button class="btn sm ghost" data-act="lbclear">Clear</button>`:''}</div>
+        ${L.list.length?L.list.map(x=>{ const p=byId(x.pid); return `<div class="lbline"><span style="min-width:0"><b>${esc(p.n)}</b><small>${esc(p.sz)} · ${money(p.p)}</small></span><span class="qty"><button data-lbn="${x.pid}|-1" aria-label="One less">−</button>${x.n}<button data-lbn="${x.pid}|1" aria-label="One more">+</button></span><button class="iconbtn" data-lbdel="${x.pid}" aria-label="Remove">${ic('x')}</button></div>`; }).join('') : '<div class="empty">Tap products on the left, or add all price changes, to build the list.</div>'}
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px"><button class="btn primary" data-act="lbprint" ${total?'':'disabled'}>${ic('printer')}Print ${total} label${total===1?'':'s'}</button></div>
+      </section>
+    </section>
+  </div>`;
+};
+function printLabels(){
+  const L=S.lb, labels=L.list.flatMap(x=>Array.from({length:x.n},()=>x.pid));
+  const page = L.size==='std' ? '@page{size:2.25in 1.25in;margin:0}' : L.size==='lg' ? '@page{size:4in 2in;margin:0}' : '@page{size:letter;margin:.5in .19in}';
+  let st=document.getElementById('lbpage'); if (!st){ st=document.createElement('style'); st.id='lbpage'; document.head.appendChild(st); }
+  st.textContent = `@media print{${page}}`;
+  $('#print').innerHTML = `<div class="lbprint ${L.size}">${labels.map(id=>shelfLabel(id, L.size)).join('')}</div>`;
+  try{ window.print(); }catch(e){}
+  st.textContent=''; $('#print').innerHTML='';
+  const printed=new Set(L.list.map(x=>x.pid)); S.tagsQ=S.tagsQ.filter(id=>!printed.has(id));
+  toast(`${labels.length} shelf label${labels.length===1?'':'s'} sent to the printer`,'printer');
+  L.list=[]; render();
+}
 /* ------------------------------------------------ bottle & can returns (CRV redemption) */
 const RCY_TYPES = [['al','Aluminum cans','under 24 oz','crvS'],['pl','Plastic bottles','under 24 oz','crvS'],['gl','Glass bottles','under 24 oz','crvS'],['big','Cans and bottles','24 oz or more','crvL']];
 const rcyCount = c => Object.values(c).reduce((a,b)=>a+(+b||0),0);
@@ -3347,7 +3466,7 @@ function endTour(){ S.tour=null; S.online=true; S.clock='now'; closeModal(); ren
 
 /* ------------------------------------------------ events */
 document.addEventListener('click', e => {
-  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-ilink],[data-bcpick],[data-npsh],[data-npcat],[data-npuse],[data-npbc],[data-signwho],[data-pinkey],[data-rcvtab],[data-rcvq],[data-strdef],[data-clockuser],[data-salesel],[data-retchk],[data-retq],[data-retwhy],[data-retdest],[data-retmeth],[data-vsel],[data-nvday],[data-nvvia],[data-nvp],[data-store],[data-sttab],[data-trmake],[data-trnext],[data-pmode],[data-ofs],[data-cdrc],[data-cdprev],[data-cdset],[data-erhow],[data-cdback],[data-cdsend],[data-rcq],[data-rcpay],[data-regview]');
+  const el = e.target.closest('[data-go],[data-act],[data-add],[data-dec],[data-cat],[data-heat],[data-tile],[data-fc],[data-inv],[data-af],[data-resolve],[data-undo],[data-seg],[data-toast],[data-close],[data-idsim],[data-pm],[data-cash],[data-scrim],[data-dk],[data-dv],[data-dr],[data-ost],[data-sugg],[data-obt],[data-obd],[data-dq],[data-dw],[data-dd],[data-claim],[data-swap],[data-rf],[data-clock],[data-buy],[data-bq],[data-addpo],[data-potab],[data-podel],[data-posend],[data-buygo],[data-tour],[data-idpol],[data-manr],[data-shelf],[data-swapgo],[data-swapall],[data-bestby],[data-bestper],[data-deal],[data-copy],[data-pchk],[data-round],[data-when],[data-invview],[data-tmreset],[data-aimargin],[data-rptab],[data-rpyear],[data-rpfmt],[data-ilink],[data-bcpick],[data-npsh],[data-npcat],[data-npuse],[data-npbc],[data-signwho],[data-pinkey],[data-rcvtab],[data-rcvq],[data-strdef],[data-clockuser],[data-salesel],[data-retchk],[data-retq],[data-retwhy],[data-retdest],[data-retmeth],[data-vsel],[data-nvday],[data-nvvia],[data-nvp],[data-store],[data-sttab],[data-trmake],[data-trnext],[data-pmode],[data-ofs],[data-cdrc],[data-cdprev],[data-cdset],[data-erhow],[data-cdback],[data-cdsend],[data-rcq],[data-rcpay],[data-regview],[data-lbq],[data-lbcat],[data-lbadd],[data-lbsize],[data-lbopt],[data-lbn],[data-lbdel],[data-lbgo]');
   if (!el) return;
   const d = el.dataset;
   if ('scrim' in d && e.target!==el) return;
@@ -3365,6 +3484,14 @@ document.addEventListener('click', e => {
   if (d.trnext){ const t=TRANSFERS[+d.trnext]; t.st++; if (t.st===1) setStockAt(t.pid, t.from, stockAt(t.pid,t.from)-t.q); if (t.st===3) setStockAt(t.pid, t.to, stockAt(t.pid,t.to)+t.q); render(); toast(`${t.no} · ${TR_ST[t.st].toLowerCase()}${t.st===3?` · ${t.q} added to ${storeOf(t.to).short} stock`:''}`); return; }
   if (d.pmode){ S.priceMode=d.pmode; PRODUCTS.forEach(p=>{ if (p.base==null) p.base=p.p; const o=STORE_PRICE[S.store]&&STORE_PRICE[S.store][p.id]; p.p = S.priceMode==='store' && o ? o : p.base; }); render(); return; }
   if (d.ofs){ const [oid,sid]=d.ofs.split('|'); const sc=OFFER_SCOPE[oid]||STORES.map(x=>x.id); OFFER_SCOPE[oid]= sc.includes(sid) ? sc.filter(x=>x!==sid) : [...sc, sid]; render(); return; }
+  if (d.lbq){ const L=S.lb, q=L.q.trim().toLowerCase(); const ids = d.lbq==='changed' ? S.tagsQ : d.lbq==='offers' ? PRODUCTS.filter(p=>offerFor(p)).map(p=>p.id) : d.lbq==='new' ? PRODUCTS.filter(p=>p.isNew).map(p=>p.id) : PRODUCTS.filter(p=>(L.cat==='All'||p.cat===L.cat) && (!q||p.n.toLowerCase().includes(q))).map(p=>p.id); const k=lbAdd(ids); render(); toast(k?`${k} product${k===1?'':'s'} added to the print list`:'Already in the print list'); return; }
+  if (d.lbcat){ S.lb.cat=d.lbcat; render(); return; }
+  if (d.lbadd){ const L=S.lb, i=L.list.findIndex(x=>x.pid===d.lbadd); if (i>=0) L.list.splice(i,1); else L.list.push({pid:d.lbadd, n:1}); render(); return; }
+  if (d.lbsize){ S.lb.size=d.lbsize; render(); return; }
+  if (d.lbopt){ S.lb.opt[d.lbopt]=!S.lb.opt[d.lbopt]; render(); return; }
+  if (d.lbn){ const [id,k]=d.lbn.split('|'), x=S.lb.list.find(y=>y.pid===id); if (x){ x.n=Math.max(1,Math.min(99,x.n+(+k))); } render(); return; }
+  if (d.lbdel){ S.lb.list=S.lb.list.filter(x=>x.pid!==d.lbdel); render(); return; }
+  if (d.lbgo){ lbAdd([d.lbgo]); go('labels'); toast(`${byId(d.lbgo).n} added to the print list`,'label'); return; }
   if (d.regview){ S.regView=d.regview; render(); window.scrollTo(0,0); if (d.regview==='products') setTimeout(()=>{ const q=$('#q'); if (q) q.focus({preventScroll:true}); },0); return; }
   if (d.rcq){ const [k,q]=d.rcq.split('|'); S.rcy.c[k]=Math.max(0,(+S.rcy.c[k]||0)+(+q)); recycleModal(); return; }
   if (d.rcpay){ S.rcy.pay=d.rcpay; recycleModal(); return; }
@@ -3554,7 +3681,9 @@ document.addEventListener('click', e => {
       const bad = rows.find(r=>r.below); if (bad){ toast(`${bad.p.n}: that price is below cost`,'alert'); break; }
       rows.forEach(r=>{ if (S.priceWhen==='now') r.p.p = Math.round(r.price*100)/100; S.priceDone[r.c.pid]=r.price; if (!S.tagsQ.includes(r.c.pid)) S.tagsQ.push(r.c.pid); });
       render(); toast(`${rows.length} prices ${S.priceWhen==='now'?'updated on the register':'scheduled for 6 AM'} · ${rows.length} shelf tags queued`); break; }
-    case 'tagsprint': toast(`${S.tagsQ.length} shelf tags sent to the label printer`); S.tagsQ=[]; render(); break;
+    case 'tagsprint': { const k=lbAdd(S.tagsQ); go('labels'); toast(`${k} price change${k===1?'':'s'} added to the print list`,'label'); break; }
+    case 'lbclear': S.lb.list=[]; render(); break;
+    case 'lbprint': printLabels(); break;
     case 'dealsample': startDealRead(); break;
     case 'dealokall': S.dealRows.forEach((x,i)=>{ if (x==='review' && SHEET.rows[i].v==='ok'){ S.dealRows[i]='ok'; dealConfirm(i); } }); render(); toast('2 deals added · alert sent to the owner'); break;
     case 'buyai': S.buyQ=null; render(); break;
@@ -3589,6 +3718,7 @@ document.addEventListener('click', e => {
   }
 });
 document.addEventListener('input', e => {
+  if (e.target.id==='lb-q'){ S.lb.q=e.target.value; const pos=e.target.selectionStart; render(); const q=$('#lb-q'); q.focus(); q.setSelectionRange(pos,pos); return; }
   if (e.target.id && e.target.id.startsWith('ns-') && S.ns){ S.ns[e.target.id.slice(3)]=e.target.value; const b=document.querySelector('[data-act="nssave"]'); if (b) b.disabled=!(S.ns.n.trim()&&S.ns.addr.trim()&&S.ns.lic.trim()); return; }
   if (e.target.id==='er-to'){ S.er.to=e.target.value; const b=document.querySelector('[data-act="ersend"]'); if (b) b.disabled=S.er.to.trim().length<=5; return; }
   if (e.target.id==='sale-q'){ S.saleQ=e.target.value; render(); refocus('sale-q'); return; }
