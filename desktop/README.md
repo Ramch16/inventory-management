@@ -22,6 +22,8 @@ drift apart.
 full-screen register with no window controls. Press **Ctrl+Shift+Q** to quit.
 On Windows, add `--kiosk` to the end of the shortcut's *Target* field.
 
+**Shelf labels:** **Tools → Shelf Labels** (Ctrl+L / ⌘L) opens the standalone label page in its own window. Start the app with `--labels` to open only the labels page, for a back-office computer next to the label printer (`npm run labels` from source).
+
 Other keys: **F11** full screen, **Ctrl + / Ctrl −** zoom, **Ctrl+R** reload.
 Only one copy of the app runs per computer; opening it again brings the window
 to the front.

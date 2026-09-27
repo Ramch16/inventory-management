@@ -55,6 +55,10 @@ stays clickable during the tour. The story runs:
   build notes for each screen, and outlines each component with its label.
 - **Moon / sun**: light and dark theme.
 
+## Standalone Shelf Labels page
+
+`shelf-labels.html` prints shelf labels on its own, without the rest of the POS: pick from the catalog (search, category, scan a barcode, everything on offer), type a label in (name, size, price, optional barcode, CRV and offer tag), or paste a list (`name, size, price` per line, from a spreadsheet or vendor sheet). Same label sizes and design as the POS Shelf Labels screen, copies per product, actual-size preview; the print list is remembered on that computer. It prints when opened as a file in a browser or in the desktop app (Tools → Shelf Labels, or start with `--labels`); the online preview can't reach a printer. The POS Shelf Labels screen has an “Open standalone page” button.
+
 ## Standalone desktop app
 
 The same POS also runs as its own desktop application for Windows, macOS and Linux, fully offline, with real printing and a kiosk mode for register lanes. See [`desktop/README.md`](../../desktop/README.md).

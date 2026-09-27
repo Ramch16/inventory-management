@@ -8,6 +8,7 @@ on:
     paths:
       - 'desktop/**'
       - 'design/pos-wireframes/index.html'
+      - 'design/pos-wireframes/shelf-labels.html'
       - '.github/workflows/desktop-app.yml'
 
 jobs:

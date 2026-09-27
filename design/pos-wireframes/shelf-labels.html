@@ -1,0 +1,337 @@
+<title>Bevnetic Shelf Labels</title>
+<meta name="description" content="Print shelf labels with name and price">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,500;0,600;0,700;1,700;1,800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F2F5F6; --surface:#FFFFFF; --surface-2:#F7F9FA; --ink:#14212A; --muted:#5A6B76; --line:#DCE3E7;
+  --accent:#F07A1C; --accent-ink:#B8520A; --accent-soft:#FFF1E4; --ok:#1E9360; --ok-soft:#E6F6EE; --warn:#B7700A; --warn-soft:#FDF4E1;
+  --band:#13202A; --band-ink:#E7EEF2; --band-muted:#8FA2AD; --board:#E4EAED;
+  --shadow:0 1px 2px rgba(20,33,42,.06),0 6px 20px rgba(20,33,42,.06);
+  --display:"Saira","Arial Narrow",system-ui,sans-serif; --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --bg:#0D161C; --surface:#152129; --surface-2:#1A2831; --ink:#E6EDF0; --muted:#8FA2AD; --line:#26363F;
+  --accent:#FF8E3A; --accent-ink:#FFB27A; --accent-soft:#3A2414; --ok:#3CC487; --ok-soft:#13301F; --warn:#F2B13C; --warn-soft:#382A10; --board:#0A1216;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#0D161C; --surface:#152129; --surface-2:#1A2831; --ink:#E6EDF0; --muted:#8FA2AD; --line:#26363F;
+  --accent:#FF8E3A; --accent-ink:#FFB27A; --accent-soft:#3A2414; --ok:#3CC487; --ok-soft:#13301F; --warn:#F2B13C; --warn-soft:#382A10; --board:#0A1216;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 14px/1.5 var(--body);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* header band */
+.band{background:var(--band);color:var(--band-ink);padding:14px 16px}
+.band-in{max-width:1320px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{width:40px;height:40px;object-fit:contain;border-radius:8px}
+.brand b{font:800 italic 19px/1 var(--display);letter-spacing:.06em}
+.brand small{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--band-muted);margin-top:3px}
+.band h1{margin:0 0 0 6px;font:700 22px/1.1 var(--display);padding-left:14px;border-left:1px solid #2A3B47;text-wrap:balance}
+.band .spacer{flex:1}
+.band label{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--band-muted)}
+.band select{background:#1B2B36;border:1px solid #2A3B47;border-radius:8px;padding:6px 8px;color:var(--band-ink)}
+
+main{max-width:1320px;margin:0 auto;padding-block:20px 120px;padding-inline:16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:18px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+h2{margin:0;font:700 17px/1.2 var(--display);letter-spacing:.01em}
+.eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* segmented tabs and chips */
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;padding:3px;background:var(--surface-2);gap:2px}
+.seg button{flex:1;border:0;background:transparent;border-radius:7px;padding:7px 8px;font-weight:700;font-size:13px;color:var(--muted)}
+.seg button[aria-selected="true"]{background:var(--ink);color:var(--surface)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-size:12.5px;font-weight:700;color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.chip.fixed{opacity:.75;cursor:default}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 14px;font-weight:700;font-size:13.5px;display:inline-flex;gap:7px;align-items:center;justify-content:center}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--muted)}
+.btn.sm{padding:5px 10px;font-size:12.5px}
+
+/* fields */
+.field{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:700;min-width:0}
+.field input,.field select,.field textarea{border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:9px 11px;font-weight:500;font-size:14px;width:100%}
+.field textarea{min-height:150px;font-family:var(--mono);font-size:12.5px;line-height:1.55;resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}
+.hint{font-size:12px;color:var(--muted);font-weight:500}
+.err{font-size:12px;color:var(--warn);font-weight:700}
+
+/* catalog list */
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:0 10px;background:var(--surface)}
+.search input{border:0;background:transparent;padding:9px 0;flex:1;min-width:0;outline:none}
+.pick{display:flex;flex-direction:column;gap:6px;max-height:460px;overflow:auto}
+.pickrow{display:grid;grid-template-columns:minmax(0,1fr) auto 28px;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface)}
+.pickrow b{display:block;font-size:13.5px}
+.pickrow small{display:block;color:var(--muted);font-size:11.5px}
+.pickrow .mark{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-weight:800;color:var(--muted)}
+.pickrow.on{border-color:var(--ok);background:var(--ok-soft)}
+.pickrow.on .mark{background:var(--ok);border-color:var(--ok);color:#fff}
+
+/* preview board */
+.board{background:var(--board);border-radius:12px;padding:16px;display:flex;flex-wrap:wrap;gap:12px;overflow:auto;min-height:170px;align-content:flex-start}
+.board .caption{flex-basis:100%;font-size:11.5px;color:var(--muted)}
+
+/* print list */
+.list{display:flex;flex-direction:column}
+.line{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.line:last-child{border-bottom:0}
+.line b{display:block;font-size:13.5px;overflow-wrap:anywhere}
+.line small{display:block;color:var(--muted);font-size:11.5px}
+.qty{display:flex;align-items:center;gap:8px;font:700 14px var(--mono)}
+.qty button,.x{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:var(--surface);padding:0;line-height:1;font-size:15px;color:var(--muted)}
+.empty{padding:22px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px;font-size:13px}
+
+/* bottom print bar */
+.printbar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(20,33,42,.08);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
+.printbar-in{max-width:1320px;margin:0 auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.printbar .sum{font-weight:700}
+.printbar .sum small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.printbar .spacer{flex:1}
+.note{font-size:12px;color:var(--warn);background:var(--warn-soft);border-radius:8px;padding:6px 10px;max-width:420px}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--surface);border-radius:10px;padding:10px 16px;font-weight:700;font-size:13px;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+
+/* the labels themselves: always white paper, black ink */
+.plabel{position:relative;background:#fff;color:#111;font-family:var(--body);display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box;flex:none}
+.board .plabel{box-shadow:0 1px 3px rgba(0,0,0,.28);border-radius:3px}
+.plabel.std{width:2.25in;height:1.25in;padding:.07in .09in}
+.plabel.lg{width:4in;height:2in;padding:.14in .18in}
+.plabel.sheet{width:2.625in;height:1in;padding:.06in .1in}
+.pl-name{font-weight:800;line-height:1.12;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;padding-right:.5in;overflow-wrap:anywhere}
+.std .pl-name{font-size:10px}.lg .pl-name{font-size:18px}.sheet .pl-name{font-size:9px;-webkit-line-clamp:1}
+.pl-meta{color:#333;margin-top:1px}.std .pl-meta{font-size:7.5px}.lg .pl-meta{font-size:12px}.sheet .pl-meta{font-size:7px}
+.pl-bottom{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:6px}
+.pl-left{display:flex;flex-direction:column;gap:1px;min-width:0}
+.pl-unit{font-weight:700}.std .pl-unit{font-size:7px}.lg .pl-unit{font-size:11px}.sheet .pl-unit{font-size:6.5px}
+.pl-store{color:#555}.std .pl-store{font-size:6px}.lg .pl-store{font-size:9px}.sheet .pl-store{font-size:5.5px}
+.pl-bc{display:flex;flex-direction:column}.pl-bc svg{fill:#111;display:block}.pl-bc span{font:600 5.5px/1 var(--mono);letter-spacing:.5px}
+.std .pl-bc svg{width:.95in;height:.2in}.lg .pl-bc svg{width:1.6in;height:.36in}.lg .pl-bc span{font-size:8px}
+.pl-price{font:800 30px/.9 var(--display);white-space:nowrap;letter-spacing:-.5px}
+.pl-price sup{font-size:.5em;vertical-align:top;position:relative;top:.12em;margin:0 1px}
+.lg .pl-price{font-size:58px}.sheet .pl-price{font-size:22px}
+.pl-off{position:absolute;top:0;right:0;background:#111;color:#fff;font-weight:800;border-bottom-left-radius:4px;max-width:55%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.std .pl-off{font-size:6.5px;padding:2px 5px}.lg .pl-off{font-size:11px;padding:4px 9px}.sheet .pl-off{font-size:6px;padding:1px 4px}
+
+#print-area{display:none}
+@media print{
+  html,body{background:#fff!important}
+  .band,main,.printbar,.toast{display:none!important}
+  #print-area{display:block!important}
+  .lbprint.std .plabel,.lbprint.lg .plabel{break-after:page;page-break-after:always}
+  .lbprint.sheet{display:grid;grid-template-columns:repeat(3,2.625in);column-gap:.125in}
+  .lbprint.sheet .plabel{break-inside:avoid}
+}
+@media (max-width:980px){main{grid-template-columns:1fr}}
+@media (max-width:560px){.band h1{border-left:0;padding-left:0;margin-left:0;flex-basis:100%;font-size:20px}.grid2,.grid3{grid-template-columns:1fr}.printbar .sum small{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="band">
+  <div class="band-in">
+    <div class="brand"><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/2wBDAQYGBgkICREJCREkGBQYJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCT/wAARCACBALoDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDwh33AKowg6CmCgkUZrpONIlSp46rKanjNNGkTRtwCea2obdGiGeeKwbdu5OAOpq4L1lXAJA9KTRutVoJeqAxA6DpWbJ1q1PNu59apSNzTJmyJ6icU9jTCaRgxnepreDzW+Ztq+tCQ5+Zvu100PgPxFPDHNFpxMcihlPmKMgjI4zWdStTpWdWSV+5pSw9WtdUot+hzLRNGxVutSxNnAP510jfD3xKy4bTj7HzU4/Wof+Fd+J88ab/5FT/Gsv7Rwq/5eL7zf+zMW1rTf3GT7U9iEQpn5j1I7VtxeAPFCDnTCW7fvU4/Wj/hXvign/kGf+RU/wAar+08L/z8X3mLyvF/8+39xzDo0fPUetKJwww3B9a6b/hXfik/8ws/9/U/xqNvhl4pbldLx7ean+NJ5lhf+fi+8v8As7FPem/uMFZto2sAy+hoKCTmJs/7J4Nbp+Gvi+IZ/siR/ZZEP9axtQ0vUNKfZqFjc2bdB50ZUH6HoaunjKFR2hNP5mVTB1qesotfIgLFThgQfemna/UA0v2hgMNhx6NTSYW7tGfzFdBhqMaBDyMimeR/tn8ql8sn7siN+OKPLl/u/rSdhplUUoNJRmpKTJFqaIZ5Jwo6moIxuOScKOpp5k3EADCjoKY7lrzc4xwB0FP83jrVQNinbqZXNYmaT3qB2NKWyMVGT/CT9KBOQhOaWLaW+Y89qYQRTHbAoE9TW0u2bUtVtLFf+W8qofYZ5/TNe/ptUBVGFUYA9BXjfwpsW1DxI146Ex2cTNuxxvbgfjgmvY+nSvhuJsR7SvGkui/M/QeE8L7PDyqy3k/wRKKAPY189+L/ABtrF54n1BrHVLyC1SUxxJFKyrtXjOB64zWSfFPiI/8AMb1LH/Xw3+NRT4ZqzgpOaVx1uKaMJuHI3Y+nQ2O1PD+xr5d/4SbxFnP9t6j/AOBDf40v/CSeIuo1zUvp9ob/ABqv9Van86+4xfFdH/n2/vPqRZD/AHTTxNt/gNfLP/CU+Ix/zHNSH/bw3+NH/CVeIcc61qP1+0N/jS/1Uqfzr7hf61UX/wAu3959UC8CfeQ09mtNRha3mSKaNxhopVDA/ga+XbPx54rsHDw63dyAfwTN5in8GzXqPgH4mJ4nlGnahEltqQG5ChISYDrj0PtXFjMgxGFj7WLul2OvB5zhMZL2TXK33G/EL4SC2tpdX8NRsFjBeaxHPHcx/wDxP5eleTJcZHOD9K+sNIuzcqY3P7xe/qK8H+LXhKHw14rZ7eMJaagpuI1A4Rs4dR+PP417XDmb1K0vqtd3fR/oeBn+VxoP2tNW7o4sSqeuRRvHqaf5CH1FJ9m/2v0r69xZ8tdEfJ6U5Yj/ABfKB1JqS1ZVfc3/AOqpLyZZAApzjvUpaXFd3sVmfdwOFHQUA0lJmkUTK1OzUANP35poGOLUEg8U61tri/nW3tIJJ5m6JGuTXdeH/hZJIVn1uYoOv2aE8/8AAm/w/OuTF4+jhleo9e3U78FlmIxbtSjp36HF6dpl7rFwLaxtpbiX0QdPqegH1r0Tw/8ACOBNs+uzec/X7NC2FHszdT+FbNx4q8K+C7b7KtxbQ7P+Xe2G9yffHf61xutfG66m3R6Np6W46Ca5O5vwUcD9a8GrjMdjfdw8eWPdn0dLAZdl/vYqfPLsj1WK2s9Hs9kaQWlrGOgwiLXF+J/ixoOnWtxb6fcm+vGRlQwDKIxGAS3Tj2zXlkk/ibxxeeWz32pyk/cXJVfwHyiu08PfAu8uNs2uXq2idTBb4eT8W6D8M1yf2ZhsM/aYypd9v61Ot5visUvZ4KlaPf8ArQ80t4mkYKAXdjwAMljXfeF/hB4g18pLdRDS7Q8+Zcj5yPZOv54r1rQfCvhzwkg+w2UUcoHMz/PKfxPT8MVp3OueXGzqViRRlpHOMD19qeJ4jqS9zCxt5v8AyMMLwv8AbxEr/wBdzN0L4VeDfDsKm5tE1CfvNe/MCfZOg/WrWqfDjwT4gtzGul2ttJj5ZbLETr+XB/EGvNvFPxltLKZoNIiGpTA4aeQkRD6d2/QUzwz8ZrW7mWHWoPsEhPy3EJJj/EdV/WuN4TM2vrF3f1/Q61/Zal9Xur+mn3mf4w+D2s+Hd9zZq2raeuT5kK4ljH+0nf6jP4VwX2YMMp8w/UV9S6d4iEkUcnmpcQuMrLGwOR68da53xj8OdF8Wo95ZbLDUDz58Qwsh/wBtf6jn6134HiOUX7PGL5/5nm4/hqSXPhvu/wAj54aED60tpczabfQX0JIlt5FkUj1BzWzrmi3/AIdv3sNVt9kq8hhyHX+8p7iswwLcMsUTfO5Cqp7k8CvqnKFSnzJ3TR8vFTp1VFq0kz6g0a4DT2s68LKoOPZhmuQ/aEiQ6Po11kbo7p4/wZM/+y11ekQ+SbOAf8slRfyH/wBauB/aKvgbXRLAONzSyTsvsAFB/U1+dZOmsxhyd2foGfL/AGRuW9keVo+RS81ShZwOGIqfzZP736V+ncx+b2GZI5BoyT1NLSVmULmjpSGnQm2U7rh5GH/POIYJ+rHgfrSbsVGN3YfDBLcyrFBG8sjHCoi5J/CuqsfBNvYxrd+J9Sh02HqLcODK/wCHb9awF8VXdnE0GmRxadGwwzQjMrfWQ8/lisr/AEi/uML5txPIegyzsf5muWqqs1vyr8f+Ad9GVCm78vPL8P8ANnoE3xE0Xw/bm18NaTu7GaX5Q3uf4m/HFcfrXjfX9a3Lc6hJHCf+WMP7tP05P4mt3RPhXrGoBZtQZNNtzyfM5kI/3e34mu50fwb4a0Eq8Vqb25X/AJbT4bB9h0H4CvKlPCUHeEeeXff8T3aeHzHGRSk/Zw7bfgeUaD4F13xCVe2smjgY/wCvn+RPwzyfwr0XQvg/o+nhZtYuGvpByYwdkQP06n866LU/E1rpaFru8t7RQOjON34DrXGap8W9KtiwtIri+k9fuL+Z5/SuapVx2J0h7q8v8zvpYDLcF71aXNLz/wAj0uzmsdMtxbWFtFDEvRIlCL+lNu9YS3iMt1dRW0Q6s7hB+ZrxKX4heK/EMxt9JgMOeAtrEXcfVjnH6Vbsfhj4k1uUXOuXv2dTyTNIZZMfTOB+dcrymnB82Imk/vZ1f2zzLlwlJy/BHY618V9B05WWzaTUZ+wiGEz7sf6ZrzDxN411nxSxS5m8m0zkW0OQn4/3j9ayGijEriMlkDEKT1IzxXovgr4b2eo2cGqatP5kMo3x20Rxkf7R/oPzr2YYPC4KHtWrs+fljcfmlT2EHZdUtEcT4d8K6p4muxbaZatLg/PKeI4x/tN2qbxL4O1bwpceTqVqUQnEc6fNHJ9G/oea+grCK302BLezgjggT7sca4ArQdLbULZ7W8giuIJBh45FDKfwrx58SVI1vg9z8T1XwlFUfj9/8D5r8OeLNY8LTbrC4JhJy9vJlo2/DsfcV7P4N+Imm+I9sUbmz1DHNvIeH/3T/F9OtYHj34R2Vjp1zrWhz+VDAhlltJSSAo67G/ofzryUFo3EkbMjKcqwOCD6g16M8NhM1pe0p6Pv/meVSx2Mymp7GrrHt/keofGHxTYanJa6VbhJbq1cvNMORHkY2A/qfTArN+FvhSXV9WXVriP/AEOybKE9JJewH06/lVTwb8NNR8QyJeagslnp5O7c3Ek3+6D0Huf1r27TLC2061hs7WFYLaFdqovYV5+NxtLA4b6nh3d9WengMvqY7E/XsRHlj0RoadGYyZWHXgV8/fFHxQvifxjcPA++1sx9lhI6NtJ3MPq2fyFeh/FL4iw6HYyaJpkobU512yMp/wCPZD1/4ER0Hbr6V4fBFjpVcN5dKLeKqLfb/M5eJsxjUfsIP1/yLkQGKftFRocU/dX2B8axuaCaaSavW2i3cqiSdo7OA8+bcNtB+g6mk3Y1hTlN2iikasWOj6hqz7LG0ln9WA+VfqTwK1re58MaTgus2rTj1XbEPw7/AI5p998QtQljENnBBaQjhVVc4+g4H6VlKU3pFHbTw9GGtafyRf034dQRgS6zf5xyYLb+rn+lbCeJfDXhWMxWP2W3YDnyR5kjfU/415rfanf6iSbq7mlHozcfl0qiY8duK55YTn/iu/5HbTzSnQ0w1NJ93ud/qPxXLki0s3kPZ7hsD/vkf41zeoeN9e1LKG+eFG42QDZ+o5/WpdD8D6jrAWabFnannzJByw/2V712Fpb+FvBoDloXuV/5bTnc/wCA7fgKhqnT92nG7OmP13FLnrT5Y/cclo/w/wBf19hM8LW8Tcma6JBP0HU12umfCrQdMCy6lO99KOSrnZH/AN8jk/iazr/4sQAlLaKebtkfIp/E81z158R9VuCfIiggB74Lt+Z/wrKVHEVfilyrsjWnPLcNq/fkesQXWn6bEILK2SOMdFiQItRXWtP5bgeXECCOTXilz4h1vUG2tqFyd38EZ25/AU+28LeItTbeunX0oxnfKCB+bVkstoQfNN6+Z0Sz+U48tGm7GavGa9j8IX2zw5p6Z6RAfqa8eCEDBGK9J8OTAaHaeWwbbGAcHofSvcpYOOJ9yR5eS13TrSkj0K1ugwHNX45/Q1x9lfNkDNblrc5ANfI5xkzoybR+gYPGKotSx4wuC3gvWB/06v8AyrwXQdX/ALDvkvDZWt2y9FnXIX3HofwNe1+M7xIvBuq73Vd8DKuTjJPQD3rwAscdDW3D9FKhOMtmz5Hiio4YqEoPVI908MfEix8QMIQwhu8ZNvJ1b/dPf+ddbDdJOMrkEdRXzfregaj4V1RILvMU4RJopIycEEZBB9jx9RXs/gbX/wC3tBgvmwLlCYpgP769/wARg/jXn5rldOEVXo7M9bJM3niG8PXVpL8TzP4heCp/DOsNdRtJNY3rM8cjnLK3Uox7n0PcVzsYwK9/8Z6dHrvhe9tSoLiMyxE/wuoyP8Pxr5/ibcAa93JMbLEULT+KOh8xxBl6wuIvD4ZakuaM+9IFNG2vZPAsSRXUtvzEQjf3wPm/Pt+FQyyvMxeR2dj1Zjk0pFIRQPmdrXGFc9KTbUuKTODzQIksrGe/uFgt4zJI3YdvcnsK6G3k0Lwzh5AuqagOgXmKI/Xufeufe+dYTbwZiib7+3rJ/vH+nSqqguQAMk9AO9TJX0Z10qqpawV5Gvq/jDV9ULDzzbxnjZFxx9etYBRpH5DO7H6kmur0jwVc3mJb5/skPXB5c/h2/GuusNP0vR1xZ2qmTHMjcsfxP9KqNKW0Ed9PB4jEe/XlZeZwemeBtX1EqzxLaRH+KY4P/fPWuv0v4c6RaYe+klvGHUE7E/Ic/rUuoeI7ezz515DCf7oOW/LrWFc+OtPUnabi4PsuB+tRPCTfxzUT0KdLA4fdcz8z0Kxj0fSlC2kFpbY/55qM/n1q/BqdtNJsWUM3oeM15E/xAIH7rTv++5P8BVnTPHUNzOI7yMWjZ+SRWJXPv6VzTyqhNW53c66Wc0VJRikkM8ZeDrvR7ye7t4WlsJGLq6c+Vns3p9a5i01G70ybzbSZo27jPyt9R3r2Ky1wsgSfDqR99eQR7+tYmv8AgCw1gNc6Yy2lw3O1R+6c/Tt+H5VMK1XDNQrL5o4sVlPM3Xwj+RmaB45srl1hv9tpMeN//LNj9e341o6z8SrDSlMOnBb66HGQf3an3Pf8Pzrz7VfD99o8/k39s0TH7rHlX+h6Gk0vQb7V7gQWFs8z9yOFX3J6Ct8S44hKVR3RzUs1xlNexive9NR+q67qfiC5+0ajdNKQflQcIn0Haun8BeBr/wASajbXM8DR6ZG4eSVxgSAHO1fXPT0rqPCvw307Stl3rDJezrz5Z/1Kfh/F+PHtXYXWvCKLZb7Yo0HLngKPb0FeNiMdKSdDCR+fQ9HCZJUnL6xjZa726/M5X47Q2s1npky4+0RStGSOykZx+YrJ+DDyfZNVj52CWNh9SDn+QrnfHniyLXLxLW1fzLa3JPmf89HPUj2/+vXdfCrSzYeGTcyKQ97KZR/uDgfyJ/GssRR+r5eqUndmuClGtm7nS2S/4B2itmMhunI5r5xUqHbHTccV7x4l1JdM0e6mDYdYXbjtx/jXgkLuAM4P1FXw/QlCMpvZkcW1YudOC3VyfdRuPrQHHdF/Cjen9z9a+iPjrjic0lJmjNBItNagmtOy0qJYhd6lJ5Nv1VDwz/8A1quEHN2RpTpubsinp+lXOpviJdsYPzSN90f4109rb6X4bjEsjp5v/PWT7x/3R/hWLf8AiZwgg06NbeJRgMRz+A7VgSGSeQvK7SMerMcmtG4U9tWd0K1Kh8CvLudVfePASVs4C5/vynA/IVg3uvanf5E104U/wp8o/SqYi9qkggM1xHCOrsFqXVnN2Mp4qrVdmy5Y+GL++VZCqxRtyHkPUfSrmpeF7bStNkuZbl5ZRhUCjCkmunjYIoUDAUYArA8X3gc29oD6yN/If1rtrYWFKnzPc7qlClSpOT1ZzKxgjpSPBkVZjXinFa8yx49yXR9evdFcKjebB3hc8fge1eieHvFFlqQAtpfKm/igc8/h615i6A1AysjBkJVhyCDgg0N3XLLVHo4PMqlB90e6TXFveReTdQRyoequu5f1qa2ktrOHyrS3jiQfwRqFH6V5Dp/jfWLFRG8kd0g4HnLk/mOalvfH2tXcZjieK0U9TCvzfma4J4KEnpsfQRz3DpczXven6noHiDxdY6KpN3PvlxlbePlj+HYe5rzPX/F+peIWMbt9ntM8QRng/wC8e9ZTI0zs8jF2Y5LMckmuh8PeBtS1x1kKG1tM8zSD7w/2R3/lVqnSoRvI8uvmGKx8vZ0lo+i/Up+FPDc3iTVI7ZAVt0IaeT+6n+J6Cvdlkh0+1VEUJFEoREHYAcCsrStO0/w3p621qmyMcknlpG9T6ms/XNdhsrWS9um2xRj5UHVj2A9zXlVITx9VO1oI+mwGGp5ZQbm/ee5hfEjXsWaWAfM102+QD+FAen4n+VcDGMikvb+fV7+W9uD88h4HZR2ApycCvepQUI8qPisxxbxNZ1Og40lFJWhwkn40hNGaTJByKCSzG8dl+8dVln6qh5VPc+p9qrXN1NdyGSaRnY9z2pp5o21Tk7WWxfPpYYEzTwo9KcBRUkXEK4FXdAgMt+ZSvES5/E8D+tUmPFaujX9jZWz+dMEkdskbSeB07V1YOMXVXM7JG+GSc02b4bis680C3v7o3Ms8wYgDCkYAH4UHxBpg/wCXpf8Avk/4Uf8ACRaYP+Xof98t/hXs1ZUKitJo9dzpyVpMcnhizA/18/5j/CpB4Wsj/wAt5/zH+FMXxJpY/wCXsf8AfLf4U9fE+lj/AJe1/wC+W/wrllSw/Sw408N1SD/hELJv+Xi4/Mf4Uf8ACFWD9bi5/Nf8KkXxRpX/AD+L/wB8t/hTx4o0jveL/wB8t/hXPOlR6NG8aeE6pDF8Bacx5urr81/wqzB8P9IDAvPdMPQso/pUX/CV6QP+X1f++G/wpf8AhL9HUf8AH6D9Eb/CuOdGPSRtGGCXRHQ6b4f0DSyHitImkHR5PnYfnWvJqo27Y1/Fv8K8/m8f6bF/qo7ic+y7R+tZN/481G7BS1RLRD3HzP8An2/KuSeFpN3k7m/9qYfDxtTt8jt9d8Q2mkoZbubdKR8sSnLN+HYV5rrOtXfiC6824OyJf9XEp+VB/U+9VGL3EjSSu7uxyWY5J/GpUh9CK0UUlZI8DHZnUxDtshI0xUtARh2oqjzApKXNJQA80hoooEApaKKACiiigBjd6qy9aKKTGiBqaetFFS9ywFFFFCKHUdqKKBAelNoopDAdTUqUUU0IsJ0FSjpRRVohksXWpH6UUVRJC3Wm0UUho//Z" alt=""><div><b>BEVNETIC</b><small>Automated sales systems</small></div></div>
+    <h1>Shelf Labels</h1>
+    <span class="spacer"></span>
+    <label for="store">Store<select id="store"><option>Oak Street Liquor #014</option><option>Midtown Liquor #021</option><option>Folsom Liquor #027</option></select></label>
+  </div>
+</header>
+
+<main>
+  <section class="panel" aria-labelledby="add-h">
+    <div class="row" style="justify-content:space-between"><h2 id="add-h">Add labels</h2><span class="hint" id="count-cat"></span></div>
+    <div class="seg" role="tablist" aria-label="How to add labels">
+      <button role="tab" id="tab-cat" aria-selected="true" data-tab="cat">From the catalog</button>
+      <button role="tab" id="tab-one" aria-selected="false" data-tab="one">Type one in</button>
+      <button role="tab" id="tab-paste" aria-selected="false" data-tab="paste">Paste a list</button>
+    </div>
+
+    <div id="pane-cat" style="display:flex;flex-direction:column;gap:10px">
+      <div class="search"><span aria-hidden="true">⌕</span><input id="q" placeholder="Search by name or scan a barcode" autocomplete="off"></div>
+      <div class="chips" id="cats"></div>
+      <div class="row"><button class="btn sm" id="add-shown">Add everything shown</button><button class="btn sm" id="add-offers">Add items on offer</button></div>
+      <div class="pick" id="pick"></div>
+    </div>
+
+    <form id="pane-one" hidden style="display:flex;flex-direction:column;gap:10px" novalidate>
+      <label class="field" for="f-name">Product name<input id="f-name" placeholder="e.g. Deep Eddy Ruby Red Vodka" required></label>
+      <div class="grid3">
+        <label class="field" for="f-size">Size<input id="f-size" placeholder="750 ml · 12 × 12 oz · 8 oz"></label>
+        <label class="field" for="f-price">Price ($)<input id="f-price" inputmode="decimal" placeholder="19.99" required></label>
+        <label class="field" for="f-kind">Sold as<select id="f-kind"><option value="drink">Drink</option><option value="food">Food</option><option value="other">Other</option></select></label>
+      </div>
+      <div class="grid3">
+        <label class="field" for="f-bc">Barcode (UPC)<input id="f-bc" inputmode="numeric" placeholder="Scan or type"></label>
+        <label class="field" for="f-crv">CRV per unit ($)<input id="f-crv" inputmode="decimal" placeholder="0.10"></label>
+        <label class="field" for="f-off">Offer tag<input id="f-off" placeholder="2 for $24"></label>
+      </div>
+      <div class="row"><button class="btn primary" type="submit">Add to print list</button><span class="err" id="one-err" role="alert"></span></div>
+      <span class="hint">Use this for items not in the catalog yet, or a one-off price.</span>
+    </form>
+
+    <div id="pane-paste" hidden style="display:flex;flex-direction:column;gap:10px">
+      <label class="field" for="paste">One product per line: name, size, price
+        <textarea id="paste" spellcheck="false">Kendall-Jackson Chardonnay, 750 ml, 16.99
+Lagunitas IPA 6pk, 6 × 12 oz, 11.99
+Takis Fuego Rolled Chips, 9.9 oz, 5.99</textarea></label>
+      <div class="row"><button class="btn primary" id="paste-add">Add these to the print list</button><span class="err" id="paste-err" role="alert"></span></div>
+      <span class="hint">Copy rows from a spreadsheet or a vendor price sheet. Tabs work as well as commas, and a $ sign is fine.</span>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="lab-h">
+    <div class="row" style="justify-content:space-between"><h2 id="lab-h">Labels</h2><span class="hint" id="size-note"></span></div>
+    <div class="field">Label size<div class="chips" id="sizes"></div></div>
+    <div class="field">On the label<div class="chips" id="opts"></div></div>
+    <div class="board" id="board" aria-label="Actual size preview"></div>
+    <div class="row" style="justify-content:space-between"><span class="eyebrow">Print list</span><button class="btn ghost sm" id="clear">Clear list</button></div>
+    <div class="list" id="list"></div>
+  </section>
+</main>
+
+<div class="printbar">
+  <div class="printbar-in">
+    <div class="sum"><span id="total">0 labels</span><small id="total-sub"></small></div>
+    <span class="spacer"></span>
+    <span class="note" id="frame-note" hidden>Printing opens in the Bevnetic POS desktop app, or when this page is opened as a file in a browser. This online preview can't reach a printer.</span>
+    <button class="btn primary" id="print-btn">Print labels</button>
+  </div>
+</div>
+<div class="toast" id="toast" hidden role="status"></div>
+<div id="print-area"></div>
+<style id="pagesize"></style>
+
+<script>
+const CATALOG = [{"n":"Tito's Handmade Vodka","sz":"1.75 L","p":34.99,"cat":"Spirits","crv":0,"bc":"619947000171","off":""},{"n":"Jameson Irish Whiskey","sz":"750 ml","p":29.99,"cat":"Spirits","crv":0,"bc":"927460707234","off":""},{"n":"Casamigos Blanco","sz":"750 ml","p":54.99,"cat":"Spirits","crv":0,"bc":"726570016384","off":"Free limes"},{"n":"Hennessy VS Cognac","sz":"750 ml","p":44.99,"cat":"Spirits","crv":0,"bc":"071817714574","off":""},{"n":"Crown Royal","sz":"750 ml","p":32.99,"cat":"Spirits","crv":0,"bc":"082000000051","off":""},{"n":"Bacardi Superior Rum","sz":"1 L","p":17.99,"cat":"Spirits","crv":0,"bc":"090686804474","off":""},{"n":"Josh Cellars Cabernet","sz":"750 ml","p":14.99,"cat":"Wine","crv":0,"bc":"351706161844","off":"Mix 6 · 10% off"},{"n":"La Marca Prosecco","sz":"750 ml","p":15.99,"cat":"Wine","crv":0,"bc":"709158688074","off":"Mix 6 · 10% off"},{"n":"Kim Crawford Sauv Blanc","sz":"750 ml","p":16.99,"cat":"Wine","crv":0,"bc":"158682908194","off":"Mix 6 · 10% off"},{"n":"Oyster Bay Sauv Blanc","sz":"750 ml","p":13.99,"cat":"Wine","crv":0,"bc":"284328813364","off":"Mix 6 · 10% off"},{"n":"Meiomi Pinot Noir","sz":"750 ml","p":21.99,"cat":"Wine","crv":0,"bc":"210578551304","off":"Mix 6 · 10% off"},{"n":"Bud Light 12pk Cans","sz":"12 × 12 oz","p":12.99,"cat":"Beer & Seltzer","crv":0.6,"bc":"091265625784","off":"2 for $24"},{"n":"Modelo Especial 12pk","sz":"12 × 12 oz","p":17.99,"cat":"Beer & Seltzer","crv":0.6,"bc":"336942186634","off":""},{"n":"White Claw Variety 12pk","sz":"12 × 12 oz","p":19.99,"cat":"Beer & Seltzer","crv":0.6,"bc":"908920915844","off":""},{"n":"High Noon Variety 8pk","sz":"8 × 12 oz","p":24.99,"cat":"Beer & Seltzer","crv":0.4,"bc":"101854120564","off":""},{"n":"Fever-Tree Tonic 4pk","sz":"4 × 200 ml","p":6.49,"cat":"Mixers","crv":0.2,"bc":"414067181514","off":""},{"n":"Red Bull 4pk","sz":"4 × 8.4 oz","p":9.99,"cat":"Mixers","crv":0.2,"bc":"031906528164","off":""},{"n":"Limes, 3 ct","sz":"produce","p":1.49,"cat":"Mixers","crv":0,"bc":"099887028464","off":"Free limes"},{"n":"Bagged Ice","sz":"10 lb","p":3.99,"cat":"Mixers","crv":0,"bc":"097017112744","off":""},{"n":"Coca-Cola 2 L","sz":"2 L","p":3.49,"cat":"Mixers","crv":0.1,"bc":"911880641924","off":""},{"n":"Lay's Classic Chips","sz":"8 oz","p":4.99,"cat":"Snacks","crv":0,"bc":"099667400094","off":""},{"n":"Jack Link's Beef Jerky","sz":"2.85 oz","p":7.49,"cat":"Snacks","crv":0,"bc":"097984655734","off":""},{"n":"Planters Salted Peanuts","sz":"16 oz","p":5.99,"cat":"Snacks","crv":0,"bc":"373383281464","off":""},{"n":"Snickers Share Size","sz":"3.29 oz","p":2.49,"cat":"Snacks","crv":0,"bc":"656501292324","off":""},{"n":"Red Party Cups, 50 ct","sz":"50 ct","p":6.99,"cat":"Snacks","crv":0,"bc":"917413102884","off":""}];
+const SIZES = {std:['Shelf edge','2.25 × 1.25 in · thermal label printer'], lg:['Large','4 × 2 in · endcaps and featured items'], sheet:['Letter sheet','30 per page · Avery 5160, 2.625 × 1 in']};
+const OPTS = [['unit','Unit price'],['crv','CRV note'],['offer','Offer tag'],['barcode','Barcode'],['store','Store and date']];
+const CATS = ['All', ...new Set(CATALOG.map(p=>p.cat))];
+const $ = s => document.querySelector(s);
+const esc = s => String(s??'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money = n => '$' + (+n).toFixed(2);
+const key = p => p.n + '|' + p.sz;
+
+const S = {tab:'cat', q:'', cat:'All', size:'std', opt:{unit:true, crv:true, offer:true, barcode:true, store:true}, list:[]};
+try{ const saved = JSON.parse(localStorage.getItem('bev-labels')||'null'); if (saved && Array.isArray(saved.list)) Object.assign(S, {size:saved.size||'std', opt:{...S.opt, ...saved.opt}, list:saved.list}); }catch(e){}
+if (!S.list.length) S.list = CATALOG.filter(p=>['Tito\'s Handmade Vodka','Meiomi Pinot Noir','Bud Light 12pk Cans'].includes(p.n)).map(p=>({...p, copies:1, sample:true}));
+const save = () => { try{ localStorage.setItem('bev-labels', JSON.stringify({size:S.size, opt:S.opt, list:S.list})); }catch(e){} };
+
+// ---- label drawing (same design as the POS Shelf Labels screen)
+function containers(sz){ const m=String(sz).match(/^(\d+)\s*[×x]/); return m ? +m[1] : 1; }
+function unitPrice(p){
+  const sz=String(p.sz||'').toLowerCase(), per=sz.split(/[×x]/).pop().trim(), v=parseFloat(per), n=containers(p.sz);
+  if (!v || !(+p.p)) return null;
+  if (/ct\b/.test(per)) return {u:'each', v:p.p/(v*n)};
+  if (/lb/.test(per)) return {u:'lb', v:p.p/(v*n)};
+  const oz = /ml/.test(per) ? v/29.5735 : /\bl\b|l$/.test(per) ? v*1000/29.5735 : /oz/.test(per) ? v : 0;
+  if (!oz) return null;
+  return {u: (p.cat==='Snacks' || p.kind==='food') ? 'oz' : 'fl oz', v:p.p/(oz*n)};
+}
+function bars(code){ let x=4, out=''; const d0=String(code||'0').replace(/\D/g,'')||'0';
+  for (const ch of ('101'+d0+'01010'+d0.split('').reverse().join('')+'101')){ const d=+ch, w=1+(d%3); if ((d+x)%2===0) out+=`<rect x="${x}" y="0" width="${w}" height="30"/>`; x+=w+1; }
+  return `<svg viewBox="0 0 ${x+4} 30" preserveAspectRatio="none" aria-hidden="true">${out}</svg>`; }
+const fmtCode = v => /^\d{12}$/.test(v) ? `${v[0]} ${v.slice(1,6)} ${v.slice(6,11)} ${v[11]}` : v;
+function storeShort(){ return $('#store').value.replace(/ Liquor.*$/,''); }
+function today(){ const d=new Date(); return String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0'); }
+function label(p, size){
+  const o=S.opt, up=o.unit?unitPrice(p):null, [d,c]=(+p.p).toFixed(2).split('.');
+  return `<div class="plabel ${size}">
+    ${o.offer&&p.off?`<span class="pl-off">${esc(p.off)}</span>`:''}
+    <div class="pl-name">${esc(p.n)}</div>
+    <div class="pl-meta">${esc(p.sz||'')}${o.crv&&+p.crv?`${p.sz?' · ':''}+ CRV ${money(p.crv)}`:''}</div>
+    <div class="pl-bottom">
+      <div class="pl-left">${up?`<div class="pl-unit">${up.v<1?(up.v*100).toFixed(1)+'¢':money(up.v)} per ${up.u}</div>`:''}${o.barcode&&p.bc&&size!=='sheet'?`<div class="pl-bc">${bars(p.bc)}<span>${fmtCode(p.bc)}</span></div>`:''}${o.store?`<div class="pl-store">${esc(storeShort())} · ${today()}</div>`:''}</div>
+      <div class="pl-price"><sup>$</sup>${d}<sup>${c}</sup></div>
+    </div></div>`;
+}
+
+// ---- rendering
+function render(){
+  document.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.tab===S.tab)));
+  $('#pane-cat').hidden = S.tab!=='cat'; $('#pane-one').hidden = S.tab!=='one'; $('#pane-paste').hidden = S.tab!=='paste';
+  const inList = new Set(S.list.map(key)), q=S.q.trim().toLowerCase();
+  const shown = CATALOG.filter(p=>(S.cat==='All'||p.cat===S.cat) && (!q || p.n.toLowerCase().includes(q) || p.bc===q));
+  $('#cats').innerHTML = CATS.map(c=>`<button class="chip" aria-pressed="${S.cat===c}" data-cat="${esc(c)}">${esc(c)}</button>`).join('');
+  $('#pick').innerHTML = shown.map((p,i)=>`<button class="pickrow ${inList.has(key(p))?'on':''}" data-pick="${CATALOG.indexOf(p)}"><span style="min-width:0"><b>${esc(p.n)}</b><small>${esc(p.sz)}${p.off?' · '+esc(p.off):''}</small></span><span class="num">${money(p.p)}</span><span class="mark" aria-hidden="true">${inList.has(key(p))?'✓':'+'}</span></button>`).join('') || '<div class="empty">No product matches that search.</div>';
+  $('#count-cat').textContent = `${CATALOG.length} products in the catalog`;
+  $('#sizes').innerHTML = Object.entries(SIZES).map(([k,[l]])=>`<button class="chip" aria-pressed="${S.size===k}" data-size="${k}">${l}</button>`).join('');
+  $('#size-note').textContent = SIZES[S.size][1];
+  $('#opts').innerHTML = `<span class="chip fixed" aria-pressed="true">Name</span><span class="chip fixed" aria-pressed="true">Size</span><span class="chip fixed" aria-pressed="true">Price</span>` + OPTS.map(([k,l])=>`<button class="chip" aria-pressed="${S.opt[k]}" data-opt="${k}">${S.opt[k]?'✓ ':''}${l}</button>`).join('');
+  const prev = S.list.slice(0, S.size==='sheet'?6:4);
+  $('#board').innerHTML = (prev.length ? prev.map(p=>label(p, S.size)).join('') : '') + `<span class="caption">${prev.length ? `Actual size${S.list.length>prev.length?` · first ${prev.length} of ${S.list.length} products`:''}${S.list.some(p=>p.sample)?' · example labels, replace them with yours':''}` : 'Add products to see their labels here at actual size.'}</span>`;
+  $('#list').innerHTML = S.list.length ? S.list.map((p,i)=>`<div class="line"><span style="min-width:0"><b>${esc(p.n)}</b><small>${esc(p.sz||'no size')} · ${money(p.p)}${p.custom?' · typed in':''}</small></span><span class="qty"><button data-dec="${i}" aria-label="One fewer copy">−</button>${p.copies}<button data-inc="${i}" aria-label="One more copy">+</button></span><button class="x" data-del="${i}" aria-label="Remove ${esc(p.n)}">×</button></div>`).join('') : '<div class="empty">The print list is empty. Pick products from the catalog, type one in, or paste a list.</div>';
+  const total = S.list.reduce((a,p)=>a+p.copies,0);
+  $('#total').textContent = `${total} label${total===1?'':'s'}`;
+  $('#total-sub').textContent = `${S.list.length} product${S.list.length===1?'':'s'} · ${SIZES[S.size][0].toLowerCase()}`;
+  $('#print-btn').disabled = !total || inFrame;
+  $('#print-btn').textContent = total ? `Print ${total} label${total===1?'':'s'}` : 'Print labels';
+  save();
+}
+let toastT; function toast(m){ const t=$('#toast'); t.textContent=m; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true, 2400); }
+const inFrame = (()=>{ try{ return window.self!==window.top; }catch(e){ return true; } })();
+$('#frame-note').hidden = !inFrame;
+
+function addItems(items){ let k=0; const have=new Set(S.list.map(key)); S.list = S.list.filter(p=>!p.sample);
+  for (const p of items){ if (have.has(key(p))) continue; S.list.push({...p, copies:1}); have.add(key(p)); k++; } return k; }
+
+// ---- events
+document.addEventListener('click', e=>{
+  const b=e.target.closest('button'); if (!b) return; const d=b.dataset;
+  if (d.tab){ S.tab=d.tab; render(); return; }
+  if (d.cat){ S.cat=d.cat; render(); return; }
+  if (d.pick){ const p=CATALOG[+d.pick], i=S.list.findIndex(x=>key(x)===key(p)); if (i>=0) S.list.splice(i,1); else { S.list=S.list.filter(x=>!x.sample); S.list.push({...p, copies:1}); } render(); return; }
+  if (d.size){ S.size=d.size; render(); return; }
+  if (d.opt){ S.opt[d.opt]=!S.opt[d.opt]; render(); return; }
+  if (d.inc){ const p=S.list[+d.inc]; p.copies=Math.min(99,p.copies+1); render(); return; }
+  if (d.dec){ const p=S.list[+d.dec]; p.copies=Math.max(1,p.copies-1); render(); return; }
+  if (d.del){ S.list.splice(+d.del,1); render(); return; }
+  if (b.id==='clear'){ S.list=[]; render(); toast('Print list cleared'); return; }
+  if (b.id==='add-shown'){ const q=S.q.trim().toLowerCase(); const k=addItems(CATALOG.filter(p=>(S.cat==='All'||p.cat===S.cat)&&(!q||p.n.toLowerCase().includes(q)))); render(); toast(k?`${k} product${k===1?'':'s'} added`:'Already in the print list'); return; }
+  if (b.id==='add-offers'){ const k=addItems(CATALOG.filter(p=>p.off)); render(); toast(k?`${k} product${k===1?'':'s'} on offer added`:'Already in the print list'); return; }
+  if (b.id==='paste-add'){ pasteAdd(); return; }
+  if (b.id==='print-btn'){ printNow(); return; }
+});
+$('#q').addEventListener('input', e=>{ S.q=e.target.value; render(); });
+$('#q').addEventListener('keydown', e=>{ if (e.key!=='Enter') return; const raw=S.q.replace(/\s/g,''); const hit=CATALOG.find(p=>p.bc===raw); if (hit){ const k=addItems([hit]); S.q=''; e.target.value=''; render(); toast(k?`${hit.n} added`:`${hit.n} is already in the list`); } });
+$('#store').addEventListener('change', render);
+$('#pane-one').addEventListener('submit', e=>{
+  e.preventDefault(); const n=$('#f-name').value.trim(), price=parseFloat($('#f-price').value.replace(/[$,\s]/g,''));
+  if (!n || !(price>0)){ $('#one-err').textContent = !n ? 'Enter the product name.' : 'Enter a price above $0, for example 19.99.'; return; }
+  $('#one-err').textContent='';
+  const kind=$('#f-kind').value, crv=parseFloat($('#f-crv').value.replace(/[$\s]/g,''))||0;
+  const k=addItems([{n, sz:$('#f-size').value.trim(), p:price, cat:kind==='food'?'Snacks':'', kind, crv, bc:$('#f-bc').value.replace(/\D/g,''), off:$('#f-off').value.trim(), custom:true}]);
+  render(); toast(k?`${n} added to the print list`:`${n} is already in the list`);
+  if (k) ['#f-name','#f-size','#f-price','#f-bc','#f-crv','#f-off'].forEach(id=>$(id).value='');
+  $('#f-name').focus();
+});
+function pasteAdd(){
+  const rows=$('#paste').value.split(/\n/).map(r=>r.trim()).filter(Boolean), items=[], bad=[];
+  rows.forEach((r,i)=>{ const parts=r.split(/\t|,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(x=>x.trim().replace(/^"|"$/g,'')); const price=parseFloat((parts[parts.length-1]||'').replace(/[$\s]/g,''));
+    if (parts.length<2 || !(price>0) || !parts[0]) { bad.push(i+1); return; }
+    items.push({n:parts[0], sz:parts.length>2?parts.slice(1,-1).join(', '):'', p:price, cat:'', crv:0, bc:'', off:'', custom:true}); });
+  const k=addItems(items); render();
+  $('#paste-err').textContent = bad.length ? `Line${bad.length>1?'s':''} ${bad.join(', ')} skipped: each line needs a name and a price, like "Name, 750 ml, 19.99".` : '';
+  if (k) toast(`${k} product${k===1?'':'s'} added from the list`);
+}
+function printNow(){
+  const labels=S.list.flatMap(p=>Array.from({length:p.copies},()=>p));
+  if (!labels.length) return;
+  $('#pagesize').textContent = S.size==='std' ? '@media print{@page{size:2.25in 1.25in;margin:0}}' : S.size==='lg' ? '@media print{@page{size:4in 2in;margin:0}}' : '@media print{@page{size:letter;margin:.5in .19in}}';
+  $('#print-area').innerHTML = `<div class="lbprint ${S.size}">${labels.map(p=>label(p,S.size)).join('')}</div>`;
+  try{ window.print(); }catch(e){}
+  $('#print-area').innerHTML=''; $('#pagesize').textContent='';
+  toast(`${labels.length} label${labels.length===1?'':'s'} sent to the printer`);
+}
+render();
+</script>

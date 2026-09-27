@@ -41,4 +41,10 @@ const printNotes = [
 for (const [from, to] of printNotes) html = html.replace(from, to);
 
 fs.writeFileSync(path.join(out, 'index.html'), html);
-console.log(`app/ ready: index.html + ${fs.readdirSync(fontsOut).length} font files`);
+
+// standalone Shelf Labels page, same font swap
+const labelsSrc = path.join(root, '..', 'design', 'pos-wireframes', 'shelf-labels.html');
+let labels = fs.readFileSync(labelsSrc, 'utf8');
+if (!fontLinks.test(labels)) throw new Error('Google Fonts links not found in shelf-labels.html');
+fs.writeFileSync(path.join(out, 'shelf-labels.html'), labels.replace(fontLinks, '<link rel="stylesheet" href="fonts.css">'));
+console.log(`app/ ready: index.html, shelf-labels.html + ${fs.readdirSync(fontsOut).length} font files`);
