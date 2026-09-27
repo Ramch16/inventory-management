@@ -689,6 +689,12 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 .vav{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font:800 italic 15px var(--display);color:#fff}
 .vrow small{display:block;color:var(--muted);font-size:11.5px}
 .vcols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.vcols.vbal{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);align-items:start}
+@media (max-width:820px){.vcols.vbal{grid-template-columns:1fr}}
+.balkv{grid-template-columns:1fr auto}
+.vcr.used{opacity:.65}
+.vcrform{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,.8fr) auto;gap:8px;align-items:end;margin-bottom:8px;padding:10px;border:1px dashed var(--line);border-radius:10px}
+@media (max-width:560px){.vcrform{grid-template-columns:1fr}}
 .vprod{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:3px 10px 3px 4px;font-size:12px;font-weight:600;background:var(--surface)}
 .vprod svg{height:22px;width:auto}
 .pick{display:flex;flex-wrap:wrap;gap:6px;max-height:180px;overflow:auto;padding:2px}
@@ -1249,6 +1255,23 @@ const VENDOR_OF = {tito175:'Summit Wine & Spirits', casa750:'Summit Wine & Spiri
   bud12:'Valley Beer Distributing', modelo12:'Valley Beer Distributing', claw12:'Valley Beer Distributing', noon8:'Valley Beer Distributing',
   redbull4:'Metro Cash & Carry', limes:'Metro Cash & Carry', ice10:'Metro Cash & Carry',
   coke2l:'Metro Cash & Carry', lays8:'Snack Direct (Frito-Lay route)', jerky:'Metro Cash & Carry', peanuts:'Metro Cash & Carry', snickers:'Metro Cash & Carry', cups50:'Metro Cash & Carry'};
+/* ---- vendor credits: offers from vendors come back as credit on the account (demo) ----
+   st: 'pending' until the delivery with the deal is received, 'avail' comes off the balance, 'used' already applied */
+const VCREDITS = {
+  'Summit Wine & Spirits': [
+    {d:'Sep 19', desc:"Tito's 1.75 L · buy 10 cases, get 1 free", src:'PO-10233', amt:189.60, st:'avail'},
+    {d:'Sep 12', desc:'Casamigos Blanco · Q3 volume rebate', src:'September deal sheet', amt:120.00, st:'avail'},
+    {d:'Aug 29', desc:'Aperol launch promo', src:'Rep email', amt:45.00, st:'used', used:'Sep 13 payment'}],
+  'Valley Beer Distributing': [
+    {d:'Sep 16', desc:'Bud Light 12pk · 10% off the extra case', src:'PO-10238', amt:22.08, st:'avail'},
+    {d:'', desc:'Modelo 12pk · buy 10 cases, get 1 free (2 cases)', src:'PO-10241', amt:51.20, st:'pending'}],
+  'Golden State Beverage': [
+    {d:'Sep 5', desc:'Mix-6 wine promo support', src:'September deal sheet', amt:60.00, st:'avail'}],
+};
+const vCredits = n => VCREDITS[n] || (VCREDITS[n] = []);
+const creditAvail = n => Math.round(vCredits(n).filter(c=>c.st==='avail').reduce((a,c)=>a+c.amt,0)*100)/100;
+const creditPending = n => Math.round(vCredits(n).filter(c=>c.st==='pending').reduce((a,c)=>a+c.amt,0)*100)/100;
+const netOwed = v => Math.max(0, Math.round((v.owed - creditAvail(v.n))*100)/100);
 const WEEKDAYS = ['Mon','Tue','Wed','Thu','Fri','Sat'];
 const blankVendor = () => ({n:'', kind:'Spirits & wine distributor', lic:'', licOk:false, rep:'', ph:'', em:'', terms:'Net 15', days:['Tue'], min:'', via:'Email', pids:[]});
 const initials = n => n.split(/\s+/).filter(w=>/^[A-Za-z]/.test(w)).slice(0,2).map(w=>w[0]).join('').toUpperCase();
@@ -1362,6 +1385,7 @@ const S = {
   ob:{name:'Wine Wednesday', type:'% off', val:15, target:'Wine', start:'2026-10-07', end:'2026-10-28', days:'Wed', members:false},
   dmg:{pid:'josh750', q:1, why:'Broken in store', where:'Sales floor', disp:'Write off', photo:null},
   recyc:null, rcy:null, rcyDone:0,
+  vcr:null,
   lb:{list:[], size:'std', q:'', cat:'All', opt:{unit:true, barcode:true, crv:true, offer:true, store:true}},
   store:'014', stTab:'overview', stPid:'casa750', priceMode:'store', ns:null,
   cd:{rc:null, ask:null, to:''}, cdPhase:null, cdPrev:null, cdPip:false, cdSlide:0, cdset:{save:true, id:true, join:true, slides:true, rc:true}, er:{how:'Text', to:''},
@@ -2138,18 +2162,18 @@ VIEWS.vendors = () => {
   const q = S.vQ.toLowerCase(), list = VENDORS.filter(v=>!q || v.n.toLowerCase().includes(q) || v.rep.toLowerCase().includes(q));
   const V = VENDORS.find(v=>v.n===S.vSel) || VENDORS[0], prods = vendorProducts(V.n);
   const pos = POS_DATA.filter(o=>o.v===V.n), deals = BUY.filter(b=>b.vendor.v===V.n).flatMap(b=>b.deals.map(d=>({prod:b.n, d, buy:b.id})));
-  const owed = VENDORS.reduce((a,v)=>a+v.owed,0);
+  const owed = VENDORS.reduce((a,v)=>a+netOwed(v),0), creds = VENDORS.reduce((a,v)=>a+creditAvail(v.n),0);
   return `
   <section class="stats">
     <div><b class="num">${VENDORS.length}</b><small>active vendors</small></div>
-    <div><b class="num" style="color:var(--warn)">${money(owed,0)}</b><small>owed to vendors · next due Fri</small></div>
-    <div><b class="num">${POS_DATA.filter(o=>o.st!=='Received').length}</b><small>open purchase orders</small></div>
+    <div><b class="num" style="color:var(--warn)">${money(owed,0)}</b><small>owed to vendors after credits · next due Fri</small></div>
+    <div><b class="num" style="color:var(--ok)">${money(creds)}</b><small>credits from vendor offers</small></div>
     <div><b class="num">${Math.round(VENDORS.reduce((a,v)=>a+v.ontime,0)/VENDORS.length)}%</b><small>average on-time delivery</small></div>
   </section>
   <div class="vnd">
     <aside style="display:flex;flex-direction:column;gap:10px" data-note="Vendor list · search">
       <div style="display:flex;gap:8px;flex-wrap:wrap"><label class="scanbar" style="flex:1;min-width:180px;padding:4px 8px 4px 12px">${ic('search')}<input id="v-q" placeholder="Search vendors or reps" value="${esc(S.vQ)}" autocomplete="off"></label><button class="btn primary" data-act="vnew">+ Add vendor</button></div>
-      ${list.map(v=>`<button class="vrow ${v.n===V.n?'on':''}" data-vsel="${esc(v.n)}"><span class="vav" style="background:${v.color}">${initials(v.n)}</span><span><b>${esc(v.n)}</b><small>${esc(v.kind)} · ${vendorProducts(v.n).length + v.extra.length} products</small></span><span style="text-align:right">${v.owed?`<b class="num">${money(v.owed,0)}</b><small>due ${v.due.split(',')[0]}</small>`:`<small>${v.ontime}% on time</small>`}</span></button>`).join('') || '<div class="empty">No vendor matches.</div>'}
+      ${list.map(v=>`<button class="vrow ${v.n===V.n?'on':''}" data-vsel="${esc(v.n)}"><span class="vav" style="background:${v.color}">${initials(v.n)}</span><span><b>${esc(v.n)}</b><small>${esc(v.kind)} · ${vendorProducts(v.n).length + v.extra.length} products</small></span><span style="text-align:right">${v.owed?`<b class="num">${money(netOwed(v),0)}</b><small>due ${v.due.split(',')[0]}${creditAvail(v.n)?` · ${money(creditAvail(v.n),0)} credit`:''}</small>`:creditAvail(v.n)?`<b class="num" style="color:var(--ok)">${money(creditAvail(v.n),0)}</b><small>credit</small>`:`<small>${v.ontime}% on time</small>`}</span></button>`).join('') || '<div class="empty">No vendor matches.</div>'}
     </aside>
     <section style="display:flex;flex-direction:column;gap:16px" data-note="Vendor detail">
       <section class="card" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
@@ -2165,10 +2189,19 @@ VIEWS.vendors = () => {
         <section class="card" data-note="Ordering terms"><div class="cardhead"><h2>Ordering</h2></div><dl class="kv">
           <dt>Delivery days</dt><dd>${V.days.join(', ')}</dd><dt>Minimum order</dt><dd>${esc(V.min)}</dd><dt>Payment terms</dt><dd>${esc(V.terms)}</dd><dt>On time</dt><dd style="color:${V.ontime<90?'var(--warn)':'var(--ok)'}">${V.ontime}%</dd></dl>
           <div class="meter" style="margin-top:10px"><i style="width:${V.ontime}%"></i></div></section>
-        <section class="card" data-note="Money owed"><div class="cardhead"><h2>Balance</h2></div>
-          <div style="font:800 26px/1 var(--display);color:${V.owed?'var(--warn)':'var(--ok)'}">${V.owed?money(V.owed,0):'Paid up'}</div>
-          <div class="muted" style="font-size:12.5px;margin-top:6px">${V.owed?`Due ${V.due} · ${esc(V.terms)}`:'Nothing owed right now'}</div>
-          ${V.owed?`<button class="btn sm" style="margin-top:10px" data-toast="Payment of ${money(V.owed,0)} scheduled for ${V.due}">Schedule payment</button>`:''}</section>
+      </div>
+      <div class="vcols vbal">
+        <section class="card" data-note="Money owed, less credits"><div class="cardhead"><h2>Balance</h2></div>
+          ${(()=>{ const ca=creditAvail(V.n), use=Math.min(ca, V.owed), net=netOwed(V), left=Math.round((ca-use)*100)/100; return `
+          <dl class="kv balkv"><dt>Invoices owed</dt><dd class="num">${money(V.owed)}</dd><dt>Credits</dt><dd class="num" style="color:var(--ok)">${use?money(-use):money(0)}</dd><dt class="tot">Balance to pay</dt><dd class="tot num" style="color:${net?'var(--warn)':'var(--ok)'}">${money(net)}</dd></dl>
+          <div class="muted" style="font-size:12.5px;margin-top:8px">${V.owed?`Due ${V.due} · ${esc(V.terms)}`:'No invoices owed right now'}${left?` · ${money(left)} credit carries to the next invoice`:''}</div>
+          ${V.owed?`<button class="btn sm primary" style="margin-top:10px" data-act="vpay">Pay ${money(net)}${use?` (credits applied)`:''}</button>`:''}`; })()}</section>
+        <section class="card" data-note="Credits from vendor offers"><div class="cardhead"><h2>Credits</h2><span class="chip ok">${money(creditAvail(V.n))} available</span><span class="spacer"></span><button class="btn sm" data-act="vcradd">+ Credit memo</button></div>
+          <div class="muted" style="font-size:12px;margin-bottom:6px">Vendor offers (free cases, discounts on extra cases, rebates) come back as credit on your account and are taken off what you owe.</div>
+          ${S.vcr?`<div class="vcrform"><label class="field">What for<input id="vcr-desc" value="${esc(S.vcr.desc)}" placeholder="e.g. Damaged case refund"></label><label class="field">Amount ($)<input id="vcr-amt" inputmode="decimal" value="${esc(S.vcr.amt)}" placeholder="25.00"></label><div style="display:flex;gap:6px;align-items:flex-end"><button class="btn sm" data-act="vcrcancel">Cancel</button><button class="btn sm primary" data-act="vcrsave">Add credit</button></div></div>`:''}
+          ${vCredits(V.n).length ? vCredits(V.n).map(c=>`<div class="rule vcr ${c.st}">${ic('gift','style="color:var(--violet)"')}<div><b>${esc(c.desc)}</b><small>${esc(c.src)}${c.d?` · ${c.d}`:''}${c.st==='pending'?' · posts when the delivery is received':c.st==='used'?` · used on ${esc(c.used)}`:''}</small></div><div style="text-align:right"><b class="num" style="color:${c.st==='avail'?'var(--ok)':'var(--muted)'}">${money(c.amt)}</b><div><span class="chip ${c.st==='avail'?'ok':c.st==='pending'?'warn':'plain'}">${c.st==='avail'?'Available':c.st==='pending'?'Pending':'Used'}</span></div></div></div>`).join('')
+            : '<div class="muted" style="font-size:13px">No credits yet. When you use this vendor’s offers, the savings show up here as credit.</div>'}
+          ${creditPending(V.n)?`<div class="muted" style="font-size:12px;margin-top:8px">${money(creditPending(V.n))} more is pending on deliveries not received yet.</div>`:''}</section>
       </div>
       <section class="card" data-note="Products this vendor supplies"><div class="cardhead"><h2>Products they supply</h2><span class="chip plain">${prods.length + V.extra.length}</span><span class="spacer"></span><span class="muted" style="font-size:12px">Each brand comes from one distributor in your area</span></div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">${prods.map(p=>`<span class="vprod">${bottleSVG(p)}${esc(p.n)}</span>`).join('')}${V.extra.map(x=>`<span class="vprod" style="padding-left:10px">${esc(x)}</span>`).join('')}${!prods.length&&!V.extra.length?'<span class="muted">No products assigned yet.</span>':''}</div></section>
@@ -3533,7 +3566,7 @@ document.addEventListener('click', e => {
     if (N.from!=null){ INVOICE[N.from].m=`${P.n} · ${P.sz}`; S.invLink[N.from]='link'; INVOICE[N.from].sug=P.id; } S.np=null; closeModal(); render(); toast(`Linked to ${P.n} · no duplicate created`); return; }
   if (d.npbc){ S.np=blankProduct({bc:d.npbc, fromPending:true}); aiFillProduct(); return; }
   if (d.bcpick){ S.bc.pick=d.bcpick; barcodeModal(); return; }
-  if (d.vsel){ S.vSel=d.vsel; if (d.vgo) go('vendors'); else render(); return; }
+  if (d.vsel){ S.vSel=d.vsel; S.vcr=null; if (d.vgo) go('vendors'); else render(); return; }
   if (d.nvday){ const a=S.nv.days; S.nv.days = a.includes(d.nvday) ? a.filter(x=>x!==d.nvday) : [...a, d.nvday].sort((x,y)=>WEEKDAYS.indexOf(x)-WEEKDAYS.indexOf(y)); vendorModal(); return; }
   if (d.nvvia){ S.nv.via=d.nvvia; vendorModal(); return; }
   if (d.nvp){ const a=S.nv.pids; S.nv.pids = a.includes(d.nvp) ? a.filter(x=>x!==d.nvp) : [...a, d.nvp]; vendorModal(); return; }
@@ -3581,7 +3614,9 @@ document.addEventListener('click', e => {
   if (d.addpo){ const item=BUY.find(b=>b.id===S.buy), vd=buyOptions(item)[+d.addpo].vd, pl=planFor(item, vd, S.buyQ);
     S.poDraft=S.poDraft.filter(l=>l.item!==item.id);
     S.poDraft.push({item:item.id, v:vd.v, n:item.n, q:pl.q, got:pl.got, paid:pl.paid, note:pl.note, save:pl.got*vd.cost-pl.paid});
-    render(); toast(`${pl.got} cases added to the ${vd.v} draft PO`); return; }
+    const save=Math.round((pl.got*vd.cost-pl.paid)*100)/100, cl=vCredits(vd.v); for (let k=cl.length-1;k>=0;k--) if (cl[k].src==='Draft PO' && cl[k].item===item.id) cl.splice(k,1);
+    if (save>0.005) cl.unshift({d:'', desc:`${item.n} · ${pl.note}`, src:'Draft PO', item:item.id, amt:save, st:'pending'});
+    render(); toast(`${pl.got} cases added to the ${vd.v} draft PO${save>0.005?` · ${money(save)} vendor credit pending`:''}`); return; }
   if (d.podel){ S.poDraft=S.poDraft.filter(l=>l.v!==d.podel); render(); return; }
   if (d.posend){ const ls=S.poDraft.filter(l=>l.v===d.posend); POS_DATA.unshift({no:'PO-'+(10242+POS_DATA.length), v:d.posend, lines:ls.map(l=>`${l.n} ×${l.got} cases`).join(' · '), total:ls.reduce((a,l)=>a+l.paid,0), st:'Sent', note:'Sent by email just now'}); S.poDraft=S.poDraft.filter(l=>l.v!==d.posend); render(); toast('PO sent to '+d.posend); return; }
   if (d.swap){ swapModal(d.swap); return; }
@@ -3606,6 +3641,7 @@ document.addEventListener('click', e => {
     case 'rcvscan': { const l=S.rcv.lines.find(x=>x.rec<x.ord); if (l){ l.rec++; render(); toast(`Case scanned · ${byId(l.pid).n} ${l.rec}/${l.ord}`,'scan'); } else toast('Everything on this PO is scanned'); break; }
     case 'rcvall': S.rcv.lines.forEach(l=>{ l.rec=l.ord; }); render(); break;
     case 'rcvdone': { const R=S.rcv, po=POS_DATA.find(o=>o.no===R.po); R.lines.forEach(l=>{ byId(l.pid).stock += (l.rec-l.dmg)*l.pack; });
+      if (po) vCredits(po.v).filter(c=>c.st==='pending' && c.src===R.po).forEach(c=>{ c.st='avail'; c.d='Sep 26'; setTimeout(()=>toast(`${money(c.amt)} vendor credit from ${po.v} is now available`,'gift'),2800); });
       const short=R.lines.some(l=>l.rec<l.ord), dmg=R.lines.filter(l=>l.dmg);
       po.st = short ? 'Partly received' : 'Received'; po.note = short ? 'Short cases still expected' : dmg.length ? 'Received · damaged cases claimed' : 'Received in full';
       dmg.forEach(l=>{ const p=byId(l.pid); CLAIMS.unshift({no:'CL-'+(2220+CLAIMS.length), sup:'Valley Beer Distributing', item:`${p.n} ×${l.dmg} cases damaged on delivery`, amt:Math.round(l.dmg*l.pack*p.p*0.7*100)/100, st:0}); });
@@ -3619,6 +3655,12 @@ document.addEventListener('click', e => {
     case 'rcyapply': { const v=rcyValue(S.rcy.c), n=rcyCount(S.rcy.c); if (!n) break;
       if (S.rcy.pay==='cash'){ S.rcyDone+=v; closeModal(); render(); toast(`Paid ${money(v)} cash for ${n} containers · logged as a recycling payout`,'recycle'); }
       else { S.recyc={c:{...S.rcy.c}, amt:v}; closeModal(); render(); toast(`${money(v)} bottle return taken off this purchase`,'recycle'); } break; }
+    case 'vpay': { const V=VENDORS.find(v=>v.n===S.vSel)||VENDORS[0]; let need=V.owed, used=0; for (const c of vCredits(V.n)){ if (c.st!=='avail' || need<=0.005) continue; if (c.amt<=need+0.005){ need-=c.amt; used+=c.amt; c.st='used'; c.used='Sep 26 payment'; } else { const rest=Math.round((c.amt-need)*100)/100; used+=need; vCredits(V.n).push({d:c.d, desc:c.desc+' (remainder)', src:c.src, amt:rest, st:'avail'}); c.amt=Math.round(need*100)/100; c.st='used'; c.used='Sep 26 payment'; need=0; } }
+      const paid=Math.round(need*100)/100; V.owed=0; V.due=''; render(); toast(`Paid ${money(paid)} to ${V.n}${used?` · ${money(used)} in credits used`:''}`); break; }
+    case 'vcradd': S.vcr={desc:'', amt:''}; render(); break;
+    case 'vcrcancel': S.vcr=null; render(); break;
+    case 'vcrsave': { const amt=Math.round(parseFloat(String(S.vcr.amt).replace(/[$,\s]/g,''))*100)/100; if (!S.vcr.desc.trim() || !(amt>0)){ toast('Enter what the credit is for and an amount above $0','alert'); break; }
+      vCredits(S.vSel).unshift({d:'Sep 26', desc:S.vcr.desc.trim(), src:'Credit memo', amt, st:'avail'}); S.vcr=null; render(); toast(`${money(amt)} credit added · taken off the balance`); break; }
     case 'storepick': storeModal(); break;
     case 'allstores': closeModal(); S.stTab='overview'; go('stores'); break;
     case 'pricesync': for (const k in STORE_PRICE) delete STORE_PRICE[k]; PRODUCTS.forEach(p=>{ if (p.base!=null) p.p=p.base; }); render(); toast('Every store now uses head office prices · shelf tags queued'); break;
@@ -3718,6 +3760,7 @@ document.addEventListener('click', e => {
   }
 });
 document.addEventListener('input', e => {
+  if ((e.target.id==='vcr-desc' || e.target.id==='vcr-amt') && S.vcr){ S.vcr[e.target.id.slice(4)]=e.target.value; return; }
   if (e.target.id==='lb-q'){ S.lb.q=e.target.value; const pos=e.target.selectionStart; render(); const q=$('#lb-q'); q.focus(); q.setSelectionRange(pos,pos); return; }
   if (e.target.id && e.target.id.startsWith('ns-') && S.ns){ S.ns[e.target.id.slice(3)]=e.target.value; const b=document.querySelector('[data-act="nssave"]'); if (b) b.disabled=!(S.ns.n.trim()&&S.ns.addr.trim()&&S.ns.lic.trim()); return; }
   if (e.target.id==='er-to'){ S.er.to=e.target.value; const b=document.querySelector('[data-act="ersend"]'); if (b) b.disabled=S.er.to.trim().length<=5; return; }
