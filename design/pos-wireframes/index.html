@@ -749,6 +749,37 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
   #print .sheet.receipt{max-width:72mm}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* Ask Bevnetic */
+.askfab{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:45;display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:12px 18px 12px 14px;background:var(--grad);color:#fff;font-weight:800;font-size:14px;box-shadow:0 10px 30px rgba(138,63,224,.35)}
+.askfab .i{width:18px;height:18px}
+body.touring .askfab{display:none}
+.askpanel{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:57;width:min(420px,calc(100vw - 40px));height:min(640px,calc(100vh - 40px));display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:0 24px 60px rgba(8,14,18,.28);overflow:hidden}
+.askpanel header{display:flex;align-items:center;gap:10px;padding:12px 12px 12px 14px;border-bottom:1px solid var(--line)}
+.askpanel header b{display:block;font:700 16px/1.1 var(--display)}
+.askpanel header small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px}
+.askpanel header .spacer{flex:1}
+.askav{width:34px;height:34px;border-radius:10px;background:var(--grad);display:grid;place-items:center;color:#fff;flex:none}.askav .i{width:18px;height:18px}
+.askpanel header small .askmode{margin-right:4px}
+.askmode{font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:99px;padding:3px 8px;background:var(--surface-2);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.askmode.ai{background:var(--violet-soft);color:var(--violet);border-color:transparent}
+.askmsgs{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.askhello{background:var(--surface-2);border-radius:12px;padding:12px 14px}.askhello p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.askmsg{max-width:88%;border-radius:14px;padding:9px 12px;font-size:13.5px;line-height:1.45;overflow-wrap:anywhere}
+.askmsg.user{align-self:flex-end;background:var(--ink);color:var(--surface);border-bottom-right-radius:4px;white-space:pre-wrap}
+.askmsg.bot{align-self:flex-start;background:var(--surface-2);border:1px solid var(--line);border-bottom-left-radius:4px}
+.askmsg p{margin:0 0 4px}.askmsg p:last-child{margin-bottom:0}.askmsg ul{margin:2px 0 6px;padding-left:18px}.askmsg li{margin:1px 0}
+.askgo{display:inline-flex;align-items:center;gap:5px;margin:4px 6px 0 0;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700}
+.askgo:hover{border-color:var(--accent);color:var(--accent-ink)}
+.asknote{display:block;margin-top:6px;color:var(--muted);font-size:11.5px}
+.askdots{display:inline-flex;gap:3px;vertical-align:middle;margin-right:4px}.askdots i{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:askdot 1s infinite}.askdots i:nth-child(2){animation-delay:.15s}.askdots i:nth-child(3){animation-delay:.3s}
+@keyframes askdot{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.asksugg{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.asksugg button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:600}
+.asksugg button:hover{border-color:var(--violet);color:var(--violet)}
+.askform{display:flex;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
+.askform input{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--surface);color:var(--ink);font-size:14px}
+.askform .btn.primary .i{width:16px;height:16px}
+@media (max-width:820px){.askfab{bottom:calc(80px + env(safe-area-inset-bottom,0px));right:14px;padding:11px}.askfab span{display:none}.askpanel{right:0;bottom:0;width:100%;height:100%;border-radius:0;border:0}}
 /* customer display */
 .cdgrid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;align-items:start}
 .cdframe{background:#0B1116;border-radius:22px;padding:14px;box-shadow:var(--shadow)}
@@ -844,6 +875,7 @@ tr.rej td:last-child{opacity:1;text-decoration:none}
 <div id="modal"></div>
 <div id="toast" class="toast" hidden></div>
 <div id="tour"></div>
+<div id="ask"></div>
 <div id="print" aria-hidden="true"></div>
 
 <script>
@@ -871,6 +903,7 @@ const P = {
   check:'<path d="M20 6L9 17l-5-5"/>',
   x:'<path d="M18 6L6 18M6 6l12 12"/>',
   alert:'<path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+  send:'<path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/>',
   spark:'<path d="M12 3l1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2z"/><path d="M19 3v4M17 5h4"/>',
   clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   truck:'<path d="M1 4h14v12H1zM15 9h4l3 3v4h-7z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/>',
@@ -1485,6 +1518,7 @@ function render(){
   $('#view').innerHTML = allowed(S.route) ? spec() + VIEWS[S.route]() : `<section class="card" style="max-width:520px;display:flex;flex-direction:column;gap:12px;align-items:flex-start">${ic('lock','style="width:32px;height:32px;color:var(--warn)"')}<h2 style="font-size:20px">A manager needs to open this</h2><div class="muted">You’re signed in as ${esc(S.user)} (${USERS.find(x=>x.n===S.user)?.role||''}). This screen needs a manager or owner.</div><button class="btn primary" data-act="signin">Switch user</button></section>`;
   if (S.route==='forecast') drawForecast();
   renderTour();
+  try{ if (ASK.open && !ASK.busy) askRender(); }catch(e){} // ASK is defined later in the script; skip on first load
 }
 function go(r){ S.route=r; try{localStorage.setItem('bev-route',r)}catch(e){} render(); window.scrollTo(0,0); }
 let toastT; function toast(msg, icon='check'){ const t=$('#toast'); t.innerHTML = ic(icon)+esc(msg); t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,2600); }
@@ -3440,6 +3474,192 @@ function recycleModal(){
     </div>
     <footer>${S.recyc?`<button class="btn ghost" data-act="rcyremove" style="margin-right:auto">Remove</button>`:''}<button class="btn" data-close>Cancel</button><button class="btn primary" data-act="rcyapply" ${n?'':'disabled'}>${R.pay==='credit'?`Apply ${money(v)} to purchase`:`Pay ${money(v)} cash`}</button></footer></div></div>`;
 }
+/* ------------------------------------------------ Ask Bevnetic: chat assistant */
+// Uses Claude (the artifact `sample` capability) when the page runs on claude.ai;
+// everywhere else (desktop app, a file in a browser, offline) it answers from the live data on its own.
+const ASK = {open:false, msgs:[], busy:false, ctl:null, mode:'checking', sample:null};
+const ASK_SUGGEST = ["What's low on stock?", "Today's sales so far", "How much do we owe Summit?", "Price of Tito's", "How do I take bottle returns?", "Who can give a 20% discount?"];
+const ASK_ROUTES = ROUTES.map(r=>r[0]);
+const askRole = () => USERS.find(u=>u.n===S.user)?.role || 'cashier';
+const yday = () => new Date(RP_TODAY.getTime()-864e5);
+
+// ---- how-to guide (used offline, and sent to Claude as the app guide)
+const ASK_GUIDE = [
+  {k:['return','refund','exchange'], go:'returns', a:'**Returns and exchanges:** open Sales & Returns, find the sale by receipt #, card, product or cashier, tap **Return or exchange**, pick the items and the reason. Refund to the original payment, or give exchange credit that is used on the Register. Refunds over $50 need a manager PIN for cashiers. Unopened items go back on the shelf; damaged ones go to Damaged Goods.'},
+  {k:['bottle return','bottles','bottle','recycl','can return','empties','crv back','crv refund'], go:'register', a:'**Bottle and can returns:** on the Register tap **Bottles**, count the empty containers by type (5¢ under 24 oz, 10¢ for 24 oz or more), then **Take off this purchase** or **Cash from the drawer**. The refund comes off after tax, so tax doesn’t change. Wine and liquor bottles aren’t refundable.'},
+  {k:['label','shelf tag','price tag'], go:'labels', a:'**Shelf labels:** open Shelf Labels, add products (price changes waiting, items on offer, search or category), pick the size (2.25 × 1.25 in shelf edge, 4 × 2 in large, or a letter sheet of 30), set copies and press **Print**. In the desktop app, Tools → Shelf Labels opens a standalone label page where you can also type a label in or paste a list.'},
+  {k:['new product','add product','add a product','unknown barcode','new item'], go:'inventory', a:'**Add a product:** Inventory → **+ Add product**. Pick the type (spirits, wine, beer, mixers, snacks), enter name, size, case cost and units per case; the shelf price is suggested from the target margin. “Fill in with AI” reads the name or barcode. Cashiers who scan an unknown barcode send it to a manager.'},
+  {k:['discount'], go:'register', a:'**Discounts:** on the Register tap **Discount**, choose the whole sale or a line, % or $, and a reason. Up to 15% anyone can give; 15–30% needs a manager PIN; over 30% is blocked so alcohol never sells below cost.'},
+  {k:['id ','scan id','age','21','underage','licence','license'], go:'register', a:'**ID checks:** any 21+ item locks payment until the ID passes. Tap **Scan ID** (licence barcode, checked on the device). If it won’t scan, a manager can accept a typed date of birth; a clearly older customer can be approved by eye (logged). Under 21 is always blocked.'},
+  {k:['offline','internet','wifi','down'], go:'devices', a:'**When the internet drops:** the Register keeps selling. Cards are stored securely and uploaded when the connection returns (limit $250 per sale). The top bar shows how many payments are waiting.'},
+  {k:['till','drawer','cash count','close shift','open shift','blind count','float','clock in','clock out'], go:'shifts', a:'**Shifts and the till:** Shifts & Staff → open the till by counting the float, close it with a **blind count** (the expected cash shows only after you submit; any over/short goes on the end-of-day report). Clock in and out there too.'},
+  {k:['receiv','delivery','deliveries','check in'], go:'receiving', a:'**Receiving a delivery:** Receiving & Counts → pick the PO, scan each case (or mark all received), note damaged cases, then **Complete**. Stock updates, short orders stay open, damage becomes a supplier claim, and vendor offer credits on that PO become available.'},
+  {k:['count','stocktake','stock take','shrink'], go:'receiving', a:'**Counting shelves:** Receiving & Counts → Count, pick the area, enter what’s on the shelf. Differences show live in units and dollars; a manager approves the adjustment (recorded as shrink).'},
+  {k:['damage','broken','broke','expired'], go:'damage', a:'**Damaged goods:** Damaged Goods → report it with a photo, reason and what to do (write off, supplier claim, sell at 30% off, return). Stock adjusts; supplier claims are tracked until the credit arrives.'},
+  {k:['price change','margin','markup','reprice','cost went up','new cost'], go:'pricing', a:'**Prices and margins:** Pricing shows new vendor costs, the new margin and a suggested price from the target margin (product rule, then brand group, then category default), rounded to .99. Approve now or at 6 AM; shelf labels are queued automatically.'},
+  {k:['purchase order','order from','reorder','po ','deal','free case'], go:'purchasing', a:'**Ordering:** Purchasing → Deal check compares each vendor offer as the real cost per case and picks the best quantity without more than 30 days of extra stock, then adds it to a draft PO for that vendor. Offers used on a PO show as pending vendor credits.'},
+  {k:['vendor','supplier','distributor','credit','owe','balance','pay '], go:'vendors', a:'**Vendors:** each vendor shows contact, terms, delivery days, POs and deals. **Balance** = invoices owed − credits; **Credits** lists offers that came back as credit (pending until the delivery is received). **Pay** uses available credits and pays the rest.'},
+  {k:['customer display','customer screen','receipt','text receipt','email receipt'], go:'display', a:'**Customer screen and receipts:** the customer-facing screen mirrors the order, then asks Text, Email, Print or No receipt. Digital receipts can be resent from Sales & Returns.'},
+  {k:['store','transfer','other location'], go:'stores', a:'**Multiple stores:** All Stores (owners) compares stores live, moves stock between stores (Requested → Picked → In transit → Received), keeps prices and offers in sync, and adds new stores.'},
+  {k:['report','end of day','eod','z report','x report','monthly','yearly','sales tax report'], go:'reports', a:'**Reports:** Reports → End of day (Z report after close, X report during the day), Date range, Monthly, Yearly and Accounting & tax. Print on a full page or the receipt printer.'},
+  {k:['pin','sign in','log in','login','switch user','password'], go:null, a:'**Signing in:** tap your name in the top bar, pick a person and enter the 4-digit PIN. The app shows only what that role allows.'},
+  {k:['who can','permission','role','allowed','cashier can','manager can'], go:'shifts', a:'**Who can do what:** cashiers sell, take returns up to $50, give discounts up to 15%, receive deliveries, count, report damage and print labels. Managers also approve larger discounts, refunds over $50, typed birthdates and counts, and run pricing, purchasing, vendors and reports. Owners also have All Stores and Store Settings. The full table is on Shifts & Staff.'},
+  {k:['offer','promotion','promo','sale price'], go:'offers', a:'**Offers:** Offers & Discounts lists the promotions the register applies by itself; pause or activate them there, or build a new one (it checks state rules like no free alcohol).'},
+  {k:['setting','tax rate','crv rate','sale hours','hours'], go:'settings', a:'**Store settings (owners):** sales tax %, CRV rates, alcohol sale hours, receipt text and default receipt, users and printers.'},
+];
+
+// ---- live data, limited to what this role may see
+function askData(){
+  const role=askRole(), can=r=>roleAllows(role,r), st=curStore(), L=[];
+  L.push(`Store: ${st.n}, ${st.addr}. Demo clock: Friday, Sep 25, 2026, 10:04 AM. Signed in: ${S.user} (${role}). Current screen: ${TITLES[S.route]?.[0]||S.route}.`);
+  L.push(`Sales tax ${(TAX*100).toFixed(2)}%. CRV $${(+S.settings.crvS).toFixed(2)} under 24 oz, $${(+S.settings.crvL).toFixed(2)} for 24 oz or more (beer, seltzer, mixers). Alcohol sales ${S.settings.open}–${S.settings.close}.`);
+  L.push('PRODUCTS (name | size | category | shelf price | in stock | vendor | offer):');
+  PRODUCTS.forEach(p=>{ const o=offerFor(p); L.push(`- ${p.n} | ${p.sz} | ${p.cat} | $${p.p.toFixed(2)} | ${p.stock} | ${VENDOR_OF[p.id]||'—'}${o?` | ${o.tag}`:''}`); });
+  L.push('ACTIVE OFFERS: '+OFFERS.filter(o=>o.status==='Active').map(o=>`${o.n} (${o.rule})`).join('; '));
+  if (S.cart.length){ const t=totals(); L.push(`CURRENT ORDER on the register: ${S.cart.map(l=>`${l.qty} × ${byId(l.id).n}`).join(', ')}; total $${t.total.toFixed(2)}.`); }
+  if (can('reports')){ const e=eod(RP_TODAY), y=eod(yday()); L.push(`SALES: today so far (10:04 AM) net $${e.net.toFixed(2)}, ${e.tx} transactions. Yesterday (Thu Sep 24) net $${y.net.toFixed(2)}, ${y.tx} transactions, tax $${y.tax.toFixed(2)}, cash over/short $${y.os.toFixed(2)}.`); }
+  if (can('vendors')) VENDORS.forEach(v=>L.push(`VENDOR ${v.n}: owed $${v.owed.toFixed(2)}${v.due?` due ${v.due}`:''}, credits available $${creditAvail(v.n).toFixed(2)}, pending $${creditPending(v.n).toFixed(2)}, balance to pay $${netOwed(v).toFixed(2)}; terms ${v.terms}; delivers ${v.days.join('/')}; rep ${v.rep} ${v.ph}; on time ${v.ontime}%.`));
+  if (can('alerts')) L.push('OPEN ALERTS: '+ALERTS.filter(a=>!S.done.has(a.id)).map(a=>`${a.h}: ${a.p}`).join(' | '));
+  if (can('stores')) L.push('STORES: '+STORES.map(s=>`${s.n} (today $${s.today}, margin ${s.margin}%, ${s.online?'online':'offline'})`).join('; '));
+  L.push(`SCREENS this person can open: ${ROUTES.filter(r=>can(r[0])).map(r=>`${r[1]} [[${r[0]}]]`).join(', ')}.`);
+  return L.join('\n');
+}
+function askGuideText(){ return ROUTES.filter(r=>roleAllows(askRole(),r[0])).map(r=>`${r[1]} [[${r[0]}]]: ${NOTES[r[0]]?.purpose||''}`).join('\n') + '\n\nHOW-TO:\n' + ASK_GUIDE.map(g=>g.a.replace(/\*\*/g,'')).join('\n'); }
+function askRules(){
+  return `You are Bevnetic Assistant, the help chat inside the Bevnetic POS app for a California liquor store. Answer the staff member's question using the store data and app guide below. This is a demo store; the numbers are demo data.
+Rules:
+- Be brief and practical: usually 1–6 short lines. Use "- " bullets for lists and **bold** for key numbers. Money with $ and 2 decimals.
+- Use only the data below for store facts. If it isn't there, say you don't have it and point to the screen where they can check.
+- When a screen helps, add its link token on its own, like [[inventory]]. Only use these ids: ${ASK_ROUTES.join(', ')}.
+- The person asking is ${S.user}, a ${askRole()}. Only use what is listed below (it is already limited to what they may see). If they ask for something their role can't see, say a manager or owner can check it.
+- For general questions (liquor, wine pairing, California rules) answer from general knowledge, briefly, and say when something should be checked with the ABC or a professional.
+
+APP GUIDE
+${askGuideText()}
+
+STORE DATA (live)
+${askData()}`;
+}
+
+// ---- offline answers from the live data
+const askNorm = s => ' '+s.toLowerCase().replace(/[’']/g,'').replace(/[^a-z0-9.$ ]+/g,' ').replace(/\s+/g,' ')+' ';
+function askFindProducts(q){
+  const w=q.split(' ').filter(x=>x.length>2 && !['the','how','many','much','price','cost','stock','left','have','what','does','for','and','with','are','our','its','is','of','can','who','give','get','need','any','sell','buy','today','this'].includes(x));
+  const scored=PRODUCTS.map(p=>{ const n=askNorm(p.n); const hits=w.filter(x=>n.includes(' '+x+' ') || (x.length>=4 && n.includes(' '+x))); return {p, s:hits.length}; }).filter(x=>x.s>0).sort((a,b)=>b.s-a.s);
+  return scored.length ? scored.filter(x=>x.s===scored[0].s).map(x=>x.p) : [];
+}
+function askGuide(q, can){
+  const g=ASK_GUIDE.map(x=>({x, s:x.k.filter(k=>q.includes(k)).reduce((a,k)=>a+k.length,0)})).filter(x=>x.s).sort((a,b)=>b.s-a.s)[0];
+  return g ? g.x.a+(g.x.go && can(g.x.go)?`\n[[${g.x.go}]]`:'') : null;
+}
+function askLocal(question){
+  const q=askNorm(question), role=askRole(), can=r=>roleAllows(role,r), m=(...ks)=>ks.some(k=>q.includes(k));
+  const noAccess = what => `That’s for managers and owners: ${what}. Ask a manager, or sign in as one from the name button in the top bar.`;
+  if (/^ (hi|hello|hey|help|what can you do) ?$/.test(q) || m(' what can you ')) return `Hi ${S.user.split(' ')[0]}! Ask me about:\n- prices and stock (“price of Tito’s”, “how many Modelo left”)\n- what’s low or out of stock\n- sales, vendors, offers and alerts\n- how to do things: returns, bottle returns, labels, discounts, ID checks, receiving`;
+  if (/^ (how|who|where|can i|can a|can we|what happens|why) /.test(q) || m(' how do ',' how to ',' who can ')){ const ga=askGuide(q, can); if (ga) return ga; }
+  // money owed / vendor
+  const vend = VENDORS.find(v=>q.includes(' '+askNorm(v.n).trim().split(' ')[0]+' '));
+  if (vend && m('owe','balance','credit','pay','due','vendor','deliver','rep','contact','phone')){
+    if (!can('vendors')) return noAccess('vendor balances and credits');
+    return `**${vend.n}**\n- Invoices owed: **${money(vend.owed)}**${vend.due?` (due ${vend.due})`:''}\n- Credits available: ${money(creditAvail(vend.n))}${creditPending(vend.n)?` (+${money(creditPending(vend.n))} pending)`:''}\n- **Balance to pay: ${money(netOwed(vend))}**\n- Delivers ${vend.days.join(', ')} · terms ${vend.terms} · rep ${vend.rep} ${vend.ph}\n[[vendors]]`;
+  }
+  if (m(' owe',' vendor balance','vendors balance','accounts payable','what do we owe')){
+    if (!can('vendors')) return noAccess('what the store owes vendors');
+    const list=VENDORS.filter(v=>v.owed||creditAvail(v.n));
+    return `Owed to vendors after credits: **${money(VENDORS.reduce((a,v)=>a+netOwed(v),0))}**\n`+list.map(v=>`- ${v.n}: ${money(netOwed(v))}${creditAvail(v.n)?` (after ${money(creditAvail(v.n))} credit)`:''}${v.due?` · due ${v.due.split(',')[0]}`:''}`).join('\n')+'\n[[vendors]]';
+  }
+  if (m(' tax rate',' sales tax',' tax %',' what tax')) return `Sales tax is **${(TAX*100).toFixed(2)}%** at ${curStore().short}. Food like chips, nuts and candy, ice and fresh fruit aren’t taxed.`+(can('settings')?'\n[[settings]]':'');
+  // sales
+  if (m(' sales',' sold',' revenue',' how much did we make',' takings',' how are we doing')){
+    if (!can('reports')) return noAccess('sales figures');
+    const e=eod(RP_TODAY), y=eod(yday());
+    return `- Today so far (10:04 AM): **${money(e.net)}** net · ${e.tx} transactions\n- Yesterday (Thu Sep 24): **${money(y.net)}** net · ${y.tx} transactions · tax ${money(y.tax)} · cash over/short ${money(y.os)}\n[[reports]]`;
+  }
+  // low stock
+  if (m(' low',' running out',' out of stock',' sold out',' reorder',' restock',' need to order')){
+    const low=PRODUCTS.filter(p=>p.stock<=12).sort((a,b)=>a.stock-b.stock);
+    return low.length ? `Low or out of stock (12 or fewer):\n`+low.map(p=>`- ${p.n}: **${p.stock ? p.stock+' left' : 'out of stock'}**`).join('\n')+(can('purchasing')?'\n[[purchasing]] [[inventory]]':'') : 'Nothing is at 12 or fewer right now.';
+  }
+  // alerts
+  if (m(' alert',' attention',' urgent',' problems',' todo',' to do')){
+    if (!can('alerts')) return noAccess('store alerts');
+    const a=ALERTS.filter(x=>!S.done.has(x.id)).slice(0,5);
+    return a.length ? 'Needs attention:\n'+a.map(x=>`- **${x.h}**: ${x.p}`).join('\n')+'\n[[alerts]]' : 'No open alerts.';
+  }
+  // offers
+  if (m(' offer',' promo',' deal',' on sale',' discount today') && !m(' how ')){
+    return 'Offers the register applies by itself:\n'+OFFERS.filter(o=>o.status==='Active').map(o=>`- **${o.n}**: ${o.rule}`).join('\n')+(can('offers')?'\n[[offers]]':'');
+  }
+  // tax, crv, hours
+  if (m(' crv ',' deposit') && !m(' return',' back',' refund')) return `CRV is **${money(+S.settings.crvS)}** per container under 24 oz and **${money(+S.settings.crvL)}** for 24 oz or more, on beer, seltzer and mixers. Not charged on wine or spirits.`;
+  if (m(' hours',' what time',' open until',' close',' 2 am',' 6 am') && m('alcohol','sell','sale','hours','open','close')) return `Alcohol can be sold **${S.settings.open}–${S.settings.close}**. Outside those hours the register locks 21+ items; mixers and snacks can still be sold.`;
+  // product price / stock
+  const hits=askFindProducts(q);
+  if (hits.length && hits.length<=4 && !m(' how do',' how to')){
+    return hits.map(p=>{ const o=offerFor(p); return `**${p.n}** · ${p.sz}\n- Price **${money(p.p)}**${p.crv?` + CRV ${money(p.crv)}`:''}${o?` · offer: ${o.tag}`:''}\n- In stock: **${p.stock}**${p.stock<=12?' (low)':''}${can('vendors')?` · vendor ${VENDOR_OF[p.id]||'—'}`:''}`; }).join('\n')+'\n[[inventory]]';
+  }
+  // how-to guide
+  return askGuide(q, can);
+}
+
+// ---- rendering
+function askFmt(text){
+  const lines=esc(text).split('\n'); let html='', inList=false;
+  for (let ln of lines){
+    ln=ln.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\[\[([a-z]+)(?:\|([^\]]+))?\]\]/g,(all,id,lab)=>ASK_ROUTES.includes(id)&&allowed(id)?`<button class="askgo" data-askgo="${id}">${ic(ROUTES.find(r=>r[0]===id)[2],'style="width:13px;height:13px"')}${esc(lab||ROUTES.find(r=>r[0]===id)[1])}</button>`:'');
+    if (/^\s*[-•]\s+/.test(ln)){ if(!inList){ html+='<ul>'; inList=true; } html+=`<li>${ln.replace(/^\s*[-•]\s+/,'')}</li>`; }
+    else { if(inList){ html+='</ul>'; inList=false; } if (ln.trim()) html+=`<p>${ln}</p>`; }
+  }
+  return html+(inList?'</ul>':'');
+}
+function askRender(){
+  const box=$('#ask'); if (!box) return; const keep=$('#askq')?.value||'';
+  const modeChip = ASK.mode==='claude' ? '<span class="askmode ai">Claude</span>' : ASK.mode==='checking' ? '' : '<span class="askmode">Offline answers</span>';  // shown under the title
+  box.innerHTML = `${ASK.open?'':`<button class="askfab" data-act="askopen" aria-label="Ask Bevnetic">${ic('spark')}<span>Ask</span></button>`}
+  ${ASK.open?`<aside class="askpanel" role="dialog" aria-label="Ask Bevnetic">
+    <header><span class="askav">${ic('spark')}</span><div style="flex:1;min-width:0"><b>Ask Bevnetic</b><small>${modeChip} ${esc(S.user)} · ${askRole()}</small></div>${ASK.msgs.length?`<button class="iconbtn" data-act="askclear" title="New chat" aria-label="New chat">${ic('sync')}</button>`:''}<button class="iconbtn" data-act="askclose" aria-label="Close">${ic('x')}</button></header>
+    <div class="askmsgs" id="askmsgs">${ASK.msgs.length?ASK.msgs.map(mm=>`<div class="askmsg ${mm.role}">${mm.role==='user'?esc(mm.text):mm.pending&&!mm.text?'<span class="askdots"><i></i><i></i><i></i></span> Thinking…':askFmt(mm.text)}${mm.note?`<small class="asknote">${esc(mm.note)}</small>`:''}</div>`).join('')
+      : `<div class="askhello"><b>Hi ${esc(S.user.split(' ')[0])}, what do you need?</b><p>Ask about prices, stock, sales, vendors, offers, or how to do something in the POS.</p></div>`}
+      ${!ASK.busy && !ASK.msgs.length?`<div class="asksugg">${ASK_SUGGEST.filter(s=>!/owe|sales|20%/i.test(s)||roleAllows(askRole(), /owe/i.test(s)?'vendors':/sales/i.test(s)?'reports':'register')).map(s=>`<button data-asksug="${esc(s)}">${esc(s)}</button>`).join('')}</div>`:''}</div>
+    <form class="askform" id="askform"><input id="askq" placeholder="Ask anything…" autocomplete="off" ${ASK.busy?'disabled':''}>${ASK.busy?`<button type="button" class="btn sm" data-act="askstop">Stop</button>`:`<button class="btn primary sm" type="submit" aria-label="Send">${ic('send')}</button>`}</form>
+  </aside>`:''}`;
+  const m=$('#askmsgs'); if (m) m.scrollTop=m.scrollHeight; const qi=$('#askq'); if (qi && keep && !ASK.busy) qi.value=keep;
+}
+async function askSend(text){
+  text=String(text||'').trim(); if (!text || ASK.busy) return; const qi=$('#askq'); if (qi) qi.value='';
+  ASK.msgs.push({role:'user', text});
+  const reply={role:'bot', text:'', pending:true}; ASK.msgs.push(reply);
+  if (ASK.mode!=='claude'){ // offline engine
+    reply.text = askLocal(text) || `I don’t have an answer for that offline. Try asking about a product (“price of Casamigos”), stock, ${roleAllows(askRole(),'reports')?'sales, vendors, ':''}offers, or how to do a task (returns, bottle returns, labels, discounts, ID checks, receiving).`;
+    reply.pending=false; askRender(); setTimeout(()=>$('#askq')?.focus(),0); return;
+  }
+  ASK.busy=true; ASK.ctl=new AbortController(); askRender();
+  const turns=[{role:'user', content:askRules()}, ...ASK.msgs.slice(0,-2).slice(-8).filter(x=>x.text && !x.failed).map(x=>({role:x.role==='user'?'user':'assistant', content:x.text})), {role:'user', content:text}];
+  try{
+    await ASK.sample(turns, {cache:false, modelTier:'quick', signal:ASK.ctl.signal, onText:({text:t})=>{ reply.text=t; reply.pending=false; const el=$('#askmsgs .askmsg.bot:last-child'); if (el){ el.innerHTML=askFmt(t); $('#askmsgs').scrollTop=1e9; } else askRender(); }});
+  }catch(e){
+    reply.text = e.text || ''; reply.failed=!e.text;
+    if (['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(e.code)){ ASK.mode='local'; reply.text = askLocal(text) || 'Claude isn’t available here, so I’m answering offline. Try a product, stock, offers, or a how-to question.'; reply.failed=false; reply.note='Answered offline'; }
+    else if (e.code==='cancelled'){ reply.note='Stopped'; if (!reply.text){ reply.text='(stopped)'; } }
+    else if (e.code==='rate_limited'){ reply.note='Too many questions at once. Try again in a minute.'; if(!reply.text){ const l=askLocal(text); if (l){ reply.text=l; reply.note+=' Answered offline meanwhile.'; } } }
+    else { const l=!reply.text && askLocal(text); if (l){ reply.text=l; reply.note='Claude didn’t answer, so this is the offline answer.'; } else reply.note='The answer was interrupted. Ask again.'; }
+    if (!reply.text) reply.text='—';
+  }finally{ reply.pending=false; ASK.busy=false; ASK.ctl=null; askRender(); setTimeout(()=>$('#askq')?.focus(),0); }
+}
+askRender();
+(async()=>{ try{ ASK.sample = (typeof claude!=='undefined' && claude.use) ? await claude.use('sample') : null; }catch(e){ ASK.sample=null; } ASK.mode = ASK.sample ? 'claude' : 'local'; askRender(); })();
+document.addEventListener('submit', e=>{ if (e.target.id==='askform'){ e.preventDefault(); const v=$('#askq').value; askSend(v); } });
+document.addEventListener('click', e=>{
+  const b=e.target.closest('[data-act^="ask"],[data-asksug],[data-askgo]'); if (!b) return;
+  const d=b.dataset;
+  if (d.asksug){ askSend(d.asksug); return; }
+  if (d.askgo){ go(d.askgo); if (window.innerWidth<=820){ ASK.open=false; askRender(); } return; }
+  if (d.act==='askopen'){ ASK.open=true; askRender(); setTimeout(()=>$('#askq')?.focus(),0); }
+  if (d.act==='askclose'){ ASK.open=false; askRender(); }
+  if (d.act==='askclear'){ ASK.msgs=[]; askRender(); }
+  if (d.act==='askstop'){ ASK.ctl?.abort(); }
+});
+
 /* ------------------------------------------------ guided demo */
 function resetSale(){ S.cart=[{id:'casa750',qty:1},{id:'bud12',qty:2}]; S.id=null; S.tdisc=null; S.member=null; S.cat='All'; S.q=''; }
 const TOUR = [
@@ -3484,6 +3704,7 @@ function tourHighlight(scroll){
   if (scroll) el.scrollIntoView({block: TOUR[S.tour].pos || (innerWidth<820 ? 'start' : 'center'), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
 }
 function renderTour(){
+  document.body.classList.toggle('touring', S.tour!=null);
   const box = $('#tour'); if (!box) return;
   if (S.tour==null){ box.innerHTML=''; return; }
   const st = TOUR[S.tour], n = S.tour+1, last = n===TOUR.length;
