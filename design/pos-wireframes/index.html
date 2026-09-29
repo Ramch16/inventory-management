@@ -780,6 +780,140 @@ body.touring .askfab{display:none}
 .askform input{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--surface);color:var(--ink);font-size:14px}
 .askform .btn.primary .i{width:16px;height:16px}
 @media (max-width:820px){.askfab{bottom:calc(80px + env(safe-area-inset-bottom,0px));right:14px;padding:11px}.askfab span{display:none}.askpanel{right:0;bottom:0;width:100%;height:100%;border-radius:0;border:0}}
+/* ---------- owner tools, staff, growth, support ---------- */
+.rptable tr.tot td{font-weight:800;border-top:2px solid var(--ink)}
+.ownergrid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:24px;align-items:start}
+.ophone{width:300px;border:10px solid #10181d;border-radius:38px;background:var(--bg);box-shadow:0 18px 40px rgba(0,0,0,.18);padding:10px 12px 0;display:flex;flex-direction:column;gap:10px;overflow:hidden;font-size:12.5px}
+.ophtop{display:flex;justify-content:space-between;font:700 11px/1 var(--mono);color:var(--muted);padding:2px 6px 0}
+.ophead{display:flex;gap:8px;align-items:center}
+.ophead img{width:30px;height:30px;border-radius:8px}
+.ophead b{display:block;font-size:13.5px}.ophead small{color:var(--muted);font-size:11px}
+.obell{position:relative;display:inline-flex}.obell svg{width:20px;height:20px}
+.obell i{position:absolute;top:-6px;right:-8px;background:var(--crit);color:#fff;border-radius:9px;font:800 9.5px/1 var(--body);font-style:normal;padding:3px 5px}
+.obig{background:var(--surface);border-radius:14px;padding:12px}
+.obig small{display:block;color:var(--muted);font-size:11px}
+.obig b{display:block;font:700 26px/1.2 var(--display)}
+.obig .up{color:var(--ok);font-weight:700;font-size:11.5px}
+.obars{display:flex;align-items:flex-end;gap:4px;height:70px;background:var(--surface);border-radius:14px;padding:8px 10px}
+.obars i{flex:1;background:var(--accent);border-radius:3px 3px 0 0}
+.ocard{background:var(--surface);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.ocard b{display:flex;gap:6px;align-items:center;font-size:12.5px}
+.ocard p{margin:0;color:var(--muted);font-size:12px;line-height:1.4}
+.ocard.warn{border:1.5px solid var(--warn)}.ocard.warn b{color:var(--warn)}.ocard.ok b{color:var(--ok)}
+.orow{display:flex;gap:6px;justify-content:flex-end}
+.oli{padding-left:12px;position:relative}.oli::before{content:"";position:absolute;left:0;top:6px;width:6px;height:6px;border-radius:50%;background:var(--crit)}
+.ocam{position:relative;border-radius:14px;overflow:hidden;height:120px}
+.ocam > span{position:absolute;z-index:1;font:700 10px/1 var(--mono);color:#fff;background:rgba(0,0,0,.5);padding:4px 6px;border-radius:4px}
+.ocam > span:first-child{top:8px;left:8px;color:#ff6a57}.ocam > span:nth-child(2){bottom:8px;left:8px}
+.onav{display:flex;justify-content:space-around;border-top:1px solid var(--line);margin:0 -12px;padding:8px 0 12px;background:var(--surface)}
+.onav span{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:var(--muted);font-weight:700}
+.onav span.on{color:var(--accent)}.onav svg{width:18px;height:18px}
+.camsvg{width:100%;height:100%;display:block}
+.dsprev{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:14px;align-items:start}
+.dsbubble{background:var(--surface-2);border:1px solid var(--line);border-radius:18px 18px 18px 4px;padding:10px 12px;font-size:12.5px;line-height:1.5;margin-top:6px}
+.dsmail{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:6px;display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.dsmail small{color:var(--muted)}
+.dsmail table{width:100%}.dsmail td{padding:4px 0;font-size:12.5px}.dsmail td:last-child{text-align:right;font-family:var(--mono)}
+.qr{display:grid;grid-template-columns:repeat(9,12px);gap:0;padding:8px;background:#fff;border:1px solid var(--line);border-radius:8px;flex:none}
+.qr i{width:12px;height:12px;background:#111}
+.pl dt{font-size:12.5px}
+.budrow{display:grid;grid-template-columns:minmax(0,1fr) 90px auto;gap:10px;align-items:center;font-size:12.5px;padding:5px 0}
+.budrow > span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.budbar{height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.budbar i{display:block;height:100%}
+.pbars{display:flex;align-items:flex-end;gap:12px;height:170px;padding-top:10px}
+.pbars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%}
+.pbars i{width:100%;max-width:48px;border-radius:6px 6px 0 0}
+.pbars span{font-size:11px}.pbars small{color:var(--muted);font-size:11.5px;font-weight:700}
+.dlstrip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.dlstrip > div{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:5px;min-height:74px;align-items:flex-start}
+.dlstrip b{font-size:12px}.dlstrip .chip{font-size:10.5px;white-space:normal;line-height:1.25}
+.dlrow svg{flex:none}
+.mkrules .chip{white-space:normal;line-height:1.3}
+.dlact{flex:none!important;display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.schtab td{padding:4px;text-align:center}.schtab td:first-child{text-align:left;padding:8px 10px}
+.schtab td:first-child small{display:block;color:var(--muted);font-size:11px}
+.shcell{width:100%;min-width:74px;border:1px solid var(--line);border-radius:8px;padding:6px 4px;background:var(--surface);display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer}
+.shcell b{font-size:12px}.shcell small{font-size:10.5px;color:var(--muted);font-family:var(--mono)}
+.shcell.O{background:var(--ok-soft);border-color:transparent}.shcell.O b{color:var(--ok)}
+.shcell.M{background:var(--over-soft);border-color:transparent}.shcell.M b{color:var(--over)}
+.shcell.L{background:var(--violet-soft);border-color:transparent}.shcell.L b{color:var(--violet)}
+.shcell.C{background:var(--accent-soft);border-color:transparent}.shcell.C b{color:var(--accent-ink)}
+.shcell.off{border-style:dashed;opacity:.7}
+.sphone{width:220px;border:8px solid #10181d;border-radius:28px;padding:14px 12px;display:flex;flex-direction:column;gap:6px;background:var(--bg);font-size:12px}
+.sphone div{display:flex;justify-content:space-between;background:var(--surface);border-radius:8px;padding:6px 8px}
+.sphone div span:last-child{font-family:var(--mono);color:var(--muted)}
+.sphone button{border:0;border-radius:10px;padding:8px;font-weight:700;background:var(--ink);color:var(--surface)}
+.sphone button + button{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.sectab td .chip{font-family:var(--mono)}
+.heatc{display:inline-block;min-width:34px;text-align:center;border-radius:6px;padding:3px 6px;font-weight:700}
+.camgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.camtile,.clip{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/9;background:#1d262c}
+.camtile .live,.clip .live{position:absolute;top:8px;left:8px;font:700 10.5px/1 var(--mono);color:#fff;background:rgba(0,0,0,.55);padding:4px 6px;border-radius:4px}
+.camtile .live{color:#ff6a57}
+.camtile b{position:absolute;bottom:8px;left:8px;color:#fff;font-size:12px;background:rgba(0,0,0,.55);padding:4px 7px;border-radius:5px}
+.cliprow{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px}
+.clipbar{position:absolute;left:10px;right:10px;bottom:10px;height:5px;border-radius:3px;background:rgba(255,255,255,.3)}
+.clipbar i{display:block;width:35%;height:100%;background:var(--accent);border-radius:3px}
+.clipplay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:grid;place-items:center}
+.clipplay svg{width:22px;height:22px}
+.clipev{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:8px;font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--line)}
+.clipev span:first-child{color:var(--muted)}
+.vplayer{margin-bottom:10px}
+.mkmail{border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;gap:8px;padding-bottom:12px;font-size:13px}
+.mkmail > *:not(.mkmh):not(.mksubj){margin-left:14px;margin-right:14px}
+.mkmail h3{margin:4px 14px 0;font:700 20px/1.2 var(--display)}
+.mkmail p{margin-top:0;margin-bottom:0;color:var(--muted);line-height:1.5}
+.mkmh{display:flex;gap:8px;align-items:center;background:var(--ink);color:var(--surface);padding:10px 14px}
+.mkmh img{width:24px;height:24px;border-radius:6px}
+.mksubj{font-size:12px;color:var(--muted);padding:0 14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.mkprods{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.mkprods > div{border:1px solid var(--line);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:2px;align-items:center;text-align:center}
+.mkprods .art{height:80px;display:flex;justify-content:center}.mkprods .art svg{height:100%;width:auto}
+.mkprods b{font-size:12px}.mkprods small{color:var(--muted);font-size:11px}.mkprods .num{font-weight:800;color:var(--accent-ink)}
+.mkoffer{background:var(--accent-soft);color:var(--accent-ink);border-radius:10px;padding:10px 12px;font-weight:700;text-align:center}
+.mkrules{display:flex;flex-wrap:wrap;gap:6px}.mkrules .chip svg{width:12px;height:12px}
+.trainrow{display:flex;gap:14px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.trainrow > div:nth-child(2){flex:1;min-width:220px}
+.trainrow b{display:block}.trainrow small{color:var(--muted);font-size:12.5px}
+.trainban,.remoteban{display:flex;gap:10px;align-items:center;border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:13px;flex-wrap:wrap}
+.trainban{background:repeating-linear-gradient(135deg,var(--violet-soft) 0 14px,transparent 14px 28px),var(--surface);border:1.5px dashed var(--violet);color:var(--violet)}
+.remoteban{background:var(--over-soft);color:var(--over);border:1.5px solid var(--over)}
+.trainban svg,.remoteban svg{width:18px;height:18px}
+.trainban .spacer,.remoteban .spacer{flex:1}
+.vidgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.vid{border:0;background:transparent;padding:0;text-align:left;display:flex;flex-direction:column;gap:6px;cursor:pointer;color:var(--ink)}
+.vid b{font-size:12.5px}
+.vthumb{position:relative;display:block;border-radius:10px;overflow:hidden;aspect-ratio:16/9}
+.vplay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:grid;place-items:center}
+.vplay svg{width:16px;height:16px}
+.vdur{position:absolute;right:6px;bottom:6px;font:700 10px/1 var(--mono);background:rgba(0,0,0,.65);color:#fff;padding:3px 5px;border-radius:4px}
+.vid:hover .vthumb{outline:2px solid var(--accent)}
+details.art{border-bottom:1px solid var(--line);padding:10px 0;font-size:13px}
+details.art summary{font-weight:700;cursor:pointer}
+details.art p{color:var(--muted);line-height:1.5;margin:8px 0}
+.tixflow{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.tixflow span{text-align:center;font-size:11.5px;font-weight:700;padding:6px;border-radius:6px;background:var(--surface-2);color:var(--muted)}
+.tixflow span.on{background:var(--ok-soft);color:var(--ok)}
+.tixmsgs{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto}
+.tixm{max-width:85%;border-radius:14px;padding:9px 12px;font-size:13px;line-height:1.45}
+.tixm small{display:block;font-size:10.5px;color:var(--muted);margin-bottom:2px;font-weight:700}
+.tixm.you{align-self:flex-end;background:var(--accent-soft);border-bottom-right-radius:4px}
+.tixm.support{align-self:flex-start;background:var(--surface-2);border:1px solid var(--line);border-bottom-left-radius:4px}
+.shotthumb{width:84px;height:56px;border:1px solid var(--line);border-radius:6px;background:var(--surface-2);display:flex;flex-direction:column;gap:3px;padding:5px;flex:none}
+.shotthumb b{font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shotthumb i{display:block;height:6px;border-radius:2px;background:var(--line)}.shotthumb i:nth-child(3){width:70%}.shotthumb i:nth-child(4){width:45%;background:var(--accent)}
+.rcode{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:18px}
+.rcode b{font:700 34px/1.1 var(--mono);letter-spacing:.1em}
+.tipchips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.tipchips button{flex:1;min-width:60px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px;font-weight:800}
+.tipchips button.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.loyrow{display:flex;gap:8px;align-items:center;justify-content:space-between;font-size:12.5px;background:var(--violet-soft);color:var(--violet);border-radius:10px;padding:7px 10px;margin:4px 0}
+.loyrow button{border:1px solid var(--violet);background:var(--surface);color:var(--violet);border-radius:8px;padding:4px 8px;font-weight:800;font-size:11.5px}
+.loyrow button.on{background:var(--violet);color:#fff}
+@media (max-width:1180px){.compgrid{grid-template-columns:1fr!important}.ownergrid{grid-template-columns:1fr}.dsprev{grid-template-columns:1fr}.cliprow{grid-template-columns:1fr}}
+@media (max-width:820px){.dlrow{flex-wrap:wrap}.dlrow .dlact{width:100%;justify-content:flex-start}.dlstrip{grid-template-columns:repeat(2,minmax(0,1fr))}.camgrid{grid-template-columns:1fr}.budrow{grid-template-columns:minmax(0,1fr) 60px auto}.ophone{width:min(300px,100%)}}
+.asktix{align-self:center;border:1px dashed var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:6px 12px;font-weight:700;font-size:12px;display:inline-flex;gap:6px;align-items:center}.asktix svg{width:14px;height:14px}.asktix:hover{color:var(--accent-ink);border-color:var(--accent)}
 /* customer display */
 .cdgrid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;align-items:start}
 .cdframe{background:#0B1116;border-radius:22px;padding:14px;box-shadow:var(--shadow)}
@@ -1082,6 +1216,14 @@ const ALERTS = [
 ];
 
 const NOTES = {
+  owner:{deck:'New · owner app and daily summary', purpose:'The owner sees every store from their phone: live sales, alerts, approvals for big discounts or refunds, and cameras. Every night at close a short summary arrives by text and email.', data:['Sales today vs last week, per store and combined','Pending approvals from the registers','Daily summary: sales, cash over/short, voids and refunds, low stock, top seller, labor %'], build:['Native iOS/Android app on the same API as the POS; push notifications for approvals and critical alerts','Summary is built from the Z-report when the last register closes and sent by SMS (Twilio) and email','Phones are approved once per owner from Store Settings; PIN or Face ID to open']},
+  profit:{deck:'New · profit and budget', purpose:'Sales minus cost of goods minus every expense (rent, payroll, card fees, utilities, insurance) = real profit, with a budget for each line and the daily break-even.', data:['Sales and gross profit from the sales ledger','Payroll from the time clock, card fees from card sales','Fixed and one-off expenses the owner enters, with monthly budgets'], build:['Expenses stored per store per month; recurring ones copy forward','Accountant export matches the P&L lines','QuickBooks/Xero sync can replace manual expenses']},
+  schedule:{deck:'New · scheduling and payroll', purpose:'Build next week’s schedule in a grid, see labor cost against forecast sales and coverage gaps, approve shift swaps and time off from the staff app, and export hours for payroll.', data:['Shifts per person per day, hourly rates','Swap and time-off requests from the staff app','Clocked hours with California daily and weekly overtime'], build:['Staff app shows my shifts, swap with a coworker (they accept first), request time off','Publishing texts everyone their week','Payroll export formats for Gusto, ADP, QuickBooks Payroll, Paychex or plain CSV']},
+  security:{deck:'New · loss prevention', purpose:'Spots register patterns linked to theft (voids, no-sale drawer opens, refunds without a receipt, price overrides, deleted lines), shows which products go missing on which shift, and links each flagged event to the camera clip.', data:['Per-cashier counts per 100 sales vs the store average','Handover counts of high-risk items: expected minus counted, by shift','Camera clips matched by lane and timestamp'], build:['Rules run nightly; 1.5× the average = amber, 2× = red','Clips come from the store’s IP cameras (RTSP/ONVIF or the camera maker’s cloud API)','Owners and managers only; every review is logged']},
+  marketing:{deck:'New · SMS and email marketing', purpose:'Send a text or email campaign such as “New bourbon arrivals” to a member segment, featuring products from the catalog, with an optional offer, and see opens, clicks and sales it brought in.', data:['Member segments from purchase history','Products, prices and photos from the catalog','Results: opened, clicked, redeemed at the register, sales'], build:['SMS via Twilio with TCPA opt-in, STOP handling and quiet hours; email with unsubscribe and store address (CAN-SPAM)','Only 21+ verified members','Offer codes redeem on the register automatically']},
+  deadlines:{deck:'New · licence and compliance calendar', purpose:'Every licence, permit, staff training and filing with a due date in one list, with reminders before each one. LEAD training that has expired blocks that person from selling alcohol.', data:['ABC licence, health permit, tobacco licence, city tax certificate, insurance','Staff LEAD certificates and expiry','Tax and CRV filing dates'], build:['Reminders 60/30/7 days before by owner app and email','Upload the renewed certificate; next due date rolls forward','An expired LEAD certificate locks the register for 21+ items for that user']},
+  export:{deck:'New · data export', purpose:'Download any data (sales, products, vendors, POs, payroll, expenses, daily totals, deadlines) as CSV, or everything as one Excel workbook, and set up automatic exports.', data:['Every dataset in the POS'], build:['CSV with UTF-8 and quoted fields; Excel workbook with one sheet per dataset','Scheduled exports by email, Google Drive or Dropbox','Accounting journal to QuickBooks or Xero']},
+  support:{deck:'New · help and support', purpose:'Search help articles and video tutorials, raise a support ticket with an automatic screenshot, track it from Open to Resolved, restore a backup, and let support see your screen when you allow it.', data:['Help articles and videos','Tickets with urgency, status and replies','Nightly backups; remote session log'], build:['Tickets go to the support desk (Zendesk/Intercom) with app version, lane and connection details','Backups are encrypted, kept 30 days, on the computer and in the cloud','Remote help needs a code and an Allow on this screen; card numbers and PINs are masked']},
   labels:{deck:'New · shelf labels', purpose:'Print shelf labels (name, size, price, unit price, CRV, barcode, current offer) for any products, on a thermal label printer or a sheet of labels. Price changes and new products are waiting here automatically.', data:['Print list with copies per product','Label size: 2.25 × 1.25 in shelf edge, 4 × 2 in large, or a letter sheet of 30','What each label shows'], build:['Thermal printers (Zebra, Brother, DYMO) print one label per page at the label size; sheet labels print 30 to a letter page','Prices come from the same catalog as the register, so a label always matches the checkout price','Printing clears the matching items from the price-change queue']},
   stores:{deck:'New · multiple stores', purpose:'Run several stores from one account: compare them live, move stock between stores before reordering, keep prices and offers in sync, and add a new store by copying an existing one.', data:['Per store: sales today vs last week, margin, staff on shift, over/short, low stock, alerts, online status','Stock of any product at every store; transfers and their status','Price differences by store, which stores run each offer, and each store’s licence, tax rate, lanes and manager'], build:['Each store is a location with its own licence, tax rate, sale hours, registers, cash and stock; catalog, vendors, price rules and offers are shared','Transfers take stock out when picked and add it when received, with a transfer record for licence rules','Owners see every store; managers and cashiers are tied to their store; reports filter by store or combine them']},
   display:{deck:'New · customer display and digital receipts', purpose:'A screen facing the customer mirrors the order live (items, offers, savings, total, ID reminder, tap prompt), then lets them choose a text, email or paper receipt.', data:['Order lines, savings, CRV, tax and total from the register','Member name and points; rewards sign-up','Receipt choice and the digital receipt the customer gets'], build:['Second screen on each lane (HDMI/USB display or the card reader screen), driven by the register over the local network so it works offline','Digital receipts go out by SMS or email with a short link, return barcode, next-visit offer and opt-out','Receipts are saved to the member account and can be resent from Sales & Returns']},
@@ -1331,8 +1473,8 @@ const USERS = [
   {n:'Dev P.', role:'cashier', pin:'4444', color:'#1E9360'},
   {n:'Sam R.', role:'cashier', pin:'5555', color:'#6A3B18'},
 ];
-const CASHIER_ROUTES = ['register','display','returns','shifts','damage','receiving','labels'];
-const OWNER_ROUTES = ['settings','stores'];
+const CASHIER_ROUTES = ['register','display','returns','shifts','damage','receiving','labels','support'];
+const OWNER_ROUTES = ['settings','stores','owner','profit','export'];
 function roleAllows(role, r){ return role==='owner' || (role==='manager' && !OWNER_ROUTES.includes(r)) || (role==='cashier' && CASHIER_ROUTES.includes(r)); }
 function allowed(r){ const u=USERS.find(x=>x.n===S.user); return !!u && roleAllows(u.role, r); }
 // what each role can do inside the screens (1 = yes, 0 = no, text = yes with a condition)
@@ -1346,10 +1488,15 @@ const ROLE_ACTIONS = [
     ['Returns and exchanges up to $50', 1,1,1],
     ['Refunds over $50', 'Manager PIN',1,1],
     ['Choose or resend a digital receipt', 1,1,1],
-    ['Take bottle and can returns (off the purchase or cash)', 1,1,1]]],
+    ['Take bottle and can returns (off the purchase or cash)', 1,1,1],
+    ['Use a member’s loyalty reward, take tips on the card reader', 1,1,1],
+    ['Practice in training mode (nothing is recorded)', 1,1,1]]],
   ['Cash and staff', [
     ['Open and close the till (blind count), clock in and out', 1,1,1],
-    ['See expected cash, over/short history and staff hours', 0,1,1]]],
+    ['See expected cash, over/short history and staff hours', 0,1,1],
+    ['Swap shifts and ask for time off from the staff app', 1,1,1],
+    ['Build the schedule, approve swaps, export payroll', 0,1,1],
+    ['Review suspicious activity and camera clips', 0,1,1]]],
   ['Stock', [
     ['Receive deliveries, report damage', 1,1,1],
     ['Print shelf labels', 1,1,1],
@@ -1359,7 +1506,11 @@ const ROLE_ACTIONS = [
     ['Change prices, build POs, add vendors, approve invoices', 0,1,1]]],
   ['Owner only', [
     ['Switch stores, move stock between stores, add a store', 0,0,1],
-    ['Tax rate, CRV, sale hours, receipt text, users and roles', 0,0,1]]],
+    ['Tax rate, CRV, sale hours, receipt text, users and roles', 0,0,1],
+    ['Owner app, profit and budget, export all data', 0,0,1]]],
+  ['Help', [
+    ['Help centre, videos and support tickets', 1,1,1],
+    ['Restore a backup, allow remote help', 0,1,1]]],
 ];
 const SHIFTS = [
   {d:'Thu Sep 24', lane:'Lane 1', who:'Maria G.', open:'8:00 AM', close:'4:02 PM', sales:9120, exp:1712.40, cnt:1712.40},
@@ -1430,10 +1581,13 @@ const ROUTES = [
   ['command','Command Center','command','Business'],
   ['reports','Reports','chart','Business'],
   ['stores','All Stores','building','Business'],
+  ['owner','Owner App','phone','Business'],
+  ['profit','Profit & Budget','dollar','Business'],
   ['register','Register','register','Store'],
   ['display','Customer Display','monitor','Store'],
   ['returns','Sales & Returns','sync','Store'],
   ['shifts','Shifts & Staff','clock','Store'],
+  ['schedule','Schedule & Payroll','cal','Store'],
   ['inventory','Inventory','inventory','Store'],
   ['receiving','Receiving & Counts','box','Store'],
   ['purchasing','Purchasing','truck','Store'],
@@ -1446,12 +1600,25 @@ const ROUTES = [
   ['assortment','Shelf Optimizer','swap','Intelligence'],
   ['invoices','Invoices','invoices','Intelligence'],
   ['alerts','Alerts','bell','Intelligence'],
+  ['security','Loss Prevention','eye','Intelligence'],
   ['customers','Customers','users','Growth'],
   ['offers','Offers & Discounts','gift','Growth'],
+  ['marketing','Marketing','mega','Growth'],
   ['devices','Devices & Offline','devices','Setup'],
   ['settings','Store Settings','gear','Setup'],
+  ['deadlines','Licences & Deadlines','badge','Setup'],
+  ['export','Data Export','download','Setup'],
+  ['support','Help & Support','help','Setup'],
 ];
 const TITLES = {
+  owner:['Owner App','Your stores on your phone · daily summary at close'],
+  profit:['Profit & Budget','Real profit after rent, payroll and every expense'],
+  schedule:['Schedule & Payroll','Build the week, approve swaps, export payroll'],
+  security:['Loss Prevention','Suspicious register activity, shrink by shift, camera clips'],
+  marketing:['Marketing','Text and email campaigns to members'],
+  deadlines:['Licences & Deadlines','ABC licence, LEAD training, permits and filings'],
+  export:['Data Export','Download everything as Excel or CSV'],
+  support:['Help & Support','Help centre, videos, tickets, backups and remote help'],
   labels:['Shelf Labels','Name and price labels that match the register'],
   stores:['All Stores','Every store live · transfers · shared prices'],
   display:['Customer Display','What the customer sees at the counter · digital receipts'],
@@ -1484,7 +1651,7 @@ function renderRail(){
   for (const [id,label,icon,grp] of ROUTES){
     if (!allowed(id)) continue;
     if (grp!==last){ html += `<div class="navlabel">${grp}</div>`; last=grp; }
-    const cnt = id==='alerts' ? `<span class="cnt">${openAlerts()}</span>` : id==='devices' && S.queue.length ? `<span class="cnt">${S.queue.length}</span>` : '';
+    const cnt = id==='alerts' ? `<span class="cnt">${openAlerts()}</span>` : id==='devices' && S.queue.length ? `<span class="cnt">${S.queue.length}</span>` : id==='support' && supBadge() ? `<span class="cnt">${supBadge()}</span>` : '';
     html += `<a class="nav ${S.route===id?'on':''}" href="#${id}" data-go="${id}">${ic(icon)}<span>${label}</span>${cnt}</a>`;
   }
   html += `<div class="railfoot"><strong>${esc(S.settings.name)}</strong>${esc(curStore().city)}, CA · ${curStore().lanes} lanes · ${STORES.length} stores<br>POC build · demo data</div>`;
@@ -1515,11 +1682,13 @@ function spec(){
 function render(){
   document.body.classList.toggle('notes', S.notes);
   renderRail(); renderTop();
-  $('#view').innerHTML = allowed(S.route) ? spec() + VIEWS[S.route]() : `<section class="card" style="max-width:520px;display:flex;flex-direction:column;gap:12px;align-items:flex-start">${ic('lock','style="width:32px;height:32px;color:var(--warn)"')}<h2 style="font-size:20px">A manager needs to open this</h2><div class="muted">You’re signed in as ${esc(S.user)} (${USERS.find(x=>x.n===S.user)?.role||''}). This screen needs a manager or owner.</div><button class="btn primary" data-act="signin">Switch user</button></section>`;
+  $('#view').innerHTML = allowed(S.route) ? topBanners() + spec() + VIEWS[S.route]() : `<section class="card" style="max-width:520px;display:flex;flex-direction:column;gap:12px;align-items:flex-start">${ic('lock','style="width:32px;height:32px;color:var(--warn)"')}<h2 style="font-size:20px">A manager needs to open this</h2><div class="muted">You’re signed in as ${esc(S.user)} (${USERS.find(x=>x.n===S.user)?.role||''}). This screen needs a manager or owner.</div><button class="btn primary" data-act="signin">Switch user</button></section>`;
   if (S.route==='forecast') drawForecast();
   renderTour();
   try{ if (ASK.open && !ASK.busy) askRender(); }catch(e){} // ASK is defined later in the script; skip on first load
 }
+function topBanners(){ try{ return trainBanner()+remoteBanner(); }catch(e){ return ''; } }
+function supBadge(){ try{ return supUnread(); }catch(e){ return 0; } }
 function go(r){ S.route=r; try{localStorage.setItem('bev-route',r)}catch(e){} render(); window.scrollTo(0,0); }
 let toastT; function toast(msg, icon='check'){ const t=$('#toast'); t.innerHTML = ic(icon)+esc(msg); t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,2600); }
 
@@ -1658,7 +1827,7 @@ VIEWS.register = () => {
       </div>
     </section>
     <aside class="ticket" data-note="Customer order · locks tender until ID passes">
-      <header><div><div class="h2">Customer order</div><div class="muted" style="font-size:12px">Sale #${S.saleNo} · ${S.member ? `${S.member} · 1,240 pts` : 'Walk-in customer'}</div></div><span class="spacer"></span>
+      <header><div><div class="h2">Customer order</div><div class="muted" style="font-size:12px">Sale #${S.saleNo} · ${S.member ? `${S.member} · ${(S.pts??1240).toLocaleString()} pts` : 'Walk-in customer'}</div></div><span class="spacer"></span>
         <button class="iconbtn" data-act="cdpip" title="${S.cdPip?'Hide':'Show'} customer screen" aria-label="Customer screen" aria-pressed="${S.cdPip}">${ic('monitor')}</button>
         <button class="iconbtn" data-act="member" title="${S.member?'Remove member':'Add member'}" aria-label="${S.member?'Remove member':'Add member'}" ${S.member?'aria-pressed="true"':''}>${ic('users2')}</button>
         <button class="btn sm danger" data-act="refuse" ${S.cart.length?'':'disabled'} title="Refuse sale">${ic('ban')}Refuse</button></header>
@@ -1668,16 +1837,19 @@ VIEWS.register = () => {
         <div style="min-width:0"><div class="ln">${p.n}</div><div class="lm">${p.sz}${p.crv?` · CRV ${money(p.crv)}`:''} · <span style="color:${p.stock-l.qty<=12?'var(--warn)':'inherit'}">${Math.max(0,p.stock-l.qty)} left after sale</span></div>${l.disc?`<div class="ldisc">−${l.disc}% · ${esc(l.reason)}</div>`:''}<div class="lp">${money(lt)}</div></div>
         <div class="qty"><button data-dec="${p.id}" aria-label="Remove one">−</button>${l.qty}<button data-add="${p.id}" aria-label="Add one">+</button></div></div>`}).join('') : `<div class="empty">${ic('scan','style="width:30px;height:30px"')}<br>Scan or tap a product to start the order.<br><button class="btn sm regbrowse" data-regview="products" style="margin-top:10px">${ic('search')}Browse products</button></div>`}</div>
       ${sugg.length ? `<div class="pairs" data-note="Counter AI · add-on suggestions"><span class="eyebrow" style="color:var(--violet)">${ic('spark','style="width:12px;height:12px;vertical-align:-2px"')} Suggest to customer</span>${sugg.slice(0,2).map(([id,why])=>{const x=byId(id); return `<div class="pair"><span class="thumb">${bottleSVG(x)}</span><div><b>${x.n}</b> · ${money(x.p)}<small>${why}</small></div><button class="btn sm" data-add="${id}">+ Add</button></div>`;}).join('')}</div>` : ''}
+      ${S.member && S.cart.length ? `<div class="loyrow" data-note="Loyalty points"><span>${ic('award','style="width:14px;height:14px;vertical-align:-2px"')} ${(S.pts??1240).toLocaleString()} pts · earns ${t.pts} on this sale</span>${(S.pts??0)>=500?`<button class="${S.reward?'on':''}" data-act="reward">${S.reward?'✓ $5 reward used':'Use $5 reward · 500 pts'}</button>`:''}</div>` : ''}
       <div class="totals">
         <span class="muted">Subtotal</span><span class="num r">${money(t.sub)}</span>
         ${t.offers.map(o=>`<span class="offerrow">${ic('gift','style="width:13px;height:13px;vertical-align:-2px"')} ${o.n}</span><span class="num r offerrow">${money(-o.amt)}</span>`).join('')}
         ${t.line?`<span class="offerrow">Line discounts</span><span class="num r offerrow">${money(-t.line)}</span>`:''}
         ${S.tdisc?`<span class="offerrow">Sale discount ${S.tdisc.kind==='%'?S.tdisc.v+'%':''} · ${esc(S.tdisc.reason)}</span><span class="num r offerrow">${money(-t.tdisc)}</span>`:''}
+        ${t.rwd?`<span class="offerrow">${ic('award','style="width:13px;height:13px;vertical-align:-2px"')} Loyalty reward · 500 pts</span><span class="num r offerrow">${money(-t.rwd)}</span>`:''}
         ${S.member?`<span class="offerrow">Member discount 5%</span><span class="num r offerrow">${money(-t.disc)}</span>`:''}
         <span class="muted">CA redemption value (CRV)</span><span class="num r">${money(t.crv)}</span>
         <span class="muted">Sales tax ${(TAX*100).toFixed(2)}%</span><span class="num r">${money(t.tax)}</span>
         ${S.credit?`<span class="offerrow">${ic('sync','style="width:13px;height:13px;vertical-align:-2px"')} Exchange credit${t.credit<S.credit-0.005?` · ${money(S.credit-t.credit)} still to use`:''}</span><span class="num r offerrow">${money(-t.credit)}</span>`:''}
         ${S.recyc?`<span class="offerrow">${ic('recycle','style="width:13px;height:13px;vertical-align:-2px"')} Bottle return · ${rcyCount(S.recyc.c)} containers${t.rcyLeft>0.005?` · ${money(t.rcyLeft)} back in cash`:''}</span><span class="num r offerrow">${money(-t.rcy)}</span>`:''}
+        ${t.tip?`<span class="muted">Tip ${S.tipPct}%</span><span class="num r">${money(t.tip)}</span>`:''}
         <span class="grand">Total</span><span class="grand num r">${money(t.total)}</span>
         ${t.saved>0.005?`<span class="chip ok saved">Customer saves ${money(t.saved)}</span>`:''}
       </div>
@@ -1706,11 +1878,14 @@ function totals(){
   for (const l of S.cart){ const p=byId(l.id); sub+=p.p*l.qty; crv+=p.crv*l.qty; if (l.disc) line+=p.p*l.qty*l.disc/100; if (taxable(p)) txb+=p.p*l.qty*(1-(l.disc||0)/100); }
   const offers=offerHits(), off=offers.reduce((a,o)=>a+o.amt,0), after=sub-off-line;
   const tdisc = !S.tdisc ? 0 : S.tdisc.kind==='%' ? after*S.tdisc.v/100 : Math.min(S.tdisc.v, after);
-  const disc = S.member ? (after-tdisc)*0.05 : 0, net=after-tdisc-disc, tax=net*(sub-line>0 ? txb/(sub-line) : 0)*TAX;
+  const rwd = S.member && S.reward ? Math.min(5, after-tdisc) : 0;
+  const disc = S.member ? (after-tdisc-rwd)*0.05 : 0, net=after-tdisc-rwd-disc, tax=net*(sub-line>0 ? txb/(sub-line) : 0)*TAX;
   const gross = net+crv+tax, credit = Math.min(S.credit||0, gross);
   // bottle-return refund is a payment back to the customer, applied after tax like store credit
   const rcyAmt = S.recyc ? S.recyc.amt : 0, rcy = Math.min(rcyAmt, gross-credit);
-  return {sub, crv, offers, off, line, tdisc, disc, tax, credit, rcy, rcyLeft:rcyAmt-rcy, total:gross-credit-rcy, saved:off+line+tdisc+disc};
+  // tip is chosen on the card reader, worked out on the pre-tax amount
+  const tip = S.settings.tips && payMethod!=='cash' ? Math.round(net*(S.tipPct||0))/100 : 0;
+  return {sub, crv, offers, off, line, tdisc, rwd, disc, net, tax, credit, rcy, rcyLeft:rcyAmt-rcy, tip, pts:Math.floor(Math.max(0,net)*1.25), total:gross-credit-rcy+tip, saved:off+line+tdisc+rwd+disc};
 }
 
 function invList(){
@@ -2614,6 +2789,7 @@ VIEWS.settings = () => {
       <div class="setrow"><div><b>Show "You saved" on receipts</b></div><button class="toggle" aria-pressed="${st.rSave}" data-act="strsave" aria-label="Show savings"></button></div>
       <div class="field">Default receipt<div class="quick">${['Ask on customer screen','Print','Text','Email'].map(v=>`<button class="${st.rDefault===v?'on':''}" data-strdef="${v}">${v}</button>`).join('')}</div></div>
       <div class="setrow"><div><b>Text members their receipt automatically</b><div class="muted" style="font-size:12px">Uses the phone number on the member account</div></div><button class="toggle" aria-pressed="${st.rAutoMember}" data-act="strauto" aria-label="Auto text members"></button></div>
+      <div class="setrow"><div><b>Ask for a tip on the card reader</b><div class="muted" style="font-size:12px">10%, 15%, 20% or no tip, after the total. Tips go to staff through payroll.</div></div><button class="toggle" aria-pressed="${!!st.tips}" data-act="sttips" aria-label="Tips on the card reader"></button></div>
       <button class="btn sm" style="align-self:flex-start" data-act="strprev">${ic('printer')}Preview receipt</button></section>
     <section class="card" data-note="Users and roles">
       <div class="cardhead"><h2>Users and roles</h2><span class="spacer"></span><button class="btn sm" data-toast="New user form opens here in the full app">+ Add user</button></div>
@@ -2670,7 +2846,7 @@ VIEWS.reports = () => {
         ${[['Card',e.card],['Tap / wallet',e.tap],['Cash',e.cash],['Offline card',e.off]].map(([n,v])=>`<div class="rpbar"><span>${n}</span><span class="meter"><i style="width:${e.total?v/e.total*100:0}%"></i></span><span class="num r">${money(v,0)}</span></div>`).join('')}</section>
       <section class="card" data-note="Cash drawer count"><div class="cardhead"><h2>Cash drawer</h2></div><dl class="kv">
         <dt>Opening float</dt><dd>${money(300)}</dd><dt>Cash sales</dt><dd>${money(e.cash)}</dd><dt>Paid outs</dt><dd class="neg">${money(-e.pay)}</dd><dt>Safe drops</dt><dd class="neg">${money(-e.drops)}</dd>
-        <dt class="tot">Expected</dt><dd class="tot">${money(e.expected)}</dd><dt>Counted</dt><dd>${e.open?'—':money(e.counted)}</dd><dt class="tot">Over / short</dt><dd class="tot" style="color:${e.os<0?'var(--crit)':'inherit'}">${e.open?'—':money(e.os)}</dd></dl></section>
+        <dt class="tot">Expected</dt><dd class="tot">${money(e.expected)}</dd><dt>Counted</dt><dd>${e.open?'—':money(e.counted)}</dd><dt class="tot">Over / short</dt><dd class="tot" style="color:${e.os<0?'var(--crit)':'inherit'}">${e.open?'—':money(e.os)}</dd><dt>Card tips owed to staff</dt><dd>${money(e.open?(S.tipsToday||0):0)}</dd></dl></section>
       <section class="card wide" data-note="Sales by hour"><div class="cardhead"><h2>Sales by hour</h2></div>${barChart(e.hours, ['8a','9a','10a','11a','12p','1p','2p','3p','4p','5p','6p','7p','8p','9p','10p','11p','12a','1a'], {h:180, hi:e.hours.indexOf(Math.max(...e.hours)), label:'Sales by hour'})}</section>
       <section class="card" data-note="Activity counts"><div class="cardhead"><h2>Activity</h2></div><dl class="kv">
         <dt>Items sold</dt><dd>${e.items.toLocaleString()}</dd><dt>Voids</dt><dd>${e.voids} · ${money(e.voidAmt)}</dd><dt>Refunds</dt><dd>${e.refunds}</dd><dt>Bottle returns (CRV paid back)</dt><dd>${money(e.recyc)}</dd><dt>Drawer opened, no sale</dt><dd>${e.nosale}</dd>
@@ -3153,9 +3329,10 @@ function payModal(phase='choose'){
       ${payMethod==='cash' ? `<div class="cashgrid">${['Exact',Math.ceil(t.total/5)*5,Math.ceil(t.total/20)*20,Math.ceil(t.total/50)*50+50].map(v=>`<button class="btn" data-cash="${v==='Exact'?t.total:v}">${v==='Exact'?'Exact':money(v,0)}</button>`).join('')}</div>`
         : payMethod==='split' ? `<div class="muted">Split between up to 4 cards or card + cash. Enter the first amount on the terminal.</div>`
         : `<div class="term"><div class="scr"><span style="font-size:11px;color:#8FA2AD">PAX A920 · Lane 1</span><span class="amt">${money(t.total)}</span><span style="font-size:12px">${S.online?'Insert, tap or swipe':'Offline: insert or tap'}</span></div><span class="nfc">${ic('tap','style="width:26px;height:26px;color:#FFA350"')}</span><span style="font-size:11px;color:#8FA2AD">EMV · NFC · Apple Pay · Google Pay · PIN</span></div>`}
+      ${S.settings.tips && payMethod!=='cash' ? `<div data-note="Tip on the card reader"><b style="font-size:13px">Customer picks a tip on the card reader</b><div class="tipchips">${[0,10,15,20].map(v=>`<button class="${(S.tipPct||0)===v?'on':''}" data-tip="${v}">${v?v+'%':'No tip'}${v?`<small style="display:block;font-weight:600;font-size:11px">${money(Math.round(t.net*v)/100)}</small>`:''}</button>`).join('')}</div></div>` : ''}
       ${!S.online ? `<div class="offbanner">${ic('wifioff')} ${over?`Offline limit is $250 per sale. Ask for cash or split the payment.`:'You are offline. This card will be stored and uploaded when the connection returns.'}</div>`:''}`
     : phase==='wait' ? `<div class="term"><div class="scr"><span class="amt">${money(t.total)}</span><span style="font-size:12px">Waiting for customer…</span></div><span class="nfc">${ic('tap','style="width:26px;height:26px;color:#FFA350"')}</span></div>`
-    : `<div class="verdict ok" style="justify-content:center">${ic('check','style="width:34px;height:34px"')}<div><div class="agebig" style="font-size:34px">${S.online?'Approved':'Stored offline'}</div><b>Sale #${S.saleNo} · ${money(t.total)}</b><div style="font-size:12px">${S.online?'Visa ·· 4412 · auth 084213':'Will upload automatically when the internet returns'} </div></div></div>
+    : `<div class="verdict ok" style="justify-content:center">${ic('check','style="width:34px;height:34px"')}<div><div class="agebig" style="font-size:34px">${S.training?'Practice sale':S.online?'Approved':'Stored offline'}</div><b>Sale #${S.saleNo} · ${money(t.total)}</b><div style="font-size:12px">${S.online?'Visa ·· 4412 · auth 084213':'Will upload automatically when the internet returns'} </div></div></div>
       <div class="rcpick"><b>Receipt</b>${S.cd.rc?`<span class="chip ok">${ic('check')} ${RCPT_LBL[S.cd.rc]}${rcTo(S.cd.rc)?' · '+esc(rcTo(S.cd.rc)):''}</span>`:`<span class="muted" style="font-size:12px">${S.cd.ask?`Customer is typing their ${S.cd.ask==='text'?'mobile number':'email'} on the customer screen`:S.cdset.rc?'Customer is choosing on the customer screen, or pick for them:':'Ask the customer:'}</span>`}<div class="quick">${['text','email','print','none'].map(k=>`<button class="${S.cd.rc===k?'on':''}" data-cdrc="${k}">${RCPT_LBL[k]}</button>`).join('')}</div></div>`;
   $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Take payment" style="width:min(560px,100%)">
     <header>${ic('card')}<h2>Take payment</h2><span class="spacer"></span><span class="num" style="font-weight:700;font-size:18px">${money(t.total)}</span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
@@ -3165,7 +3342,7 @@ function payModal(phase='choose'){
 }
 function charge(){
   payModal('wait');
-  setTimeout(()=>{ S.cart.forEach(l=>{ const pr=byId(l.id); pr.stock=Math.max(0,pr.stock-l.qty); }); if (!SALES.some(x=>x.no===S.saleNo)) SALES.unshift({no:S.saleNo, t:nowLabel(), who:S.user, items:S.cart.map(l=>[l.id,l.qty]), tender: payMethod==='cash'?'Cash':payMethod==='tap'?'Apple Pay':'Visa ·· 4412', idm: S.cart.some(l=>byId(l.id).r) ? (S.idMethod==='visual'?'Approved by eye':S.idMethod==='manual'?'Date of birth typed':'ID scanned') : 'No 21+ items', member:S.member, tot:(t=>({save:Math.round((t.saved)*100)/100, tax:Math.round(t.tax*100)/100, total:Math.round((t.total+t.rcy+t.credit)*100)/100}))(totals()), ...(S.recyc?{rcy:Math.round(totals().rcy*100)/100, rcyCash:Math.round(totals().rcyLeft*100)/100, rcyN:rcyCount(S.recyc.c)}:{})}); if (S.recyc) S.rcyDone+=S.recyc.amt; if (!S.online) S.queue.push({no:S.saleNo, amt:Math.round(totals().total*100)/100, t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), card:'Visa ·· 4412'}); S.cd.rc=null; S.cd.ask=null; S.cd.to=''; { const def=S.settings.rDefault; if (def==='Print' || (def!=='Ask on customer screen' && S.member)) setReceipt(def.toLowerCase()); else if (S.member && S.settings.rAutoMember) setReceipt('text'); } payModal('done'); renderRail(); renderTop(); }, payMethod==='cash'?300:1400);
+  setTimeout(()=>{ if (S.training){ S.cd.rc=null; S.cd.ask=null; payModal('done'); toast('Training sale · nothing was recorded','play'); return; } S.cart.forEach(l=>{ const pr=byId(l.id); pr.stock=Math.max(0,pr.stock-l.qty); }); if (!SALES.some(x=>x.no===S.saleNo)) SALES.unshift({no:S.saleNo, t:nowLabel(), who:S.user, items:S.cart.map(l=>[l.id,l.qty]), tender: payMethod==='cash'?'Cash':payMethod==='tap'?'Apple Pay':'Visa ·· 4412', idm: S.cart.some(l=>byId(l.id).r) ? (S.idMethod==='visual'?'Approved by eye':S.idMethod==='manual'?'Date of birth typed':'ID scanned') : 'No 21+ items', member:S.member, tot:(t=>({save:Math.round((t.saved)*100)/100, tax:Math.round(t.tax*100)/100, total:Math.round((t.total+t.rcy+t.credit)*100)/100}))(totals()), ...(S.recyc?{rcy:Math.round(totals().rcy*100)/100, rcyCash:Math.round(totals().rcyLeft*100)/100, rcyN:rcyCount(S.recyc.c)}:{})}); { const T=totals(); if (S.member) S.pts=(S.pts||0)-(T.rwd?500:0)+T.pts; if (T.tip){ S.tipsToday=(S.tipsToday||0)+T.tip; if (SALES[0].no===S.saleNo) SALES[0].tip=T.tip; } } if (S.recyc) S.rcyDone+=S.recyc.amt; if (!S.online) S.queue.push({no:S.saleNo, amt:Math.round(totals().total*100)/100, t:'Fri '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}), card:'Visa ·· 4412'}); S.cd.rc=null; S.cd.ask=null; S.cd.to=''; { const def=S.settings.rDefault; if (def==='Print' || (def!=='Ask on customer screen' && S.member)) setReceipt(def.toLowerCase()); else if (S.member && S.settings.rAutoMember) setReceipt('text'); } payModal('done'); renderRail(); renderTop(); }, payMethod==='cash'?300:1400);
 }
 
 function startDealRead(){ S.dealSheet='reading'; S.dealRows=SHEET.rows.map(()=>'review'); render(); setTimeout(()=>{ S.dealSheet='done'; render(); toast('5 lines read · 2 deals worth taking','spark'); }, 1400); }
@@ -3294,7 +3471,7 @@ function cdStage(){ if (S.cdPhase==='done') return S.cd.rc ? 'thanks' : 'receipt
 function rcTo(how){ return how==='text' ? (S.member?'(916) 555-0148':S.cd.to) : how==='email' ? (S.member?'jordan.d@example.com':S.cd.to) : ''; }
 function customerScreen(stage){
   const st=curStore(), set=S.cdset, t=totals();
-  const head = `<div class="cdhead"><img src="${MARK}" alt=""><b>${esc(st.n)}</b><span class="spacer"></span>${S.member?`<span class="cdmem">${ic('award')} Hi Jordan · 1,240 pts</span>`:''}</div>`;
+  const head = `<div class="cdhead"><img src="${MARK}" alt=""><b>${esc(st.n)}</b><span class="spacer"></span>${S.member?`<span class="cdmem">${ic('award')} Hi Jordan · ${(S.pts??1240).toLocaleString()} pts</span>`:''}</div>`;
   if (stage==='idle'){ const o=OFFERS.filter(x=>x.status==='Active'); const k=o.length?S.cdSlide%o.length:0;
     return `${head}<div class="cdidle"><small>Welcome in</small><h3>${o.length&&set.slides?esc(o[k].n):'Thanks for shopping local'}</h3><p>${o.length&&set.slides?esc(o[k].rule):esc(S.settings.rHeader)}</p>${set.join?`<div class="cdjoin">${ic('award')} Rewards members save 5% · text JOIN to 55123</div>`:''}${o.length>1&&set.slides?`<div class="cddots">${o.map((x,i)=>`<i class="${i===k?'on':''}"></i>`).join('')}</div>`:''}</div>`; }
   if (stage==='order') return `${head}<div class="cdorder"><div class="cdlines">${S.cart.map(l=>{ const p=byId(l.id); return `<div><span>${l.qty} × ${esc(p.n)}</span><b>${money(p.p*l.qty*(1-(l.disc||0)/100))}</b></div>`; }).join('')}
@@ -3505,7 +3682,21 @@ const ASK_GUIDE = [
   {k:['pin','sign in','log in','login','switch user','password'], go:null, a:'**Signing in:** tap your name in the top bar, pick a person and enter the 4-digit PIN. The app shows only what that role allows.'},
   {k:['who can','permission','role','allowed','cashier can','manager can'], go:'shifts', a:'**Who can do what:** cashiers sell, take returns up to $50, give discounts up to 15%, receive deliveries, count, report damage and print labels. Managers also approve larger discounts, refunds over $50, typed birthdates and counts, and run pricing, purchasing, vendors and reports. Owners also have All Stores and Store Settings. The full table is on Shifts & Staff.'},
   {k:['offer','promotion','promo','sale price'], go:'offers', a:'**Offers:** Offers & Discounts lists the promotions the register applies by itself; pause or activate them there, or build a new one (it checks state rules like no free alcohol).'},
-  {k:['setting','tax rate','crv rate','sale hours','hours'], go:'settings', a:'**Store settings (owners):** sales tax %, CRV rates, alcohol sale hours, receipt text and default receipt, users and printers.'},
+  {k:['setting','tax rate','crv rate','sale hours','hours'], go:'settings', a:'**Store settings (owners):** sales tax %, CRV rates, alcohol sale hours, receipt text and default receipt, users and printers.'},,
+  {k:['owner app','phone app','mobile app','daily summary','text me','summary','end of day text'], go:'owner', a:'**Owner app and daily summary:** open Owner App to see what the phone app shows (live sales, alerts, approvals, cameras). Turn on the **Daily summary** to get sales, cash over/short, voids and low stock by text and email when the store closes.'},
+  {k:['profit','expense','rent','budget','real profit','break even','break-even','p&l'], go:'profit', a:'**Profit and budget:** open Profit & Budget. It takes gross profit and subtracts rent, payroll, card fees and every other expense to show real profit, with budget vs actual and the daily break-even. Press **Add expense** for anything new.'},
+  {k:['licence','license','lead','permit','renewal','renew','deadline','expire','expiry'], go:'deadlines', a:'**Licences and deadlines:** open Licences & Deadlines. It lists the ABC licence, LEAD training for each person, health permit, tobacco licence, tax and CRV filings with due dates and reminders. Press **Renewed** after you renew; the next due date rolls forward.'},
+  {k:['export','excel','csv','download','spreadsheet','accountant'], go:'export', a:'**Export data:** open Data Export and press **Everything in one Excel file**, or pick CSV for one dataset (sales, products, vendors, POs, payroll, expenses, daily totals).'},
+  {k:['schedule','shift swap','swap','time off','rota','roster'], go:'schedule', a:'**Scheduling:** open Schedule & Payroll. Tap a cell to set Open, Mid, Late, Close or off, then **Publish and text staff**. Staff swap shifts or ask for time off in the staff app; you approve under **Requests**.'},
+  {k:['payroll','overtime','wages','gusto','adp','paycheck'], go:'schedule', a:'**Payroll export:** open Schedule & Payroll → **Payroll**. Hours come from the time clock with California overtime. Pick Gusto, ADP, QuickBooks Payroll, Paychex or CSV and press **Download payroll file**.'},
+  {k:['training','practice','new hire'], go:'shifts', a:'**Training mode:** open Shifts & Staff and press **Start training mode**. New staff can ring up, scan IDs, take returns and payments; nothing is recorded. A striped banner shows while it’s on.'},
+  {k:['theft','suspicious','void','no sale','shrink','camera','video','clip','stealing'], go:'security', a:'**Loss prevention:** open Loss Prevention. **Suspicious activity** compares each cashier’s voids, no-sale drawer opens, refunds without receipt, price overrides and deleted lines with the store average. Press **View clip** to see the camera video for that sale.'},
+  {k:['loyalty','points','reward','rewards'], go:'customers', a:'**Loyalty points:** members earn points on every sale. On the Register, add the member and tap **Use $5 reward · 500 pts**. Tiers and rewards are under Customers.'},
+  {k:['marketing','campaign','sms','email blast','promote','newsletter','new arrivals'], go:'marketing', a:'**Marketing:** open Marketing, name the campaign, choose text and/or email, pick who gets it, feature the new products and press **Send** or schedule it. Only opted-in 21+ members get texts, never between 9 PM and 9 AM.'},
+  {k:['tip','tips','gratuity'], go:'settings', a:'**Tips:** turn on **Ask for a tip on the card reader** in Store Settings → Receipts. The customer picks 10%, 15%, 20% or no tip when paying by card; tips show on the end-of-day report and in payroll.'},
+  {k:['ticket','support','help desk','printer not','card reader','not working'], go:'support', a:'**Get support:** open Help & Support → **Raise a ticket**, pick what it’s about and how urgent, and send. A screenshot is attached automatically. You’ll get a notification when support replies.'},
+  {k:['backup','restore','lost data'], go:'support', a:'**Backups:** the POS backs up every night after close, on the computer and in the cloud, and keeps 30 days. Help & Support → **Backups** to back up now or restore.'},
+  {k:['remote','screen share','teamviewer'], go:'support', a:'**Remote help:** Help & Support → **Remote help** → **Start a session**, read the code to support, then press **Allow**. You can end it any time.'}
 ];
 
 // ---- live data, limited to what this role may see
@@ -3619,6 +3810,7 @@ function askRender(){
   ${ASK.open?`<aside class="askpanel" role="dialog" aria-label="Ask Bevnetic">
     <header><span class="askav">${ic('spark')}</span><div style="flex:1;min-width:0"><b>Ask Bevnetic</b><small>${modeChip} ${esc(S.user)} · ${askRole()}</small></div>${ASK.msgs.length?`<button class="iconbtn" data-act="askclear" title="New chat" aria-label="New chat">${ic('sync')}</button>`:''}<button class="iconbtn" data-act="askclose" aria-label="Close">${ic('x')}</button></header>
     <div class="askmsgs" id="askmsgs">${ASK.msgs.length?ASK.msgs.map(mm=>`<div class="askmsg ${mm.role}">${mm.role==='user'?esc(mm.text):mm.pending&&!mm.text?'<span class="askdots"><i></i><i></i><i></i></span> Thinking…':askFmt(mm.text)}${mm.note?`<small class="asknote">${esc(mm.note)}</small>`:''}</div>`).join('')
+      + (!ASK.busy?`<button class="asktix" data-act="asktix">${ic('help')}Still stuck? Talk to a person</button>`:'')
       : `<div class="askhello"><b>Hi ${esc(S.user.split(' ')[0])}, what do you need?</b><p>Ask about prices, stock, sales, vendors, offers, or how to do something in the POS.</p></div>`}
       ${!ASK.busy && !ASK.msgs.length?`<div class="asksugg">${ASK_SUGGEST.filter(s=>!/owe|sales|20%/i.test(s)||roleAllows(askRole(), /owe/i.test(s)?'vendors':/sales/i.test(s)?'reports':'register')).map(s=>`<button data-asksug="${esc(s)}">${esc(s)}</button>`).join('')}</div>`:''}</div>
     <form class="askform" id="askform"><input id="askq" placeholder="Ask anything…" autocomplete="off" ${ASK.busy?'disabled':''}>${ASK.busy?`<button type="button" class="btn sm" data-act="askstop">Stop</button>`:`<button class="btn primary sm" type="submit" aria-label="Send">${ic('send')}</button>`}</form>
@@ -3658,6 +3850,526 @@ document.addEventListener('click', e=>{
   if (d.act==='askclose'){ ASK.open=false; askRender(); }
   if (d.act==='askclear'){ ASK.msgs=[]; askRender(); }
   if (d.act==='askstop'){ ASK.ctl?.abort(); }
+});
+
+/* ================================================ owner tools, staff & operations, growth, support (demo) */
+Object.assign(S, {
+  pts:1240, reward:false, tipPct:0, tipsToday:0, training:false,
+  oapp:[{id:1, who:'Maria G.', what:'20% off the whole sale · Manager courtesy', amt:87.10, t:'10:02 AM'}],
+  dsum:{sms:true, email:true, when:'At close (2:05 AM)', phone:'(916) 555-0199', email:'priya@oakstreetliquor.example', inc:{sales:true, cash:true, low:true, voids:true, top:true, labor:true}},
+  pfMonth:'aug', expAdd:null,
+  schTab:'week', payProv:'Gusto',
+  secTab:'activity',
+  mk:{name:'New bourbon arrivals', sms:true, email:true, seg:0, feat:[0,1,2], offer:'none', when:'Fri 3:00 PM', subj:'Just in: Eagle Rare, Buffalo Trace and more', sms_t:'Oak Street Liquor: New bourbon just landed! Eagle Rare 10yr $49.99, Buffalo Trace $32.99. Limited stock. Reply STOP to opt out'},
+  supTab:'help', supQ:'', tix:null, tixSel:null, tixNew:null, backingUp:false, remote:null, remoteCtl:false,
+});
+S.settings.tips = false;
+
+/* ---- icons */
+Object.assign(P, {
+  phone:'<rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/>',
+  dollar:'<path d="M12 2v20M17 6.5C17 4.6 14.8 3.5 12 3.5S7 4.6 7 6.8s2.2 3 5 3.7 5 1.6 5 3.8-2.2 3.4-5 3.4-5-1.2-5-3.2"/>',
+  cal:'<rect x="3" y="4.5" width="18" height="16.5" rx="2"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/>',
+  badge:'<circle cx="12" cy="9" r="6"/><path d="M8.5 14l-1.5 8 5-3 5 3-1.5-8"/><path d="M9.5 9l1.8 1.8 3.4-3.4"/>',
+  download:'<path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/>',
+  help:'<circle cx="12" cy="12" r="9.5"/><path d="M9.3 9.2a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.3-2.7 4M12 17.5h.01"/>',
+  eye:'<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  mega:'<path d="M3 10v4h3l7 5V5L6 10H3z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>',
+  video:'<rect x="2" y="5" width="14" height="14" rx="2"/><path d="M16 10l6-3.5v11L16 14z"/>',
+  lifebuoy:'<circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="4"/><path d="M5.3 5.3l3.9 3.9M14.8 14.8l3.9 3.9M18.7 5.3l-3.9 3.9M9.2 14.8l-3.9 3.9"/>',
+});
+
+/* ---- small helpers */
+const pctTxt = (a,b) => b ? `${a>=b?'+':''}${((a-b)/b*100).toFixed(1)}%` : '—';
+const segBtns = (items, cur, attr) => `<div class="seg" role="tablist">${items.map(([k,l])=>`<button class="${cur===k?'on':''}" ${attr}="${k}">${l}</button>`).join('')}</div>`;
+const lowStock = () => PRODUCTS.filter(p=>p.stock<=12).sort((a,b)=>a.stock-b.stock);
+const DEMO_TODAY = RP_TODAY;
+const daysUntil = s => Math.round((new Date(s) - DEMO_TODAY)/864e5);
+
+/* ================================================ Owner App + daily summary */
+function dailySummaryText(){
+  const e=eod(yday()), low=lowStock(), I=S.dsum.inc, L=[`${curStore().short} · Thu Sep 24 close`];
+  if (I.sales) L.push(`Sales ${money(e.net,0)} (${pctTxt(e.net, eod(new Date(yday().getTime()-7*864e5)).net)} vs last Thu) · ${e.tx} sales`);
+  if (I.cash) L.push(`Cash ${e.os<0?'short':e.os>0?'over':'balanced'} ${e.os?money(Math.abs(e.os)):''}`.trim());
+  if (I.voids) L.push(`Voids ${e.voids} (${money(e.voidAmt,0)}) · refunds ${e.refunds}`);
+  if (I.low) L.push(`Low stock: ${low.slice(0,3).map(p=>p.n.split(' ').slice(0,2).join(' ')).join(', ')}${low.length>3?` +${low.length-3}`:''}`);
+  if (I.top) L.push('Top seller: Bud Light 12pk (41)');
+  if (I.labor) L.push('Labor 5.6% of sales');
+  return L;
+}
+VIEWS.owner = () => {
+  const e=eod(RP_TODAY), y=eod(yday()), D=S.dsum, sum=dailySummaryText();
+  const hours=[180,420,310];
+  return `<div class="ownergrid">
+    <section style="display:flex;flex-direction:column;align-items:center;gap:10px">
+      <div class="ophone" data-note="Owner mobile app (iOS and Android)">
+        <div class="ophtop"><span>10:04</span><span>●●● 5G</span></div>
+        <div class="ophead"><img src="${MARK}" alt=""><div><b>${esc(curStore().short)}</b><small>${STORES.length} stores · live</small></div><span class="spacer"></span><span class="obell">${ic('bell')}<i>${openAlerts()}</i></span></div>
+        <div class="obig"><small>Sales today (all stores)</small><b>${money(STORES.reduce((a,s)=>a+s.today,0),0)}</b><span class="up">${pctTxt(STORES.reduce((a,s)=>a+s.today,0), STORES.reduce((a,s)=>a+s.lastwk,0))} vs last Fri</span></div>
+        <div class="obars">${[18,42,31,0,0,0,0,0,0,0,0,0].map((v,i)=>`<i style="height:${v?Math.max(8,v*1.6):4}px;opacity:${v?1:.25}"></i>`).join('')}</div>
+        ${S.oapp.length?S.oapp.map(a=>`<div class="ocard warn"><b>${ic('lock','style="width:13px;height:13px"')} Approval needed</b><p>${esc(a.who)} · ${esc(a.what)} · ${money(a.amt)} sale · ${a.t}</p><div class="orow"><button class="btn sm" data-oapp="${a.id}|no">Decline</button><button class="btn sm primary" data-oapp="${a.id}|yes">Approve</button></div></div>`).join(''):`<div class="ocard ok"><b>${ic('check','style="width:13px;height:13px"')} No approvals waiting</b></div>`}
+        <div class="ocard"><b>Needs attention</b>${ALERTS.filter(a=>!S.done.has(a.id)).slice(0,3).map(a=>`<p class="oli">${esc(a.h)}</p>`).join('')}</div>
+        <div class="ocam"><span class="live">● LIVE</span><span>Lane 1 · cam 2</span>${camScene(1)}</div>
+        <nav class="onav">${[['command','Home'],['chart','Sales'],['bell','Alerts'],['eye','Cams']].map(([i,l],k)=>`<span class="${k===0?'on':''}">${ic(i)}${l}</span>`).join('')}</nav>
+      </div>
+      <div class="muted" style="font-size:12px;text-align:center;max-width:320px">Owner app for iPhone and Android: live sales for every store, alerts, remote approvals and cameras. Approvals here reach the register in seconds.</div>
+    </section>
+    <section style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <section class="card" style="display:flex;flex-direction:column;gap:10px" data-note="Daily summary at close">
+        <div class="cardhead"><h2>Daily summary</h2><span class="spacer"></span><span class="chip ok">On</span></div>
+        <div class="muted" style="font-size:13px">Sent to you every night when the store closes, so you know how the day went without opening the app.</div>
+        <div class="frow"><label class="field">Text to<input id="ds-phone" value="${esc(D.phone)}"></label><label class="field">Email to<input id="ds-email" value="${esc(D.email)}"></label></div>
+        <div class="quick">${[['sms','Text message'],['email','Email']].map(([k,l])=>`<button class="${D[k]?'on':''}" data-dsch="${k}">${D[k]?'✓ ':''}${l}</button>`).join('')}${['At close (2:05 AM)','Next morning 7:00 AM'].map(w=>`<button class="${D.when===w?'on':''}" data-dswhen="${w}">${w}</button>`).join('')}</div>
+        <div class="field">Include<div class="quick">${[['sales','Sales vs last week'],['cash','Cash over/short'],['voids','Voids and refunds'],['low','Low stock'],['top','Top seller'],['labor','Labor %']].map(([k,l])=>`<button class="${D.inc[k]?'on':''}" data-dsinc="${k}">${D.inc[k]?'✓ ':''}${l}</button>`).join('')}</div></div>
+        <div class="dsprev">
+          ${D.sms?`<div><div class="eyebrow">Text preview</div><div class="dsbubble">${sum.map(esc).join('<br>')}</div></div>`:''}
+          ${D.email?`<div style="min-width:0"><div class="eyebrow">Email preview</div><div class="dsmail"><b>Daily summary · ${esc(curStore().n)}</b><small>Thu, Sep 24 · closed 2:04 AM</small><table>${[['Net sales',money(y.net)],['Transactions',y.tx],['Average basket',money(y.net/y.tx)],['Cash over/short',money(y.os)],['Voids',`${y.voids} · ${money(y.voidAmt)}`],['Refunds',y.refunds],['Low stock items',lowStock().length]].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table><span class="chip plain">Full end-of-day report attached (PDF)</span></div></div>`:''}
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm primary" data-act="dstest">Send a test now</button><span class="muted" style="font-size:12px;align-self:center">Managers can get their own store's summary too.</span></div>
+      </section>
+      <section class="card" data-note="Get the app"><div class="cardhead"><h2>Get the owner app</h2></div>
+        <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div class="qr" aria-hidden="true">${Array.from({length:81},(_, i)=>`<i style="opacity:${[0,1,2,6,7,8,9,17,18,26,27,35,54,55,56,62,63,64,72,73,74,80,11,23,31,40,41,49,58,67,70,76].includes(i)||((i*7)%5===0)?1:0}"></i>`).join('')}</div>
+        <div style="font-size:13px;line-height:1.6">Scan with your phone camera, or search <b>Bevnetic Owner</b> in the App Store or Google Play. Sign in with your owner PIN; each phone is approved once from Store Settings.</div></div></section>
+    </section></div>`;
+};
+
+/* ================================================ Profit & Budget */
+const EXP_BASE = [
+  {n:'Rent', cat:'Occupancy', amt:18500, bud:18500},
+  {n:'Payroll (from time clock)', cat:'Staff', amt:42600, bud:42000},
+  {n:'Payroll taxes & workers’ comp', cat:'Staff', amt:4260, bud:4200},
+  {n:'Card processing fees', cat:'Payments', amt:0, bud:18500, card:true},
+  {n:'Utilities (power, water, trash)', cat:'Occupancy', amt:4820, bud:4500},
+  {n:'Insurance (liquor liability, property)', cat:'Insurance', amt:2400, bud:2400},
+  {n:'Licences & permits (monthly share)', cat:'Compliance', amt:135, bud:135},
+  {n:'Bevnetic POS subscription (3 lanes)', cat:'Software', amt:447, bud:447},
+  {n:'Security & alarm monitoring', cat:'Occupancy', amt:189, bud:189},
+  {n:'Marketing (SMS, email, flyers)', cat:'Marketing', amt:1650, bud:1500},
+  {n:'Repairs & maintenance', cat:'Occupancy', amt:1240, bud:800},
+  {n:'Bank fees', cat:'Payments', amt:120, bud:120},
+];
+S.exp = EXP_BASE.map(x=>({...x}));
+function pfMonth(k){
+  const map={aug:[new Date(2026,7,1), new Date(2026,7,31), 'August 2026', 1], sep:[new Date(2026,8,1), RP_LAST, 'September 2026 (to Sep 24)', 24/30]};
+  const [a,b,label,share]=map[k], t=sumRows(rangeRows(a,b));
+  const ex=S.exp.map(x=>({...x, act: x.card ? Math.round(t.card*0.026) : Math.round(x.amt*share), bud: Math.round(x.bud*share)}));
+  const expT=ex.reduce((s,x)=>s+x.act,0), budT=ex.reduce((s,x)=>s+x.bud,0);
+  return {label, t, ex, expT, budT, gross:t.profit, net:t.profit-expT, days:Math.round((b-a)/864e5)+1};
+}
+VIEWS.profit = () => {
+  const M=pfMonth(S.pfMonth), t=M.t, net=M.net, cogs=t.net-t.profit;
+  const trend=[['Apr',3],['May',4],['Jun',5],['Jul',6],['Aug',7]].map(([l,i])=>{ const r=sumRows(rangeRows(new Date(2026,i,1), new Date(2026,i+1,0))); const ex=S.exp.reduce((s,x)=>s+(x.card?Math.round(r.card*0.026):x.amt),0); return [l, r.profit-ex, r.net]; });
+  const mx=Math.max(...trend.map(x=>Math.abs(x[1])),1);
+  const breakEven = (M.expT/(t.profit/t.net))/M.days;
+  return `<div class="row" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px">${segBtns([['aug','August'],['sep','September to date']], S.pfMonth, 'data-pfm')}<span class="spacer" style="flex:1"></span><button class="btn sm" data-act="expnew">+ Add expense</button><button class="btn sm" data-go="export">${ic('download')}Export for accountant</button></div>
+  <section class="stats">
+    <div><b class="num">${money(t.net,0)}</b><small>sales · ${esc(M.label)}</small></div>
+    <div><b class="num">${money(t.profit,0)}</b><small>gross profit · ${t.margin.toFixed(1)}% margin</small></div>
+    <div><b class="num" style="color:var(--warn)">${money(M.expT,0)}</b><small>expenses · budget ${money(M.budT,0)}</small></div>
+    <div><b class="num" style="color:${net>=0?'var(--ok)':'var(--crit)'}">${money(net,0)}</b><small>real profit · ${(net/t.net*100).toFixed(1)}% of sales</small></div>
+  </section>
+  <div class="compgrid" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)">
+    <section class="card" data-note="Profit and loss">
+      <div class="cardhead"><h2>Profit and loss</h2><span class="spacer"></span><span class="chip plain">${esc(M.label)}</span></div>
+      <dl class="kv pl"><dt>Sales (net of discounts)</dt><dd class="num">${money(t.net)}</dd><dt>Cost of goods sold</dt><dd class="num neg">${money(-cogs)}</dd><dt class="tot">Gross profit</dt><dd class="tot num">${money(t.profit)}</dd>
+      ${M.ex.map(x=>`<dt>${esc(x.n)}</dt><dd class="num neg">${money(-x.act)}</dd>`).join('')}
+      <dt class="tot">Real profit</dt><dd class="tot num" style="color:${net>=0?'var(--ok)':'var(--crit)'}">${money(net)}</dd></dl>
+      ${S.expAdd?`<div class="vcrform" style="margin-top:12px"><label class="field">Expense<input id="ex-n" value="${esc(S.expAdd.n)}" placeholder="e.g. New cooler compressor"></label><label class="field">Per month ($)<input id="ex-amt" inputmode="decimal" value="${esc(S.expAdd.amt)}" placeholder="250"></label><div style="display:flex;gap:6px;align-items:flex-end"><button class="btn sm" data-act="expcancel">Cancel</button><button class="btn sm primary" data-act="expsave">Add</button></div></div>`:''}
+    </section>
+    <section style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <section class="card" data-note="Budget vs actual"><div class="cardhead"><h2>Budget vs actual</h2></div>
+        ${M.ex.filter(x=>x.bud||x.act).map(x=>{ const over=x.act>x.bud*1.02, w=Math.min(100, x.bud? x.act/x.bud*100 : 100); return `<div class="budrow"><span>${esc(x.n.replace(/ \(.*\)/,''))}</span><span class="budbar"><i style="width:${w}%;background:${over?'var(--warn)':'var(--ok)'}"></i></span><span class="num" style="color:${over?'var(--warn)':'inherit'}">${money(x.act,0)} / ${money(x.bud,0)}</span></div>`; }).join('')}
+      </section>
+      <section class="card" data-note="Real profit by month"><div class="cardhead"><h2>Real profit by month</h2></div>
+        <div class="pbars">${trend.map(([l,v,s])=>`<div><span class="num">${money(v,0)}</span><i style="height:${Math.max(4,Math.abs(v)/mx*110)}px;background:${v>=0?'var(--ok)':'var(--crit)'}"></i><small>${l}</small></div>`).join('')}</div>
+        <div class="muted" style="font-size:12.5px;margin-top:10px">Break-even: about <b>${money(breakEven,0)}</b> in sales a day covers every expense. Payroll comes from the time clock, card fees from real card sales, everything else from the expenses you enter.</div></section>
+    </section></div>`;
+};
+
+/* ================================================ Licences & Deadlines */
+S.dl = [
+  {n:'LEAD training · Sam R.', who:'Sam R.', due:'2026-09-18', kind:'LEAD', note:'Sam can’t sell alcohol until this is renewed (ABC rule).', years:3},
+  {n:'LEAD training · Maria G.', who:'Maria G.', due:'2026-10-12', kind:'LEAD', years:3},
+  {n:'Sales and use tax return (CDTFA)', due:'2026-10-31', kind:'Tax', note:'Q3 return. The Accounting & tax report has the numbers.', years:0.25},
+  {n:'CRV recycling report', due:'2026-10-31', kind:'Recycling', years:0.25},
+  {n:'Fire extinguisher inspection', due:'2026-11-14', kind:'Safety', years:1},
+  {n:'Health permit (Sacramento County EMD)', due:'2026-12-31', kind:'Permit', years:1},
+  {n:'Tobacco retailer licence (CDTFA)', due:'2026-12-31', kind:'Licence', years:1},
+  {n:'City business operations tax certificate', due:'2027-01-31', kind:'Licence', years:1},
+  {n:'Liquor liability insurance', due:'2027-02-01', kind:'Insurance', years:1},
+  {n:'LEAD training · Dev P.', who:'Dev P.', due:'2027-03-03', kind:'LEAD', years:3},
+  {n:'ABC Type 21 licence renewal', due:'2027-06-30', kind:'Licence', note:'Renewal fee about $1,110. ABC sends the notice 45 days before.', years:1},
+  {n:'LEAD training · Alex K.', who:'Alex K.', due:'2028-01-20', kind:'LEAD', years:3},
+];
+S.dlRemind=[60,30,7];
+ALERTS.unshift({id:40, t:'compliance', sev:'crit', ic:'badge', h:'LEAD training expired', p:'Sam R.’s LEAD certificate expired Sep 18. Sam can’t sell alcohol until it’s renewed.', when:'6:00 AM', acts:['Mark seen','Open deadlines'], go:'deadlines'});
+const dlState = d => { const n=daysUntil(d.due); return n<0?['crit','Overdue',n]:n<=30?['warn',`Due in ${n} day${n===1?'':'s'}`,n]:['ok',`${n} days`,n]; };
+const fmtD = s => new Date(s+'T12:00').toLocaleDateString('en-US',{month:'short', day:'numeric', year:'numeric'});
+VIEWS.deadlines = () => {
+  const rows=S.dl.map((d,i)=>({d,i,st:dlState(d)})).sort((a,b)=>a.st[2]-b.st[2]);
+  const over=rows.filter(r=>r.st[0]==='crit').length, soon=rows.filter(r=>r.st[0]==='warn').length;
+  const months=['Oct','Nov','Dec','Jan','Feb','Mar'];
+  return `<section class="stats">
+    <div><b class="num" style="color:var(--crit)">${over}</b><small>overdue</small></div>
+    <div><b class="num" style="color:var(--warn)">${soon}</b><small>due in the next 30 days</small></div>
+    <div><b class="num">${S.dl.length}</b><small>licences, permits, trainings and filings tracked</small></div>
+    <div><b class="num" style="font-size:18px">${S.dlRemind.join(', ')} days</b><small>reminders before each due date · owner app + email</small></div></section>
+  <section class="card" data-note="Next 6 months"><div class="cardhead"><h2>Coming up</h2></div>
+    <div class="dlstrip">${months.map((m,k)=>{ const items=S.dl.filter(d=>{ const dt=new Date(d.due); return dt.getMonth()===((9+k)%12) && dt.getFullYear()===(k<3?2026:2027); }); return `<div><b>${m}</b>${items.map(d=>`<span class="chip ${dlState(d)[0]}">${esc(d.n.split(' · ')[0].replace(/ \(.*\)/,''))}${d.who?' · '+esc(d.who):''}</span>`).join('')||'<small class="muted">—</small>'}</div>`; }).join('')}</div></section>
+  <section class="card" data-note="Everything with a due date"><div class="cardhead"><h2>Licences, permits, training and filings</h2><span class="spacer"></span><span class="muted" style="font-size:12px">Remind me</span><div class="quick">${[60,30,14,7,1].map(n=>`<button class="${S.dlRemind.includes(n)?'on':''}" data-dlrem="${n}" style="padding:3px 8px;font-size:11.5px">${n}d</button>`).join('')}</div></div>
+    ${rows.map(({d,i,st})=>`<div class="rule dlrow">${ic(d.kind==='LEAD'?'id':d.kind==='Tax'?'dollar':d.kind==='Insurance'?'shield':'badge')}<div><b>${esc(d.n)}</b><small>${esc(d.kind)} · due ${fmtD(d.due)}${d.note?` · ${esc(d.note)}`:''}</small></div><div class="dlact"><span class="chip ${st[0]}">${st[1]}</span>${d.kind==='LEAD'?`<a class="btn sm" href="https://www.abc.ca.gov/education/licensee-education/lead/" target="_blank" rel="noopener">Book LEAD</a>`:''}<button class="btn sm" data-dlup="${i}">Upload</button><button class="btn sm primary" data-dlok="${i}">Renewed</button></div></div>`).join('')}
+  </section>`;
+};
+
+/* ================================================ Schedule & Payroll */
+const STAFF = ['Alex K.','Maria G.','Dev P.','Sam R.'];
+const RATE = {'Alex K.':24, 'Maria G.':19, 'Dev P.':18.5, 'Sam R.':18};
+const WEEK = ['Mon 9/28','Tue 9/29','Wed 9/30','Thu 10/1','Fri 10/2','Sat 10/3','Sun 10/4'];
+const SHIFT = {O:['Open','8a–4p'], M:['Mid','12p–8p'], L:['Late','4p–12a'], C:['Close','6p–2a']};
+S.sched = {'Alex K.':['O','O','','O','O','M',''], 'Maria G.':['O','','O','O','','O','O'], 'Dev P.':['C','C','C','','C','C',''], 'Sam R.':['','L','L','C','L','','C']};
+S.swaps = [
+  {from:'Dev P.', to:'Sam R.', day:5, st:'pending', note:'Family event · Sam agreed in the app'},
+  {from:'Maria G.', to:null, day:4, st:'pending', note:'Time off · doctor appointment'},
+];
+const PAYROLL = [
+  {n:'Alex K.', reg:78, ot:4, dt:0, tips:0},
+  {n:'Maria G.', reg:72.5, ot:1.5, dt:0, tips:42.50},
+  {n:'Dev P.', reg:76, ot:6, dt:1, tips:61.00},
+  {n:'Sam R.', reg:44, ot:0, dt:0, tips:18.75},
+];
+const payRow = r => { const rate=RATE[r.n]; const gross=r.reg*rate+r.ot*rate*1.5+r.dt*rate*2; return {...r, rate, gross:Math.round(gross*100)/100}; };
+function schedCheck(){
+  const out=[];
+  WEEK.forEach((d,k)=>{ const col=STAFF.map(n=>S.sched[n][k]); const late=col.filter(c=>c==='C'||c==='L').length, open=col.filter(c=>c==='O').length, need=(k===4||k===5)?2:1;
+    if (!open) out.push(`${d}: nobody on the opening shift`); if (late<need) out.push(`${d}: ${late} on the late shifts (need ${need})`); });
+  return out;
+}
+VIEWS.schedule = () => {
+  const tab=S.schTab;
+  let body='';
+  if (tab==='week'){
+    const hrs=n=>S.sched[n].filter(Boolean).length*8, cost=STAFF.reduce((a,n)=>a+hrs(n)*RATE[n],0), fc=168400, gaps=schedCheck();
+    body = `<section class="stats"><div><b class="num">${STAFF.reduce((a,n)=>a+hrs(n),0)} h</b><small>scheduled this week</small></div><div><b class="num">${money(cost,0)}</b><small>labor cost</small></div><div><b class="num">${(cost/fc*100).toFixed(1)}%</b><small>of forecast sales (${money(fc,0)})</small></div><div><b class="num" style="color:${gaps.length?'var(--warn)':'var(--ok)'}">${gaps.length||'None'}</b><small>coverage gaps</small></div></section>
+    <section class="card" data-note="Weekly schedule · tap a cell to change it">
+      <div class="cardhead"><h2>Week of Sep 28</h2><span class="spacer"></span><span class="muted" style="font-size:12px">Tap a cell: Open → Mid → Late → Close → off</span><button class="btn sm primary" data-act="schpub">Publish and text staff</button></div>
+      <div class="tablewrap"><table class="schtab"><thead><tr><th>Staff</th>${WEEK.map(d=>`<th>${d}</th>`).join('')}<th class="r">Hours</th></tr></thead><tbody>
+      ${STAFF.map(n=>`<tr><td><b>${esc(n)}</b><small>${money(RATE[n])}/h</small></td>${S.sched[n].map((c,k)=>`<td><button class="shcell ${c||'off'}" data-sch="${n}|${k}">${c?`<b>${SHIFT[c][0]}</b><small>${SHIFT[c][1]}</small>`:'<small>off</small>'}</button></td>`).join('')}<td class="r num">${hrs(n)}</td></tr>`).join('')}
+      </tbody></table></div>
+      ${gaps.length?`<div class="clockban soon" style="margin-top:10px">${ic('alert')} ${gaps.map(esc).join(' · ')}</div>`:''}
+    </section>
+    <div class="compgrid" style="grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)">
+      <section class="card" data-note="Swap and time-off requests from the staff app"><div class="cardhead"><h2>Requests from the staff app</h2></div>
+        ${S.swaps.length?S.swaps.map((r,i)=>`<div class="rule">${ic('swap')}<div><b>${esc(r.from)} ${r.to?`→ ${esc(r.to)}`:'· time off'}</b><small>${WEEK[r.day]} · ${SHIFT[S.sched[r.from][r.day]]?.[1]||'—'} · ${esc(r.note)}</small></div><div>${r.st==='pending'?`<button class="btn sm" data-swp="${i}|no">Decline</button> <button class="btn sm primary" data-swp="${i}|yes">Approve</button>`:`<span class="chip ${r.st==='approved'?'ok':'plain'}">${r.st==='approved'?'Approved':'Declined'}</span>`}</div></div>`).join(''):'<div class="muted">No requests.</div>'}</section>
+      <section class="card" style="display:flex;flex-direction:column;align-items:center;gap:8px" data-note="Staff app"><div class="sphone"><b>My shifts · Dev P.</b>${WEEK.map((d,k)=>S.sched['Dev P.'][k]?`<div><span>${d}</span><span>${SHIFT[S.sched['Dev P.'][k]][1]}</span></div>`:'').join('')}<button>Swap a shift</button><button>Request time off</button></div><small class="muted" style="text-align:center">Staff see their shifts, swap with a coworker or ask for time off from their phone. Managers approve here.</small></section>
+    </div>`;
+  } else {
+    const rows=PAYROLL.map(payRow), tot=rows.reduce((a,r)=>({reg:a.reg+r.reg, ot:a.ot+r.ot, dt:a.dt+r.dt, gross:a.gross+r.gross, tips:a.tips+r.tips}),{reg:0,ot:0,dt:0,gross:0,tips:0});
+    body = `<section class="card" data-note="Payroll from the time clock"><div class="cardhead"><h2>Pay period Sep 16 – Sep 29</h2><span class="spacer"></span><span class="chip ok">Hours from the time clock</span></div>
+      <div class="tablewrap"><table class="rptable" style="min-width:680px"><thead><tr><th>Employee</th><th class="r">Regular h</th><th class="r">Overtime h (1.5×)</th><th class="r">Double time h (2×)</th><th class="r">Rate</th><th class="r">Tips</th><th class="r">Gross pay</th></tr></thead><tbody>
+      ${rows.map(r=>`<tr><td>${esc(r.n)}</td><td class="r">${r.reg}</td><td class="r">${r.ot}</td><td class="r">${r.dt}</td><td class="r">${money(r.rate)}</td><td class="r">${money(r.tips)}</td><td class="r"><b>${money(r.gross)}</b></td></tr>`).join('')}
+      <tr class="tot"><td>Total</td><td class="r">${tot.reg}</td><td class="r">${tot.ot}</td><td class="r">${tot.dt}</td><td></td><td class="r">${money(tot.tips)}</td><td class="r"><b>${money(tot.gross)}</b></td></tr></tbody></table></div>
+      <div class="muted" style="font-size:12px;margin:8px 0 12px">California overtime is worked out per day (over 8 hours = 1.5×, over 12 = 2×) and per week (over 40 = 1.5×). Meal and rest breaks come from clock-outs.</div>
+      <div class="field">Export for<div class="quick">${['Gusto','ADP','QuickBooks Payroll','Paychex','Plain CSV'].map(p=>`<button class="${S.payProv===p?'on':''}" data-payprov="${p}">${p}</button>`).join('')}</div></div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn primary" data-act="payexp">${ic('download')}Download payroll file</button><button class="btn" data-toast="Sent to ${S.payProv} · they'll confirm by email">Send to ${esc(S.payProv)}</button></div></section>`;
+  }
+  return `<div style="margin-bottom:16px">${segBtns([['week','Schedule'],['pay','Payroll']], tab, 'data-schtab')}</div>${body}`;
+};
+
+/* ================================================ Loss Prevention (security + shrink + cameras) */
+const SEC = [
+  {n:'Maria G.', tx:1840, voids:11, nosale:6, refnr:1, over:3, del:9},
+  {n:'Dev P.', tx:1510, voids:38, nosale:21, refnr:6, over:14, del:31},
+  {n:'Sam R.', tx:760, voids:7, nosale:3, refnr:0, over:2, del:5},
+  {n:'Alex K.', tx:420, voids:4, nosale:2, refnr:1, over:9, del:3},
+];
+const SEC_COLS=[['voids','Voids'],['nosale','No-sale opens'],['refnr','Refunds, no receipt'],['over','Price overrides'],['del','Deleted lines']];
+S.secEv = [
+  {t:'Fri Sep 26 · 9:41 PM', who:'Dev P.', lane:'Lane 1', what:'Void right after the payment screen', amt:54.99, items:[['21:41:02','Scan · Casamigos Blanco 750 ml','$54.99'],['21:41:30','Payment screen opened',''],['21:41:48','VOID whole sale',''],['21:41:55','Drawer opened · no sale','']], st:'new'},
+  {t:'Fri Sep 26 · 10:12 PM', who:'Dev P.', lane:'Lane 1', what:'Refund without a receipt · Hennessy VS', amt:44.99, items:[['22:12:10','Return started · no receipt',''],['22:12:31','Refund to cash · Hennessy VS 750 ml','$44.99'],['22:12:33','Drawer opened','']], st:'new'},
+  {t:'Thu Sep 25 · 11:05 PM', who:'Dev P.', lane:'Lane 1', what:'Price override · Tito’s 1.75 L $34.99 → $19.99', amt:15.00, items:[['23:05:40','Scan · Tito’s 1.75 L','$34.99'],['23:05:52','Price changed to $19.99','−$15.00'],['23:06:10','Paid cash','$19.99']], st:'new'},
+  {t:'Thu Sep 25 · 7:22 PM', who:'Maria G.', lane:'Lane 2', what:'Two items deleted before payment · Jameson ×2', amt:59.98, items:[['19:22:05','Scan · Jameson 750 ml ×2','$59.98'],['19:22:40','Lines deleted',''],['19:22:58','Paid card · Bud Light 12pk','$12.99']], st:'ok', res:'Customer changed their mind (manager note)'},
+];
+const SHRINK_SH = [['Minis 50 ml (assorted)',[2,3,11],1.99],['Hennessy VS 750 ml',[0,1,3],35],['Casamigos Blanco 750 ml',[0,0,2],38.9],['Red Bull 4pk',[1,0,2],6.3],['Jameson 750 ml',[0,1,1],21],['Snickers Share Size',[1,2,3],1.3]];
+function camScene(k){ return `<svg class="camsvg" viewBox="0 0 160 90" preserveAspectRatio="none" aria-hidden="true"><rect width="160" height="90" fill="#1d262c"/><path d="M0 62 L160 55 L160 90 L0 90Z" fill="#2c353b"/><rect x="${20+k*8}" y="48" width="70" height="12" fill="#3a444a"/><rect x="${28+k*8}" y="40" width="16" height="9" fill="#55636b"/><circle cx="${108-k*6}" cy="34" r="8" fill="#6d7b83"/><path d="M${96-k*6} 70 Q${108-k*6} 40 ${120-k*6} 70Z" fill="#6d7b83"/>${Array.from({length:8},(_,i)=>`<rect x="${120+(i%4)*9}" y="${14+Math.floor(i/4)*12}" width="6" height="10" fill="#8a5a2b" opacity=".7"/>`).join('')}</svg>`; }
+function clipModal(i){
+  const e=S.secEv[i];
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Camera clip" style="width:min(760px,100%)">
+    <header>${ic('video')}<h2>${esc(e.what)}</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body cliprow"><div class="clip">${camScene(0)}<span class="live">${esc(e.lane)} · CAM 2 · ${esc(e.t)}</span><div class="clipbar"><i></i></div><span class="clipplay">${ic('play')}</span></div>
+      <div style="min-width:0"><div class="eyebrow">Register events in this clip</div>${e.items.map(x=>`<div class="clipev"><span class="num">${x[0]}</span><span>${esc(x[1])}</span><b class="num">${x[2]}</b></div>`).join('')}
+      <div class="muted" style="font-size:12px;margin-top:8px">${esc(e.who)} · ${money(e.amt)} at stake. The clip starts 20 seconds before the first event.</div></div></div>
+    <footer><button class="btn" data-secev="${i}|ok">Looks fine · explain</button><button class="btn primary" data-secev="${i}|esc">Flag for the owner</button></footer></div></div>`;
+}
+VIEWS.security = () => {
+  const tab=S.secTab, tx=SEC.reduce((a,r)=>a+r.tx,0), avg=Object.fromEntries(SEC_COLS.map(([k])=>[k, SEC.reduce((a,r)=>a+r[k],0)/tx*100]));
+  const flag=(r,k)=>{ const v=r[k]/r.tx*100, x=avg[k]?v/avg[k]:0; return [v, x>=2?'crit':x>=1.5?'warn':'']; };
+  const shrinkT=SHRINK_SH.reduce((a,[,s,c])=>a+(s[0]+s[1]+s[2])*c,0);
+  let body='';
+  if (tab==='activity') body = `<section class="card" data-note="Register behaviour per cashier, last 14 days"><div class="cardhead"><h2>Suspicious activity · last 14 days</h2><span class="spacer"></span><span class="muted" style="font-size:12px">Per 100 sales, compared with the store average</span></div>
+    <div class="tablewrap"><table class="rptable sectab" style="min-width:720px"><thead><tr><th>Cashier</th><th class="r">Sales</th>${SEC_COLS.map(([,l])=>`<th class="r">${l}</th>`).join('')}</tr></thead><tbody>
+      ${SEC.map(r=>`<tr><td><b>${esc(r.n)}</b></td><td class="r">${r.tx.toLocaleString()}</td>${SEC_COLS.map(([k])=>{ const [v,f]=flag(r,k); return `<td class="r"><span class="${f?'chip '+f:''}">${r[k]} · ${v.toFixed(1)}</span></td>`; }).join('')}</tr>`).join('')}
+      <tr class="tot"><td>Store average</td><td></td>${SEC_COLS.map(([k])=>`<td class="r">${avg[k].toFixed(1)}</td>`).join('')}</tr></tbody></table></div>
+    <div class="clockban soon" style="margin-top:10px">${ic('alert')} Dev P. is above the store average on all 5 signals, and more than 2× on refunds without a receipt. That’s a pattern worth reviewing, not proof: check the clips below before talking to anyone.</div></section>
+    <section class="card" data-note="Events linked to camera clips"><div class="cardhead"><h2>Events to review</h2></div>
+      ${S.secEv.map((e,i)=>`<div class="rule">${ic('video','style="color:var(--violet)"')}<div><b>${esc(e.what)}</b><small>${esc(e.t)} · ${esc(e.who)} · ${esc(e.lane)} · ${money(e.amt)}${e.res?` · ${esc(e.res)}`:''}</small></div><div style="display:flex;gap:6px;align-items:center">${e.st==='new'?'<span class="chip warn">To review</span>':e.st==='ok'?'<span class="chip ok">Explained</span>':'<span class="chip crit">Flagged</span>'}<button class="btn sm" data-clip="${i}">View clip</button></div></div>`).join('')}</section>`;
+  if (tab==='shrink') body = `<section class="stats"><div><b class="num" style="color:var(--warn)">${money(shrinkT,0)}</b><small>shrink this month at cost</small></div><div><b class="num">${(shrinkT/sumRows(rangeRows(new Date(2026,8,1),RP_LAST)).net*100).toFixed(2)}%</b><small>of sales (1–2% is typical)</small></div><div><b class="num">Close</b><small>shift with the most missing items</small></div><div><b class="num">6</b><small>high-risk items counted at every handover</small></div></section>
+    <section class="card" data-note="Missing items by product and shift"><div class="cardhead"><h2>Missing items by product and shift</h2><span class="spacer"></span><span class="muted" style="font-size:12px">From handover counts: expected − counted</span></div>
+      <div class="tablewrap"><table class="rptable shrinktab" style="min-width:560px"><thead><tr><th>Product</th><th class="r">Open 8a–4p</th><th class="r">Mid / late</th><th class="r">Close 6p–2a</th><th class="r">Lost at cost</th></tr></thead><tbody>
+      ${SHRINK_SH.map(([n,s,c])=>`<tr><td>${esc(n)}</td>${s.map(v=>`<td class="r"><span class="heatc" style="background:rgba(214,63,47,${Math.min(.85,v*c/120+.04)});color:${v*c>60?'#fff':'inherit'}">${v}</span></td>`).join('')}<td class="r num">${money((s[0]+s[1]+s[2])*c)}</td></tr>`).join('')}</tbody></table></div>
+      <div class="muted" style="font-size:12.5px;margin-top:10px">Minis go missing mostly on the close shift. Options: move minis behind the counter, add them to the close handover count, check the Lane 1 camera angle.</div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn sm primary" data-toast="Minis moved to the behind-the-counter list">Move minis behind the counter</button><button class="btn sm" data-go="receiving">Count now</button></div></section>`;
+  if (tab==='cams') body = `<div class="camgrid">${[['Lane 1 · cam 2',1],['Lane 2 · cam 3',2],['Cooler doors · cam 4',0],['Back door · cam 1',3]].map(([n,k])=>`<div class="camtile">${camScene(k)}<span class="live">● LIVE</span><b>${n}</b></div>`).join('')}</div><div class="muted" style="font-size:12px;margin-top:10px">Works with most IP cameras (Verkada, Hikvision, Ubiquiti, Arlo). Clips are linked to register events automatically; nothing is recorded by the POS itself.</div>`;
+  return `<div style="margin-bottom:16px">${segBtns([['activity','Suspicious activity'],['shrink','Shrink by product and shift'],['cams','Cameras']], tab, 'data-sectab')}</div>${body}`;
+};
+
+/* ================================================ Marketing (SMS + email) */
+const MK_NEW = [
+  {n:'Eagle Rare 10 Year Bourbon', sz:'750 ml', p:49.99, c:['#7A4A1E','#D9C38A'], lb:'EAGLE RARE', sh:'whiskey'},
+  {n:'Buffalo Trace Bourbon', sz:'750 ml', p:32.99, c:['#6A3B18','#E9D8A6'], lb:'BUFFALO', sh:'whiskey'},
+  {n:'Weller Special Reserve', sz:'750 ml', p:39.99, c:['#8A5A2B','#F1E6C8'], lb:'WELLER', sh:'whiskey'},
+  {n:'Maker’s Mark', sz:'750 ml', p:31.99, c:['#8A5A2B','#B3202A'], lb:'MAKER’S', sh:'whiskey'},
+];
+const MK_SEG = [['Bourbon & whiskey buyers',214,388],['All members',1320,2418],['Weekend wine buyers',190,412],['Lapsing regulars',61,97]];
+S.camps = [
+  {n:'Game-day beer', ch:'SMS', when:'Sep 18', to:636, open:'98%', click:'22%', red:71, rev:1840, st:'Sent'},
+  {n:'Wine Wednesday', ch:'Email', when:'Sep 9', to:412, open:'41%', click:'9%', red:38, rev:1210, st:'Sent'},
+  {n:'Tequila week', ch:'SMS + Email', when:'Aug 28', to:188, open:'64%', click:'17%', red:29, rev:980, st:'Sent'},
+];
+VIEWS.marketing = () => {
+  const M=S.mk, seg=MK_SEG[M.seg], feat=M.feat.map(i=>MK_NEW[i]), reach=(M.sms?seg[1]:0)+(M.email?seg[2]:0), len=M.sms_t.length;
+  return `<section class="stats"><div><b class="num">${MK_SEG[1][2].toLocaleString()}</b><small>members who get email</small></div><div><b class="num">${MK_SEG[1][1].toLocaleString()}</b><small>opted in to texts</small></div><div><b class="num">${money(S.camps.reduce((a,c)=>a+(c.rev||0),0),0)}</b><small>sales from campaigns (30 days)</small></div><div><b class="num">${S.camps.length}</b><small>campaigns</small></div></section>
+  <div class="compgrid" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <section class="card" style="display:flex;flex-direction:column;gap:10px" data-note="Campaign composer">
+      <div class="cardhead"><h2>New campaign</h2></div>
+      <label class="field">Name<input id="mk-name" value="${esc(M.name)}"></label>
+      <div class="field">Send by<div class="quick">${[['sms','Text (SMS)'],['email','Email']].map(([k,l])=>`<button class="${M[k]?'on':''}" data-mkch="${k}">${M[k]?'✓ ':''}${l}</button>`).join('')}</div></div>
+      <label class="field">Who gets it<select id="mk-seg">${MK_SEG.map((s,i)=>`<option value="${i}" ${M.seg===i?'selected':''}>${s[0]} · ${s[1]} text · ${s[2]} email</option>`).join('')}</select></label>
+      <div class="field">Feature these new arrivals<div class="quick">${MK_NEW.map((p,i)=>`<button class="${M.feat.includes(i)?'on':''}" data-mkfeat="${i}">${M.feat.includes(i)?'✓ ':''}${esc(p.n)}</button>`).join('')}</div></div>
+      ${M.email?`<label class="field">Email subject<input id="mk-subj" value="${esc(M.subj)}"></label>`:''}
+      ${M.sms?`<label class="field">Text message <small class="muted" style="font-weight:500">${len}/160 characters${len>160?` · sends as ${Math.ceil(len/153)} texts`:''}</small><textarea id="mk-sms" rows="3">${esc(M.sms_t)}</textarea></label>`:''}
+      <div class="frow"><label class="field">Offer<select id="mk-offer">${[['none','No offer, just news'],['5off','$5 off a featured bottle'],['pts','Double points this weekend']].map(([k,l])=>`<option value="${k}" ${M.offer===k?'selected':''}>${l}</option>`).join('')}</select></label><label class="field">When<select id="mk-when">${['Now','Fri 3:00 PM','Sat 11:00 AM'].map(w=>`<option ${M.when===w?'selected':''}>${w}</option>`).join('')}</select></label></div>
+      <div class="chips mkrules"><span class="chip ok">${ic('check')} 21+ verified members only</span><span class="chip ok">${ic('check')} Texts only to opted-in members, with STOP to opt out</span><span class="chip ok">${ic('check')} No texts 9 PM–9 AM</span><span class="chip ok">${ic('check')} Email unsubscribe link and store address</span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-act="mktest">Send test to me</button><button class="btn primary" data-act="mksend" ${reach&&feat.length?'':'disabled'}>${M.when==='Now'?'Send now':'Schedule for '+esc(M.when)} · ${reach.toLocaleString()} people</button></div>
+    </section>
+    <section style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      ${M.email?`<section class="card" data-note="Email preview"><div class="eyebrow" style="margin-bottom:8px">Email preview</div><div class="mkmail"><div class="mkmh"><img src="${MARK}" alt=""><b>${esc(curStore().n)}</b></div><div class="mksubj">${esc(M.subj)}</div><h3>New bourbon just landed</h3><p>Hi Jordan, a few bottles our whiskey regulars have been asking for are on the shelf now. Stock is limited.</p><div class="mkprods">${feat.map(p=>`<div><span class="art">${bottleSVG(p)}</span><b>${esc(p.n)}</b><small>${esc(p.sz)}</small><span class="num">${money(p.p)}</span></div>`).join('')}</div>${M.offer!=='none'?`<div class="mkoffer">${M.offer==='5off'?'$5 off any featured bottle this weekend · show this email':'Double points on every purchase this weekend'}</div>`:''}<small class="muted">${esc(curStore().addr)} · Unsubscribe · Please drink responsibly. 21+ only.</small></div></section>`:''}
+      ${M.sms?`<section class="card" data-note="Text preview"><div class="eyebrow" style="margin-bottom:8px">Text preview</div><div class="dsbubble">${esc(M.sms_t)}</div></section>`:''}
+      <section class="card" data-note="Campaign results"><div class="cardhead"><h2>Campaigns</h2></div><div class="tablewrap"><table class="rptable" style="min-width:560px"><thead><tr><th>Campaign</th><th>Sent by</th><th>When</th><th class="r">People</th><th class="r">Opened</th><th class="r">Clicked</th><th class="r">Sales</th></tr></thead><tbody>${S.camps.map(c=>`<tr><td>${esc(c.n)} ${c.st!=='Sent'?`<span class="chip warn">${c.st}</span>`:''}</td><td>${c.ch}</td><td>${c.when}</td><td class="r">${c.to}</td><td class="r">${c.open}</td><td class="r">${c.click}</td><td class="r">${c.rev?money(c.rev,0):'—'}</td></tr>`).join('')}</tbody></table></div></section>
+    </section></div>`;
+};
+
+/* ================================================ Loyalty (added to Customers) */
+const LOY_TIERS=[['Member','0–999 pts','1 pt per $1',1712],['Gold','1,000–2,499','1.25 pts per $1 · birthday double points',548],['Platinum','2,500+','1.5 pts per $1 · early access to allocated bottles',158]];
+const LOY_REWARDS=[['Free bag of ice',150],['$5 off',500],['$15 off',1200],['Reserve an allocated bottle',2500]];
+const earnPts = net => Math.floor(net*1.25);
+const _custView = VIEWS.customers;
+VIEWS.customers = () => _custView() + `<section class="card" style="margin-top:16px" data-note="Loyalty program">
+  <div class="cardhead"><h2>Loyalty points and rewards</h2><span class="spacer"></span><span class="chip plain">2,418 members · ${money(18420,0)} in points outstanding</span></div>
+  <div class="compgrid" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div><div class="eyebrow" style="margin-bottom:6px">Tiers</div>${LOY_TIERS.map(t=>`<div class="rule">${ic('award','style="color:var(--violet)"')}<div><b>${t[0]}</b><small>${t[1]} · ${t[2]}</small></div><span class="num">${t[3].toLocaleString()}</span></div>`).join('')}</div>
+    <div><div class="eyebrow" style="margin-bottom:6px">Rewards</div>${LOY_REWARDS.map(r=>`<div class="rule">${ic('gift','style="color:var(--accent)"')}<div><b>${r[0]}</b><small>${r[1].toLocaleString()} points</small></div><span class="chip plain">On the register</span></div>`).join('')}
+    <div class="muted" style="font-size:12px;margin-top:8px">Members earn on every sale automatically. At checkout the cashier sees the points and can use a reward in one tap. Points aren’t earned on CRV, tax or bottle returns; rewards can’t buy alcohol below cost.</div></div>
+  </div></section>`;
+
+/* ================================================ Training mode */
+const _shiftsView = VIEWS.shifts;
+VIEWS.shifts = () => `<section class="card trainrow" data-note="Training mode"><div>${ic('play','style="color:var(--violet)"')}</div><div><b>Training mode</b><small>Practice on the real register without recording anything: no sales, stock, cash or points change. New hires can ring up, scan IDs, take returns and payments safely.</small></div><button class="btn ${S.training?'':'primary'}" data-act="training">${S.training?'Leave training mode':'Start training mode'}</button></section>` + _shiftsView();
+const trainBanner = () => S.training ? `<div class="trainban">${ic('play')} <b>Training mode</b> · practice only, nothing is recorded<span class="spacer"></span><button class="btn sm" data-act="training">Leave training</button></div>` : '';
+const remoteBanner = () => S.remote==='on' ? `<div class="remoteban">${ic('eye')} <b>Jamie from Bevnetic support is ${S.remoteCtl?'controlling':'viewing'} your screen</b> · session 482 913<span class="spacer"></span><button class="btn sm" data-act="remoteend">End session</button></div>` : '';
+
+/* ================================================ Data export */
+function csvOf(rows){ return rows.map(r=>r.map(v=>{ const s=String(v??''); return /[",\n]/.test(s)?`"${s.replace(/"/g,'""')}"`:s; }).join(',')).join('\r\n'); }
+const EXPORTS = [
+  {k:'sales', n:'Sales and receipts', d:'Every sale with items, tax, CRV, payment, cashier and ID check', rows:()=>[['Sale #','Time','Cashier','Payment','ID check','Member','Product','Qty','Price','Line total'], ...SALES.flatMap(s=>s.items.map(([id,q])=>{ const p=byId(id); return [s.no,s.t,s.who,s.tender,s.idm,s.member||'',p.n,q,p.p.toFixed(2),(p.p*q).toFixed(2)]; }))]},
+  {k:'products', n:'Products and prices', d:'Catalog with size, category, price, stock, vendor and codes', rows:()=>[['Name','Size','Category','Price','CRV','In stock','Vendor','Barcode','Taxable'], ...PRODUCTS.map(p=>[p.n,p.sz,p.cat,p.p.toFixed(2),p.crv.toFixed(2),p.stock,VENDOR_OF[p.id]||'',(codesFor(p.id).find(c=>/^Barcode/.test(c.t))||{}).v||'',taxable(p)?'yes':'no'])]},
+  {k:'vendors', n:'Vendors, balances and credits', d:'Contacts, terms, owed, credits and balance to pay', rows:()=>[['Vendor','Rep','Phone','Email','Terms','Owed','Credits available','Credits pending','Balance to pay'], ...VENDORS.map(v=>[v.n,v.rep,v.ph,v.em,v.terms,v.owed.toFixed(2),creditAvail(v.n).toFixed(2),creditPending(v.n).toFixed(2),netOwed(v).toFixed(2)])]},
+  {k:'pos', n:'Purchase orders', d:'Every PO with vendor, lines, total and status', rows:()=>[['PO','Vendor','Lines','Total','Status'], ...POS_DATA.map(o=>[o.no,o.v,o.lines,o.total.toFixed(2),o.st])]},
+  {k:'payroll', n:'Time clock and payroll', d:'Hours, overtime, tips and gross pay for the current period', rows:()=>[['Employee','Regular h','Overtime h','Double time h','Rate','Tips','Gross pay'], ...PAYROLL.map(payRow).map(r=>[r.n,r.reg,r.ot,r.dt,r.rate.toFixed(2),r.tips.toFixed(2),r.gross.toFixed(2)])]},
+  {k:'expenses', n:'Expenses and budget', d:'Monthly expenses with budget', rows:()=>[['Expense','Category','Per month','Budget'], ...S.exp.map(x=>[x.n,x.cat,x.amt,x.bud])]},
+  {k:'daily', n:'Daily sales totals', d:'One row per day this year: net sales, transactions, tax, CRV, cash', rows:()=>[['Date','Net sales','Transactions','Tax','CRV','Cash','Card'], ...rangeRows(new Date(2026,0,1), RP_LAST).map(e=>[ymd(e.d),e.net.toFixed(2),e.tx,e.tax.toFixed(2),e.crv.toFixed(2),e.cash.toFixed(2),(e.card+e.tap+e.off).toFixed(2)])]},
+  {k:'deadlines', n:'Licences and deadlines', d:'Everything tracked with due dates', rows:()=>[['Item','Type','Due'], ...S.dl.map(d=>[d.n,d.kind,d.due])]},
+];
+let DL_NS = null; (async()=>{ try{ DL_NS = (typeof claude!=='undefined' && claude.use) ? await claude.use('downloads') : null; }catch(e){ DL_NS=null; } })();
+async function saveFile(filename, text, mime){
+  try{
+    if (DL_NS){ const r = await DL_NS.save({filename, data:text}); if (r && r.status) toast(`${filename} saved`,'download'); return; }
+    const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type:mime||'text/csv'})); a.download=filename; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1000);
+    toast(`${filename} downloaded`,'download');
+  }catch(e){ if (e && e.code==='cancelled') return; toast('The file couldn’t be saved here. Try the desktop app.','alert'); }
+}
+function workbookXml(){
+  const cell=v=>{ const n=typeof v==='number'||(/^-?\d+(\.\d+)?$/.test(String(v))&&String(v).length<12); return `<Cell><Data ss:Type="${n?'Number':'String'}">${esc(String(v??''))}</Data></Cell>`; };
+  return `<?xml version="1.0"?>\n<?mso-application progid="Excel.Sheet"?>\n<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">`+EXPORTS.map(x=>`<Worksheet ss:Name="${esc(x.n.slice(0,31))}"><Table>${x.rows().map(r=>`<Row>${r.map(cell).join('')}</Row>`).join('')}</Table></Worksheet>`).join('')+`</Workbook>`;
+}
+VIEWS.export = () => `<section class="card" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap" data-note="Export everything">
+    <div style="flex:1;min-width:240px"><h2>Your data is yours</h2><div class="muted" style="font-size:13px;margin-top:4px">Download anything, any time, in formats Excel, Google Sheets and your accountant can open. No lock-in: if you ever leave Bevnetic, you take everything with you.</div></div>
+    <button class="btn primary" data-act="expall">${ic('download')}Everything in one Excel file</button></section>
+  <section class="card" style="margin-top:16px" data-note="Datasets"><div class="cardhead"><h2>Download by type</h2><span class="spacer"></span><span class="muted" style="font-size:12px">CSV opens in Excel, Numbers and Google Sheets</span></div>
+    ${EXPORTS.map(x=>`<div class="rule">${ic('download')}<div><b>${esc(x.n)}</b><small>${esc(x.d)} · ${(x.rows().length-1).toLocaleString()} rows</small></div><button class="btn sm" data-exp="${x.k}">CSV</button></div>`).join('')}</section>
+  <section class="card" style="margin-top:16px" data-note="Automatic exports"><div class="cardhead"><h2>Automatic exports</h2></div>
+    ${[['Monthly Excel file to the owner’s email','On the 1st of each month',true],['Nightly copy to Google Drive / Dropbox','2:30 AM, after the daily backup',false],['QuickBooks / Xero daily journal','Posted after close',true]].map(([n,s,on],i)=>`<div class="setrow"><div><b>${n}</b><div class="muted" style="font-size:12px">${s}</div></div><button class="toggle" aria-pressed="${S['autoexp'+i]??on}" data-autoexp="${i}" aria-label="${n}"></button></div>`).join('')}</section>`;
+
+/* ================================================ Help & Support */
+const VIDEOS = [['Your first sale','2:40','register'],['ID checks and refusals','3:15','register'],['Returns, exchanges and bottle returns','4:05','returns'],['Opening and closing the till','3:30','shifts'],['Receiving a delivery','2:55','receiving'],['Printing shelf labels','1:50','labels'],['Deal check and purchase orders','5:10','purchasing'],['End-of-day and monthly reports','3:45','reports']];
+const SYS = [['Card payments','ok','Operational'],['Cloud sync and backups','ok','Operational'],['ID scanning','ok','Operational'],['SMS and email','warn','Delays of up to 5 minutes'],['Owner app','ok','Operational']];
+S.tix = [
+  {no:'T-1041', sub:'Receipt printer on Lane 2 prints blank paper', cat:'Printer', urg:'Normal', st:'Resolved', when:'Sep 20', by:'Alex K.', msgs:[['you','The Lane 2 printer feeds paper but nothing is printed.','Sep 20 · 3:12 PM'],['support','Thanks Alex. Thermal paper goes in with the shiny side toward the print head. Could you flip the roll and print a test?','Sep 20 · 3:20 PM'],['you','That was it, thank you!','Sep 20 · 3:31 PM']]},
+  {no:'T-1042', sub:'How do I add a second user to the owner app?', cat:'Account & billing', urg:'Low', st:'In progress', when:'Sep 24', by:'Priya N.', msgs:[['you','My business partner needs owner access on her phone.','Sep 24 · 9:02 AM'],['support','Happy to help. Owners can add another owner in Store Settings → Users. We’re adding a step-by-step article; I’ll send it here today.','Sep 24 · 9:40 AM']], unread:true},
+];
+const TIX_CAT=['Card reader or payments','Printer','Barcode scanner','Register or app','ID scanning','Internet or offline','Reports or data','Account & billing','Something else'];
+const supUnread = () => (S.tix||[]).filter(t=>t.unread).length;
+function tixNewForm(){ return S.tixNew || (S.tixNew={cat:'Printer', urg:'Normal', sub:'', desc:'', shot:true, from:TITLES[S.route]?.[0]||'Register'}); }
+VIEWS.support = () => {
+  const tab=S.supTab, q=S.supQ.trim().toLowerCase();
+  let body='';
+  if (tab==='help'){
+    const arts=ASK_GUIDE.map(g=>({t:g.a.match(/\*\*(.+?):?\*\*/)?.[1]?.replace(/:$/,'')||'Guide', a:g.a.replace(/\*\*/g,''), go:g.go})).filter(x=>!q||x.t.toLowerCase().includes(q)||x.a.toLowerCase().includes(q));
+    const vids=VIDEOS.filter(v=>!q||v[0].toLowerCase().includes(q));
+    body=`<label class="scanbar" style="padding:4px 8px 4px 12px;margin-bottom:14px">${ic('search')}<input id="sup-q" placeholder="Search help: printer, returns, labels, tax…" value="${esc(S.supQ)}" autocomplete="off"></label>
+    <div class="compgrid" style="grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr)">
+      <section style="display:flex;flex-direction:column;gap:16px;min-width:0">
+        <section class="card" data-note="Video tutorials"><div class="cardhead"><h2>Video tutorials</h2><span class="spacer"></span><span class="muted" style="font-size:12px">${vids.length} videos</span></div>
+          <div class="vidgrid">${vids.map((v,i)=>`<button class="vid" data-vid="${VIDEOS.indexOf(v)}"><span class="vthumb">${camScene(i%4)}<span class="vplay">${ic('play')}</span><span class="vdur">${v[1]}</span></span><b>${esc(v[0])}</b></button>`).join('')||'<div class="muted">No video matches.</div>'}</div></section>
+        <section class="card" data-note="Help articles"><div class="cardhead"><h2>Help articles</h2><span class="spacer"></span><span class="muted" style="font-size:12px">${arts.length} articles</span></div>
+          ${arts.map(x=>`<details class="art"><summary>${esc(x.t)}</summary><p>${esc(x.a.replace(/^[^:]+:\s*/,''))}</p>${x.go&&allowed(x.go)?`<button class="btn sm" data-go="${x.go}">Open ${esc(ROUTES.find(r=>r[0]===x.go)[1])}</button>`:''}</details>`).join('')||'<div class="muted">Nothing matches. Ask the assistant or raise a ticket.</div>'}</section>
+      </section>
+      <section style="display:flex;flex-direction:column;gap:16px;min-width:0">
+        <section class="card" data-note="Contact support"><div class="cardhead"><h2>Get help from a person</h2></div>
+          <button class="btn primary" style="width:100%;margin-bottom:8px" data-suptab="tickets" data-act="tixnew">${ic('lifebuoy')}Raise a ticket</button>
+          <button class="btn" style="width:100%;margin-bottom:8px" data-act="askopen">${ic('spark')}Ask the assistant</button>
+          <button class="btn" style="width:100%" data-suptab="remote">${ic('eye')}Remote help (screen share)</button>
+          <div class="muted" style="font-size:12px;margin-top:10px">24/7 phone for “can’t take payments”: <b style="user-select:all">(800) 555-0199</b></div></section>
+        <section class="card" data-note="System status"><div class="cardhead"><h2>System status</h2></div>${SYS.map(s=>`<div class="setrow"><span style="font-size:13px">${s[0]}</span><span class="chip ${s[1]}">${s[2]}</span></div>`).join('')}</section>
+      </section></div>`;
+  }
+  if (tab==='tickets'){
+    const sel=S.tix.find(t=>t.no===S.tixSel);
+    const N=S.tixNew;
+    body=`<div class="compgrid" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)">
+      <section class="card" data-note="Your tickets"><div class="cardhead"><h2>Your tickets</h2><span class="spacer"></span><button class="btn sm primary" data-act="tixnew">+ New ticket</button></div>
+        ${S.tix.slice().reverse().map(t=>`<button class="vrow ${S.tixSel===t.no?'on':''}" data-tix="${t.no}" style="grid-template-columns:minmax(0,1fr) auto"><span><b>${esc(t.sub)}</b><small>${t.no} · ${esc(t.cat)} · ${t.when} · ${esc(t.by)}</small></span><span style="text-align:right"><span class="chip ${t.st==='Resolved'?'ok':t.st==='Open'?'warn':'over'}">${t.st}</span>${t.unread?'<small style="color:var(--accent);font-weight:800">New reply</small>':''}</span></button>`).join('')}
+      </section>
+      ${N?`<section class="card" style="display:flex;flex-direction:column;gap:10px" data-note="Raise a ticket"><div class="cardhead"><h2>Raise a ticket</h2></div>
+        <div class="frow"><label class="field">What’s it about?<select id="tn-cat">${TIX_CAT.map(c=>`<option ${N.cat===c?'selected':''}>${c}</option>`).join('')}</select></label><div class="field">How urgent?<div class="quick">${[['Low','Low'],['Normal','Normal'],['Urgent','Urgent · can’t sell']].map(([k,l])=>`<button class="${N.urg===k?'on':''}" data-tnurg="${k}">${l}</button>`).join('')}</div></div></div>
+        <label class="field">Short summary<input id="tn-sub" value="${esc(N.sub)}" placeholder="e.g. Card reader on Lane 1 says offline"></label>
+        <label class="field">What happened?<textarea id="tn-desc" rows="4" placeholder="What you tried, what you see, which lane">${esc(N.desc)}</textarea></label>
+        <div class="setrow" style="border:0;padding:0"><div style="display:flex;gap:10px;align-items:center"><span class="shotthumb"><b>${esc(N.from)}</b><i></i><i></i><i></i></span><div><b style="font-size:13px">Attach a screenshot of “${esc(N.from)}”</b><div class="muted" style="font-size:12px">Taken automatically, with app version, lane and connection details</div></div></div><button class="toggle" aria-pressed="${N.shot}" data-act="tnshot" aria-label="Attach screenshot"></button></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" data-act="tncancel">Cancel</button><button class="btn primary" data-act="tnsend">Send ticket</button></div></section>`
+      : sel?`<section class="card" style="display:flex;flex-direction:column;gap:10px" data-note="Ticket conversation"><div class="cardhead"><h2>${esc(sel.sub)}</h2><span class="spacer"></span><span class="chip ${sel.st==='Resolved'?'ok':sel.st==='Open'?'warn':'over'}">${sel.st}</span></div>
+        <div class="tixflow">${['Open','In progress','Resolved'].map(s=>`<span class="${['Open','In progress','Resolved'].indexOf(s)<=['Open','In progress','Resolved'].indexOf(sel.st)?'on':''}">${s}</span>`).join('')}</div>
+        <div class="muted" style="font-size:12px">${sel.no} · ${esc(sel.cat)} · ${esc(sel.urg)} urgency · raised by ${esc(sel.by)} on ${sel.when}${sel.shot?' · screenshot attached':''}</div>
+        <div class="tixmsgs">${sel.msgs.map(m=>`<div class="tixm ${m[0]}"><small>${m[0]==='you'?'You':'Jamie · Bevnetic support'} · ${esc(m[2])}</small>${esc(m[1])}</div>`).join('')}</div>
+        ${sel.st!=='Resolved'?`<div style="display:flex;gap:8px"><input id="tix-reply" class="grow" placeholder="Write a reply…" style="flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface);color:var(--ink)"><button class="btn primary sm" data-act="tixreply">Send</button></div><button class="btn sm ghost" style="align-self:flex-start" data-act="tixdone">Mark as resolved</button>`:''}
+      </section>`:`<section class="card"><div class="empty">Pick a ticket to see the conversation, or raise a new one.</div></section>`}
+    </div>`;
+  }
+  if (tab==='backup'){
+    const list=Array.from({length:8},(_,i)=>{ const d=new Date(RP_TODAY.getTime()-i*864e5); return [d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+(i===0?' · 2:15 AM':' · 2:15 AM'), (48-i*0.4).toFixed(1)+' MB']; });
+    body=`<section class="stats"><div><b class="num" style="color:var(--ok)">Today 2:15 AM</b><small>last backup · encrypted</small></div><div><b class="num">30 days</b><small>backups kept</small></div><div><b class="num">2 places</b><small>this computer + Bevnetic cloud</small></div><div><b class="num">${S.backingUp?'Running…':'Every night'}</b><small>after close</small></div></section>
+    <section class="card" data-note="Backups"><div class="cardhead"><h2>Backups</h2><span class="spacer"></span><button class="btn sm primary" data-act="backupnow" ${S.backingUp?'disabled':''}>${S.backingUp?'Backing up…':'Back up now'}</button></div>
+      ${list.map((b,i)=>`<div class="rule">${ic('cloud')}<div><b>${b[0]}</b><small>${b[1]} · sales, products, customers, vendors, settings${i===0?' · verified':''}</small></div><button class="btn sm" data-restore="${i}">Restore…</button></div>`).join('')}
+      <div class="muted" style="font-size:12px;margin-top:8px">If this computer breaks, sign in on a new one and everything comes back from the cloud copy. Card numbers are never stored.</div></section>`;
+  }
+  if (tab==='remote'){
+    body=`<section class="card" style="max-width:720px;display:flex;flex-direction:column;gap:12px" data-note="Remote help">
+      <h2>Remote help</h2><div class="muted" style="font-size:13px">A Bevnetic support person can see your screen to help you, only while you allow it. You can end it at any time, and card numbers and PINs are always hidden from them.</div>
+      ${!S.remote?`<div class="setrow" style="border:0;padding:0"><div><b>Let support control the mouse and keyboard</b><div class="muted" style="font-size:12px">Off: they can only watch and point</div></div><button class="toggle" aria-pressed="${S.remoteCtl}" data-act="remotectl" aria-label="Allow control"></button></div><button class="btn primary" style="align-self:flex-start" data-act="remotestart">${ic('eye')}Start a session</button>`
+      : S.remote==='code'?`<div class="rcode"><small>Read this code to support</small><b class="num">482 913</b><small class="muted">Waiting for support to join…</small></div>`
+      : S.remote==='ask'?`<div class="clockban soon" style="align-items:center">${ic('eye')} <b>Jamie from Bevnetic support</b>&nbsp;wants to ${S.remoteCtl?'control':'view'} your screen.<span class="spacer" style="flex:1"></span><button class="btn sm" data-act="remoteend">Deny</button><button class="btn sm primary" data-act="remoteallow">Allow</button></div>`
+      : `<div class="clockban" style="background:var(--ok-soft);color:var(--ok)">${ic('check')} Session active. Jamie can ${S.remoteCtl?'control':'see'} your screen. <button class="btn sm" style="margin-left:auto" data-act="remoteend">End session</button></div>`}
+      <div class="muted" style="font-size:12px">Every session is logged with who joined, when, and for how long.</div></section>`;
+  }
+  return `<div style="margin-bottom:16px">${segBtns([['help','Help centre'],['tickets',`Tickets${supUnread()?` (${supUnread()})`:''}`],['backup','Backups'],['remote','Remote help']], tab, 'data-suptab')}</div>${body}`;
+};
+function tixReplyLater(no, text, delay){ setTimeout(()=>{ const t=S.tix.find(x=>x.no===no); if (!t || t.st==='Resolved') return; t.msgs.push(['support', text, 'Just now']); t.st='In progress'; t.unread = !(S.route==='support' && S.supTab==='tickets' && S.tixSel===no); render(); toast(`Support replied to ${no}`,'lifebuoy'); }, delay); }
+function videoModal(i){
+  const v=VIDEOS[i];
+  $('#modal').innerHTML = `<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="${esc(v[0])}" style="width:min(720px,100%)">
+    <header>${ic('video')}<h2>${esc(v[0])}</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header>
+    <div class="body"><div class="clip vplayer">${camScene(i%4)}<span class="clipplay">${ic('play')}</span><div class="clipbar"><i></i></div><span class="live">${v[1]}</span></div>
+    <div class="muted" style="font-size:12.5px">Tutorial videos play here in the full app. In this demo the video is a placeholder; the matching help article is in the Help centre.</div></div>
+    <footer><button class="btn" data-close>Close</button>${allowed(v[2])?`<button class="btn primary" data-go="${v[2]}">Open ${esc(ROUTES.find(r=>r[0]===v[2])[1])}</button>`:''}</footer></div></div>`;
+}
+
+/* ---- events for everything above */
+document.addEventListener('click', e=>{
+  const b=e.target.closest('[data-oapp],[data-dsch],[data-dswhen],[data-dsinc],[data-pfm],[data-dlrem],[data-dlok],[data-dlup],[data-schtab],[data-sch],[data-swp],[data-payprov],[data-sectab],[data-clip],[data-secev],[data-mkch],[data-mkfeat],[data-suptab],[data-tix],[data-tnurg],[data-vid],[data-restore],[data-exp],[data-autoexp],[data-tip],[data-act="dstest"],[data-act="expnew"],[data-act="expcancel"],[data-act="expsave"],[data-act="schpub"],[data-act="payexp"],[data-act="mktest"],[data-act="mksend"],[data-act="training"],[data-act="expall"],[data-act="tixnew"],[data-act="tncancel"],[data-act="tnsend"],[data-act="tnshot"],[data-act="tixreply"],[data-act="tixdone"],[data-act="backupnow"],[data-act="dorestore"],[data-act="remotestart"],[data-act="remoteallow"],[data-act="remoteend"],[data-act="remotectl"],[data-act="reward"],[data-act="asktix"],[data-act="sttips"]');
+  if (!b) return; const d=b.dataset;
+  if (d.oapp){ const [id,v]=d.oapp.split('|'); const a=S.oapp.find(x=>x.id==id); S.oapp=S.oapp.filter(x=>x.id!=id); render(); toast(v==='yes'?`Approved on the owner app · ${a.who}'s register unlocks the discount`:`Declined · ${a.who} sees it on the register`); return; }
+  if (d.dsch){ S.dsum[d.dsch]=!S.dsum[d.dsch]; render(); return; }
+  if (d.dswhen){ S.dsum.when=d.dswhen; render(); return; }
+  if (d.dsinc){ S.dsum.inc[d.dsinc]=!S.dsum.inc[d.dsinc]; render(); return; }
+  if (d.pfm){ S.pfMonth=d.pfm; render(); return; }
+  if (d.dlrem){ const n=+d.dlrem; S.dlRemind = S.dlRemind.includes(n) ? S.dlRemind.filter(x=>x!==n) : [...S.dlRemind, n].sort((a,b)=>b-a); render(); return; }
+  if (d.dlok){ const x=S.dl[+d.dlok], base=Math.max(new Date(x.due), RP_TODAY), nd=new Date(base); nd.setMonth(nd.getMonth()+Math.round(x.years*12)); x.due=ymd(nd); if (x.kind==='LEAD'){ const al=ALERTS.find(a=>a.id===40); if (al && x.who==='Sam R.') S.done.add(40); } render(); toast(`${x.n} renewed · next due ${fmtD(x.due)}`); return; }
+  if (d.dlup){ toast(`Document attached to ${S.dl[+d.dlup].n}`,'upload'); return; }
+  if (d.schtab){ S.schTab=d.schtab; render(); return; }
+  if (d.sch){ const [n,k]=d.sch.split('|'); const order=['O','M','L','C','']; const cur=S.sched[n][+k]; S.sched[n][+k]=order[(order.indexOf(cur)+1)%order.length]; render(); return; }
+  if (d.swp){ const [i,v]=d.swp.split('|'), r=S.swaps[+i]; if (v==='yes'){ if (r.to){ S.sched[r.to][r.day]=S.sched[r.from][r.day]; } S.sched[r.from][r.day]=''; r.st='approved'; } else r.st='declined'; render(); toast(v==='yes'?(r.to?`Swap approved · ${r.to} now works ${WEEK[r.day]}`:`Time off approved for ${r.from} · ${WEEK[r.day]} needs cover`):'Request declined · they get a text'); return; }
+  if (d.payprov){ S.payProv=d.payprov; render(); return; }
+  if (d.sectab){ S.secTab=d.sectab; render(); return; }
+  if (d.clip){ clipModal(+d.clip); return; }
+  if (d.secev){ const [i,v]=d.secev.split('|'); const ev=S.secEv[+i]; ev.st = v==='ok'?'ok':'esc'; if (v==='ok') ev.res='Reviewed · no issue'; closeModal(); render(); toast(v==='ok'?'Marked as explained':'Flagged · the owner gets it on the owner app'); return; }
+  if (d.mkch){ S.mk[d.mkch]=!S.mk[d.mkch]; render(); return; }
+  if (d.mkfeat){ const i=+d.mkfeat; S.mk.feat = S.mk.feat.includes(i) ? S.mk.feat.filter(x=>x!==i) : [...S.mk.feat, i]; render(); return; }
+  if (d.suptab){ S.supTab=d.suptab; if (d.act!=='tixnew') render(); if (!d.act) return; }
+  if (d.tix){ S.tixSel=d.tix; S.tixNew=null; const t=S.tix.find(x=>x.no===d.tix); if (t) t.unread=false; render(); return; }
+  if (d.tnurg){ S.tixNew.urg=d.tnurg; render(); return; }
+  if (d.vid){ videoModal(+d.vid); return; }
+  if (d.restore){ const i=+d.restore; $('#modal').innerHTML=`<div class="scrim" data-scrim><div class="modal" role="dialog" aria-modal="true" aria-label="Restore backup" style="width:min(480px,100%)"><header>${ic('cloud')}<h2>Restore this backup?</h2><span class="spacer"></span><button class="iconbtn" data-close aria-label="Close">${ic('x')}</button></header><div class="body"><div class="clockban soon">${ic('alert')} Everything since this backup (${i===0?'today 2:15 AM':i+' day'+(i>1?'s':'')+' ago'}) will be replaced. A backup of right now is saved first, so you can undo.</div></div><footer><button class="btn" data-close>Cancel</button><button class="btn primary" data-act="dorestore">Restore</button></footer></div></div>`; return; }
+  if (d.exp){ const x=EXPORTS.find(y=>y.k===d.exp); saveFile(`bevnetic-${x.k}-2026-09-25.csv`, csvOf(x.rows()), 'text/csv'); return; }
+  if (d.autoexp!=null){ const k='autoexp'+d.autoexp; S[k] = !(S[k] ?? (d.autoexp!=='1')); render(); return; }
+  if (d.tip!=null){ S.tipPct=+d.tip; payModal('choose'); render(); return; }
+  switch (d.act){
+    case 'dstest': toast(`Test summary sent${S.dsum.sms?' by text':''}${S.dsum.sms&&S.dsum.email?' and':''}${S.dsum.email?' by email':''}`); break;
+    case 'expnew': S.expAdd={n:'', amt:''}; render(); break;
+    case 'expcancel': S.expAdd=null; render(); break;
+    case 'expsave': { const n=($('#ex-n')?.value||'').trim(), amt=parseFloat(($('#ex-amt')?.value||'').replace(/[$,\s]/g,'')); if (!n || !(amt>0)){ toast('Enter the expense and a monthly amount above $0','alert'); break; } S.exp.push({n, cat:'Other', amt:Math.round(amt), bud:Math.round(amt)}); S.expAdd=null; render(); toast(`${n} added · profit updated`); break; }
+    case 'schpub': toast(`Schedule published · texted to ${STAFF.length} staff`); break;
+    case 'payexp': { const rows=[['Employee','Regular hours','Overtime hours','Double time hours','Rate','Tips','Gross pay'], ...PAYROLL.map(payRow).map(r=>[r.n,r.reg,r.ot,r.dt,r.rate.toFixed(2),r.tips.toFixed(2),r.gross.toFixed(2)])]; saveFile(`payroll-${S.payProv.toLowerCase().replace(/\s+/g,'-')}-sep16-sep29.csv`, csvOf(rows), 'text/csv'); break; }
+    case 'mktest': toast('Test sent to your phone and email'); break;
+    case 'mksend': { const M=S.mk, seg=MK_SEG[M.seg]; S.camps.unshift({n:M.name, ch:[M.sms&&'SMS',M.email&&'Email'].filter(Boolean).join(' + '), when:M.when==='Now'?'Today':M.when, to:(M.sms?seg[1]:0)+(M.email?seg[2]:0), open:'—', click:'—', red:0, rev:0, st:M.when==='Now'?'Sending':'Scheduled'}); render(); toast(M.when==='Now'?`Sending to ${S.camps[0].to.toLocaleString()} people`:`Scheduled for ${M.when}`); break; }
+    case 'training': S.training=!S.training; render(); toast(S.training?'Training mode on · nothing is recorded':'Training mode off · back to real sales', S.training?'play':'check'); break;
+    case 'expall': saveFile('bevnetic-everything-2026-09-25.xls', workbookXml(), 'application/vnd.ms-excel'); break;
+    case 'tixnew': S.supTab='tickets'; S.tixSel=null; S.tixNew=null; tixNewForm(); if (S.route!=='support') go('support'); else render(); break;
+    case 'tncancel': S.tixNew=null; render(); break;
+    case 'tnshot': S.tixNew.shot=!S.tixNew.shot; render(); break;
+    case 'tnsend': { const N=S.tixNew; N.sub=($('#tn-sub')?.value||'').trim(); N.desc=($('#tn-desc')?.value||'').trim(); N.cat=$('#tn-cat')?.value||N.cat;
+      if (!N.sub){ toast('Add a short summary so support knows what’s wrong','alert'); break; }
+      const no='T-'+(1041+S.tix.length); S.tix.push({no, sub:N.sub, cat:N.cat, urg:N.urg, st:'Open', when:'Today', by:S.user, shot:N.shot, msgs:[['you', N.desc||N.sub, 'Just now']]}); S.tixNew=null; S.tixSel=no; render();
+      toast(`${no} sent · ${N.urg==='Urgent'?'we call back within 15 minutes':'reply usually within 2 hours'}`,'lifebuoy');
+      tixReplyLater(no, N.urg==='Urgent' ? 'Hi, this is Jamie. I’m calling the store now at (916) 555-0101 so we can get payments running again.' : 'Hi, this is Jamie from Bevnetic support. Thanks for the details and the screenshot, I’m looking into it now and will update you here.', 4000); break; }
+    case 'tixreply': { const t=S.tix.find(x=>x.no===S.tixSel), v=($('#tix-reply')?.value||'').trim(); if (!t||!v) break; t.msgs.push(['you', v, 'Just now']); render(); tixReplyLater(t.no, 'Thanks, got it. I’ll follow up here shortly.', 3500); break; }
+    case 'tixdone': { const t=S.tix.find(x=>x.no===S.tixSel); if (t){ t.st='Resolved'; t.unread=false; } render(); toast('Ticket resolved · thanks for the feedback'); break; }
+    case 'backupnow': S.backingUp=true; render(); setTimeout(()=>{ S.backingUp=false; render(); toast('Backup finished · 48.3 MB, verified','cloud'); }, 1800); break;
+    case 'dorestore': closeModal(); toast('Restored · the previous state was saved first, so you can undo','cloud'); break;
+    case 'remotectl': S.remoteCtl=!S.remoteCtl; render(); break;
+    case 'remotestart': S.remote='code'; render(); setTimeout(()=>{ if (S.remote==='code'){ S.remote='ask'; render(); } }, 2500); break;
+    case 'remoteallow': S.remote='on'; render(); toast('Support can now '+(S.remoteCtl?'control':'see')+' your screen'); break;
+    case 'remoteend': S.remote=null; render(); toast('Remote session ended'); break;
+    case 'reward': S.reward=!S.reward; render(); break;
+    case 'sttips': S.settings.tips=!S.settings.tips; if (!S.settings.tips) S.tipPct=0; render(); toast(S.settings.tips?'Tips on · the card reader asks after the total':'Tips off'); break;
+    case 'asktix': { const last=[...ASK.msgs].reverse().find(m=>m.role==='user'); S.supTab='tickets'; S.tixSel=null; S.tixNew={cat:'Something else', urg:'Normal', sub:last?last.text.slice(0,80):'', desc:ASK.msgs.map(m=>`${m.role==='user'?'Me':'Assistant'}: ${m.text}`).join('\n').slice(0,1500), shot:true, from:TITLES[S.route]?.[0]||'Register'}; ASK.open=false; askRender(); go('support'); toast('Your chat is copied into a new ticket · check it and press Send','lifebuoy'); break; }
+  }
+});
+document.addEventListener('input', e=>{
+  const id=e.target.id||'';
+  if (id==='ds-phone'){ S.dsum.phone=e.target.value; return; }
+  if (id==='ds-email'){ S.dsum.email=e.target.value; return; }
+  if (id==='mk-name'){ S.mk.name=e.target.value; return; }
+  if (id==='mk-subj'){ S.mk.subj=e.target.value; const b=$('.mksubj'); if (b) b.textContent=e.target.value; return; }
+  if (id==='mk-sms'){ S.mk.sms_t=e.target.value; return; }
+  if (id==='sup-q'){ S.supQ=e.target.value; const pos=e.target.selectionStart; render(); const q=$('#sup-q'); q.focus(); q.setSelectionRange(pos,pos); return; }
+  if (id==='tn-sub' && S.tixNew){ S.tixNew.sub=e.target.value; return; }
+  if (id==='tn-desc' && S.tixNew){ S.tixNew.desc=e.target.value; return; }
+});
+document.addEventListener('change', e=>{
+  const id=e.target.id||'';
+  if (id==='mk-seg'){ S.mk.seg=+e.target.value; render(); return; }
+  if (id==='mk-offer'){ S.mk.offer=e.target.value; render(); return; }
+  if (id==='mk-when'){ S.mk.when=e.target.value; render(); return; }
+  if (id==='mk-sms'){ render(); return; }
+  if (id==='tn-cat' && S.tixNew){ S.tixNew.cat=e.target.value; return; }
 });
 
 /* ------------------------------------------------ guided demo */
@@ -3869,7 +4581,7 @@ document.addEventListener('click', e => {
       R.done=true; render(); toast(`Received · stock updated${dmg.length?' · damage claim opened':''}${short?' · PO kept open':''}`,'truck'); break; }
     case 'cntfill': { const deltas=[-2,0,-1,0,1]; S.cnt.lines.forEach((l,i)=>{ l.c=String(Math.max(0,l.exp+deltas[i%deltas.length])); }); render(); break; }
     case 'cntdone': { const C=S.cnt; let u=0, v=0; C.lines.forEach(l=>{ const p=byId(l.pid), dv=+l.c-l.exp; u+=dv; v+=dv*p.p*0.7; p.stock=+l.c; });
-      SHRINK.unshift({d:'Sep 25', area:C.area, units:u, value:Math.round(v*100)/100, by:S.user}); C.done=true; render(); toast(`Stock adjusted · ${u>0?'+':''}${u} units (${money(v)}) recorded`,'box'); break; }
+      SHRINK_SH.unshift({d:'Sep 25', area:C.area, units:u, value:Math.round(v*100)/100, by:S.user}); C.done=true; render(); toast(`Stock adjusted · ${u>0?'+':''}${u} units (${money(v)}) recorded`,'box'); break; }
     case 'strsave': S.settings.rSave=!S.settings.rSave; render(); break;
     case 'rcyopen': S.rcy = {c: S.recyc ? {...S.recyc.c} : {al:0, pl:0, gl:0, big:0}, pay: S.cart.length ? 'credit' : 'cash'}; recycleModal(); break;
     case 'rcyremove': S.recyc=null; closeModal(); render(); toast('Bottle return removed'); break;
@@ -3973,7 +4685,7 @@ document.addEventListener('click', e => {
     case 'idcontinue': if (S.payAfterId){ payMethod='card'; payModal(); } else { closeModal(); render(); } break;
     case 'declinesale': S.cart=S.cart.filter(x=>!byId(x.id).r); S.id=null; closeModal(); render(); toast('21+ items removed · refusal logged','alert'); break;
     case 'charge': charge(); break;
-    case 'newsale': S.cart=[]; S.id=null; S.member=null; S.tdisc=null; S.credit=0; S.recyc=null; S.saleNo++; closeModal(); S.cdPhase=null; S.cd.rc=null; S.cd.ask=null; S.cd.to=''; render(); break;
+    case 'newsale': S.cart=[]; S.id=null; S.member=null; S.reward=false; S.tipPct=0; S.tdisc=null; S.credit=0; S.recyc=null; S.saleNo++; closeModal(); S.cdPhase=null; S.cd.rc=null; S.cd.ask=null; S.cd.to=''; render(); break;
     case 'invall': { S.inv = S.inv.map((v,i)=> (INVOICE[i].m || S.invLink[i]) && INVOICE[i].conf>=90 && v==='review' ? 'ok' : v); const left=INVOICE.filter((l,i)=>!l.m && !S.invLink[i]).length; render(); toast(`Matched lines approved${left?` · ${left} line${left>1?'s':''} still need a product`:''}`); break; }
     case 'invpost': S.invStep=8; render(); toast('Inventory and accounting updated'); break;
     case 'offtoggle': S.offlineLimit=!S.offlineLimit; render(); break;
