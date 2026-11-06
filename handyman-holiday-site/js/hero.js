@@ -1,8 +1,8 @@
-/* Hero: a real photo of a decorated house. Scroll switches its lights on, strand by strand.
-   off.jpg  = the same photo, lights removed and graded to a dark night (pre-processed)
-   lit.jpg  = the real lit photo
-   map.png  = R: when each pixel switches on (0..1), G: how "bulb-like" it is (sharp pop vs soft glow)
-   A WebGL shader blends off → lit per pixel from the scroll position, so it reverses on scroll-up. */
+/* Hero: the same house photographed by day and at night. Scrolling takes it from day, through dusk,
+   to the lights switching on strand by strand; scrolling up reverses it.
+   day.jpg = real daytime photo        off.jpg = dusk, lights still off (built from the day photo + night sky)
+   lit.jpg = real night photo, lit     map.png = R: when each pixel switches on, G: how "bulb-like" it is
+   Built by handyman-holiday-site-tools/build_hero_daynight.py */
 (function () {
   const hero = document.getElementById("hero");
   const track = document.getElementById("heroTrack");
@@ -16,7 +16,6 @@
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduced) document.documentElement.classList.add("reduced");
 
-  const BG = [11 / 255, 16 / 255, 32 / 255];
   let target = 0, current = reduced ? 1 : 0, visible = true, raf = 0, ready = false, fallback = null;
 
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -47,22 +46,23 @@
   const VS = "attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}";
   const FS = [
     "precision mediump float;",
-    "uniform sampler2D tOff,tLit,tMap;uniform float p,seed,edge;uniform vec4 rect;uniform vec2 res;uniform vec3 bg;",
+    "uniform sampler2D tDay,tOff,tLit,tMap;uniform float p,seed;uniform vec4 rect;uniform vec2 res;",
     "float h(vec2 c){return fract(sin(dot(c,vec2(12.9898,78.233)))*43758.5453);}",
     "void main(){",
     " vec2 fc=vec2(gl_FragCoord.x,res.y-gl_FragCoord.y);",
-    " vec2 uv=(fc-rect.xy)/rect.zw; vec2 c=clamp(uv,0.,1.);",
-    " vec3 off=texture2D(tOff,c).rgb; vec3 lit=texture2D(tLit,c).rgb; vec4 m=texture2D(tMap,c);",
-    " float soft=mix(.11,.016,m.g);",
-    " float a=smoothstep(m.r-.004,m.r+soft,p);",
-    " a=max(a,smoothstep(.93,1.,p));",
-    " vec3 col=mix(off,lit,a);",
-    " col+=lit*m.g*a*(1.-a)*1.4;",                       // brief ignition flare as a bulb comes on
-    " float ex=smoothstep(0.,edge,uv.x)*smoothstep(1.,.96,uv.x);",
-    " float ey=smoothstep(0.,.10,uv.y)*smoothstep(1.,.86,uv.y);",
-    " col=mix(bg,col,ex*ey);",
-    " vec2 q=fc/res-.5; col*=1.-dot(q,q)*.5;",          // lens vignette
-    " col+=(h(fc+seed)-.5)*.045;",                       // film grain hides the soft source resolution
+    " vec2 uv=(fc-rect.xy)/rect.zw;",
+    " vec2 c=clamp(vec2(1.-abs(1.-abs(uv.x)),uv.y),0.,1.);", // mirror sideways (sky + lawn continue); top sky row extends upward
+    " vec3 day=texture2D(tDay,c).rgb; vec3 off=texture2D(tOff,c).rgb; vec3 lit=texture2D(tLit,c).rgb; vec4 m=texture2D(tMap,c);",
+    " float dusk=smoothstep(0.,.32,p);",                  // phase 1: day falls to dusk
+    " float q=clamp((p-.3)/.7,0.,1.);",                   // phase 2: lights switch on
+    " vec3 base=mix(day,off,dusk);",
+    " float soft=mix(.12,.016,m.g);",
+    " float a=smoothstep(m.r-.004,m.r+soft,q);",
+    " a=max(a,smoothstep(.93,1.,q));",
+    " vec3 col=mix(base,lit,a);",
+    " col+=lit*m.g*a*(1.-a)*1.3;",                       // brief ignition flare as a bulb comes on
+    " vec2 v=fc/res-.5; col*=1.-dot(v,v)*mix(.25,.5,dusk);",// lens vignette, stronger at night
+    " col+=(h(fc+seed)-.5)*mix(.012,.03,dusk);",          // fine grain, mostly in the dark
     " gl_FragColor=vec4(col,1.);}"
   ].join("\n");
 
@@ -79,7 +79,7 @@
     return t;
   }
 
-  let iw = 960, ih = 648, W = 0, H = 0, dpr = 1;
+  let iw = 1870, ih = 841, W = 0, H = 0, dpr = 1;
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     const cw = canvas.clientWidth, ch = canvas.clientHeight;
@@ -89,31 +89,31 @@
     if (gl) gl.viewport(0, 0, W, H);
   }
   function layout(p) {
-    // Portrait: keep the whole house large and centred. Landscape: height-fit and shift the
-    // house right so the headline sits on the dark left side; the image edge fades into the page.
-    const z = 1 + 0.06 * p;                              // slow dolly-in as the lights come on
-    if (W / H < 0.9) {
-      const s = (W / (iw * 0.74)) * z, w = iw * s, h = ih * s;
-      return [W * 0.5 - w * 0.5, H * 0.53 - h * 0.5, w, h];
+    const z = 1 + 0.05 * p;                              // slow dolly-in as night falls
+    if (W / H < 0.9) {                                   // portrait: house large and centred
+      const w = W * 1.75 * z, h = w * ih / iw;
+      return [W * 0.5 - w * 0.62, H * 0.55 - h * 0.5, w, h];
     }
-    const s = (H / ih) * Math.max(0.84, Math.min(1.04, 1.86 - (W / H) * 0.6)) * z;
+    // landscape: house on the right, bottom-anchored; any gap is filled by the mirrored sky/lawn
+    const s = Math.max((H * 0.8) / ih, (W * 0.8) / iw) * z;
     const w = iw * s, h = ih * s;
-    const x = W - w * 0.97 - (z - 1) * w * 0.3;         // right-anchored; the left edge fades out
-    const y = (H - h) * 0.45;
-    return [x, y, w, h];
+    return [W - w, H - h * 0.98, w, h];
   }
+  // text scrim: light and sky-tinted by day, full strength once it's dark
+  const setNight = (p) => { const t = clamp(p / 0.32, 0, 1); hero.style.setProperty("--night", (t * t * (3 - 2 * t)).toFixed(3)); };
+  const lightsOn = (p) => clamp((p - 0.3) / 0.7, 0, 1);
 
   function draw(p) {
-    if (fallback) { fallback.style.opacity = p; setMeter(p); return; }
+    if (fallback) { fallback.style.opacity = p; setNight(p); setMeter(lightsOn(p)); return; }
     if (!ready) return;
     gl.uniform1f(U.p, p);
     gl.uniform1f(U.seed, (p * 977) % 97);
     const r = layout(p);
     gl.uniform4fv(U.rect, r);
-    gl.uniform1f(U.edge, r[0] > 2 ? 0.2 : 0.04);
     gl.uniform2f(U.res, W, H);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
-    setMeter(p);
+    setNight(p);
+    setMeter(lightsOn(p));
   }
 
   function tick() {
@@ -128,7 +128,7 @@
   function onScroll() { if (reduced) return; target = scrollProgress(); request(); }
 
   function useFallback() {
-    // No WebGL: cross-fade the two real photos.
+    // No WebGL: cross-fade the real day and night photos.
     fallback = document.createElement("img");
     fallback.src = "images/hero/lit.jpg"; fallback.alt = ""; fallback.className = "hero__poster"; fallback.style.opacity = current;
     poster.after(fallback);
@@ -147,12 +147,11 @@
       const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
       const loc = gl.getAttribLocation(prog, "a"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-      ["tOff", "tLit", "tMap", "p", "seed", "edge", "rect", "res", "bg"].forEach((n) => (U[n] = gl.getUniformLocation(prog, n)));
-      const [off, lit, map] = await Promise.all([loadImg("images/hero/off.jpg"), loadImg("images/hero/lit.jpg"), loadImg("images/hero/map.png")]);
+      ["tDay", "tOff", "tLit", "tMap", "p", "seed", "rect", "res"].forEach((n) => (U[n] = gl.getUniformLocation(prog, n)));
+      const [day, off, lit, map] = await Promise.all(["day.jpg", "off.jpg", "lit.jpg", "map.png"].map((f) => loadImg("images/hero/" + f)));
       iw = lit.naturalWidth; ih = lit.naturalHeight;
-      tex(off, 0); tex(lit, 1); tex(map, 2);
-      gl.uniform1i(U.tOff, 0); gl.uniform1i(U.tLit, 1); gl.uniform1i(U.tMap, 2);
-      gl.uniform3fv(U.bg, BG);
+      tex(day, 0); tex(off, 1); tex(lit, 2); tex(map, 3);
+      gl.uniform1i(U.tDay, 0); gl.uniform1i(U.tOff, 1); gl.uniform1i(U.tLit, 2); gl.uniform1i(U.tMap, 3);
       resize(); ready = true; hero.classList.add("is-gl");
       target = reduced ? 1 : scrollProgress(); current = target; draw(current);
     } catch (e) { console.warn("Hero WebGL unavailable, using fallback.", e); useFallback(); }
