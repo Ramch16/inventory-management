@@ -37,13 +37,12 @@ Also: replace the placeholder logo (an SVG house with four bulbs, inline in `ind
 - Several are CC BY / CC BY-SA, so **keep `credits.html` linked** while any of them remain. Two are U.S. military public-domain photos: fine to use, but they must not imply endorsement.
 - Replace them with the client's own job photos as soon as possible. After that, set `samplePhotos: false` in `js/config.js` and update `js/photos.js` (slug, category, alt text).
 - **Hero images (client-supplied day + night pair):** the hero scrolls from the day photo, through dusk, to the night photo with the lights switching on. Confirm the client has the rights to use these two images. If they're renders or concept images rather than a real job, the client should be comfortable presenting them as illustrative. To swap in a new aligned pair, run `handyman-holiday-site-tools/build_hero_daynight.py day.jpg night.jpg ../handyman-holiday-site/images/hero`.
-- Designer sample houses (`sample-cottage`, `sample-green-house`) are also placeholders. If they're swapped, the preset strand coordinates in `js/designer.js` (`SAMPLES`) need updating.
 
 ## 4. Left to do before launch
 
 1. Complete sections 1–3 above.
 2. Deploy to Netlify (drag-and-drop the folder works; no build step).
-3. Netlify → Forms: confirm the `quote` form was detected. Add an email notification to the client's inbox. Note the limit of 8 MB per submission (customer photo + design image).
+3. Netlify → Forms: confirm the `quote` form was detected. Add an email notification to the client's inbox. Note the limit of 8 MB per submission (the customer's photo).
 4. Test a real submission on the live URL. Locally the form shows its error state, because a plain local server can't accept the POST.
 5. Add the production domain: absolute `og:image` URL, `"url"` and full address/geo in the JSON-LD (if they have a public address), plus `robots.txt`, `sitemap.xml` and `404.html`.
-6. Test on a real mid-range phone (hero scroll, light designer, photo upload from the camera roll).
+6. Test on a real mid-range phone (hero scroll, photo upload from the camera roll).

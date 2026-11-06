@@ -306,27 +306,5 @@
   "artist": "jmrodri",
   "license": "CC BY 2.0",
   "page": "https://www.flickr.com/photos/33205801@N00/8017481089"
- },
- {
-  "slug": "sample-cottage",
-  "cat": "tool",
-  "alt": "Yellow cottage with a front porch on a sunny day",
-  "w": 1023,
-  "h": 735,
-  "title": "New Door Installed",
-  "artist": "Laertes",
-  "license": "CC BY 2.0",
-  "page": "https://www.flickr.com/photos/56685562@N00/3666468624"
- },
- {
-  "slug": "sample-green-house",
-  "cat": "tool",
-  "alt": "Green single-storey house with a back deck",
-  "w": 960,
-  "h": 720,
-  "title": "Deck Repair: Before",
-  "artist": "NatalieMaynor",
-  "license": "CC BY 2.0",
-  "page": "https://www.flickr.com/photos/93178668@N00/6947624489"
  }
 ]

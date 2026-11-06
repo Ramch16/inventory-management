@@ -70,7 +70,6 @@
     <nav class="nav__links" aria-label="Main">
       <a href="#holiday">Holiday lighting</a>
       <a href="#services">Handyman</a>
-      <a href="#designer">Light designer</a>
       <a href="#gallery">Gallery</a>
       <a href="#quote">Quote</a>
     </nav>
@@ -139,77 +138,15 @@
   </div>
 </section>
 
-<!-- 5. INTERACTIVE TOOL: holiday light designer -->
-<section class="section section--night designer" id="designer" aria-labelledby="designerTitle">
-  <div class="wrap">
-    <div class="section__head reveal">
-      <p class="eyebrow eyebrow--glow">Holiday light designer</p>
-      <h2 id="designerTitle">See it lit before<br><span class="muted-on-dark">a single clip goes up.</span></h2>
-      <p class="section__lede">Try colors and bulb styles on a sample home, or upload a photo of your own house and tap along the roofline to place lights. Your photo stays on your device.</p>
-    </div>
-    <div class="designer__grid">
-      <div class="designer__stage-wrap">
-        <div class="designer__stage" id="dzStage">
-          <canvas id="dzCanvas" aria-label="Holiday light preview. Tap or click on the photo to add points to the current light strand."></canvas>
-          <p class="designer__tip" id="dzTip">Tap along a roofline to add lights</p>
-        </div>
-        <div class="designer__samples" role="group" aria-label="Choose a photo">
-          <button type="button" class="thumb is-active" data-sample="cottage" aria-pressed="true"><img src="images/sample-cottage-sm.jpg" alt="Sample: yellow cottage with porch" width="96" height="69"><span>Cottage</span></button>
-          <button type="button" class="thumb" data-sample="deck" aria-pressed="false"><img src="images/sample-green-house-sm.jpg" alt="Sample: house with a back deck" width="96" height="72"><span>Deck</span></button>
-          <label class="thumb thumb--upload" for="dzUpload"><span class="thumb__plus" aria-hidden="true">+</span><span>Your photo</span></label>
-          <input type="file" id="dzUpload" accept="image/*" class="sr-only">
-        </div>
-      </div>
-      <div class="designer__panel">
-        <fieldset class="ctl">
-          <legend>Bulb color</legend>
-          <div class="swatches" id="dzPalettes"></div>
-        </fieldset>
-        <fieldset class="ctl">
-          <legend>Bulb style</legend>
-          <div class="seg" id="dzStyles">
-            <button type="button" data-style="c9" aria-pressed="true">Large C9</button>
-            <button type="button" data-style="mini" aria-pressed="false">Mini</button>
-            <button type="button" data-style="icicle" aria-pressed="false">Icicle</button>
-          </div>
-        </fieldset>
-        <fieldset class="ctl">
-          <legend>Effect</legend>
-          <div class="seg" id="dzEffects">
-            <button type="button" data-effect="steady" aria-pressed="true">Steady</button>
-            <button type="button" data-effect="twinkle" aria-pressed="false">Twinkle</button>
-            <button type="button" data-effect="chase" aria-pressed="false">Chase</button>
-          </div>
-        </fieldset>
-        <div class="ctl ctl--range">
-          <label for="dzDusk">Time of day <output id="dzDuskOut">Night</output></label>
-          <input type="range" id="dzDusk" min="0" max="100" value="85">
-        </div>
-        <div class="ctl ctl--range">
-          <label for="dzSpacing">Bulb spacing <output id="dzSpacingOut">Medium</output></label>
-          <input type="range" id="dzSpacing" min="0" max="100" value="45">
-        </div>
-        <div class="ctl ctl--actions">
-          <button type="button" class="btn btn--small" id="dzNew">New strand</button>
-          <button type="button" class="btn btn--small" id="dzUndo">Undo</button>
-          <button type="button" class="btn btn--small" id="dzClear">Clear</button>
-        </div>
-        <button type="button" class="btn btn--glow btn--block" id="dzUse">Use this design in my quote</button>
-        <p class="designer__note">Preview only. Final layout, bulb counts and pricing are confirmed on site.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- 6. HOW IT WORKS -->
-<section class="section" id="how" aria-labelledby="howTitle">
+<section class="section section--night" id="how" aria-labelledby="howTitle">
   <div class="wrap">
     <div class="section__head reveal">
       <p class="eyebrow">How it works</p>
-      <h2 id="howTitle">Three steps.<br><span class="muted">No guesswork.</span></h2>
+      <h2 id="howTitle">Three steps.<br><span class="muted-on-dark">No guesswork.</span></h2>
     </div>
     <ol class="steps">
-      <li class="step reveal"><span class="step__n" style="--c:var(--amber)">1</span><h3>Tell us what you need</h3><p>Send the form with a few photos, or call. Light designs from the tool above come straight through.</p></li>
+      <li class="step reveal"><span class="step__n" style="--c:var(--amber)">1</span><h3>Tell us what you need</h3><p>Send the form with a few photos of the job, or call. The more we can see, the sharper the quote.</p></li>
       <li class="step reveal"><span class="step__n" style="--c:var(--holly)">2</span><h3>Get a clear quote</h3><p>We confirm the details, measure if needed and send a written price before any work is booked.</p></li>
       <li class="step reveal"><span class="step__n" style="--c:var(--pine)">3</span><h3>We do the work</h3><p>On the day we agree, we arrive, do the job and leave the place tidy. Holiday lights come down when you’re ready.</p></li>
     </ol>
@@ -279,13 +216,6 @@
         <div class="field"><label for="fDate">Preferred date</label><input id="fDate" name="preferred-date" type="date"></div>
         <div class="field"><label for="fPhoto">Photo of the job</label><input id="fPhoto" name="photo" type="file" accept="image/*"><small class="hint">Optional, up to 5&nbsp;MB.</small><small class="err"></small></div>
       </div>
-      <input type="hidden" name="light-design" id="fDesign">
-      <input type="file" name="design-image" id="fDesignImg" accept="image/*" hidden>
-      <div class="design-chip" id="designChip" hidden>
-        <img id="designChipImg" alt="Your holiday light design preview">
-        <div><b>Light design attached</b><span id="designChipText"></span></div>
-        <button type="button" class="design-chip__x" id="designChipRemove" aria-label="Remove attached light design">×</button>
-      </div>
       <button class="btn btn--glow btn--block" type="submit" id="fSubmit">Send quote request</button>
       <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>
     </form>
@@ -350,7 +280,6 @@
 <script src="js/config.js"></script>
 <script src="js/photos.js"></script>
 <script src="js/hero.js"></script>
-<script src="js/designer.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

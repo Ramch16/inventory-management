@@ -136,25 +136,6 @@
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
   document.querySelectorAll(".reveal").forEach((el, i) => { el.style.transitionDelay = (el.classList.contains("card") ? (i % 3) * 70 : 0) + "ms"; io.observe(el); });
 
-  /* ---------- light design → form ---------- */
-  const designInput = $("#fDesign"), designFile = $("#fDesignImg"), chip = $("#designChip");
-  let chipURL = null;
-  window.addEventListener("design:use", (e) => {
-    const { blob, own, summary } = e.detail;
-    designInput.value = summary;
-    if (chipURL) URL.revokeObjectURL(chipURL);
-    chipURL = URL.createObjectURL(blob);
-    $("#designChipImg").src = chipURL;
-    let attached = false;
-    if (own) {
-      try { const dt = new DataTransfer(); dt.items.add(new File([blob], "light-design.jpg", { type: "image/jpeg" })); designFile.files = dt.files; attached = true; } catch (err) { attached = false; }
-    } else { designFile.value = ""; }
-    $("#designChipText").textContent = summary + (own ? (attached ? " · preview image attached" : "") : "");
-    chip.hidden = false;
-    prefill("Holiday: Roofline & eave lighting");
-  });
-  $("#designChipRemove").addEventListener("click", () => { designInput.value = ""; designFile.value = ""; chip.hidden = true; });
-
   /* ---------- form ---------- */
   const form = $("#quoteForm"), status = $("#formStatus"), submit = $("#fSubmit");
   const today = new Date(); $("#fDate").min = new Date(today - today.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
