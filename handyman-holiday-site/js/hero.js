@@ -34,6 +34,7 @@
     const pct = Math.round(p * 100);
     meterFill.style.height = pct + "%";
     meterVal.textContent = pct + "%";
+    hero.style.setProperty("--lit", p.toFixed(3));   // drives the glow on the word "lit." in the headline
   }
 
   function loadImg(src) {

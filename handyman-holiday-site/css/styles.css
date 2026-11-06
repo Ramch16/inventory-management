@@ -106,7 +106,9 @@ main{background:var(--paper)}
 @media (min-width:761px) and (max-width:1279px){.hero .trust-row{display:none}}
 @media (min-width:761px){.hero .trust-row li:last-child{display:none}}
 .hero__title{font-size:clamp(2.6rem,5.4vw,4.6rem);max-width:11.5em;text-shadow:0 2px 30px rgba(0,0,0,.55)}
-.hero__title .glow-word{background:none;color:#ffd36e;-webkit-text-fill-color:#ffd36e;filter:none;text-shadow:none}
+.hero__title .glow-word{background:none;color:#e0861a;-webkit-text-fill-color:#e0861a;filter:none;
+  /* glow grows with the lights: --lit goes 0 -> 1 as the house switches on */
+  text-shadow:0 0 calc(var(--lit,0) * 8px) rgba(255,176,64,calc(var(--lit,0) * .9)),0 0 calc(var(--lit,0) * 26px) rgba(255,150,40,calc(var(--lit,0) * .65)),0 0 calc(var(--lit,0) * 52px) rgba(255,130,30,calc(var(--lit,0) * .35))}
 .hero__lede{font-size:clamp(1.05rem,1.5vw,1.25rem);color:rgba(238,241,251,.86);text-shadow:0 1px 12px rgba(0,0,0,.6);max-width:32em;margin-top:22px}
 .hero__ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
 .trust-row{list-style:none;padding:0;margin:30px 0 0;display:flex;flex-wrap:wrap;gap:10px 26px;font-size:.92rem;color:rgba(238,241,251,.78)}
@@ -141,7 +143,7 @@ main{background:var(--paper)}
 @media (max-width:760px) and (max-height:700px){.trust-row{display:none}}
 .reduced .hero__track{height:100vh;height:100svh}
 .reduced .meter,.reduced .hero__hint{display:none}
-.reduced .hero{--night:1}
+.reduced .hero{--night:1;--lit:1}
 
 /* ===== Promise ===== */
 .promise{background:var(--ink);color:#fff;padding:clamp(70px,10vw,130px) 0 clamp(80px,10vw,130px)}
