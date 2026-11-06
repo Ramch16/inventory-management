@@ -24,9 +24,11 @@
     serviceSelect.appendChild(g);
   }
   addOptions("Holiday lighting", S.holiday, "Holiday: ");
+  addOptions("Roofing & snow", S.roofing, "Roofing: ");
   addOptions("Handyman", S.handyman, "Handyman: ");
   const other = document.createElement("option"); other.value = "Other / several jobs"; other.textContent = "Other / several jobs"; serviceSelect.appendChild(other);
 
+  const PREFIX = { holiday: "Holiday: ", roofing: "Roofing: ", handy: "Handyman: " };
   function card(s, kind) {
     const p = photo(s.photo);
     const el = document.createElement("article");
@@ -39,14 +41,16 @@
         <span class="card__cta" aria-hidden="true">Request this</span>
       </div>
       <button type="button" class="card__btn"><span class="sr-only">Request a quote for ${esc(s.name)}</span></button>`;
-    el.querySelector(".card__btn").addEventListener("click", () => prefill((kind === "holiday" ? "Holiday: " : "Handyman: ") + s.name));
+    el.querySelector(".card__btn").addEventListener("click", () => prefill(PREFIX[kind] + s.name));
     return el;
   }
   const hc = $("#holidayCards"), dc = $("#handyCards");
   S.holiday.forEach((s) => hc.appendChild(card(s, "holiday")));
   S.handyman.forEach((s) => dc.appendChild(card(s, "handy")));
+  const rc = $("#roofCards");
+  S.roofing.forEach((s) => rc.appendChild(card(s, "roofing")));
   const fs = $("#footerServices");
-  ["Holiday light installation", "Light takedown & packing", ...S.handyman.slice(0, 6).map((s) => s.name)].forEach((n) => { const li = document.createElement("li"); li.textContent = n; fs.appendChild(li); });
+  ["Holiday light installation", "Light takedown & packing", ...S.roofing.map((s) => s.name), ...S.handyman.slice(0, 5).map((s) => s.name)].forEach((n) => { const li = document.createElement("li"); li.textContent = n; fs.appendChild(li); });
 
   function prefill(value) {
     serviceSelect.value = value;
@@ -56,7 +60,7 @@
   }
 
   /* ---------- gallery ---------- */
-  const CATS = { holiday: "Holiday lighting", interior: "Repairs & interiors", outdoor: "Outdoor" };
+  const CATS = { holiday: "Holiday lighting", roofing: "Roofing & snow", interior: "Repairs & interiors", outdoor: "Outdoor" };
   PHOTOS.forEach((p) => { if (p.cat === "tools") p.cat = "interior"; });
   const items = PHOTOS.filter((p) => CATS[p.cat]);
   const grid = $("#galleryGrid"), chips = $("#galleryChips"), more = $("#galleryMore");

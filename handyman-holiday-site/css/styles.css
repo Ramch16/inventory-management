@@ -168,6 +168,9 @@ main{background:var(--paper)}
 .cards--holiday .card{grid-column:span 2}
 .cards--holiday .card:nth-child(1),.cards--holiday .card:nth-child(2){grid-column:span 3}
 .cards--handy{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.cards--roof{grid-template-columns:repeat(3,1fr)}
+@media (max-width:900px){.cards--roof{grid-template-columns:1fr 1fr}.cards--roof .card:first-child{grid-column:span 2}}
+@media (max-width:560px){.cards--roof{grid-template-columns:1fr}.cards--roof .card:first-child{grid-column:auto}}
 @media (max-width:900px){.cards--holiday{grid-template-columns:1fr 1fr}.cards--holiday .card,.cards--holiday .card:nth-child(n){grid-column:span 1}.cards--holiday .card:nth-child(1){grid-column:span 2}}
 @media (max-width:560px){.cards--holiday{grid-template-columns:1fr}.cards--holiday .card:nth-child(1){grid-column:span 1}}
 .card{position:relative;border-radius:var(--radius);overflow:hidden;background:#fff;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .45s var(--ease),box-shadow .45s var(--ease)}

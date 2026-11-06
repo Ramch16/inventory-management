@@ -22,6 +22,7 @@ Logo files (made from the supplied logo): `images/logo.png`, `logo-240.png` and 
 
 ## 2. The client must confirm
 
+- **Roofing & snow services** (rubber roof repairs, asphalt shingles, roof snow removal) and **Christmas lights / gutter cleaning** were confirmed by the client. The short descriptions under each are drafts: check the wording.
 - **Services list and wording** (`js/config.js`): 5 holiday and 11 handyman services, all drafted generically. Remove anything they don't offer.
   - Electrical (light fixtures, ceiling fans) and plumbing (faucets, toilets, drains) may need a licence in their state. Confirm they're allowed to advertise these.
   - "Takedown & packing": confirm they pack and/or store lights.

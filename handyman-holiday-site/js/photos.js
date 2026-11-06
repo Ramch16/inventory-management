@@ -307,5 +307,82 @@ window.PHOTOS = [
   "artist": "jmrodri",
   "license": "CC BY 2.0",
   "page": "https://www.flickr.com/photos/33205801@N00/8017481089"
+ },
+ {
+  "slug": "roof-rubber-flat",
+  "cat": "roofing",
+  "alt": "Flat roof covered in a dark rubber membrane over a garage",
+  "w": 1024,
+  "h": 768,
+  "title": "28495c61d2-Galeria-EPDM roof-EPDM-Roofing 1-1",
+  "artist": "tereza123456",
+  "license": "Public Domain Mark 1.0",
+  "page": "https://www.flickr.com/photos/142436573@N07/28485872222"
+ },
+ {
+  "slug": "roof-flat-membrane",
+  "cat": "roofing",
+  "alt": "Weathered flat membrane roof on a stone building beside a slate roof",
+  "w": 1024,
+  "h": 768,
+  "title": "Flat roof and chimneys",
+  "artist": "Bryn Pinzgauer",
+  "license": "CC BY 2.0",
+  "page": "https://www.flickr.com/photos/12394349@N06/2695550131"
+ },
+ {
+  "slug": "roof-shingles-roofer",
+  "cat": "roofing",
+  "alt": "Roofer nailing new asphalt shingles on a roof",
+  "w": 1024,
+  "h": 683,
+  "title": "Installing roof shingles",
+  "artist": "pointnshoot",
+  "license": "CC BY 2.0",
+  "page": "https://www.flickr.com/photos/18244673@N00/362936240"
+ },
+ {
+  "slug": "roof-shingles-crew",
+  "cat": "roofing",
+  "alt": "Two roofers working on an asphalt shingle roof",
+  "w": 1024,
+  "h": 683,
+  "title": "Putting on Second layer of shingles",
+  "artist": "waitscm",
+  "license": "CC BY 2.0",
+  "page": "https://www.flickr.com/photos/78341140@N00/8374856638"
+ },
+ {
+  "slug": "snow-roof-rake",
+  "cat": "roofing",
+  "alt": "Person pulling snow off a cabin roof with a long roof rake",
+  "w": 1024,
+  "h": 768,
+  "title": "roof raking",
+  "artist": "ChrisDag",
+  "license": "CC BY 2.0",
+  "page": "https://www.flickr.com/photos/8558461@N08/4240631013"
+ },
+ {
+  "slug": "snow-roof-shovel",
+  "cat": "roofing",
+  "alt": "Two people shovelling deep snow off a roof",
+  "w": 1024,
+  "h": 689,
+  "title": "Roof Snow Removal",
+  "artist": "Sunburned Surveyor",
+  "license": "CC BY 2.0",
+  "page": "https://www.flickr.com/photos/46645540@N00/8594790913"
+ },
+ {
+  "slug": "snow-roof-house",
+  "cat": "roofing",
+  "alt": "Snow being cleared from the roof and awnings of a two-storey house",
+  "w": 1023,
+  "h": 752,
+  "title": "shoveling",
+  "artist": "Mike J Maguire",
+  "license": "CC BY 2.0",
+  "page": "https://www.flickr.com/photos/62915351@N04/24208052029"
  }
 ];

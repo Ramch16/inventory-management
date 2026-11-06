@@ -16,6 +16,15 @@ window.SITE = {
     { id: "takedown", name: "Takedown & packing", photo: "holiday-twilight-porch", tone: "plum",
       text: "When the season ends, everything comes down carefully and is packed ready for next year." }
   ],
+  /* Roofing & snow: services confirmed by the client. */
+  roofing: [
+    { id: "rubber", name: "Rubber roof repairs", photo: "roof-rubber-flat",
+      text: "Leaks, splits and lifted seams on commercial and residential rubber (EPDM) flat roofs found and repaired." },
+    { id: "shingles", name: "Asphalt shingle repair & replacement", photo: "roof-shingles-roofer",
+      text: "Missing, cracked or curling shingles replaced, or a full new asphalt shingle roof when repairs no longer make sense." },
+    { id: "snow", name: "Roof snow removal", photo: "snow-roof-rake",
+      text: "Snow and ice cleared from any type of roof, flat or pitched, home or commercial, before the weight becomes a problem." }
+  ],
   handyman: [
     { id: "drywall", name: "Drywall repair", photo: "repair-drywall-ceiling",
       text: "Holes, cracks and water marks patched, taped and sanded until the wall reads as one surface again." },
