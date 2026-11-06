@@ -1,14 +1,13 @@
-# Lumen & Level site: client checklist (before going live)
+# Metro West All Power Handyman Services: client checklist (before going live)
 
 The site is in `handyman-holiday-site/`. It has **not been deployed or published** anywhere.
 
-No source website, logo or contact details were supplied, so **every business fact on the page is a placeholder**. Nothing below has been verified.
+The **name and logo** come from the client's logo ("Metro West All Power Handyman Services", "Est. 2023"), and the site colours are taken from it (navy `#1a3a59`, copper `#c07f55`). No contact details or website were supplied, so **everything else is still a placeholder**. Nothing below has been verified.
 
 ## 1. Find and replace (all files in `handyman-holiday-site/`)
 
 | Placeholder | Replace with | Where it appears |
 |---|---|---|
-| `Lumen & Level` / `Lumen &amp; Level` | Real business name | Title, nav, footer, JSON-LD, form text, credits page |
 | `(555) 010-0199` | Real phone, display format | Nav, hero, contact list, call bar, form error, footer |
 | `+15550100199` / `+1-555-010-0199` | Real phone, tel/JSON format | `tel:` links, JSON-LD |
 | `hello@example.com` | Real email | Contact list, footer, JSON-LD |
@@ -16,7 +15,10 @@ No source website, logo or contact details were supplied, so **every business fa
 | `Mon–Fri 9am–5pm · Sat 9am–1pm` | Real hours | Contact list, footer and JSON-LD `openingHoursSpecification` |
 | `https://www.google.com/maps?q=Your%20City&output=embed` | Real town or address | Footer map |
 
-Also: replace the placeholder logo (an SVG house with four bulbs, inline in `index.html` and in `favicon.svg`), and adjust the brand colours in `css/styles.css` (`:root` tokens) to match the real logo.
+Logo files (made from the supplied logo): `images/logo.png` (original colours, transparent) and `images/logo-reverse*.png` (navy turned to white, for the dark nav and footer), plus `favicon-32.png`, `favicon-48.png` and `apple-touch-icon.png`. If the client has a vector (SVG/AI/EPS) version, swap it in for a sharper result.
+
+- **Service area:** the logo says "Metro West". Confirm the exact area wording (for example "MetroWest, Massachusetts" or specific towns) and use it everywhere `Your City & Surrounding Towns` appears.
+- **"Est. 2023"** is on the logo and is in the JSON-LD as `foundingDate`. If the client wants it, it can also go in `trust` in `js/config.js`.
 
 ## 2. The client must confirm
 
