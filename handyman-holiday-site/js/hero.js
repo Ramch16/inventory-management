@@ -37,6 +37,20 @@
     hero.style.setProperty("--lit", p.toFixed(3));   // drives the glow on the word "lit." in the headline
   }
 
+  // Served over http(s): use the image files. Opened from disk (file://): browsers refuse to let
+  // WebGL read local image files, so load the same images from js/hero-inline.js as data URIs.
+  function heroSources() {
+    const files = ["day.jpg", "off.jpg", "lit.jpg", "map.png"].map((f) => "images/hero/" + f);
+    if (location.protocol !== "file:") return Promise.resolve(files);
+    return new Promise((res) => {
+      const sc = document.createElement("script");
+      sc.src = "js/hero-inline.js";
+      sc.onload = () => { const d = window.HERO_INLINE; res(d ? [d.day, d.off, d.lit, d.map] : files); };
+      sc.onerror = () => res(files);
+      document.head.appendChild(sc);
+    });
+  }
+
   function loadImg(src) {
     return new Promise((res, rej) => { const i = new Image(); i.decoding = "async"; i.onload = () => res(i); i.onerror = rej; i.src = src; });
   }
@@ -131,6 +145,7 @@
 
   function useFallback() {
     // No WebGL: cross-fade the real day and night photos.
+    hero.classList.add("no-gl");
     fallback = document.createElement("img");
     fallback.src = "images/hero/lit.jpg"; fallback.alt = ""; fallback.className = "hero__poster"; fallback.style.opacity = current;
     poster.after(fallback);
@@ -150,7 +165,7 @@
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
       const loc = gl.getAttribLocation(prog, "a"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
       ["tDay", "tOff", "tLit", "tMap", "p", "seed", "rect", "res"].forEach((n) => (U[n] = gl.getUniformLocation(prog, n)));
-      const [day, off, lit, map] = await Promise.all(["day.jpg", "off.jpg", "lit.jpg", "map.png"].map((f) => loadImg("images/hero/" + f)));
+      const [day, off, lit, map] = await Promise.all((await heroSources()).map(loadImg));
       iw = lit.naturalWidth; ih = lit.naturalHeight;
       tex(day, 0); tex(off, 1); tex(lit, 2); tex(map, 3);
       gl.uniform1i(U.tDay, 0); gl.uniform1i(U.tOff, 1); gl.uniform1i(U.tLit, 2); gl.uniform1i(U.tMap, 3);

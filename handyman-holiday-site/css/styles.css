@@ -92,7 +92,11 @@ main{background:var(--paper)}
 .hero__stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;color:#fff}
 .hero__canvas,.hero__poster{position:absolute;inset:0;width:100%;height:100%}
 .hero__poster{object-fit:cover;object-position:78% 75%}
-.hero.is-gl .hero__poster{opacity:0;transition:opacity .6s}
+/* with JS the canvas fades in once it's ready (no jump from a differently cropped poster); the poster is only the no-WebGL fallback */
+.js .hero__poster{opacity:0}
+.js .hero.no-gl .hero__poster,.js .hero.no-gl .hero__poster + .hero__poster{opacity:1}
+.js .hero__canvas{opacity:0;transition:opacity .7s var(--ease)}
+.hero.is-gl .hero__canvas{opacity:1}
 .hero__scrim{position:absolute;inset:0;pointer-events:none;background:
   radial-gradient(ellipse 46% 42% at 22% 40%,rgba(14,42,78,.42) 0%,rgba(14,42,78,.2) 55%,rgba(14,42,78,0) 100%),
   linear-gradient(90deg,rgba(14,42,78,.45) 0%,rgba(14,42,78,.25) 30%,rgba(14,42,78,0) 46%),
