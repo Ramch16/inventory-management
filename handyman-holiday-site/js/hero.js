@@ -79,7 +79,7 @@
     return t;
   }
 
-  let iw = 1870, ih = 841, W = 0, H = 0, dpr = 1;
+  let iw = 1870, ih = 840, W = 0, H = 0, dpr = 1;
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     const cw = canvas.clientWidth, ch = canvas.clientHeight;
@@ -90,14 +90,15 @@
   }
   function layout(p) {
     const z = 1 + 0.05 * p;                              // slow dolly-in as night falls
-    if (W / H < 0.9) {                                   // portrait: house large and centred
-      const w = W * 1.75 * z, h = w * ih / iw;
-      return [W * 0.5 - w * 0.62, H * 0.55 - h * 0.5, w, h];
+    if (W / H < 0.9) {                                   // portrait: the house (right half of the photo) large and centred
+      const w = W * 1.9 * z, h = w * ih / iw;
+      return [W * 0.5 - w * 0.715, H * 0.56 - h * 0.5, w, h];
     }
-    // landscape: house on the right, bottom-anchored; any gap is filled by the mirrored sky/lawn
-    const s = Math.max((H * 0.8) / ih, (W * 0.8) / iw) * z;
+    // landscape: house on the right, open sky behind the headline; bottom-anchored,
+    // the sky's top row extends upward and the lawn/sky mirror sideways if needed
+    const s = Math.max(W / iw, (H * 0.86) / ih) * z;
     const w = iw * s, h = ih * s;
-    return [W - w, H - h * 0.98, w, h];
+    return [W - w, H - h, w, h];
   }
   // text scrim: light and sky-tinted by day, full strength once it's dark
   const setNight = (p) => { const t = clamp(p / 0.32, 0, 1); hero.style.setProperty("--night", (t * t * (3 - 2 * t)).toFixed(3)); };

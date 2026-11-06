@@ -15,7 +15,7 @@ The **name and logo** come from the client's logo ("Metro West All Power Handyma
 | `Mon–Fri 9am–5pm · Sat 9am–1pm` | Real hours | Contact list, footer and JSON-LD `openingHoursSpecification` |
 | `https://www.google.com/maps?q=Your%20City&output=embed` | Real town or address | Footer map |
 
-Logo files (made from the supplied logo): `images/logo.png` (original colours, transparent) and `images/logo-reverse*.png` (navy turned to white, for the dark nav and footer), plus `favicon-32.png`, `favicon-48.png` and `apple-touch-icon.png`. If the client has a vector (SVG/AI/EPS) version, swap it in for a sharper result.
+Logo files (made from the supplied logo): `images/logo.png`, `logo-240.png` and `logo-480.png` (original colours, transparent). The nav and footer show them on a cream tile so the navy lettering stays clear on the dark design. Also `favicon-32.png`, `favicon-48.png` and `apple-touch-icon.png`. If the client has a vector (SVG/AI/EPS) version, swap it in for a sharper result.
 
 - **Service area:** the logo says "Metro West". Confirm the exact area wording (for example "MetroWest, Massachusetts" or specific towns) and use it everywhere `Your City & Surrounding Towns` appears.
 - **"Est. 2023"** is on the logo and is in the JSON-LD as `foundingDate`. If the client wants it, it can also go in `trust` in `js/config.js`.

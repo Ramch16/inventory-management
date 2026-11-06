@@ -33,8 +33,8 @@ dusk += (1-skyf) * np.linspace(0.02, 0, H)[:, None, None] * np.array([0.4, 0.5, 
 dusk = np.clip(dusk, 0, 1)
 
 # --- bulbs in the night photo
-Yn = lum(n); loc = nd.gaussian_filter(Yn, 4*k)
-mask = ((Yn > 0.72) & ((Yn-loc) > 0.05)) | (Yn > 0.95)
+Yn = lum(n); loc = nd.gaussian_filter(Yn, 3*k)
+mask = ((Yn > 0.6) & ((Yn-loc) > 0.04)) | (Yn > 0.93)
 mask &= ~sky
 mask = nd.binary_opening(mask, iterations=1)
 mask = nd.binary_dilation(mask, iterations=max(1, int(1.2*k)))
