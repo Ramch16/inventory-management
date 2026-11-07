@@ -22,7 +22,7 @@ This file sits outside `cellaxs-natick/` on purpose so it never gets deployed.
 ## Photos needed
 These services reuse a general bench/parts photo and need a real one: **MacBook, PS5, Apple Watch, Phone Unlocking, Used Phones** (`photoNote: true` in `content.js`). Photos of the actual Natick kiosk or store front would help a lot.
 
-The hero's "repaired" frame is a digital retouch of their own cracked-phone photo (`images/hero-repaired.jpg`).
+The hero now uses the two phone images you supplied (cracked and intact). Only the screen is taken from the intact image, so the background doesn't shift during the scroll. These are not the client's own photos and look computer-generated; confirm the client is happy to use them, and that you have the rights to them.
 
 ## Before going live
 1. Deploy `cellaxs-natick/` to Netlify, then turn on form notifications (Forms → estimate → email to the owner).

@@ -292,6 +292,7 @@ p{margin:0}
   .hero__shade{background:radial-gradient(90% 45% at 50% 32%,transparent 60%,rgba(10,10,12,.35) 100%)}
   .hero__copy{top:auto;bottom:max(34px,calc(env(safe-area-inset-bottom) + 28px));transform:none}
   .hero__title{font-size:clamp(32px,9vw,44px);margin:10px 0 0}
+  .hero__copy>.hero__title{max-width:none}
   .hero__lede{display:none}
   .hero__cta{margin-top:22px;gap:10px}
   .hero__cta .btn{flex:1 1 auto;height:48px;padding:0 18px;font-size:15px}

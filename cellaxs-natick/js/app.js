@@ -123,10 +123,10 @@
     const canvas = $("#heroCanvas"), track = $("#heroTrack");
     const ctx = canvas.getContext("2d");
     const off = document.createElement("canvas"), octx = off.getContext("2d");
-    const IW = 1600, IH = 800;
+    const IW = 1672, IH = 941;
     // glass outline in source-image pixels (used for the light sweep)
-    const GLASS = [[700,34],[940,48],[1150,68],[1180,88],[1192,122],[1186,300],[1172,560],[1160,800],[584,800],[612,520],[640,300],[664,120],[678,52]];
-    const A = [932, 26], B = [868, 806]; // phone's long axis, top → bottom
+    const GLASS = [[790,108],[1044,110],[1066,128],[1072,160],[1072,770],[1062,800],[1040,816],[790,816],[768,800],[762,770],[762,160],[770,128]];
+    const A = [917, 104], B = [917, 820]; // phone's long axis, top → bottom
     const pics = ["images/hero-cracked.jpg", "images/hero-repaired.jpg"].map((src) => { const i = new Image(); i.decoding = "async"; i.src = src; return i; });
     let W = 0, H = 0, dpr = 1, target = 0, cur = 0, raf = 0, visible = true, ready = false;
     const meterFill = $("#meterFill"), meterPct = $("#meterPct"), meterLabel = $("#meterLabel"), hint = $("#heroHint");
@@ -148,13 +148,13 @@
     function view(p) {
       if (W < 760) {
         // portrait: show the whole phone, centred, above the copy
-        const s = Math.min((W * 0.8) / 620, (H * 0.43) / 780) * (1 + 0.04 * p);
-        const top = 102;
-        return { s, ox: W / 2 - 888 * s, oy: top - 34 * s, mobile: true };
+        const s = Math.min((W * 0.62) / 330, (H * 0.42) / 720) * (1 + 0.04 * p);
+        const top = 100;
+        return { s, ox: W / 2 - 915 * s, oy: top - 100 * s, mobile: true };
       }
       const zoom = 1 + 0.07 * p;
       const s = Math.max(W / IW, H / IH) * zoom;
-      const fx = 890, fy = 400, tx = 0.7, ty = 0.5;
+      const fx = 915, fy = 465, tx = 0.68, ty = 0.52;
       let ox = W * tx - fx * s, oy = H * ty - fy * s;
       ox = Math.min(0, Math.max(W - IW * s, ox));
       oy = Math.min(0, Math.max(H - IH * s, oy));
